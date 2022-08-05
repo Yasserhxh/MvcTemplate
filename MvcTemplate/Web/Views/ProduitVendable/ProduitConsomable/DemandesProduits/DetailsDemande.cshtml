@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Domain.Models.DemandePret_DetailsModel>
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="getDemandesPrets">Liste des demandes des produits prêts à consommer</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                @if (Model.FirstOrDefault().Demande_Pret.Atelier != null)
+                                {
+                                    <h4 class="card-title">Details de demande des produits prêts à consommer "@Model.FirstOrDefault().Demande_Pret.Atelier.Atelier_Nom"</h4>
+                                }
+                                @if (Model.FirstOrDefault().Demande_Pret.Lieu_Stockage != null)
+                                {
+                                    <h4 class="card-title">Details de demande des produits prêts à consommer "@Model.FirstOrDefault().Demande_Pret.Lieu_Stockage.LieuStockag_Nom"</h4>
+                                }
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table table-responsive ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Produit Prêt à consommer</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Forme</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité demandée</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité livrée</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Produit_PretConsomer.ProduitPretConsomer_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Produit.FormeProduit_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0 ">@item.DemandePretDetails_Quantite.ToString("G29") @item.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                        <td class="text-bold-600 pr-0 ">@item.DemandePretDetails_QuantiteLivre.ToString("G29") @item.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            @*            <div class="breadcrumb-item ">
+                    <a class="btn btn-outline-success round mr-1 mb-1" asp-action="Planification"><i class="bx bx-dish"></i><span class="align-middle ml-25"></span></a>
+                </div>*@
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function deleteProduitVendable(id)
+    {
+            var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("DeletePlanification", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Produit désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeDesPlans", "ProduitVendable")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 3000);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeDesPlans", "ProduitVendable")';
+                                }, 3000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+
+
+
+</script>
+

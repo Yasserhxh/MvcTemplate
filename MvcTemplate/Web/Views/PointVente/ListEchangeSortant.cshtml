@@ -1,0 +1,223 @@
+﻿@model IEnumerable<Domain.Models.Echange_ProduitsModel>
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Liste des echanges des produits sortant</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-3 offset-md-1 mb-1">
+                        <label for="etat">Statut de l'ordre d'échange</label>
+                        <div>
+                            <div>
+                                <select class="custom-select" data-search="true" id="statut">
+                                    <option value="" selected disabled>Sélectionnez un état d'échange...</option>
+                                    <option value="Ordre de transfert">En ordre de transfert</option>
+                                    <option value="En cours de livraison">En cours de livraison </option>
+                                    <option value="Produits reçus">Porduits reçus</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <div class="form-group">
+                            <label for="pdvRec">Point de vente récepteur</label>
+                            <div>
+                                <select class="custom-select" id="pdvRec" data-search="true" asp-items="@ViewBag.pdv">
+                                    <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <div class="form-group">
+                            <label for="date">Date d'échanges</label>
+                            <div>
+                                <input type="date" id="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des échanges des produits</h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">P.V récepteur</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Etat de l'échange</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Validé Par(expéditeur)</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Validé Par(récepteur)</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de l'échange</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                <tr>
+                                                                    <td class="text-bold-600 pr-0 ">@item.ReceptionPdv.PointVente_Nom</td>
+                                                                    @if (item.EchangeProduits_Statut == "Ordre de transfert")
+                                                                    {<td class="text-bold-600 pr-0 "><a class="btn btn-outline-warning btn-table round" href="#0"><i class="bx bx-check"></i>@item.EchangeProduits_Statut</a></td>}
+                                                                    @if (item.EchangeProduits_Statut == "En cours de livraison")
+                                                                    {<td class="text-bold-600 pr-0 "><a class="btn btn-outline-info btn-table round" href="#0"><i class="bx bx-check"></i>@item.EchangeProduits_Statut</a></td>}
+                                                                    @if (item.EchangeProduits_Statut == "Produits reçus")
+                                                                    {<td class="text-bold-600 pr-0 "><a class="btn btn-outline-success btn-table round" href="#0"><i class="bx bx-check"></i>@item.EchangeProduits_Statut</a></td>}
+                                                                    <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.EchangeProduits_PdvFournisseurUserID)</td>
+                                                                    <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.EchangeProduits_PdvRecepUserID)</td>
+                                                                    <td class="text-bold-600 pr-0 ">@Html.DisplayFor(modelItem => item.EchangeProduits_DateEchange)</td>
+                                                                    <td>
+                                                                        <div class="dropdown">
+                                                                            <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                            </span>
+                                                                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                <a class="dropdown-item  btn-outline-secondary" asp-action="ListeDetailsEchanges" asp-route-id="@item.EchangeProduits_ID"><i class="bx bx-info-square"></i>Afficher les détails de l'échange</a>
+                                                                                @if (item.EchangeProduits_Statut == "En ordre de transfert")
+                                                                                {
+                                                                                    <button class="dropdown-item  btn-outline-success" onclick="Valider(@item.EchangeProduits_ID)"><i class="bx bx-info-square"></i>Valider la livraison des produits</button>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </td>
+
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script type="text/javascript">
+
+    function Valider(echangeiD) {
+        $.ajax({
+    url: '@Url.Action("AccepterOrdreEchange", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: { 'echangeiD': echangeiD },
+            success: function (data) {
+                if (data == true) {
+                    ShowNotification("Transfert accepté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeEchangesSortant", "PointVente")';
+                        }, 3000);
+                } else if (data == null) {
+                    ShowNotification("Un ou plusieur produits demandés ne sont pas en magasin.", NotifToaster.WarningType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeEchangesSortant", "PointVente")';
+                        }, 5000);
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                }
+},
+            error: function () {
+    ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+}
+        });
+    }
+
+    function displayDashboard() {
+        var statut = $("#statut").val();
+        var pdvRec = $("#pdvRec").val();
+        var date = $("#date").val();
+        window.location.href = '/PointVente/ListeEchangesSortant?statut=' + statut  + "&pdvRec=" + pdvRec + "&date=" + date ;
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+</script>
+

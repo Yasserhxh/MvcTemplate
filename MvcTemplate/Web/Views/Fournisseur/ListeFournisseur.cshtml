@@ -1,0 +1,365 @@
+﻿@model IEnumerable<Domain.Models.FournisseurModel>
+@using Web.Helpers;
+@addTagHelper *,ReflectionIT.Mvc.Paging
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Fournisseurs";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Liste des fournisseurs</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!--Dashboard Ecommerce stqrts-->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-4 offset-md-1 mb-1">
+                        <label for="role">Ville</label>
+                        <div>
+                            <select class="custom-select" id="ville" data-search="true" asp-items="@ViewBag.Ville">
+                                <option value="" selected disabled>Sélectionnez une ville ...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Statut">Statut</label>
+                            <div>
+                                <select class="custom-select" id="statut" data-search="true">
+                                    <option value="" selected disabled>Sélectionnez un statut...</option>
+                                    <option value="1">Fournisseurs activés</option>
+                                    <option value="0">Fournisseurs desactivés</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des fournisseurs des matières premières</h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Raison Sociale</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">ICE</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Ville</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Adresse</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Contact d'usine</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Téléphone</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Statut</th>
+                                                                    <th><span calss="text-sm-left">Actions</span></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr class="odd">
+                                                                        <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Founisseur_RaisonSocial)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Founisseur_ICE)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1 text-sm-left">@Html.DisplayFor(modelItem => item.Ville.Ville_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1 text-sm-left">@Html.DisplayFor(modelItem => item.Founisseur_Adresse)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1 text-sm-left">@Html.DisplayFor(modelItem => item.Founisseur_NomContact)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Founisseur_Telephone)</td>
+                                                                        <td class="text-bold-600 pr-0 sorting_1 text-sm-left">@(item.Founisseur_IsActive == 0? "Désactivé" : "Activé")</td>
+                                                                        <td>
+                                                                            <a class="btn btn-outline-secondary btn-table round" asp-action="Modification" asp-route-id="@item.Founisseur_Id"><i class="bx bx-pencil"></i> </a>
+                                                                            @if (item.Founisseur_IsActive == 1)
+                                                                            {
+                                                                                <button class="btn btn-outline-google btn-table round" onclick="deleteFournisseur(@item.Founisseur_Id, 0)"><i class="bx bx-trash-alt"></i> </button>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <button class="btn btn-outline-facebook btn-table round" onclick="deleteFournisseur(@item.Founisseur_Id, 1)"><i class="bx bx-redo"></i> </button>
+                                                                            }
+                                                                            <a class="btn btn-outline-success btn-table round" asp-action="ConsulterMatieres" asp-route-id="@item.Founisseur_Id"><i class="bx bx-list-ol"></i> </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <div class="container">
+
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeFournisseur" asp-route-pg="1" asp-route-Ville="@Context.Request.Query["ville"]" asp-route-statut="@Context.Request.Query["statut"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeFournisseur" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-Ville="@Context.Request.Query["ville"]" asp-route-statut="@Context.Request.Query["statut"]"><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link" asp-action="ListeFournisseur" asp-route-pg="@pge" asp-route-Ville="@Context.Request.Query["ville"]" asp-route-SousCateg="@Context.Request.Query["statut"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeFournisseur" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-Ville="@Context.Request.Query["ville"]" asp-route-SousCateg="@Context.Request.Query["statut"]"><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeFournisseur" asp-route-pg="@(pager.TotalPages)" asp-route-Ville="@Context.Request.Query["ville"]" asp-route-SousCateg="@Context.Request.Query["statut"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+            <!--Dashboard Ecommerce ends-->
+            <div class="breadcrumb-item text-sm-right ">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="Ajouter"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un fournisseur</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+<script>
+    function deleteFournisseur(id, code) {
+        var data = {
+            id: id,
+            code: code
+        };
+        $.ajax({
+            url: '@Url.Action("DeleteFournisseur", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data == true) {
+                    if (code == 0) {
+                        ShowNotification("Fournisseur désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    else {
+                        ShowNotification("Fournisseur activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    setTimeout(
+                        function () {
+                                window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+                            if ($("#usertbody tr").length == 0) {
+                                document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1500);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+                                }, 1500);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+
+      @*function refresh() {
+        setTimeout(
+            function () {
+                window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+            }, 500);
+        }
+        function fct(Id) {
+        var data = { Id: Id }
+            $("#mbody").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
+             $.ajax({
+            url: '@Url.Action("getFournisseurNom", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                $("#fournisseur").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+        }
+        function camionAdd() {
+
+            if (
+                $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+                $("#matiere").val() != null && $("#matiere").val() != ''
+
+            ) {
+                camionAjout();
+                formCamionClear();
+            }
+        }
+
+
+
+
+        function camionAjout() {
+            var desc = $("#fournisseur").val();
+            var prix = $("#matiere option:selected").val();
+
+            if ($("#tableCamions tbody").length == 0) {
+                $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+                document.getElementById('divTable').style.display = "block";
+                document.getElementById('envbutton').style.display = "block";
+            }
+
+            $("#tbodyCamions").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+                "<td >" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text()+ "</td>" +
+                "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+        function formCamionClear() {
+            $("#matiere").val("");
+        }
+
+        //delete
+        function CamionDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tableCamions tbody tr").length == 0) {
+                document.getElementById('divTable').style.display = "none";
+            }
+        }
+
+    function CreatePrix() {
+        var ListIdMatiere = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+            var matierF = {
+                MatierePremiere_Id: prix,
+            };
+            ListIdMatiere.push(prix);
+        }
+
+
+        var data = {
+            idFournisseur: parseInt($("#spanVal").text()),
+            listMatiere: ListIdMatiere,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterMatiere", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }*@
+    function displayDashboard() {
+        var pv = $("#ville").val();
+        var statut = $("#statut").val();
+        console.log(pv, statut);
+        window.location.href = '/Fournisseur/ListeFournisseur?Ville=' + pv + "&statut=" + statut;
+    }
+</script>

@@ -1,0 +1,293 @@
+﻿@model IEnumerable<Domain.Models.MouvementStockModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Consulter l'historique d'achat";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeMatierePremiere">Liste des matières premières </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <div>
+                                    @{ var a = @Model.FirstOrDefault(); }
+                                    @if (a == null)
+                                    {<h4 class="card-title">Historique d'achat de la matière première</h4> }
+                                    else
+                                    {<h4 class="card-title"> Historique d'achat de la matière "@Model.FirstOrDefault().MatierePremiere_Stokage.Matiere_Premiere.MatierePremiere_Libelle" </h4>}
+                                </div>
+                                
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-sm-left">Fournisseur</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Unite de mesure</th>
+                                                                    <th>Prix d'achat par unité</th>
+                                                                    <th>Date d'achat</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                <tr>
+                                                                    <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Founisseur.Founisseur_RaisonSocial)</td>
+                                                                    @{ var qte = decimal.Parse(item.MouvementStock_Quantite.ToString()).ToString("G29");}
+                                                                    <td class="border-b dark:border-dark-5">@qte</td>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                    <td class="border-b dark:border-dark-5">@item.MouvementStock_PrixAchatUnite DH/@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MouvementStock_DateReception)</td>
+
+
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    function DeleteUniteLink(id, code)
+    {
+        var data = {
+            id: id,
+            code : code
+        };
+        $.ajax({
+            url: '@Url.Action("DeleteUniteLink", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data)
+            {
+                if (data == true)
+                {
+                    if (code == 0) {
+                        ShowNotification("Matière première désactivée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    else {
+                        ShowNotification("Matière première activée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.reload();
+
+                            if ($("#usertbody tr").length == 0)
+                            {
+                                document.getElementById('usertable').style.display = "none";
+                            }
+
+                        }, 1500);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.reload();
+                            }, 1500);
+                    }
+                },
+            error: function ()
+            {
+                alert("Erreur");
+
+            }
+
+        });
+
+    }
+
+
+     function fct(Id) {
+        $("#tableCamions").children().remove();
+
+        var data = { Id: Id }
+            $("#mbody").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
+             $.ajax({
+            url: '@Url.Action("getMatiere", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                $("#fournisseur").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+        }
+    function camionAdd() {
+
+        if (
+            $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout() {
+        var desc = $("#fournisseur").val();
+        var prix = $("#matiere option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            document.getElementById('divTable').style.display = "block";
+            document.getElementById('envbutton').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+            "<td >" + desc + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+        function CreatePrix() {
+        var ListIdUnite = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+
+            ListIdUnite.push(prix);
+        }
+
+
+        var data = {
+            idMatiere: parseInt($("#spanVal").text()),
+            listUnite: ListIdUnite,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterUniteUtilisation", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+</script>

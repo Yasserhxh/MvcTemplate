@@ -1,0 +1,369 @@
+﻿@{ ViewData["Title"] = "Gestion de Stock";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.MouvementStockModel
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="Mouvements">Mouvements de stock</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Réception fournisseur</legend>
+                        <div class="form-row">
+                            <div class="col-md-2 mb-1">
+                                <label for="Fournisseur">Fournisseur</label>
+                                <div>
+                                    <select id="fournisseur" class="form-control select2" data-search="true" asp-for="MouvementStock_FournisseurId" asp-items="@ViewBag.MouvementStock_FournisseurId" onchange="matiereListe()">
+                                        <option value="" selected disabled>Sélectionnez un fournisseur...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="matierePremiere">Matière première</label>
+                                <div>
+                                    <select class="custom-select" id="matiere" data-search="true" asp-for="MouvementStock_MatierePremiereStokageId" asp-items="@ViewBag.MouvementStock_MatierePremiereStokageId" onchange="uniteListe()">
+                                        <option value="" selected disabled>Sélectionnez la matière première...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Quantite">Quantité</label>
+                                <input type="number" min="0" id="qte" step=".01" asp-for="MouvementStock_Quantite" class="form-control" required />
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="UniteMesure">Unité</label>
+                                <div>
+                                    <select class="custom-select" id="unite" data-search="true" asp-for="MouvementStock_UniteMesureId" asp-items="@ViewBag.MouvementStock_UniteMesureId">
+                                        <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="UniteMesure">Prix / Unité</label>
+                                <input type="number" min="0" id="prix" step=".01" asp-for="MouvementStock_PrixAchatUnite" class="form-control" required />
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <div class="form-group">
+                                    <label for="DateReception">Date de réception</label>
+                                    <input type="date" id="date" asp-for="MouvementStock_DateReception" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class=" text-md-right">
+                                <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <div class="table-responsive">
+                                    <table id="tableCamions" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Fournisseur</th>
+                                                <th>Quantité</th>
+                                                <th>Unité</th>
+                                                <th>Prix par unité</th>
+                                                <th>Matière première</th>
+                                                <th>Date de Réception</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="card-footer d-flex justify-content-between text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer la réception </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+
+<script>
+
+    @if (TempData["Creation"] != null)
+    {
+        <text>CreationNotifications();</text>
+    }
+
+    @if (TempData["CreationError"] != null)
+    {
+        <text>ModificationNotifications();</text>
+    }
+    function CreationNotifications()
+    {
+        ShowNotification("Produit enregistré avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+    function ModificationNotifications()
+    {
+        ShowNotification("Une error s'est produite.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+    function matiereListe()
+    {
+        var data = { fournisseurId: parseInt($("#fournisseur").val()) };
+        if ($("#fournisseur").val() != null) {
+            $.ajax({
+                url: '@Url.Action("matiereListe", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#matiere option").length > 1) {
+                        $.each($("#matiere option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#matiere").append("<option value='' selected disabled>Sélectionnez La matiere premiere</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#matiere").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function uniteListe()
+    {
+        var data = { MatierePremiereStokage_Id: parseInt($("#matiere option:selected").val()) };
+        if ($("#matiere option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getUnite", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez L'unite de mesure</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#qte").val() != null && $("#qte").val() != '' &&
+            $("#prix").val() != null && $("#prix").val() != '' &&
+            $("#date").val() != null && $("#date").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var matiere = 0;
+        var quantite = 0;
+        var unite = 0;
+        var table = document.getElementById("tbodyCamions");
+         
+        var fournisseurval = $("#fournisseur option:selected").val();
+        var matiereval = $("#matiere option:selected").val();
+        var quantiteval = $("#qte").val();
+        var uniteval = $("#unite option:selected").val();
+        var uniteText = $("#unite option:selected").text();
+        var dateval = $("#date").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[1].innerHTML == matiereval) {
+                    if ((uniteval == 1 && table.rows[i].cells[2].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[2].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                    else if ((uniteval == 2 && table.rows[i].cells[2].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[2].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                    else { quantiteval = parseFloat(quantiteval); }
+                    matiere = table.rows[i].cells[1].innerHTML;
+                    quantite = table.rows[i].cells[4].innerHTML;
+                    uniteVal = table.rows[i].cells[2].innerHTML;
+                    uniteText = table.rows[i].cells[5].innerHTML;
+                    table.rows[i].remove();
+                }
+            }
+        }
+        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#fournisseur option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + uniteText + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + dateval + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        //$("#fournisseur").val("");
+        $("#prix").val("");
+        $("#matiere").val("");
+        $("#qte").val("");
+        $("#unite").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListeRecep = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var Fournisseur = 0;
+        var prix = 0;
+        var matiereStockage = 0;
+        var quantite = 0.00;
+        var unite = 0;
+        var date = "";
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            Fournisseur = table.rows[i].cells[0].innerHTML;
+            matiere = table.rows[i].cells[1].innerHTML;
+            quantite = table.rows[i].cells[4].innerHTML;
+            prix = table.rows[i].cells[6].innerHTML;
+            unite = table.rows[i].cells[2].innerHTML;
+            date = table.rows[i].cells[8].innerHTML;
+
+            var Reception = {
+                MouvementStock_MatierePremiereStokageId: 0,
+                MouvementStock_DateReception: "",
+                MouvementStock_Quantite: 0,
+                MouvementStock_UniteMesureId: 0,
+                MouvementStock_FournisseurId: 0,
+                MouvementStock_PrixAchatUnite: 0,
+            }
+
+            Reception.MouvementStock_MatierePremiereStokageId = matiere;
+            Reception.MouvementStock_DateReception = date;
+            Reception.MouvementStock_Quantite = parseFloat(quantite).toFixed(2).replace(".", ",");
+            Reception.MouvementStock_UniteMesureId = unite;
+            Reception.MouvementStock_FournisseurId = Fournisseur;
+            Reception.MouvementStock_PrixAchatUnite = parseFloat(prix).toFixed(2).replace(".",",");
+            ListeRecep.push(Reception);
+
+        }
+
+
+
+            var data = {
+                mouvementStockModel: ListeRecep
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("Receptionfournisseur", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Mouvement  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("Receptionfournisseur", "ProduitVendable")';
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+    var jq14 = jQuery.noConflict(true);
+
+    (function ($) {
+        $(document).ready(function () {
+            $("#fournisseur").selectize({
+                placeholder: "Séléctionnez un fournisseur...",
+                allowClear: true
+            });
+        });
+    }(jq14));
+
+   
+</script>
+

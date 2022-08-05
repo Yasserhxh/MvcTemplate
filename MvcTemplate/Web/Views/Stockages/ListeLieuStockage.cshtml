@@ -1,0 +1,363 @@
+﻿@model IEnumerable<Domain.Models.Lieu_StockageModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Lieux de stockage";
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeLieuStockage">Liste des points de stockage</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row form-row text-sm-center" style="margin-right: -30%;margin-left: 30%;">
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Statut">Statut</label>
+                            <div>
+                                <select class="custom-select" id="statut" data-search="true">
+                                    <option value="" selected disabled>Sélectionnez un statut...</option>
+                                    <option value="1">Points de stockage activés</option>
+                                    <option value="0">Points de stockage desactivés</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Point de stockage</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Adresse</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Responsable</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Téléphone</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
+                                                                    <th><span style="margin-left:10%">Actions</span></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.LieuStockag_Nom)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.LieuStockag_Adresse)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.LieuStockag_NomResponsable)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.LieuStockag_Telephone)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-center">@(item.LieuStockag_IsActive == 0? "Désactivé" : "Activé")</td>
+                                                                        <td>
+                                                                            <a class="btn btn-outline-secondary btn-table round" asp-action="ModificationPointStock" asp-route-id="@item.LieuStockag_Id"><i class="bx bx-pencil"></i> </a>
+                                                                            @if (item.LieuStockag_IsActive == 1)
+                                                                            {
+                                                                                <button class="btn btn-outline-google btn-table round" onclick="deleteZone(@item.LieuStockag_Id, 0)"><i class="bx bx-trash-alt"></i> </button>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <button class="btn btn-outline-facebook btn-table round" onclick="deleteZone(@item.LieuStockag_Id, 1)"><i class="bx bx-redo"></i> </button>
+                                                                            }
+                                                                            <a class="btn btn-outline-success btn-table round" asp-controller="Stockages" asp-action="ConsulterZone" asp-route-id="@item.LieuStockag_Id"><i class="bx bx-detail"></i> </a>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1"  data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un point de stockage</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter un point de stockage</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form class="form" action="#">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PointVente_Nom">Nom de point de stockage </label>
+                                        <input type="text" id="nom" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ville">Ville</label>
+                                        <select class="custom-select" id="ville" data-search="true" asp-items="@ViewBag.Ville">
+                                            <option value="" id="ville" selected disabled>Sélectionnez une ville...</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Code Postal">Code Postal</label>
+                                        <input type="number" id="code" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Adresse">Adresse</label>
+                                        <input type="text" id="adresse" class="form-control" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="chef">Responsable</label>
+                                        <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-items="@ViewBag.User" onchange="getRespoName()">
+                                            <option value="" selected disabled>Sélectionnez un responsable de Vente...</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ContactName"> Nom du responsable</label>
+                                        <input type="text" class="form-control" id="respoNom" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="Tel">Numéro de téléphone </label>
+                                        <input type="tel" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}" class="form-control" id="gsm" placeholder="Ex: 00-00-00-00-00" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="envbutton" onclick="ajouterPdV()">
+                        <span style="color:aliceblue;">Enregistrer</span> 
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function deleteZone(id, code) {
+        var data = {
+            id: id,
+            code: code
+        };
+            $.ajax({
+                url: '@Url.Action("DeleteLieuStockage", "Stockages")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        if (code == 0) {
+                            ShowNotification("Lieu désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        }
+                        if (code == 1) {
+                            ShowNotification("Lieu activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        }
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeLieuStockage", "Stockages")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1500);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeLieuStockage", "Stockages")';
+                                }, 1500);
+                    }
+                },
+                error: function () {
+                    alert("Erreur");
+                }
+            });
+    }
+       function getRespoName() {
+        var data = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoName", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data,
+                 success: function (data) {
+                     console.log(data);
+                     $("#respoNom").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+
+
+
+        var data2 = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoPhoneNumber", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data2,
+                 success: function (data) {
+                     console.log(data);
+                     $("#gsm").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+             });
+    }
+        function refresh() {
+        setTimeout(
+            function () {
+                window.location.href = '@Url.Action("ListeLieuStockage", "Stockages")';
+            }, 500);
+    }
+
+    function ajouterPdV() {
+        document.getElementById("envbutton").disabled = true;
+        var lieu_StockageModel = {
+
+            LieuStockag_Nom: $('#nom').val(),
+            LieuStockag_Adresse: $('#adresse').val(),
+            LieuStockag_NomResponsable: $('#respoNom').val(),
+            LieuStockag_Telephone: $("#gsm").val(),
+            LieuStockag_VilleID: $('#ville option:selected').val(),
+            LieuStockag_CodePostal: $("#code").val(),
+            LieuStockag_UTILISATEUR: $('#inputGroupSelected02 option:selected').val(),
+        };
+        console.log(lieu_StockageModel);
+            $.ajax({
+
+             url: '@Url.Action("AjouterLieu", "Stockages")',
+             type: "POST",
+             cache: false,
+             async: true,
+                data: lieu_StockageModel,
+                 success: function (data) {
+                if (data == true)
+                {
+                    ShowNotification("Point de stockage ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("ListeLieuStockage", "Stockages")';
+                        }, 1000);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.href = '@Url.Action("ListeLieuStockage", "Stockages")';
+                            }, 1000);
+                    }
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+    }
+    function displayDashboard() {
+        var statut = $("#statut").val();
+        window.location.href = '/Stockages/ListeLieuStockage?statut=' + statut;
+    }
+</script>

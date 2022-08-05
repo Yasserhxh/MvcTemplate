@@ -1,0 +1,619 @@
+﻿@model IEnumerable<Domain.Models.Point_VenteModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Points de Vente";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Liste des points de vente</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-4 offset-md-1 mb-1">
+                        <label for="role">Type de service</label>
+                        <div>
+                            <select class="custom-select" id="service" data-search="true">
+                                <option value="" selected disabled>Sélectionnez un type de service...</option>
+                                <option value="1">Service à table</option>
+                                <option value="0">Service emporter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Statut">Statut</label>
+                            <div>
+                                <select class="custom-select" id="statut" data-search="true">
+                                    <option value="" selected disabled>Sélectionnez un statut...</option>
+                                    <option value="1">Points de vente activés</option>
+                                    <option value="0">Points de vente desactivés</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Point de Vente</th>
+                                                                    <th>Type de service </th>
+                                                                    <th>Ville </th>
+                                                                    <th>Adresse</th>
+                                                                    <th>Responsable</th>
+                                                                    <th>Téléphone</th>
+                                                                    <th>Statut</th>
+                                                                    <th><span style="margin-left:18%">Actions</span></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                <tr>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.PointVente_Nom)</td>
+                                                                    @if (item.PointVente_TypeService == 0){
+                                                                        <td class="border-b dark:border-dark-5">Service à emporter</td>}
+                                                                    else {
+                                                                        <td class="border-b dark:border-dark-5">Service à table</td>}
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Ville.Ville_Libelle)</td>
+                                                                    <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.PointVente_Adresse)</td>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.PointVente_NomResponsable)</td>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.PointVente_Telephone)</td>
+                                                                    <td class="border-b dark:border-dark-5">@(item.PointVente_IsActive == 0 ? "Desactivé": "Activé")</td>
+
+                                                                    <td>
+                                                                        <a class="btn btn-outline-secondary btn-table round" asp-action="Modification" asp-route-id="@item.PointVente_Id"><i class="bx bx-pencil"></i> </a>
+                                                                        @if (item.PointVente_IsActive == 1)
+                                                                        {
+                                                                            <button class="btn btn-outline-google btn-table round" onclick="deletePointdeVente(@item.PointVente_Id, 0)"><i class="bx bx-trash-alt"></i> </button>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <button class="btn btn-outline-facebook btn-table round" onclick="deletePointdeVente(@item.PointVente_Id, 1)"><i class="bx bx-redo"></i> </button>
+                                                                        }
+                                                                        <a class="btn btn-outline-success btn-table round" asp-action="ConsulterFamilles" asp-route-id="@item.PointVente_Id"><i class="bx bx-list-ol"></i> </a>
+                                                                    </td>
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un point de vente</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter un point de vente</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form class="form">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PointVente_Nom">Point de vente </label>
+                                        <input type="text" id="nom" class="form-control" required />
+                                    </div>
+                                </div> 
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ville">Ville</label>
+                                        <select class="custom-select" id="ville" data-search="true" asp-items="@ViewBag.Ville">
+                                            <option value="" id="ville" selected disabled>Sélectionnez une ville...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Code Postal">Code Postal</label>
+                                        <input type="number"  id ="code" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Adresse">Adresse</label>
+                                        <input type="text" id="adresse" class="form-control" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="atelier">Atelier par defaut</label>
+                                        <select class="custom-select" id="inputGroupSelected001" data-search="true"  asp-items="@ViewBag.Ateliers">
+                                            <option value="" selected disabled>Sélectionnez un atelier par defaut...</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="stock">Point stock par defaut</label>
+                                        <select class="custom-select" id="inputGroupSelected002" data-search="true" asp-items="@ViewBag.Stocks">
+                                            <option value="" selected disabled>Sélectionnez un point de stockage par defaut...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                              
+                              
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="chef">Responsable</label>
+                                        <select class="custom-select" id="inputGroupSelected02" data-search="true"  asp-items="@ViewBag.User" onchange="getRespoName()">
+                                            <option value="" selected disabled>Sélectionnez un responsable de Vente...</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="chef">Type de service</label>
+                                        <select class="custom-select" id="service" data-search="true">
+                                            <option value="" selected disabled>Sélectionnez un type de service...</option>
+                                            <option value="1">Service à table</option>
+                                            <option value="0">Service emporter</option>
+                                        </select>
+                                    </div>
+                                </div>
+                              
+                              
+                            </div>
+                            <div class="form-row">                               
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ContactName"> Nom du responsable</label>
+                                        <input type="text" class="form-control" id="respoNom" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Tel">Numéro de téléphone </label>
+                                        <input type="tel"   class="form-control" id="gsm" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-sm-right">
+                            <button class="btn btn-primary" id="envbutton" onclick="camionAdd()">
+                                <span style="color:aliceblue;">Enregistrer</span>
+                                
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+@*<div class="modal fade show" id="familleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter des familles de produits.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mbodyfamille">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Point de vente: </label>
+                                    <input type="text" id="fournisseur" class="form-control" disabled>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Famille: </label>
+                                    <select class="custom-select" id="matiere" data-search="true" asp-items="@ViewBag.Familles" required>
+                                        <option value="" selected>Séléctionnez une famille de produit ...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="familleAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto" style="display: none">
+                                <table id="tableCamions" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Point Vente</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Falille de produit</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="famillebutton" onclick="CreatePrix()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>*@
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#nom").val() != null && $("#nom").val() != '' &&
+            $("#adresse").val() != null && $("#adresse").val() != '' &&
+            $("#respoNom").val() != null && $("#respoNom").val() != '' &&
+            $("#gsm").val() != null && $("#gsm").val() != '' &&
+            $("#ville").val() != null && $("#ville").val() != '' &&
+            $("#code").val() != null && $("#code").val() != '' &&
+            $("#inputGroupSelected02").val() != null && $("#inputGroupSelected02").val() != '') { ajouterPdV(); }
+
+    }
+    function deletePointdeVente(id, code)
+    {
+        var data = {
+            id: id,
+            code : code
+        };
+        $.ajax({
+            url: '@Url.Action("DeletePointVente", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data)
+            {
+                if (data == true)
+                {
+                    if (code == 0) {
+                        ShowNotification("Point de vente désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    else {
+                        ShowNotification("Point de vente activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("ListePointVente", "PointVente")';
+
+                            if ($("#usertbody tr").length == 0)
+                            {
+                                document.getElementById('usertable').style.display = "none";
+                            }
+
+                        }, 1500);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.href = '@Url.Action("ListePointVente", "PointVente")';
+                            }, 1500);
+                    }
+                },
+            error: function ()
+            {
+                alert("Erreur");
+
+            }
+
+        });
+
+    }
+    function getRespoName() {
+        var data = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoName", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data,
+                 success: function (data) {
+                     console.log(data);
+                     $("#respoNom").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+
+
+
+        var data2 = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoPhoneNumber", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data2,
+                 success: function (data) {
+                     console.log(data);
+                     $("#gsm").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+             });
+    }
+        function refresh() {
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 1);
+        }
+
+    function ajouterPdV() {
+        document.getElementById("envbutton").disabled = true;
+        var pointVenteModel = {
+
+            PointVente_Nom: $('#nom').val(),
+            PointVente_Adresse: $('#adresse').val(),
+            PointVente_NomResponsable: $('#respoNom').val(),
+            PointVente_Telephone: $("#gsm").val(),
+            PointVente_VilleID: $('#ville option:selected').val(),
+            PointVente_CodePostal: $("#code").val(),
+            PointVente_TypeService: $("#service").val(),
+            PointVente_UtilisateurId: $('#inputGroupSelected02 option:selected').val(),
+            PointVente_AtelierID: $('#inputGroupSelected001 option:selected').val(),
+            PointVente_StockID: $('#inputGroupSelected002 option:selected').val()
+        };
+        console.log(pointVenteModel);
+
+        $.ajax({
+
+             url: '@Url.Action("Ajouter", "PointVente")',
+             type: "POST",
+             cache: false,
+             async: true,
+            data: pointVenteModel,
+                 success: function (data) {
+                if (data == true)
+                {
+                    ShowNotification("Point de vente ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("ListePointVente", "PointVente")';
+                        }, 1000);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.href = '@Url.Action("ListePointVente", "PointVente")';
+                            }, 1000);
+                    }
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+    }
+
+     function fct(Id) {
+        var data = { Id: Id }
+         $("#mbodyfamille").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
+             $.ajax({
+            url: '@Url.Action("getPvNom", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                $("#fournisseur").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+        }
+
+      function familleAdd() {
+
+            if (
+                $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+                $("#matiere").val() != null && $("#matiere").val() != ''
+
+            ) {
+                camionAjout();
+                formCamionClear();
+            }
+        }
+
+
+
+
+        function camionAjout() {
+            var desc = $("#fournisseur").val();
+            var prix = $("#matiere option:selected").val();
+
+            if ($("#tableCamions tbody").length == 0) {
+                $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+                document.getElementById('divTable').style.display = "block";
+                document.getElementById('famillebutton').style.display = "block";
+            }
+
+            $("#tbodyCamions").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+                "<td >" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text()+ "</td>" +
+                "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+        function formCamionClear() {
+            $("#matiere").val("");
+        }
+
+        //delete
+        function CamionDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tableCamions tbody tr").length == 0) {
+                document.getElementById('divTable').style.display = "none";
+            }
+        }
+
+    function CreatePrix() {
+        var ListIdMatiere = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+
+            ListIdMatiere.push(prix);
+        }
+
+
+        var data = {
+            idPointVente: parseInt($("#spanVal").text()),
+            listFamille: ListIdMatiere,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterFamille", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListePointVente", "PointVente")';
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function displayDashboard() {
+        var service = $("#service").val();
+        var statut = $("#statut").val();
+        window.location.href = '/PointVente/ListePointVente?type=' + service + "&statut=" + statut;
+    }
+</script>

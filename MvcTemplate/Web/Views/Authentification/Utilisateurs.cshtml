@@ -1,0 +1,444 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<Domain.Models.UserModel>
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ ViewData["Title"] = "Users"; }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a asp-action="Utilisateurs"><i class="bx bx-list-ul"></i> Liste des utilisateurs</a>
+                                </li>
+                                
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-4 offset-md-1 mb-1">
+                        <label for="role">Rôle</label>
+                        <div>
+                            <select class="custom-select" id="roles" data-search="true" asp-items="@ViewBag.Roles">
+                                <option value="" selected disabled>Sélectionnez un rôle ...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Statut">Statut</label>
+                            <div>
+                                <select class="custom-select" id="statut" data-search="true" >
+                                    <option value="" selected disabled>Sélectionnez un statut...</option>
+                                    <option value="1">Utilisateurs activés</option>
+                                    <option value="0">Utilisateurs desactivés</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> Liste des utilisateurs </h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table ">
+                                                        <table id="usertable" class="table  mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Nom et Prenom</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">E-mail</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Numéro de Téléphone</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Rôle</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Site</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-center"> Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model.OrderBy(p=>p.Nom))
+                                                                {
+                                                                <tr>
+                                                                    <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Nom) @item.Prenom</td>
+                                                                    <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Email)</td>
+                                                                    <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Gsm)</td>
+                                                                    @if (item.Role == "Gerant_de_stock")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Gérant de stock</td>
+                                                                    }@if (item.Role == "Responsable_Vente")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Responsable des points de vente</td>
+                                                                    }@if (item.Role == "Position_Vente")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Caissier</td>
+                                                                    }@if (item.Role == "Chef_Patissier")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Chef patissier</td>
+                                                                    }
+
+                                                                    <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Affectation)</td>
+                                                                    <td class="border-b dark:border-dark-5">@(item.Statut == 0 || item.Statut == null ? "Désactivé" : "Activé")</td>
+                                                                    <td class="text-right">
+                                                                        <a class="btn btn-outline-facebook btn-table round" asp-action="Modification" asp-route-id="@item.UserId"><i class="bx bx-pencil"></i>  </a>
+                                                                        @if (item.Statut == 0 || item.Statut == null)
+                                                                        {
+                                                                            <button class="btn btn-outline-facebook btn-table round" onclick="Activer('@item.UserId')"><i class="bx bx-redo"></i> </button>
+                                                                        }
+                                                                        @if (item.Statut == 1)
+                                                                        {
+                                                                            <button class="btn btn-outline-google btn-table round" onclick="Desactiver('@item.UserId')"><i class="bx bx-trash-alt"></i>  </button>
+                                                                        }
+                                                                        <button class="btn btn-outline-instagram btn-table round" onclick="Reset('@item.UserId')"><i class="bx bx-key"></i> </button>
+                                                                    </td>
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            @if (User.IsInRole("Client"))
+            {
+                <div class="breadcrumb-item text-right">
+                    <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-list-plus"></i><span class="align-middle ml-25">Ajouter un utilisateur</span></a>
+                </div>
+            }else if(User.IsInRole("Administrateur"))
+            {
+                <div class="breadcrumb-item text-right ">
+                    <a class="btn btn-outline-success round mr-1 mb-1" asp-controller="Clients" asp-action="Ajouter"><i class="bx bx-list-plus"></i><span class="align-middle ml-25">Ajouter un utilisateur</span></a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter un utilisateur</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 mb-50">
+                                    <label for="inputfirstname4">Nom d'utilisateur</label>
+                                    <input type="text" class="form-control" id="inputfirstname4" placeholder="Nom d'utilisateur">
+                                </div>
+                                <div class="form-group col-md-6 mb-50">
+                                    <label for="inputlastname4">Prénom</label>
+                                    <input type="text" class="form-control" id="inputlastname4" placeholder="Prénom">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6 mb-50">
+                                    <label for="Phone">Numéro de téléphone</label>
+                                    <input type="text" class="form-control" id="inputGSM" maxlength="10" placeholder="Ex: 0612345678">
+                                </div>
+                                <div class="form-group col-md-6 mb-50">
+                                    <label for="Adresse">Adresse</label>
+                                    <input type="text" class="form-control" id="inputAdresse" placeholder="Adresse">
+                                </div>
+                            </div>
+                            <div class="form-group mb-50">
+                                <label class="text-bold-600" for="exampleInputUsername1">Login</label>
+                                <input type="text" class="form-control" id="exampleInputUsername1"
+                                       placeholder="Username">
+                                <span id='message'></span>
+                            </div>
+                            <div class="form-group mb-50">
+                                <label class="text-bold-600" for="exampleInputEmail1">Adresse E-mail </label>
+                                <input type="email" class="form-control" id="exampleInputEmail1"
+                                       placeholder="Email address">
+                            </div>
+                            <div class="form-group mb-50">
+                                <label class="text-bold-600" for="Role">Rôle</label>
+                                <select class="custom-select" id="inputGroupSelected" data-search="true"  asp-items="@ViewBag.Roles" required>
+                                    <option value="" selected disabled>Séléctionnez un rôle...</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-2">
+                                <label class="text-bold-600" for="exampleInputPassword1">Mot de passe</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                       placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onkeyup="validationmdp()" required>
+                                <div id='message2' style="color:red;display:none">Doit contenir au moins un chiffre, un caractère spécial et une lettre majuscule, et au moins 6 caractères</div>
+                            </div>
+                            <button onclick="ajouterAllergene()" id="disabled" style="color:aliceblue;" class="btn btn-primary glow position-relative w-100">
+                                Enregistrer<i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+    function refresh() {
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 1);
+        }
+
+    var myInput = document.getElementById("exampleInputPassword1");
+    function validationmdp() {
+        var lowerCaseLetters = /[a-z]/g;
+        var upperCaseLetters = /[A-Z]/g;
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(lowerCaseLetters) && myInput.value.match(upperCaseLetters) && myInput.value.match(numbers) && myInput.value.length >= 6) {
+            document.getElementById("message2").style.display = "none";
+        }
+        else {
+            document.getElementById("message2").style.display = "block";
+        }
+    }
+
+ function ajouterAllergene() {
+     document.getElementById('disabled').disabled = true;
+     var user = {
+
+         Nom: $('#inputfirstname4').val(),
+         Prenom: $('#inputlastname4').val(),
+         GSM: $('#inputGSM').val(),
+         Adresse: $('#inputAdresse').val(),
+         UserName: $('#exampleInputUsername1').val(),
+         Email: $('#exampleInputEmail1').val(),
+         Role: $('#inputGroupSelected').val(),
+         Password: $('#exampleInputPassword1').val(),
+        };
+
+     console.log(user);
+
+     $.ajax({
+         url: '@Url.Action("RegisterUser", "Authentification")',
+         type: "POST",
+         cache: false,
+         async: true,
+         data: user,
+         success: function (data) {
+             if (data == 1)
+             {
+                 ShowNotification("Utilisateur ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                function ()
+                {
+                    window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                }, 1000);
+            }
+            else
+             {
+                 $('#message').html('Utilisateur existe déjà!').css('color', 'red');
+                @*ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout
+                     (
+                function ()
+                {
+                    window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                }, 1000);*@
+             }
+
+         },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+ }
+
+
+     function Reset(id) {
+
+        var data = {
+            id: id
+        };
+        $.ajax({
+        url: '@Url.Action("Reset", "Authentification")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data == true)
+                 {
+                     ShowNotification("Mot de passe réinitialisé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                     setTimeout(
+                    function ()
+                    {
+                        window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                    }, 1000);
+                }
+                else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                     setTimeout
+                         (
+                    function ()
+                    {
+                        window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                    }, 1000);
+                 }
+            },
+            error: function () {
+                ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+        });
+    }
+
+     function Activer(id) {
+
+        var data = {
+            id: id
+        };
+
+         $.ajax({
+             url: '@Url.Action("Activation", "Authentification")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data,
+             success: function (data) {
+             if (data == true)
+             {
+                 ShowNotification("Compte activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                function ()
+                {
+                    window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                }, 1000);
+             }
+            else
+             {
+                ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout
+                     (
+                function ()
+                {
+                    window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                }, 1000);
+             }
+             },
+             error: function () {
+                 ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+             }
+
+        });
+
+    }
+
+    function Desactiver(id) {
+
+        var data = {
+            id: id
+        };
+        $.ajax({
+        url: '@Url.Action("Desactivation", "Authentification")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                 if (data == true)
+                 {
+                     ShowNotification("Compte désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                     setTimeout(
+                    function ()
+                    {
+                        window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                    }, 1000);
+                }
+                else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                     setTimeout
+                         (
+                    function ()
+                    {
+                        window.location.href = '@Url.Action("Utilisateurs", "Authentification")';
+                    }, 1000);
+                 }
+            },
+            error: function () {
+                ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+        });
+    }
+    function displayDashboard() {
+        var pv = $("#roles").val();
+        var statut = $("#statut").val();
+        console.log(pv, statut);
+        window.location.href = '/Authentification/Utilisateurs?role=' + pv + "&statut=" + statut;
+    }
+</script>

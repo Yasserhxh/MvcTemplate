@@ -1,0 +1,487 @@
+﻿@{
+    ViewData["Title"] = "Fiches Technique de base";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@model Domain.Models.FicheTehcniqueProduitBaseModel
+
+@{
+    ViewData["Title"] = "Ajouter une Fiche";
+}
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFichesTechniquesBase">Liste des fiches techniques des produits de base</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter une fiche technique</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="validationTooltip01">Libellé</label>
+                                                            <div>
+                                                                <input type="text" id="libelle" asp-for="FicheTechniqueProduitBase_Libelle" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-2">
+                                                            <label for="validationTooltip01">Produit de base</label>
+                                                            <div>
+                                                                <select class="custom-select" id="produit" data-search="true" asp-for="FicheTechniqueProduitBase_ProduitBaseID" asp-items="@ViewBag.produitBase" onchange="getUnite()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div> 
+                                                        <div class="col-md-6 mb-2">
+                                                            <label for="qte">Quantité à produire</label>
+                                                            <input id="qteFiche" type="number" min="0" step=".01" asp-for="FicheTechniqueProduitBase_QuantiteProd" class="form-control" />
+                                                        </div>
+                                                        <div class="col-md-6 mb-2">
+                                                            <label for="unite">Unité de mesure</label>
+                                                            <div>
+                                                                <select class="custom-select" id="uniteFiche" data-search="true" asp-for="FicheTechniqueProduitBase_UniteMesureID" required>
+                                                                    <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->
+
+                                                <fieldset>
+                                                    <legend>Détails de la fiche technique</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Matière première</label>
+                                                            <select class="custom-select" id="matiere" data-search="true" asp-for="@Model.ProduitBase_FicheTechnique[0].ProduitBaseFicheTechnique_MatierePremiereID" asp-items="@ViewBag.FicheTechnique_MatierePremiereId" onchange="UniteList()">
+                                                                <option value="" selected disabled>Choisir une matière première ...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="QuantiteMatiere">Quantité</label>
+                                                            <input id="quantite" type="number" min="0" step=".01" asp-for="@Model.ProduitBase_FicheTechnique[0].ProduitBaseFicheTechnique_QuantiteMatiere" class="form-control" />
+
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="UniteMesure"> Unité de mesure</label>
+                                                            <div>
+                                                                <select class="custom-select" id="unite" data-search="true" asp-for="@Model.ProduitBase_FicheTechnique[0].ProduitBaseFicheTechnique_UniteMesureID">
+                                                                    <option value="" selected disabled>Choisir une unité de mesure ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableCamions" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Matière première</th>
+                                                                            <th>Quantité</th>
+                                                                            <th>Unité</th>
+                                                                            <th>Prix</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                          
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer la fiche technique</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    function camionAdd() {
+
+        if ($("#matiere").val() != null && $("#matiere").val() != '' &&
+            $("#quantite").val() != null && $("#quantite").val() != '' &&
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function formeadd() {
+
+        if ($("#forme").val() != null && $("#forme").val() != '' &&
+            $("#qteforme").val() != null && $("#qteforme").val() != '' &&
+            $("#uniteforme").val() != null && $("#uniteforme").val() != ''
+
+        ) {
+            formeAjout();
+            formClear();
+        }
+    }
+
+
+
+
+    function camionAjout()
+    {
+      
+        var matieretxt = $("#matiere option:selected").text();
+        var matiereval = $("#matiere option:selected").val();
+
+        var quantitetxt = $("#quantite").text();
+        var quantiteval = $("#quantite").val();
+
+        var unitetxt = $("#unite option:selected").text();
+        var uniteval = $("#unite option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        } 
+        var calPrix =
+        {
+            matiere : $("#matiere option:selected").val(),
+            unite : $("#unite option:selected").val(),
+            quantite: parseFloat($("#quantite").val()).toFixed(3).replace(".", ","),
+        };
+        $.ajax({
+        url: '@Url.Action("CalculerPrix", "MatierePremiere")',
+        type: "POST",
+        cache: false,
+        data: calPrix,
+            success: function (data) {
+                if (data != null) {
+                    var table = document.getElementById("tbodyCamions");
+                    var matiere = 0;
+                    var quantite = 0;
+                    var unite = 0;
+                    var cdr = 0;
+                    var unitetext = "";
+                    var val = 0;
+                    if ($("#tableCamions tbody").length == 0) {
+                        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+                        //document.getElementById('divTable').style.display = "block";
+                    } else {
+                        for (var i = 0; i < table.rows.length; i++) {
+                            if (table.rows[i].cells[6].innerHTML == matiereval) {
+                                if ((uniteval == 1 && table.rows[i].cells[8].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[8].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                                else if ((uniteval == 2 && table.rows[i].cells[8].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[8].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                                else { quantiteval = parseFloat(qteformeval); }
+                                matiere = table.rows[i].cells[6].innerHTML;
+                                quantite = table.rows[i].cells[2].innerHTML;
+                                uniteval = table.rows[i].cells[8].innerHTML;
+                                unitetxt = table.rows[i].cells[3].innerHTML;
+                                cdr = table.rows[i].cells[4].innerHTML;
+                                table.rows[i].remove();
+                                // table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
+                                // table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML;
+
+                            }
+                        }
+                    }
+                    val = parseFloat(data) + parseFloat(cdr);
+                    console.log(val, data, parseFloat(cdr));
+                    quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+                $("#tbodyCamions").append("<tr>" +
+                    "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#produit option:selected").text() + "</td>" +
+                    "<td class='border-b dark:border-dark-5 text-sm-left'>" + matieretxt + "</td>" +
+                    "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(3) + "</td>" +
+                    "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
+                    "<td class='border-b dark:border-dark-5'>" + parseFloat(val).toFixed(3) + "</td>" +
+                    "<td style='display:none;'>" + $("#produit option:selected").val() + "</td>" +
+                    "<td style='display:none;'>" + matiereval + "</td>" +
+                    "<td style='display:none;'>" + parseFloat(quantiteval).toFixed(3).replace(".", ",") + "</td>" +
+                    "<td style='display:none;'>" + uniteval + "</td>" +
+                    "<td class='count' style='display:none;'>" + parseFloat(val).toFixed(3).replace(".", ",") + "</td>" +
+                    "<td class='text-right'>" +
+                    '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+                    "</tr>");
+
+
+
+            } else {
+                ShowNotification("Une erreur est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+
+    }
+    function formeAjout()
+    {
+        var produittxt = $("#produit option:selected").text();
+        var produitval = $("#produit option:selected").val();
+
+        var formeproduittxt = $("#forme option:selected").text();
+        var formeproduitval = $("#forme option:selected").val();
+
+        var qteformeval = $("#qteforme").val();
+
+        var uniteformetxt = $("#uniteforme option:selected").text();
+        var uniteformeval = $("#uniteforme option:selected").val();
+
+        if ($("#tableForme tbody").length == 0) {
+            $("#tableForme").append("<tbody id='tbodyForme'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+        $("#tbodyForme").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + produitval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + produittxt + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + formeproduitval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + formeproduittxt + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(qteformeval).toFixed(2).replace(".", ",") + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteformeval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + uniteformetxt + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+
+    }
+    function formCamionClear() {
+        $("#matiere").val("");
+        $("#quantite").val("");
+        $("#unite").val("");
+    }
+    function formClear() {
+        $("#forme").val("");
+        $("#qteforme").val("");
+        $("#uniteforme").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ProduitId = $("#produit option:selected").val() ;
+        var Libelle = $("#libelle").val() ;
+        var uniteFiche = $("#uniteFiche").val() ;
+        var qteFiche = $("#qteFiche").val() ;
+        var ListMatieres = new Array();
+        var ListFormes = new Array();
+        var prixT =parseFloat(0);
+        var table = document.getElementById("tbodyCamions");
+        var tableForme = document.getElementById("tbodyForme");
+        var formeproduit = 0;
+        var qteforme = 0;
+        var uniteforme = 0;
+        var matiere = 0;
+        var quantite = 0;
+        var unite = 0;
+        var prix = 0;
+        if (table != null) {
+            for (var i = 0; i < table.rows.length; i++) {
+                produit = table.rows[i].cells[5].innerHTML;
+                matiere = table.rows[i].cells[6].innerHTML;
+                quantite = table.rows[i].cells[7].innerHTML;
+                unite = table.rows[i].cells[8].innerHTML;
+                prix = table.rows[i].cells[9].innerHTML;
+
+                var fiche = {
+                    ProduitBaseFicheTechnique_FicheTehcniqueProduitBaseID: "",
+                    ProduitBaseFicheTechnique_MatierePremiereID: "",
+                    ProduitBaseFicheTechnique_UniteMesureID: "",
+                    ProduitBaseFicheTechnique_QuantiteMatiere: "",
+                    ProduitBaseFicheTechnique_Prix: "",
+                }
+
+                fiche.ProduitBaseFicheTechnique_FicheTehcniqueProduitBaseID = produit;
+                fiche.ProduitBaseFicheTechnique_MatierePremiereID = matiere;
+                fiche.ProduitBaseFicheTechnique_UniteMesureID = unite;
+                fiche.ProduitBaseFicheTechnique_QuantiteMatiere = quantite;
+                fiche.ProduitBaseFicheTechnique_Prix = prix;
+                ListMatieres.push(fiche);
+
+            }
+        }
+
+
+            var fichebridge = {
+                FicheTechniqueProduitBase_ProduitBaseID: ProduitId,
+                FicheTechniqueProduitBase_Libelle: Libelle,
+                FicheTechniqueProduitBase_QuantiteProd: parseFloat(qteFiche).toFixed(2).replace(".",","),
+                FicheTechniqueProduitBase_UniteMesureID: uniteFiche ,
+                //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
+                ProduitBase_FicheTechnique: ListMatieres,
+                //Fiche_Forme: ListFormes,
+            }
+
+            var data = {
+                fiche: fichebridge
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("AjouterFicheBase", "FicheTechnique")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Fiche Technique ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeFichesTechniquesBase", "FicheTechnique")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+        }
+
+    function getUnite()
+    {
+          var data = { Id: parseInt($("#produit").val()) };
+              $.ajax({
+                url: '@Url.Action("GetUniteBase", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                  success: function (data) {
+                      console.log(data);
+                      if ($("#uniteFiche option").length > 1) {
+                          $.each($("#uniteFiche option"), function (i, item) {
+                              item.remove();
+                          });
+                          $("#uniteFiche").append("<option value='' selected disabled>Sélectionnez une unite</option>");
+                      }
+                      $.each(data, function (i, item) {
+                          $("#uniteFiche").append($('<option>', {
+                              value: item.value,
+                              text: item.text
+                          }));
+                      });
+
+                      //console.log(data);
+                      //$("#uniteforme").val(data.produitVendable_UniteMesureId);
+                },
+                error: function () {
+                }
+            });
+
+    }
+    
+    function UniteList()
+    {
+          var data = { Id: parseInt($("#matiere").val()) };
+        if ($("#matiere").val() != null)
+        {
+            $.ajax({
+                url: '@Url.Action("getListUniteMesure", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez une unite de mesure </option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+        }
+    }
+</script>

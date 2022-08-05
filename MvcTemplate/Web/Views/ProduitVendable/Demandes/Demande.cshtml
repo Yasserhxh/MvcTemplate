@@ -1,0 +1,495 @@
+﻿@{ ViewData["Title"] = "Produits Vendable ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.DemandeModel
+
+@{ ViewData["Title"] = "Demande de sortie de stock"; }
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeDeDemandes">Liste des demandes spéciales</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Ajouter une demande.</h4>
+                <a class="heading-elements-toggle">
+                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                </a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li>
+                            <a data-action="collapse">
+                                <i class="bx bx-chevron-down"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-action="expand">
+                                <i class="bx bx-fullscreen"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-action="reload">
+                                <i class="bx bx-revision"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- table success start -->
+
+                            <div class="card mb-1">
+                                <!-- form start -->
+                                <form class="needs-validation" novalidate="">
+                                    <div class="form-row">
+                                        <div class="col-md-3 mb-1">
+                                            <label for="demande">Type de demande</label>
+                                            <div>
+                                                <select class="custom-select" id="demande" data-search="true" asp-for="Demande_Type" onchange="show()" required>
+                                                    <option value="" selected>Choisissez le type de demande...</option>
+                                                    <option value="Complementaire">Demande Complementaire</option>
+                                                    <option value="Recherche et Developpment">Recherche et développement</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-1" id="mot" style="display:none;">
+                                            <label for="Motif">Description</label>
+                                            <div>
+                                                <input id="motif" type="text" asp-for="Demande_Motif" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-1" id="planif" style="display:none;">
+                                            <label for="Motif">Planification de production</label>
+                                            <div>
+                                                <select class="custom-select" id="plan" data-search="true"  asp-items="@ViewBag.Demande_PlanificationID" onchange="fillMatiereDemande()" required>
+                                                    <option value="" selected disabled>Choisissez une planification de production...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            <label for="planificationProduction">Point de stockage</label>
+                                            <div>
+                                                <select class="custom-select" id="planification" data-search="true" asp-for="Demande_LieuStockageID" asp-items="@ViewBag.lieuID" required>
+                                                    <option value="" selected>Choisir un point de stockage...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- form ends -->
+                                <fieldset>
+                                    <legend>Détails de demande</legend>
+                                    <div class="form-row">
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Matiere">Matière Première</label>
+                                            <div>
+                                                <select class="custom-select" id="matiere" data-search="true" asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_MatiereId" asp-items="@ViewBag.MatierePremiere"  onchange="getQteMagasin()" required>
+                                                    <option value="" selected disabled>Sélectionnez une matière première ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 mb-1">
+                                            <label for="Matiere">Quantité en magasin</label>
+                                            <input id="qteM" type="text"  disabled class="form-control" />
+
+                                        </div>
+                                        <div class="col-md-2 mb-1">
+                                            <label for="Quantite">Quantité à demander</label>
+                                            <input id="quantite" type="text" asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_Quantite" class="form-control" />
+
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Unite">Unité de mesure</label>
+                                            <div>
+                                                <select class="custom-select" id="unite" data-search="true" asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
+                                                    <option value="" selected>Sélectionnez une unité ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class=" text-md-right">
+                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="table-responsive">
+                                                <table id="tableCamions" class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Matières premières</th>
+                                                            <th>Quantité à demander</th>
+                                                            <th>Unité de mesure</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+
+                            <!-- table success ends -->
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                    </div>
+                    <div>
+                        <button type="button" id="disabled" class="btn btn-success glow " onclick="AjoutTrpMoral()">Enregistrer la demande </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Détails.</h4>
+                    <a class="heading-elements-toggle">
+                        <i class="bx bx-dots-vertical font-medium-3"></i>
+                    </a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li>
+                                <a data-action="collapse">
+                                    <i class="bx bx-chevron-down"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-action="expand">
+                                    <i class="bx bx-fullscreen"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-action="reload">
+                                    <i class="bx bx-revision"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">-->
+
+                    <!-- datatable start -->
+                    <!--<div class="table-responsive">
+                        <div id="divTable" class="overflow-x-auto" style="display: none">
+                            <table id="tableCamions" class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantité</th>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Unité Mesure </th>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Matière Première</th>
+                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                            <button class="btn btn-success" onclick="AjoutTrpMoral()">
+                                <i class="bx bx-play"></i> Enregistrer
+                            </button>
+
+                            <a class="btn btn-danger" asp-action="ListeDesPlans">
+                                Annuler
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>-->
+    </div>
+</div>
+
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (
+            $("#quantite").val() != null && $("#quantite").val() != '' &&
+            $("#demande").val() != null && $("#demande").val() != '' &&
+            $("#planification").val() != null && $("#planification").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout()
+    {
+        var matiere = 0;
+        var quantite = 0;
+        var unite = 0;
+        var table = document.getElementById("tbodyCamions");
+
+        var demandeTxt = $("#demande option:selected").text();
+        var demandeVal = $("#demande option:selected").val();
+
+        var planiftxt = $("#planif option:selected").text();
+        var planifVal = $("#planif option:selected").val();
+
+        var planTxt = $("#planification option:selected").text();
+        var planVal = $("#planification option:selected").val();
+
+        var matiereTxt = $("#matiere option:selected").text();
+        var matiereVal = $("#matiere option:selected").val();
+
+        var quantitetxt = $("#quantite").text();
+        var quantiteval = $("#quantite").val();
+
+        var uniteText = $("#unite option:selected").text();
+        var uniteVal = $("#unite option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        } else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[5].innerHTML == matiereVal) {
+                    if ((uniteVal == 1 && table.rows[i].cells[3].innerHTML == 2) || (uniteVal == 4 && table.rows[i].cells[3].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                    else if ((uniteVal == 2 && table.rows[i].cells[3].innerHTML == 1) || (uniteVal == 3 && table.rows[i].cells[3].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                    else { quantiteval = parseFloat(quantiteval); }
+                    matiere = table.rows[i].cells[5].innerHTML;
+                    quantite = table.rows[i].cells[2].innerHTML;
+                    uniteVal = table.rows[i].cells[3].innerHTML;
+                    uniteText = table.rows[i].cells[4].innerHTML;
+                    table.rows[i].remove();
+
+
+                }
+            }
+        }
+        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+
+
+
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;' >" + demandeVal + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + matiereTxt + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(3)+ "</td>" +
+
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + uniteVal + "</td>" +
+            "<td>" + uniteText + "</td>" +
+
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + planVal + "</td>" +
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + planifVal + "</td>" +
+
+            "<td>" +
+            '<button class="btn btn-outline-secondary btn-table round " onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+        $("#unite").val("");
+        $("#quantite").val("");
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListDetails = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var plan = 0;
+        var planif = 0;
+        var type = "";
+        var motif = $("#motif").val();
+        var bonQte = 0;
+        var bonUnite = 0;
+        var bonMatiere = 0;
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+
+            type = table.rows[i].cells[0].innerHTML;
+            planif = table.rows[i].cells[7].innerHTML;
+            plan = table.rows[i].cells[6].innerHTML;
+            bonQte = table.rows[i].cells[2].innerHTML;
+            bonUnite = table.rows[i].cells[3].innerHTML;
+            bonMatiere = table.rows[i].cells[5].innerHTML;
+            var details = {
+                BonDeSortie_Quantite: parseFloat(bonQte).toFixed(3).replace(".",","),
+                BonDeSortie_UniteMesureId: bonUnite,
+                BonDeSortie_MatiereId: bonMatiere,
+                BonDeSortie_QuantiteDemandee: parseFloat(bonQte).toFixed(3).replace(".", ","),
+            };
+            ListDetails.push(details);
+
+            }
+            console.log(ListDetails);
+
+            var demande = {
+                Demande_Type: type,
+                Demande_LieuStockageID: plan,
+                Demande_PlanificationID: planif,
+                Demande_Etat: "En traitement",
+                Demande_Motif: motif,
+                BonDe_Sortie: {
+                    Bon_Details: ListDetails,
+                },
+
+            }
+
+            var data = {
+                demandeModel: demande
+        };
+            console.log(data);
+
+        $.ajax({
+            url: '@Url.Action("Demander", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                 ShowNotification("Demande ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 1000);
+             }
+             else
+             {
+                 ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                     function () {
+                         window.location.reload();
+                     }, 1000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+    function getQteMagasin() {
+            $.ajax({
+                url: '@Url.Action("getQuantiteEnMagasin", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: { 'matiereId': parseInt($("#matiere option:selected").val()) },
+                success: function (data) {
+                    $("#qteM").val(data.matierePremiere_QuantiteEnMagasin + " " + data.matierePremiere_UniteMesureLibelle);
+                },
+                error: function () {
+                }
+            });
+        $.ajax({
+                url: '@Url.Action("getListUniteMesure", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: false,
+                data: { 'Id': parseInt($("#matiere option:selected").val()) },
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez une unite de mesure </option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+    }
+    function show() {
+        var type = $("#demande option:selected").val();
+        if (type === "Complementaire")
+        {
+            document.getElementById('mot').style.display = "none";
+            $("#motif").val("");
+            document.getElementById('planif').style.display = "block";
+        }
+        if (type === "Recherche et Developpment")
+        {
+            document.getElementById('planif').style.display = "none";
+            $("#plan").val("");
+            document.getElementById('mot').style.display = "block";
+        }
+    }
+    function fillMatiereDemande() {
+        var planJourneeID = $("#plan option:selected").val();
+        if (parseInt(planJourneeID) != null) {
+            console.log(planJourneeID);
+            $.ajax({
+                url: '@Url.Action("fillMatiereDemande", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: false,
+                data: { 'planJourneeID': parseInt(planJourneeID)},
+                success: function (data) {
+                    if ($("#matiere option").length > 1) {
+                        $.each($("#matiere option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#matiere").append("<option value='' selected disabled>Sélectionnez une matière première ...</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#matiere").append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    
+</script>

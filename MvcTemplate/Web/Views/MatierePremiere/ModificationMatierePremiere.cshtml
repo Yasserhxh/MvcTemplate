@@ -1,0 +1,249 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.MatierePremiereModel
+
+@{ ViewData["Title"] = "Matiere Premiere"; }
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeMatierePremiere">Liste des matières première</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Modifier une matière première</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="info-tabs-">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card icon-tab">
+                        <div class="card-body">
+                            <fieldset>
+                                <legend>Informations</legend>
+                                <form class="wizard-horizontal wizard clearfix" asp-action="ModificationMatierePremiere" asp-controller="MatierePremiere" method="post">
+                                    <div class="content clearfix">
+                                        <!-- Step 1 -->
+                                        <h6 id="steps-uid-1-h-0" tabindex="-1" class="title current">
+                                        </h6>
+                                        <!-- Step 1 end-->
+                                        <!-- body content of step 1 -->
+                                        <fieldset id="steps-uid-1-p-0" role="tabpanel" aria-labelledby="steps-uid-1-h-0" class="body current" aria-hidden="false" style="border:2px solid #fff">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h6 class="py-50"></h6>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Libellé</label>
+                                                        <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matiere" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Catégorie matière première</label>
+                                                        <select class="custom-select" id="parentID" data-search="true" asp-for="MatierePremiere_FamilleID"  asp-items="@ViewBag.FamilleParent" onchange="familleList()" required>
+                                                            <option value="" selected>Sélectionnez une catégorie ...</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Sous-catégorie matière première</label>
+                                                        <select class="custom-select" id="childID" data-search="true" asp-for="MatierePremiere_FamilleID" required>
+                                                            <option selected disabled>Sélectionnez une sous-catégorie ...</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="AchatUniteMesure">Unité d'achat</label>
+                                                        <select class="custom-select" id="uniteAchat" data-search="true" asp-for="MatierePremiere_AchatUniteMesureId" asp-items="@ViewBag.MatierePremiere_UniteMesureId_FT" required>
+                                                            <option value="" selected>Sélectionnez l'unité de mesure ...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="Quantite_FT">Quantité d'Achat</label>
+                                                        <input type="text"  id="QteTotal" asp-for="MatierePremiere_Quantite_FT" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="FormeStockage">Forme de Stockage</label>
+                                                        <select class="custom-select" id="forme" data-search="true" asp-for="MatierePremiere_FormeStockageId" asp-items="@ViewBag.MatierePremiere_FormeStockageId">
+                                                            <option value="" selected>Sélectionnez une forme de stockage...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="PrixMoyen">Prix Moyen d'achat</label>
+                                                        <input type="text" min="0" id="prix" step=".01" asp-for="MatierePremiere_PrixMoyenAchat" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="PourcentrageTolerancePerte"> Pourcentrage de Tolérance du Perte</label>
+                                                        <input type="text" min="0" id="TolePerte" max="100" step=".01" asp-for="MatierePremiere_PourcentrageTolerancePerte" onchange="onchangeevent()" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="">Quantité utilisée</label>
+                                                        <input type="text" id="QteUsed" min="0" step=".01" onchange="onchangeQte()" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <p><label for="EstAllergene">Est Allergène:</label></p>
+                                                        <ul class="list-unstyled mb-0">
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset style="border:2px solid #fff">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio"  asp-for="MatierePremiere_EstAllergene" class="custom-control-input" onclick="fct1()" value="0" id="customColorRadio3">
+                                                                        <label class="custom-control-label" for="customColorRadio3">Non</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset style="border:2px solid #fff">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio"  asp-for="MatierePremiere_EstAllergene" class="custom-control-input"  value="1" id="customColorRadio4" onclick="fct1()">
+                                                                        <label class="custom-control-label" for="customColorRadio4">Oui</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="Allergene">Nom d'allergène</label>
+                                                        <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="MatierePremiere_AllergeneId" asp-items="@ViewBag.MatierePremiere_AllergeneId" disabled="disabled">
+                                                            <option value="" selected disabled>Sélectionnez une allergene...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <hr>
+
+                                        </fieldset>
+                                        <!-- body content of step 1 end-->
+                                    </div>
+                                    <div class="form-actions text-right">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="icon-note"></i> Modifier
+                                        </button>
+                                        <a asp-action="ListeMatierePremiere" class="btn btn-danger">
+                                            Annuler
+                                        </a>
+
+                                    </div>
+                                </form>
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    window.onload = function() {
+        familleList();
+        fct1();
+   /*     onchangeevent();*/
+        /*onchangeQte();*/
+    };
+    function familleList()
+    {
+        var data = { familleParent: parseInt($("#parentID").val()) };
+        if ($("#parentID").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#childID option").length > 1) {
+                        $.each($("#childID option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#childID").append("<option value='' selected disabled>Sélectionnez une sous-catégorie</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#childID").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    } function fct1() {
+        if (document.getElementById('customColorRadio3').checked) {
+            document.getElementById('inputGroupSelected02').disabled = true;
+        } else if (document.getElementById('customColorRadio4').checked) {
+            document.getElementById('inputGroupSelected02').disabled = false;
+
+        }
+    }
+    function onchangeevent() {
+        var val = (parseFloat($("#TolePerte").val()) * parseFloat($("#QteTotal").val())) / 100;
+        var reste = parseFloat($("#QteTotal").val()) - val;
+        console.log(val);
+        console.log(reste);      
+        if (reste < 0) {
+            reste = 0;
+        }
+        if (reste > $('#QteTotal').val()) {
+            reste = $('#QteTotal').val();
+        }
+        $('#QteUsed').val(reste);
+    }
+    function onchangeQte() {
+        var val = ($('#QteUsed').val() * 100) / $('#QteTotal').val();
+        var pourcentage = 100 - val;
+        if (pourcentage < 0) {
+            pourcentage = 0;
+        }
+        if (pourcentage > 100) {
+            pourcentage = 100;
+        }
+        $('#TolePerte').val(parseFloat(pourcentage).toFixed(2));
+    }
+</script>
+

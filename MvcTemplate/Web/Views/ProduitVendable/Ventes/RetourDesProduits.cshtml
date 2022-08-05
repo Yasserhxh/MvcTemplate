@@ -1,0 +1,346 @@
+﻿@{ ViewData["Title"] = "Retour produits ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.RetourProduitsModel
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeRetours">Liste des retours de produit</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Retour des produits</legend>
+                        <div class="form-row">
+                            <div class="col-md-2 mb-1">
+                                <label for="Produit">Produit</label>
+                                <div>
+                                    <select class="custom-select" id="produit" data-search="true" asp-items="@ViewBag.produits" onchange="matiereListe()">
+                                        <option value="" selected disabled>Sélectionnez un produit...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="Forme">Forme </label>
+                                <div>
+                                    <select class="custom-select" id="forme" data-search="true" onchange="uniteListe()">
+                                        <option value="" selected disabled>Sélectionnez la matière première...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Quantite">Quantité</label>
+                                <input type="number" min="0" id="qte" step=".01"  class="form-control" onkeyup="getprix()" required />
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="UniteMesure">Unité</label>
+                                <div>
+                                    <select class="custom-select" id="unite" data-search="true" >
+                                        <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 mb-1">
+                                <label for="Prix">Prix</label>
+                                <input type="number" min="0" id="prix" step=".01" class="form-control" required disabled/>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <div class="form-group">
+                                    <label for="DateReception">Date de retour</label>
+                                    <input type="date" id="date" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class=" text-md-right">
+                                <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <div class="table-responsive">
+                                    <table id="tableCamions" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Forme</th>
+                                                <th>Quantité</th>
+                                                <th>Unité</th>
+                                                <th>Prix</th>
+                                                <th>Date de retour</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="card-footer d-flex justify-content-between text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script>
+
+
+
+    function matiereListe()
+    {
+        var data = { produitId: parseInt($("#produit").val()) };
+        if ($("#produit").val() != null) {
+            $.ajax({
+                url: '@Url.Action("FormeListe", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function uniteListe()
+    {
+        var data = { produitId: parseInt($("#produit option:selected").val()) };
+        if ($("#produit option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getUniteVente", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez L'unite de vente</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+
+    function getprix() {
+        var quantite = parseFloat($("#qte").val()).toFixed(2).replace(".", ",");
+        var FormeId = parseInt($('#forme option:selected').val());
+        var data = {
+            Id: FormeId,
+            qte: quantite,
+        }
+
+           $.ajax({
+            url: '@Url.Action("GetPrix", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+               success: function (data) {
+                   $('#prix').val(data);
+
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+           });
+
+    }
+
+
+
+
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#qte").val() != null && $("#qte").val() != '' &&
+            $("#prix").val() != null && $("#prix").val() != '' &&
+            $("#date").val() != null && $("#date").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var fournisseurval = $("#produit option:selected").val();
+        var matiereval = $("#forme option:selected").val();
+        var quaniteval = $("#qte").val();
+        var uniteval = $("#unite").val();
+        var dateval = $("#date").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#produit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#forme option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + quaniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#unite option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#prix").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + dateval + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#produit").val("");
+        $("#prix").val("");
+        $("#forme").val("");
+        $("#qte").val("");
+        $("#unite").val("");
+        $("#date").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListeRetour = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var Fournisseur = 0;
+        var prix = 0;
+        var matiereStockage = 0;
+        var quantite = 0.00;
+        var unite = 0;
+        var date = "";
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            Fournisseur = table.rows[i].cells[0].innerHTML;
+            matiere = table.rows[i].cells[1].innerHTML;
+            quantite = table.rows[i].cells[5].innerHTML;
+            prix = table.rows[i].cells[7].innerHTML;
+            unite = table.rows[i].cells[2].innerHTML;
+            date = table.rows[i].cells[8].innerHTML;
+
+            var Details = {
+                RetourDetails_FormeID: "",
+                RetourDetails_PrixProduit: 0,
+                RetourDetails_Quantite: 0,
+                RetourDetails_UniteVente: 0,
+                RetourDetails_PrixTotal: 0,
+                RetourDetails_DateRetour: 0,
+            }
+
+            Details.RetourDetails_FormeID = matiere;
+            Details.RetourDetails_PrixProduit = parseFloat(prix).toFixed(2).replace(".", ",");
+            Details.RetourDetails_Quantite = parseFloat(quantite).toFixed(2).replace(".", ",");
+            Details.RetourDetails_PrixTotal = parseFloat(prix * quantite).toFixed(2).replace(".", ",");
+            Details.RetourDetails_UniteVente = unite;
+            Details.RetourDetails_DateRetour = date;
+            ListeRetour.push(Details);
+
+        }
+         var Model = {
+             retourDetails: ListeRetour,
+         }
+
+
+
+            var data = {
+                retourModel: Model
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("RetourDesProduits", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("RetourDesProduits", "ProduitVendable")';
+                            }, 1000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("RetourDesProduits", "ProduitVendable")';
+                            }, 1000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+</script>
+

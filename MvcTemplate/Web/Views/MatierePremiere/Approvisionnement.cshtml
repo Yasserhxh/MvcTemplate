@@ -1,0 +1,158 @@
+﻿
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.Approvisionnement_MatiereModel
+
+@{ ViewData["Title"] = "Approvisionnement des matières premières"; }
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeApprovisionnementProduits">Liste des approvisionnements</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-body">
+                    <div class="px-3">
+                        <fieldset>
+                            <legend>Approvisionner un point de vente</legend>
+                            <form class="form" action="ApprovisionnementMatiere" onsubmit="theButton.disabled = true; return true;" method="post">
+                                <div class="form-body">
+                                    <h4 class="form-section">
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Produit">Matière première</label>
+                                                <select class="custom-select" id="matiere" data-search="true" asp-for="ApprovisionnementMatiere_MatiereStockID" asp-items="@ViewBag.MatiereStockage" onchange="uniteListe()" required>
+                                                    <option value="" selected>Choisissez une matiere premiere...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Qte Produite">Quantité en stock</label>
+                                                <input type="text" class="form-control" id="qteproduite" placeholder="Quantite en stock" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="qteDist">Quantité à livrer</label>
+                                                <input type="text" class="form-control" id="qteDistu" asp-for="ApprovisionnementMatiere_Quantite" placeholder="Quantite à livrer" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Unite">Unite de mesure</label>
+                                                <select class="custom-select" id="unite" data-search="true" asp-for="ApprovisionnementMatiere_UniteID" asp-items="@ViewBag.unite" required>
+                                                    <option value="" selected>Choisissez une unite de mesure...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="PdV">Point de production</label>
+                                                <select class="custom-select" id="pdv" data-search="true" asp-for="ApprovisionnementMatiere_AtelierID" asp-items="@ViewBag.production" required>
+                                                    <option value="" selected>Choisissez un point de production...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Date d'approvisionnement </label>
+                                                <input type="date" class="form-control" asp-for="ApprovisionnementMatiere_DateApprovisionnement" id="dateDist" required />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions text-sm-right">
+                                    <button class="btn btn-danger" asp-action="ListeApprovisionnementProduits">
+                                        Annuler
+                                    </button>
+                                    <button type="submit" name="theButton" class="btn btn-success">
+                                        <i class="icon-note"></i> Enregistrer
+                                    </button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<script>
+    function uniteListe()
+    {
+        var data = { MatierePremiereStokage_Id: parseInt($("#matiere option:selected").val()) };
+        if ($("#matiere option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getUnite", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez L'unite de mesure</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+            $.ajax({
+                url: '@Url.Action("getQteStock", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: { 'id': parseInt($("#matiere option:selected").val()) },
+                success: function (data) {
+                    $("#qteproduite").val(data);
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('dateDist').value = new Date().toDateInputValue();
+</script>

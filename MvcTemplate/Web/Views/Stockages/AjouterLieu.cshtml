@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.Lieu_StockageModel
+
+@{
+    ViewData["Title"] = "Ajouter Lieu";
+}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeLieuStockage">Liste des point de stockage</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form">Ajouter un point de Stockage</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+                        <form class="form" action="AjouterLieu" method="post">
+                            <div class="form-body">
+                                <h4 class="form-section">
+                                </h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="Nom">Point de stockage</label>
+                                            <input type="text" asp-for="LieuStockag_Nom" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="Adresse">Adresse </label>
+                                            <input type="text" asp-for="LieuStockag_Adresse" class="form-control" required />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="LieuStockage">Responsable</label>
+                                            <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="LieuStockag_UTILISATEUR" asp-items="@ViewBag.User" onchange="getRespoName()">
+                                                <option value="" selected disabled>Sélectionnez un responsable ...</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="NomRespo"> Nom de Responsable</label>
+                                            <input type="text" asp-for="LieuStockag_NomResponsable" class="form-control" id="respoNom" disabled />
+                                        </div>
+                                       
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="Telephone"> Numéro de Téléphone</label>
+                                            <input type="tel" pattern="[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}" asp-for="LieuStockag_Telephone" class="form-control" id="gsm" disabled />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-actions">
+                                <a class="btn btn-danger" asp-action="ListeLieuStockage">
+                                    Annuler
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="icon-note"></i> Enregistrer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script>
+    function getRespoName() {
+        var data = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoName", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data,
+                 success: function (data) {
+                     console.log(data);
+                     $("#respoNom").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+
+
+
+        var data2 = { userId: $('#inputGroupSelected02 option:selected').val() }
+         $.ajax({
+
+             url: '@Url.Action("getRespoPhoneNumber", "Clients")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data2,
+                 success: function (data) {
+                     console.log(data);
+                     $("#gsm").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+             });
+    }
+</script>

@@ -1,0 +1,225 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.ProduitVendableModel
+
+@{ ViewData["Title"] = "Produit maison"; }
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitVendable">Liste des produits maison</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Modifier un produit maison</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="info-tabs-">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card icon-tab">
+                        <div class="card-body">
+                            <fieldset>
+                                <legend>Informations</legend>
+                                <form class="wizard-horizontal wizard clearfix" asp-action="Modification" asp-controller="ProduitVendable" method="post" onsubmit="theButton.disabled = true; return true;" enctype="multipart/form-data">
+                                    <div class="content clearfix">
+                                        <!-- Step 1 -->
+                                        <h6 id="steps-uid-1-h-0" tabindex="-1" class="title current">
+                                        </h6>
+                                        <!-- Step 1 end-->
+                                        <!-- body content of step 1 -->
+                                        <fieldset id="steps-uid-1-p-0" role="tabpanel" aria-labelledby="steps-uid-1-h-0" class="body current" aria-hidden="false" style="border:2px solid #fff">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h6 class="py-50"></h6>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Libellé</label>
+                                                        <input type="text" id="libelle" asp-for="ProduitVendable_Designation" class="form-control" placeholder="Entrez le nom de la matiere" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="FamilleProduit">Famille de produit</label>
+                                                        <div>
+                                                            <select class="custom-select" id="inputGroupSelected" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="familleList()" required>
+                                                                <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="SousFamille">Sous-famille</label>
+                                                        <div>
+                                                            <select class="custom-select" asp-for="ProduitVendable_FamilleProduitId" id="sousfamille1" data-search="true" required>
+                                                                <option value="" selected>Sélectionnez une sous-famille...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="FormeStockage">Forme de Stockage</label>
+                                                        <select class="custom-select" id="forme" data-search="true" asp-for="ProduitVendable_FormStockageId">
+                                                            <option value="" selected>Sélectionnez une forme de stockage...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="delai">Delai de comsommation</label>
+                                                        <input type="text" min="0" id="delai" max="100" step=".01" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="CodeBarre">Code à barre</label>
+                                                        <input type="text" maxlength="30" asp-for="ProduitVendable_CodeBarre" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="PourcentrageTolerancePerte"> Stockage minimum</label>
+                                                        <input type="text" min="0" id="TolePerte" max="100" step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="">Stockage maximum</label>
+                                                        <input type="text" id="QteUsed" min="0" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Photo de produit</label>
+                                                        <div class="custom-file">
+                                                            <input type="file" name="files" class="custom-file-input" id="fileinput" required>
+                                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                        </fieldset>
+                                        <!-- body content of step 1 end-->
+                                    </div>
+                                    <div class="form-actions text-right">
+                                        <button type="submit" name="theButton"  class="btn btn-success">
+                                            <i class="icon-note"></i> Modifier
+                                        </button>
+                                        <a asp-action="ListeProduitVendable" class="btn btn-danger">
+                                            Annuler
+                                        </a>
+
+                                    </div>
+                                </form>
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    window.onload = function() {
+        familleList();
+        fct1();
+   /*     onchangeevent();*/
+        /*onchangeQte();*/
+    };
+    function familleList()
+    {
+        var data = { familleParent: parseInt($("#inputGroupSelected").val()) };
+        if ($("#inputGroupSelected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousfamille1 option").length > 1) {
+                        $.each($("#sousfamille1 option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousfamille1").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousfamille1").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function fct1() {
+        if (document.getElementById('customColorRadio3').checked) {
+            document.getElementById('inputGroupSelected02').disabled = true;
+        } else if (document.getElementById('customColorRadio4').checked) {
+            document.getElementById('inputGroupSelected02').disabled = false;
+
+        }
+    }
+    function onchangeevent() {
+        var val = (parseFloat($("#TolePerte").val()) * parseFloat($("#QteTotal").val())) / 100;
+        var reste = parseFloat($("#QteTotal").val()) - val;
+        console.log(val);
+        console.log(reste);
+        if (reste < 0) {
+            reste = 0;
+        }
+        if (reste > $('#QteTotal').val()) {
+            reste = $('#QteTotal').val();
+        }
+        $('#QteUsed').val(reste);
+    }
+    function onchangeQte() {
+        var val = ($('#QteUsed').val() * 100) / $('#QteTotal').val();
+        var pourcentage = 100 - val;
+        if (pourcentage < 0) {
+            pourcentage = 0;
+        }
+        if (pourcentage > 100) {
+            pourcentage = 100;
+        }
+        $('#TolePerte').val(parseFloat(pourcentage).toFixed(2));
+    }
+</script>
+

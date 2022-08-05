@@ -1,0 +1,249 @@
+﻿
+@model IEnumerable<Domain.Models.FicheTehcniqueProduitBaseModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Fiches Technique";
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFichesTechniquesBase">Liste des fiches techniques des produits de base</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> Liste des fiches techniques des produits de base</h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Libellé</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Produit de base</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Unité de mesure</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Coût de revient</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Active</th>
+                                                                    @*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Coût de Revient</th>
+                                                                    *@
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                <tr>
+                                                                    <td class="text-bold-600 pr-0" id="libelle">@Html.DisplayFor(modelItem => item.FicheTechniqueProduitBase_Libelle)</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.ProduitBase.ProduitBase_Designation)</td>
+                                                                    <td class="text-bold-600 pr-0">@item.FicheTechniqueProduitBase_QuantiteProd.ToString("G29")</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.FicheTechniqueProduitBase_CoutDeRevient) DH</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left check-tb">@Html.DisplayFor(modelItem => item.FicheTechniqueProduitBase_InUse)</td>
+                                                                    <td>
+                                                                        <div class="dropdown">
+                                                                            <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                            </span>
+                                                                            <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                <a class="dropdown-item btn-outline-secondary" asp-action="DetailsBase" asp-route-id="@item.FicheTechniqueProduitBase_ID"><i class="bx bx-detail"></i> Consulter les détails de la fiche</a>
+                                                                                @*<button class="dropdown-item btn-outline-danger" onclick="deleteFicheTechnique(@item.FicheTechniqueBridge_ID)"><i class="bx bx-trash-alt"></i> Supprimer la fiche technique</button>*@
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterFicheBase"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter une fiche technique</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script>
+
+    function deleteFicheTechnique(id) {
+            swal({
+            title: "Êtes-vous sûr?",
+            text: "La fiche technique sera supprimé",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui",
+            cancelButtonText: "Annuler",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    var data = {
+                        id: id,
+                    };
+                    $.ajax({
+                        url: '@Url.Action("DeleteFicheTechnique", "FicheTechnique")',
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        data: data,
+                        success: function (data) {
+                            if (data == true) {
+                                swal("Spprimé!", " Le produit a été supprimée", "success");
+                                setTimeout(
+                                    function () {
+                                        window.location.reload();
+                                    }, 2000);
+                            } else {
+                                swal("Non Spprimé!", "Le produit n'a pas été supprimée", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Non Spprimé!", "le produit n'a pas été supprimée", "error");
+                        }
+                        });
+                }
+            }
+        );
+    }
+
+    function Details(Libelle) {
+        console.log(Libelle)
+        window.location.href = '@Url.Action("details", "FicheTechnique")?data=' + Libelle;
+
+@*        $.ajax
+            ({
+                url: '@Url.Action("Details", "FicheTechnique")',
+                type: "POST",
+                accept: "application/json",
+                cache: false,
+                async: true,
+                data: { "Libelle": Libelle },
+                success: function (data) {
+                    if (data != null) {
+                        ShowNotification("succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                console.log(data[0].ficheTechnique_Prix);
+                                window.location.href = '@Url.Action("detailss", "FicheTechnique")?data=' + Libelle;
+
+                                }, 1000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+                    }
+                },
+            });*@
+    }
+        function displayDashboard() {
+        var categ = $("#categ").val();
+        var SousCateg = $("#SousCateg").val();
+        window.location.href = '/FicheTechnique/ListeFichesTechniques?categ=' + categ + "&SousCateg=" + SousCateg;
+    }
+    function familleList()
+    {
+        var data = { familleParent: parseInt($("#categ").val()) };
+        if ($("#categ").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#SousCateg option").length > 1) {
+                        $.each($("#SousCateg option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#SousCateg").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#SousCateg").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+
+</script>

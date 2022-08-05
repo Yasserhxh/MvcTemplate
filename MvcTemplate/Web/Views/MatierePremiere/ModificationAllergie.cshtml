@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = " Allergene ";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.AllergeneModel
+
+
+<div class="app-content content">
+    <section id="basic-form-layouts">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title" id="basic-layout-form"> Modifier Allergene</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="px-3">
+                    <form class="form" asp-action="ModificationAllergie" asp-controller="MatierePremiere" method="post">
+                        <div class="form-body">
+                            <h4 class="form-section">
+                                <i class="icon-user"></i> Modifier allergie alimentaire
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="AllergeneLabel">Nom d'allegrie</label>
+                                        <input type="text" asp-for="Allergene_Libelle" class="form-control" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-actions">
+                                <a class="btn btn-danger" asp-action="ListeAllergie" asp-controller="MatierePremiere">
+                                    Annuler la modification
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="icon-note"></i> Modifier
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>

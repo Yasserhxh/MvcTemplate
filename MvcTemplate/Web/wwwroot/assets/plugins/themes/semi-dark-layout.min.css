@@ -1,0 +1,31 @@
+body.semi-dark-layout .main-menu {
+  background-color: #371450 !important
+}
+body.semi-dark-layout .main-menu .shadow-bottom {
+  background: -webkit-linear-gradient(top, #1A233AF0 44%, #1A233ABF 73%, #2C303C00);
+  background: linear-gradient(180deg, #1A233AF0 44%, #1A233ABF 73%, #2C303C00)
+}
+body.semi-dark-layout .main-menu .navbar-header {
+  z-index: 3
+}
+body.semi-dark-layout .main-menu .navbar-header .modern-nav-toggle {
+  background-color: transparent !important
+}
+body.semi-dark-layout .main-menu-content .navigation-main {
+  background-color: transparent
+}
+body.semi-dark-layout .main-menu-content .navigation-main .nav-item a:after, body.semi-dark-layout .main-menu-content .navigation-main .nav-item i {
+  color: #efefef
+}
+body.semi-dark-layout .main-menu-content .navigation-main .nav-item .menu-content .active .menu-item {
+  color: #ffffff !important
+}
+body.semi-dark-layout .main-menu-content .navigation-main .active .menu-title, body.semi-dark-layout .main-menu-content .navigation-main .active i {
+  color: #ffffff
+}
+body.semi-dark-layout .main-menu-content .navigation-main .sidebar-group-active {
+  background: #52c1de !important
+}
+body.semi-dark-layout .main-menu-content .navigation-main .sidebar-group-active .menu-content .active {
+  background-color: #331459
+}

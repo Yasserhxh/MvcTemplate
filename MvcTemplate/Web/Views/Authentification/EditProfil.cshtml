@@ -1,0 +1,85 @@
+﻿@model Domain.Models.EditPasswordModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!-- BEGIN: Content-->
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- forgot password start -->
+            <section class="row flexbox-container">
+                <div class="col-xl-7 col-md-9 col-10  px-0">
+                    <div class="card bg-authentication mb-0">
+                        <div class="row m-0">
+                            <!-- left section-forgot password -->
+                            <div class="col-md-6 col-12 px-0">
+                                <div class="card disable-rounded-right mb-0 p-2">
+                                    <div class="card-header pb-1">
+                                        <div class="card-title">
+                                            <h4 class="text-center mb-2">Changer le mot de passe</h4>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center mb-2">
+                                            <small>
+                                                Nous vous conseillons d’utiliser un mot de passe sûr que vous n’utilisez nulle part ailleurs
+                                            </small>
+                                        </div>
+                                        <form class="mb-2" asp-controller="Authentification" asp-action="EditProfil" method="post">
+                                            <div class="form-group mb-2">
+                                                <label class="text-bold-600">
+                                                    Nom d'utilisateur
+                                                </label>
+                                                <input type="text" class="form-control" value="@User.Identity.Name" disabled>
+                                                <label class="text-bold-600">
+                                                    Ancien mot de passe
+                                                </label>
+                                                <input type="password" class="form-control" id="oldmdp" asp-for="OldPassword">
+                                                <div class="text-danger" style="color:red">
+                                                    @TempData["MdpError"]
+                                                </div>
+                                                <label class="text-bold-600">
+                                                    Nouveau mot de passe
+                                                </label>
+                                                <input class="form-control" name="password" id="password" type="password" asp-for="registerModel.Password">
+                                                <label class="text-bold-600">
+                                                    Confirmer le nouveau mot de passe
+                                                </label>
+                                                <input class="form-control" type="password" name="confirm_password" id="confirm_password">
+                                                <span id='message'></span>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary glow position-relative w-100">
+                                                Modifier le Mot de Passe
+                                                <i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- right section image -->
+                            <div class="col-md-6 d-md-block d-none text-center align-self-center">
+
+                                <img class="img-fluid" src="~/assets/images/login/forgot-password.png" alt="branding logo" width="300" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- forgot password ends -->
+
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $('#confirm_password').on('keyup', function () {
+        if ($('#password').val() == $('#confirm_password').val()) {
+            $('#message').html('Confirmé').css('color', 'green');
+        } else
+            $('#message').html('Vous devez saisir le même mot de passe afin de le confirmer').css('color', 'red');
+    });
+</script>
+<!-- END: Content-->

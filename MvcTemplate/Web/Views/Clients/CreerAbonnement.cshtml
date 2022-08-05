@@ -1,0 +1,263 @@
+﻿@{ ViewData["Title"] = "Paiement abonnement  ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.PaiementAbonnementModel
+
+<div class="app-content content">
+
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListePaiement">Liste des paiements</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Paiement des abonnements</legend>
+                        <div class="form-row">
+                            <div class="col-md-2 mb-1">
+                                <label for="Client">Client :</label>
+                                <div>
+                                    <select id="client" class="custom-select" data-search="true" asp-items="@ViewBag.client" onchange="matiereListe()">
+                                        <option value="" selected disabled>Sélectionnez un client...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-1">
+                                <label for="pdv">Points de vente :</label>
+                                <div>
+                                    <select class="custom-select" id="pdv" data-search="true">
+                                        <option value="" selected disabled>Sélectionnez un point de vente ...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-1">
+                                <label for="Période">Période :</label>
+                                <div>
+                                    <select class="custom-select" id="periode" data-search="true">
+                                        <option value="" selected disabled>Sélectionnez une période</option>
+                                        <option value="1">1 mois</option>
+                                        <option value="3">3 mois</option>
+                                        <option value="6">6 mois</option>
+                                        <option value="12">1 an</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="montant">Montant Reçu :</label>
+                                <input type="text" id="montant" class="form-control" required />
+                            </div>
+                            <div class=" text-md-right">
+                                <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <div class="table-responsive">
+                                    <table id="tableCamions" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Client</th>
+                                                <th>Point de vente</th>
+                                                <th>Période</th>
+                                                <th>Montant reçu</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="card-footer d-flex justify-content-between text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer les paiements </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function matiereListe()
+    {
+        var val = { clientID: parseInt($("#client option:selected").val()) };
+        if ($("#client").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getListePdv", "Clients")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: val,
+                success: function (data) {
+                    console.log(data)
+                    if ($("#pdv option").length > 1) {
+                        $.each($("#pdv option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#pdv").append("<option value='' selected disabled>Sélectionnez un point de vente</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#pdv").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#client option:selected").val() != null && $("#client option:selected").val() != '' &&
+            $("#pdv option:selected").val() != null && $("#pdv option:selected").val() != '' &&
+            $("#periode option:selected").val() != null && $("#periode option:selected").val() != '' &&
+            $("#montant").val() != null && $("#montant").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var client = $("#client").val();
+        var pdv = $("#pdv").val();
+        var periode = $("#periode  option:selected").val();
+        var montant = $("#montant").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + client + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + pdv + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + periode + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#client option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#pdv option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#periode option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + montant + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        //$("#fournisseur").val("");
+        $("#client").val("");
+        $("#pdv").val("");
+        $("#periode").val("");
+        $("#montant").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListePaiement = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var client = 0;
+        var pdv = 0;
+        var periode = 0;
+        var montant = 0.00;
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            client = table.rows[i].cells[0].innerHTML;
+            pdv = table.rows[i].cells[1].innerHTML;
+            periode = table.rows[i].cells[2].innerHTML;
+            montant = table.rows[i].cells[6].innerHTML;
+
+            var paiement = {
+                PaiementAbonnement_AbonnementId: 0,
+                PaiementAbonnement_PointVenteID: 0,
+                PaiementAbonnement_PeriodeDePaiement: 0,
+                PaiementAbonnement_Montant: 0,
+            };
+
+            paiement.PaiementAbonnement_AbonnementId = client;
+            paiement.PaiementAbonnement_PointVenteID = pdv;
+            paiement.PaiementAbonnement_PeriodeDePaiement =periode;
+            paiement.PaiementAbonnement_Montant = parseFloat(montant).toFixed(2).replace(".", ",");
+            //ListePaiement.push(paiement);
+
+        }
+
+
+
+            var data = {
+                paiementModel: paiement
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("CreerAbonnement", "Clients")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Paiement d'abonnement ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListePaiement", "Clients")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("CreerAbonnement", "Clients")';
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+
+
+
+
+</script>
+

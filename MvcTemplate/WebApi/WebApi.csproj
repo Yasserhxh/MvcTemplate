@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>ad7084b8-24ca-4d0f-9c40-f9b7a871039f</UserSecretsId>
+  </PropertyGroup>
+	<ItemGroup>
+		<Folder Include="Controllers\" />
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.1" PrivateAssets="All" />
+	<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+
+  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Service\Service.csproj" />
+	</ItemGroup>
+
+</Project>

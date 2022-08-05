@@ -1,0 +1,104 @@
+﻿@{
+}
+@model Domain.Models.FicheTechniqueBridgeModel
+
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFichesTechniques">Liste des fiches techniques</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter une fiche technique</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+                                                        <div class="col-md-5 mb-1">
+                                                            <label for="validationTooltip01">Libellé</label>
+                                                            <div>
+                                                                <input type="text" id="libelle" asp-for="FicheTechniqueBridge_Libelle" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-5 mb-2">
+                                                            <label for="validationTooltip01">Produit maison</label>
+                                                            <div>
+                                                                <select class="custom-select" id="produit" data-search="true" asp-for="FicheTechniqueBridge_ProduitVendableID" asp-items="@ViewBag.FicheTechnique_ProduitVendableId" onchange="familleList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " onclick="AjoutTrpMoral()">Enregistrer la fiche technique</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>

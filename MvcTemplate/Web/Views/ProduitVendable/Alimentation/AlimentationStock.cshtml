@@ -1,0 +1,138 @@
+﻿@{ ViewData["Title"] = "Gestion de Stock";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.MouvementStockModel
+
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListAlimentationIntraStock">Liste des alimentations intra-stock</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-body">
+                    <div class="px-3">
+                        <fieldset>
+                            <legend>Alimenter un point de stockage</legend>
+                            <form class="form" action="AlimentationStock" onsubmit="theButton.disabled = true; return true;"  method="post">
+                                <div class="form-body">
+                                    <h4 class="form-section">
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="PdV">Stock destinataire</label>
+                                                <select class="custom-select" id="lieu" data-search="true" asp-for="MouvementStock_DestinationStockId" asp-items="@ViewBag.Lieu" required>
+                                                    <option value="" selected disabled>Sélectionnez un point de stock...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="PdV">Matière première</label>
+                                                <select class="custom-select" id="matiere" data-search="true" asp-for="MouvementStock_MatierePremiereStokageId" onchange="uniteListe()" asp-items="@ViewBag.MouvementStock_MatierePremiereStokageId" required>
+                                                    <option value="" selected disabled>Sélectionnez une matière première...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="qte">Quantité à livrer</label>
+                                                <input type="text" class="form-control" id="qte" asp-for="MouvementStock_Quantite"/>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="unite">Unité de mesure</label>
+                                                <select class="custom-select" id="unite" data-search="true" asp-for="MouvementStock_UniteMesureId" asp-items="@ViewBag.MouvementStock_UniteMesureId" required>
+                                                    <option value="" selected disabled>Sélectionnez l'unité de mesure</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="date">Date d'envoi </label>
+                                                <input type="date" class="form-control" asp-for="MouvementStock_Date" id="dateDist" required />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions text-sm-right">
+                                    <a class="btn btn-danger" asp-action="ListeSectionStockage">
+                                        Annuler
+                                    </a>
+                                    <button type="submit" name="theButton" class="btn btn-success">
+                                        <i class="icon-note"></i> Enregistrer
+                                    </button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<script>
+    function uniteListe()
+    {
+        var data = { MatierePremiereStokage_Id: parseInt($("#matiere option:selected").val()) };
+        if ($("#matiere option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getUnite", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez L'unite de mesure</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('dateDist').value = new Date().toDateInputValue();
+</script>
+

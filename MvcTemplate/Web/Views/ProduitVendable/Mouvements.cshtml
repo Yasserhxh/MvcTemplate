@@ -1,0 +1,264 @@
+﻿@model IEnumerable<Domain.Models.MouvementStockModel>
+@using Web.Helpers;
+@addTagHelper *,ReflectionIT.Mvc.Paging
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Gestion de Stockage";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Liste des mouvements</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-4 offset-md-1 mb-1">
+                        <label for="matiere">Matiére première</label>
+                        <div>
+                            @if (User.IsInRole("Client"))
+                            {
+                                <select class="custom-select" id="matiere" data-search="true" asp-items="@ViewBag.MatierePremiere">
+                                    <option value="" selected disabled>Sélectionnez une matière première...</option>
+                                </select>
+                            }
+                            @if (User.IsInRole("Gerant_de_stock"))
+                            {
+                                <select class="custom-select" id="matiere" data-search="true" asp-items="@ViewBag.MouvementStock_MatierePremiereStokageId">
+                                    <option value="" selected disabled>Sélectionnez une matière première en stock...</option>
+                                </select>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Date">Date de mouvement</label>
+                            <div>
+                                <input type="date" id="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> Liste des mouvements de stock </h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table table-responsive  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière Première</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Type de Mouvement </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de saisie</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de réception</th>
+                                                                    @*                                                                    <th>Action</th>
+                                                                    *@
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.MatierePremiere_Stokage.Matiere_Premiere.MatierePremiere_Libelle)</td>
+                                                                        @{ var qte = decimal.Parse(item.MouvementStock_Quantite.ToString()).ToString("G29");}
+                                                                        <td class="text-bold-600 pr-0 text-sm-left"> @qte @Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                        @if (item.MouvementStock_MouvementTypeId == 2)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-danger text-sm-left">Planification de produciton</td>
+                                                                        }
+                                                                        else if (item.MouvementStock_MouvementTypeId == 1)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-danger text-sm-left">Alimentation intra stock</td>
+                                                                        }
+                                                                        else if (item.MouvementStock_MouvementTypeId == 3)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-success text-sm-left">Réception fournisseur</td>
+                                                                        }
+                                                                        else if (item.MouvementStock_MouvementTypeId == 4)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-danger text-sm-left">Demande complémentaire</td>
+                                                                        }
+                                                                        else if (item.MouvementStock_MouvementTypeId == 5)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-success text-sm-left">Retour des matières</td>
+                                                                        }
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.MouvementStock_DateSaisie)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.MouvementStock_DateReception)</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="container">
+
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Mouvements" asp-route-pg="1" asp-route-matiere="@Context.Request.Query["matiere"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Mouvements" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-matiere="@Context.Request.Query["matiere"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link" asp-action="Mouvements" asp-route-pg="@pge" asp-route-matiere="@Context.Request.Query["matiere"]" asp-route-date="@Context.Request.Query["date"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Mouvements" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-matiere="@Context.Request.Query["matiere"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="Mouvements" asp-route-pg="@(pager.TotalPages)" asp-route-matiere="@Context.Request.Query["matiere"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="MouvementsAll"><i class="bx bxs-detail"></i><span class="align-middle ml-25">Afficher la liste complète</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function deleteProduitVendable(id)
+    {
+            var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("DeleteproduitVendable", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Produit désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 3000);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                }, 3000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+    function displayDashboard() {
+        var matiere = $("#matiere").val();
+        var date = $("#date").val();
+        window.location.href = '/ProduitVendable/Mouvements?matiere=' + matiere + "&date=" + date;
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+</script>

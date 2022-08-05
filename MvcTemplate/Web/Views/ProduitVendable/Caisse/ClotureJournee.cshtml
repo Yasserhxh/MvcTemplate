@@ -1,0 +1,312 @@
+﻿@{ ViewData["Title"] = "Gestion de caisse";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.ClotureJourneeModel
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeDesClotures">Liste des clôtures</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+@*                <h1>@ViewData["Id"]</h1>
+*@                <div class="card-body">
+                    <fieldset>
+                        <legend>Clôture de la journée</legend>
+                            <div class="form-row">
+                                @if(User.IsInRole("Client")){
+                                    <div class="col-md-6 mb-1">
+                                    <label for="Fournisseur">Point de vente</label>
+                                    <div>
+                                        <select class="custom-select" id="pdv" data-search="true"  asp-items="@ViewBag.pdv" required onchange="getPositions()">
+                                            <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label for="Fournisseur">Caisse</label>
+                                    <div>
+                                        <select class="custom-select" id="position" data-search="true" asp-for="ClotueJournee_PositionVenteID" required onchange="getsolde()">
+                                            <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="SoldeD">Recettes</label>
+                                    <input type="number" min="0" id="debit" step=".01" asp-for="ClotueJournee_SoldeDebit" class="form-control" required disabled />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="SoldeC">Retraits</label>
+                                    <input type="number" min="0" id="credit" step=".01" asp-for="ClotueJournee_SoldeCredit" class="form-control" required disabled  />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="montant">Alimentation</label>
+                                    <input type="number" id="alim" class="form-control" disabled />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="montant">Montant calculé</label>
+                                    <input type="number" id="montantencaisse" class="form-control" disabled />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="Quantite">Montant en caisse</label>
+                                    <input type="number" min="0" id="montant" step=".01" asp-for="ClotueJournee_Montant" class="form-control" required />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="motif">Description</label>
+                                    <input type="text" id="motif" asp-for="ClotueJournee_Description" class="form-control" />
+                                </div>
+                                }
+                                else{
+                                    <div class="col-md-4 mb-1">
+                                    <label for="Fournisseur">Caisse</label>
+                                    <div>
+                                        <select class="custom-select" id="position" data-search="true" asp-for="ClotueJournee_PositionVenteID" asp-items="@ViewBag.Positions" required onchange="getsolde()">
+                                            <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="SoldeD">Recettes</label>
+                                    <input type="number" min="0" id="debit" step=".01" asp-for="ClotueJournee_SoldeDebit" class="form-control" required disabled />
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <label for="SoldeC">Retraits</label>
+                                    <input type="number" min="0" id="credit" step=".01" asp-for="ClotueJournee_SoldeCredit" class="form-control" required disabled  />
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label for="montant">Alimentations</label>
+                                    <input type="number" id="alim" class="form-control" disabled />
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label for="montant">Montant calculé</label>
+                                    <input type="number" id="montantencaisse" class="form-control" disabled />
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label for="Quantite">Montant en caisse</label>
+                                    <input type="number" min="0" id="montant" step=".01" asp-for="ClotueJournee_Montant" class="form-control" required />
+                                </div>
+                                <div class="col-md-6 mb-1">
+                                    <label for="motif">Description</label>
+                                    <input type="text" id="motif" asp-for="ClotueJournee_Description" class="form-control" />
+                                </div>
+                                }
+
+                                
+                                <div class="offset-md-10">
+                                    <button class="btn btn-success glow mt-md-2 mb-1" id="disabled" onclick="camionAdd()">Enregistrer</button>
+                                </div>
+                            </div>
+                    </fieldset>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script><script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#position").val() != null && $("#position").val() != ''  &&
+            $("#alim").val() != null && $("#alim").val() != '' && 
+            $("#debit").val() != null && $("#debit").val() != '' &&
+            $("#credit").val() != null && $("#credit").val() != ''
+            //$("#montant").val() != null && $("#montant").val() != '' &&
+            //$("#motif").val() != null && $("#motif").val() != ''
+
+        ) {
+            
+            AjoutTrpMoral();
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+         var Caisse = $("#position option:selected").val();
+         var Montant = $("#montant").val();
+         var Credit = $("#credit").val();
+         var Debit = $("#debit").val();
+         var Motif = $("#motif").val();
+         var Alim = $("#alim").val();
+
+         if (Montant < 0 || Montant == "" || Montant == null) {
+             swal({
+                 title: "Attention",
+                 text: "Veuillez indiqueer le montant réel en caisse",
+                 type: "warning",
+                 showCancelButton: false,
+                 cancelButtonText: "Annuler",
+                 closeOnConfirm: false,
+                 closeOnCancel: true
+             }); return 0;
+
+         }
+         if (Credit == 0 && Debit == 0 && Alim == 0 ) {
+             swal({
+                 title: "Attention",
+                 text: "Cette caisse est déjà clôturée",
+                 type: "warning",
+                 showCancelButton: false,
+                 cancelButtonText: "Annuler",
+                 closeOnConfirm: false,
+                 closeOnCancel: true
+             });
+             return 0;
+         }
+         var Cloture = {
+             ClotueJournee_PositionVenteID: 0,
+             ClotueJournee_SoldeCredit: 0,
+             ClotueJournee_SoldeDebit: 0,
+             ClotueJournee_Montant: 0,
+             ClotueJournee_Description: "",
+             ClotueJournee_Alimentation: 0,
+         }
+
+         Cloture.ClotueJournee_PositionVenteID = Caisse;
+         Cloture.ClotueJournee_SoldeCredit =  parseFloat(Credit).toFixed(2).replace(".", ",");
+         Cloture.ClotueJournee_SoldeDebit =  parseFloat(Debit).toFixed(2).replace(".", ",");
+         Cloture.ClotueJournee_Montant = parseFloat(Montant).toFixed(2).replace(".", ",");
+         Cloture.ClotueJournee_Alimentation = parseFloat(Alim).toFixed(2).replace(".", ",");
+         Cloture.ClotueJournee_Description = Motif;
+         var data = {
+             clotureModel: Cloture
+        };
+
+         console.log(data);
+        $.ajax({
+            url: '@Url.Action("Cloturer", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Clôture enregistrée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.reload();
+                            }, 1000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ClotureJournee", "ProduitVendable")';
+                            }, 1000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+    function getsolde() {
+        var c = 0;
+        var d = 0;
+        var data = {
+            caisseId: $("#position option:selected").val(),
+        };
+          $.ajax({
+            url: '@Url.Action("getSoldeDebitCaisse", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data,
+              success: function (data) {
+                  d = data;
+                  $("#debit").val(data);
+              },
+        error: function () {
+            alert("Error");
+        }
+          });
+        $.ajax({
+            url: '@Url.Action("getSoldeCreditCaisse", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data,
+            success: function (data) {
+
+                c = data;
+                $("#credit").val(data);
+              },
+        error: function () {
+            alert("Error");
+        }
+        });
+        $.ajax({
+            url: '@Url.Action("getAlimentationCaisse", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data,
+            success: function (data) {
+
+                a = data;
+                $("#alim").val(data);
+              },
+        error: function () {
+            alert("Error");
+        }
+        });
+        $("#montantencaisse").val(parseFloat((d+a) - c).toFixed(2));
+    }
+    function getPositions() {
+        var data = {
+            Id: $("#pdv option:selected").val(),
+        };
+        $.ajax({
+            url: '@Url.Action("GetPositions", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                  if ($("#position option").length > 1) {
+                      $.each($("#position option"), function (i, item) {
+                          item.remove();
+                      });
+                      $("#position").append("<option value='' selected disabled>Sélectionnez une caisse </option>");
+                  }
+                  $.each(data, function (i, item) {
+                      $("#position").append($('<option>', {
+                          value: item.value,
+                          text: item.text
+                      }));
+                  });
+              },
+        error: function () {
+            alert("Error");
+        }
+          });
+    }
+   
+</script>
+

@@ -1,0 +1,202 @@
+﻿@model IEnumerable<Domain.Models.ApprovisionnementModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Approvisionnement";
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Liste des approvisionnements des produits maison </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-2 offset-md-1 mb-1">
+                        <label for="pdv">Point de vente</label>
+                        <div>
+                            <select class="custom-select" id="point" data-search="true" asp-items="@ViewBag.PdV">
+                                <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="pdv">Point de production</label>
+                        <div>
+                            <select class="custom-select" id="atelierID" data-search="true" asp-items="@ViewBag.atelier">
+                                <option value="" selected disabled>Sélectionnez un point de production...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label for="etat">Etat</label>
+                        <div>
+                            <div>
+                                <select class="custom-select" data-search="true" id="etat">
+                                    <option value="0" selected>Produits en cours de livraison</option>
+                                    <option value="1">Produits reçus</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <div class="form-group">
+                            <label for="Date">Date d'approvisionnement</label>
+                            <div>
+                                <input type="date" id="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                @if (Model.Count() == 0)
+                                {
+                                    <h4 class="card-title">Veuillez sélectionnez un point de vente / production</h4>
+                                }
+                                else
+                                {<h4 class="card-title">Liste des approvisionnements</h4>}
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table table-responsive">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Point de production</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Point de Vente</th>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Produit</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Forme </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">date</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Statut</th>
+                                                                    @*                                                                    <th>Action</th>
+                                                                    *@
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model.OrderByDescending(p => p.Approvisionnement_Id))
+                                                                {
+                                                                <tr>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Atelier.Atelier_Nom)</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Point_Vente.PointVente_Nom)</td>
+                                                                    @{ var qte = decimal.Parse(item.Approvisionnement_Quantite.ToString()).ToString("G29");}
+                                                                    <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Produit_Vendable.ProduitVendable_Designation)</td>
+                                                                    <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Produit.FormeProduit_Libelle)</td>
+                                                                    <td class="text-bold-600 pr-0">@qte @item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle</td>
+
+
+                                                                    <td class="text-bold-600 pr-0">@item.Approvisionnement_Date.ToShortDateString()</td>
+
+                                                                    @if (item.Approvisionnement_Etat == 0)
+                                                                    {
+                                                                        <td class="text-bold-600 pr-0 text-info text-sm-left">En cours de Livraison</td>
+                                                                    }
+                                                                    else if (item.Approvisionnement_Etat == 1)
+                                                                    {
+                                                                        <td class="text-bold-600 pr-0 text-success text-sm-left">Produit maison Reçu</td>
+                                                                    } @*                                                                    <td>
+            <a class="btn btn-outline-light btn-table round"><i class="bx bx-detail"></i> Détails</a>
+        </td>*@
+                                                                </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+           @* <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="Approvisionnement"><i class="bx bx-dish"></i><span class="align-middle ml-25">Approvisionner un point de vente</span></a>
+            </div>*@
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function displayDashboard() {
+        var etat = $("#etat").val();
+        var point = $("#point").val();
+        var atelierID = $("#atelierID").val();
+        var date = $("#date").val();
+        console.log(date);
+        window.location.href = '/ProduitVendable/ListeApprovisionnement?point=' + point + "&date=" + date + "&etat=" + etat + "&atelierID=" + atelierID;
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+
+</script>

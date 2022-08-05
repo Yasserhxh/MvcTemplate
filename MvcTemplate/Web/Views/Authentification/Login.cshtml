@@ -1,0 +1,84 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+@model Domain.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<!-- BEGIN: Content-->
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <!-- login page start -->
+            <section id="auth-login" class="row flexbox-container">
+                <div class="col-xl-8 col-11">
+                    <div class="card bg-authentication mb-0">
+                        <div class="row m-0 display-flex">
+                            <!-- left section-login -->
+                            <div class="col-md-6 col-12 px-0">
+                                <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
+                                    <div class="card-header pb-1">
+                                        <div class="card-title">
+                                            @*<img width="80" src="~/assets/images/logo/logo-ikbal.svg" />*@
+                                            @*<img width="160" src="~/assets/images/logo/Mahal.png" />*@
+                                            @*<img width="160" src="~/assets/images/logo/al-mahal.svg" />*@
+                                            <img width="160" src="~/assets/images/logo/trepho-logo.svg"/>
+                                            <h4 class="text-center mb-2" style="color:#65322c">Authentification</h4>
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-body">
+
+                                            <form asp-action="Login" method="post">
+                                                <div class="form-group mb-50">
+                                                    <label class="text-bold-600" for="login1">Login</label>
+                                                    <input type="text" class="form-control" id="login1"
+                                                           placeholder="Login" asp-for="UserName" required />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="text-bold-600" for="Password1">Mot de passe</label>
+                                                    <input type="password" asp-for="Password" class="form-control" id="Password1"
+                                                           placeholder="Mot de passe" required />
+                                                </div>
+                                                <div class="text-danger" style="color:red">
+                                                    @TempData["LoginError"]
+                                                </div>
+                                                <div class="form-group d-flex flex-md-row flex-column justify-content-between align-items-center">
+                                                    <div class="text-left">
+                                                        <div class="checkbox checkbox-sm">
+                                                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                                            <label class="checkboxsmall" for="exampleCheck1"><small>Rester connecté</small></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary glow w-100 position-relative" style="background-color: #371450 !important">
+                                                    Login<i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- right section image -->
+                            <div class="col-md-6 d-md-block d-none text-center align-self-center bg-login">
+                                <div class="card-content">
+                                    <img class="img-fluid image-container"  src="~/assets/images/login/login.png" alt="branding logo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- login page ends -->
+
+        </div>
+    </div>
+</div>
+<!-- END: Content-->

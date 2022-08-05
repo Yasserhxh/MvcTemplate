@@ -1,0 +1,709 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ ViewData["Title"] = "Formes de produit"; }
+@model IEnumerable<Domain.Models.Forme_ProduitModel>
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitVendable">Liste des produits maison</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-area="">Formes de proudit</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des formes de produit</h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Produit Maison</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Forme</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Coût de Revient</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix de vente</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date d'ajout</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Produit_Vendable.ProduitVendable_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.FormeProduit_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.FormeProduit_CoutDeRevient) DH</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.FormeProduit_PrixVente) DH</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.FormeProduit_DateCreation)</td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <button class="dropdown-item btn-outline-success" data-target="#prixModal" data-toggle="modal" onclick='fct(@item.FormeProduit_ID, "@item.FormeProduit_Libelle", "@item.Produit_Vendable.ProduitVendable_Designation", "@item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle")'><i class="bx bx-dollar"></i> Ajouter/Modifier le prix</button>
+                                                                                    @if (item.FormeProduit_CoutDeRevient <= 0)
+                                                                                    {
+                                                                                        <button class="dropdown-item btn-outline-primary" data-target="#fichetechModal" data-toggle="modal"  onclick='fct2(@item.FormeProduit_ID, "@item.FormeProduit_Libelle", "@item.Produit_Vendable.ProduitVendable_Designation", "@item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle", @item.FormeProduit_ProduitID)'><i class="bx bx-list-ol"></i>Inclure dans la fiche technique</button>
+                                                                                    }
+                                                                                    @*<button class="dropdown-item btn-outline-secondary"><i class="bx bx-pencil"></i>Modifier</button> *@
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </td>
+                                                                    </tr>
+}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter des formes de produit </span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter des formes de produit.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>Produit Maison: </label>
+                                    <input type="text" id="produit" class="form-control" placeholder="Produit" disabled>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Description: </label>
+                                    <input type="text" id="desc" class="form-control" placeholder="Description de la forme">
+                                </div>
+                                <div class=" col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto">
+                                <table id="tableCamions" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Produit Maison</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Forme de produit</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="envbutton" onclick="ModifierQteProduite()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="prixModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Réglage de prix du produit.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mPrixbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label>Produit: </label>
+                                    <input type="text" id="ProduitDesi" class="form-control" disabled="disabled">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Forme: </label>
+                                    <input type="text" id="forme" disabled="disabled" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Prix de vente: </label>
+                                    <input type="number" id="prix" class="form-control" placeholder="Prix de vente">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Unité de vente: </label>
+                                    <input type="text" id="unite" disabled="disabled" class="form-control">
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="prixAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTablePrix" class="overflow-x-auto" style="display: none">
+                                <table id="tablePrix" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Nom de produit </th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Forme</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Prix</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="envbuttonPrix" onclick="CreatePrix()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="fichetechModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Inclure dans la fiche technique.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mPrixbody1">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label>Produit: </label>
+                                    <input type="text" id="ProduitDesi1" class="form-control" disabled="disabled">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Forme: </label>
+                                    <input type="text" id="forme1" disabled="disabled" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Quantité produite: </label>
+                                    <input type="text" id="prix1" class="form-control" >
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Unité: </label>
+                                    <input type="text" id="unite1" disabled="disabled" class="form-control">
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="ficheAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTablePrix1" class="overflow-x-auto" style="display: none">
+                                <table id="tablePrix1" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Produit</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Forme</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantité produite</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="envbuttonPrix1" onclick="CreateFiche()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function deleteProduitVendable(id)
+    {
+            var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("DeleteFicheTechnique", "FicheTechnique")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Produit désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1000);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+    var url = window.location.pathname;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    $("#mbody").append("<span style='display:none' id='spanVal'> " + id + " </span>")
+    var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("getProduitDesi", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data != null) {
+                        $("#produit").val(data);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    function camionAdd() {
+
+        if (
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#desc").val() != null && $("#desc").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+    function camionAjout() {
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+           // document.getElementById('divTable').style.display = "block";
+            document.getElementById('envbutton').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='text-sm-left'>" + $("#produit").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' >" + $("#desc").val() + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+       // $("#produit").val("");
+        $("#desc").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function ModifierQteProduite() {
+        document.getElementById('envbutton').disabled = true;
+        var ListFormes = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var desc = "";
+        var produitId = 0;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            produitId = parseInt($("#spanVal").text());
+            desc = table.rows[i].cells[1].innerHTML;
+            var forme = {
+                FormeProduit_ProduitID: parseInt(produitId) ,
+                FormeProduit_Libelle: desc,
+                FormeProduit_CoutDeRevient:0,
+            };
+            ListFormes.push(forme);
+        }
+
+
+        var data = {
+            id: parseInt($("#spanVal").text()),
+            forme: ListFormes,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterFormeProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                          window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function refresh() {
+       // $('#myModal').modal('toggle');
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 500);
+    }
+
+    function fct(FormeId, FormeLib, ProduitDesi, UniteLib) {
+
+
+        var data = { Id: FormeId }
+
+        $("#mPrixbody").append("<span style='display:none' id='spanValPrix'> " + FormeId + " </span>")
+        $("#ProduitDesi").val(ProduitDesi)
+        $("#unite").val(UniteLib);
+        $("#forme").val(FormeLib);
+
+         @*$.ajax({
+            url: '@Url.Action("GetUnitebyFrome", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 $("#unite").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                     function () {
+                         window.location.reload();
+                     }, 500);
+
+            }
+        });*@
+    }
+    function fct2(FormeId, FormeLib, ProduitDesi, UniteLib, produitID) {
+        $("#mPrixbody1").append("<span style='display:none' id='spanValPrix1'> " + FormeId + " </span>")
+        $("#mPrixbody1").append("<span style='display:none' id='spanValProduit'> " + produitID + " </span>")
+        $("#ProduitDesi1").val(ProduitDesi)
+        $("#unite1").val(UniteLib);
+        $("#forme1").val(FormeLib);
+
+    
+        }
+
+        function prixAdd() {
+
+            if (
+                $("#prix").val() != null && $("#prix").val() != ''
+
+            ) {
+                prixAjout();
+                prixClear();
+            }
+    }
+    function ficheAdd() {
+
+            if (
+                $("#prix1").val() != null && $("#prix1").val() != ''
+
+            ) {
+                ficheAjout();
+                ficheClear();
+            }
+        }
+
+
+
+
+     function prixAjout() {
+            var desc = $("#ProduitDesi").val();
+            var prix = $("#prix").val();
+            var qtemin = $("#forme").val();
+            document.getElementById('prix').disabled = true;
+
+                if ($("#tablePrix tbody").length == 0) {
+                $("#tablePrix").append("<tbody id='tbodyPrix'></tbody>");
+                document.getElementById('divTablePrix').style.display = "block";
+                document.getElementById('envbuttonPrix').style.display = "block";
+            }
+
+            $("#tbodyPrix").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanValPrix").val() + "</td>" +
+                "<td class='border-b dark:border-dark-5 text-sm-left' >" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'  >" + qtemin  + "</td>" +
+                "<td class='border-b dark:border-dark-5'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="prixDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+    }
+    function ficheAjout() {
+            var desc = $("#ProduitDesi1").val();
+            var prix = $("#prix1").val();
+            var qtemin = $("#forme1").val();
+            document.getElementById('prix1').disabled = true;
+
+                if ($("#tablePrix1 tbody").length == 0) {
+                $("#tablePrix1").append("<tbody id='tbodyPrix1'></tbody>");
+                document.getElementById('divTablePrix1').style.display = "block";
+                document.getElementById('envbuttonPrix1').style.display = "block";
+            }
+
+            $("#tbodyPrix1").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanValPrix1").val() + "</td>" +
+                "<td class='border-b dark:border-dark-5' >" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'  >" + qtemin  + "</td>" +
+                "<td class='border-b dark:border-dark-5'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="ficheDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+         function prixClear() {
+            $("#descPrix").val("");
+            $("#prix").val("");
+            $("#qtemin").val("");
+        }
+        //delete
+        function prixDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tbodyPrix tbody tr").length == 0) {
+                console.log("vide")
+                //document.getElementById('divTablePrix').style.display = "none";
+                document.getElementById('prix').disabled = false;
+
+            }
+    }
+    function ficheClear()
+    {
+            $("#descPrix1").val("");
+            $("#prix1").val("");
+            $("#qtemin1").val("");
+
+    }
+
+    //delete
+
+    function ficheDelete(ctl)
+    {
+        $(ctl).parents("tr").remove();
+        if ($("#tbodyPrix1 tbody tr").length == 0) {
+            //document.getElementById('divTablePrix').style.display = "none";
+            document.getElementById('prix1').disabled = false;
+        }
+    }
+
+    function CreatePrix() {
+        document.getElementById('envbuttonPrix').disabled = true;
+        var table = document.getElementById("tbodyPrix");
+        var prix = 0;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            prix = table.rows[i].cells[3].innerHTML;
+        }
+
+
+        var data = {
+            formeID: parseInt($("#spanValPrix").text()),
+            prix: parseFloat(prix).toFixed(2).replace(".",","),
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("UpdatePrixForme", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                          window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                     function () {
+                         window.location.reload();
+                     }, 500);
+            }
+        });
+    }
+    function CreateFiche() {
+        document.getElementById('envbuttonPrix1').disabled = true;
+        var table = document.getElementById("tbodyPrix1");
+        var prix = 0;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            prix = table.rows[i].cells[3].innerHTML;
+        }
+
+
+        var data = {
+            formeID: parseInt($("#spanValPrix1").text()),
+            produitID: parseInt($("#spanValProduit").text()),
+            qteForme: parseFloat(prix).toFixed(2).replace(".",","),
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("updateFicheForme", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                          window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 setTimeout(
+                     function () {
+                         window.location.reload();
+                     }, 500);
+            }
+        });
+    }
+</script>

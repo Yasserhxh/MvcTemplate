@@ -1,0 +1,494 @@
+﻿@{ ViewData["Title"] = " Echange de produits ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.Echange_ProduitsModel
+@using Microsoft.AspNetCore.Http;
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeEchanges">Liste des echanges</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter un ordre de transfert</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <!-- form ends -->
+                                                <fieldset>
+                                                    <legend>Liste des ordres de transfert</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="date">Point de vente expéditeur</label>
+                                                            <div>
+                                                                <select id="pdv" data-search="true" class="form-control" asp-items="@ViewBag.pdv" onchange="produitsList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="validationTooltip01">Produit</label>
+                                                            <div>
+                                                                <select id="produit" data-search="true" class="form-control" onchange="formesList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 mb-1">
+                                                            <label for="validationTooltip01">Forme</label>
+                                                            <div>
+                                                                <select class="custom-select" id="forme" data-search="true" onchange="lieuList()" required>
+                                                                    <option value="" selected>Choisissez une forme ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 mb-1">
+                                                            <label for="Quantite">Quantité Mag</label>
+                                                            <input id="quantiteMag" type="text" disabled class="form-control" />
+
+                                                        </div>
+                                                        <div class="col-md-1 mb-1">
+                                                            <label for="Quantite">Quantité</label>
+                                                            <input id="quantite" type="text" class="form-control" onkeyup="checkqte()" />
+
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="unite">Unité</label>
+                                                            <select class="custom-select" id="unite" data-search="true" required>
+                                                                <option value="" selected>Choisissez l'unite de vente ...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="lieu">Point de vente destinataire</label>
+                                                            <div>
+                                                                <select class="custom-select" id="lieu" data-search="true" required>
+                                                                    <option value="" selected>Choisissez un point de vente ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 mt-2">
+                                                            <label></label>
+                                                            <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                                                <i class="bx bx-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Buttons with Icon -->
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableCamions" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Point de vente expéditeur</th>
+                                                                            <th>Produit</th>
+                                                                            <th>Forme de produit</th>
+                                                                            <th>Quantité à transferer</th>
+                                                                            <th>Unité de mesure</th>
+                                                                            <th>Point de vente destinataire</th>
+                                                                            <th>Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+
+
+
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; ">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; ">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()"> <i class="fa fa-spinner fa-spin" id="spiner" style="display:none;"></i>Enregistrer l'ordre</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    function camionAdd() {
+
+        if (
+            $("#pdv").val() != null && $("#quantite").val() != '' &&
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#lieu").val() != null && $("#lieu").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#quantite").val() != null && $("#quantite").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout()
+    {
+        var quantiteval = $("#quantite").val();
+        if (isNaN(quantiteval))
+            quantiteval = 0;
+        var pdvVal = $("#pdv option:selected").val();
+        var uniteTxt = $("#unite option:selected").text();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+         //   document.getElementById('divTable').style.display = "block";
+        }
+
+
+
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#pdv option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#produit option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#forme option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + quantiteval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#unite option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#lieu option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#pdv option:selected").text()  + "</td>" +
+            "<td>" + $("#produit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#forme option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2).replace(".", ",") + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + uniteTxt + "</td>" +
+            "<td >" + $("#lieu option:selected").text() + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+       // $("#produit").select2("val","");
+        $("#quantite").val("");
+        $("#forme").val("");
+        $("#lieu").val("");
+        $("#produit").val("");
+        $("#unite").val("");
+        $("#quantiteMag").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+        }
+    }
+    var plan;
+    function Sum(a, b) {
+        return parseFloat(parseFloat(a) + parseFloat(b)).toFixed(2);
+    }
+    function AjoutTrpMoral() {
+        document.getElementById('spiner').style.display = "block"
+        document.getElementById('disabled').disabled = true;
+        var ListDetailsEchanges = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var quantite = 0;
+        var lieu = 0;
+        var pdv = 0;
+        var produit = 0;
+        var forme = 0;
+        var unite = 0;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            pdv = table.rows[i].cells[0].innerHTML;
+            produit = table.rows[i].cells[1].innerHTML;
+            forme = table.rows[i].cells[2].innerHTML;
+            quantite = table.rows[i].cells[3].innerHTML;
+            unite = table.rows[i].cells[4].innerHTML;
+            lieu = table.rows[i].cells[5].innerHTML;
+            var Details = {
+                EchangeProduitDetails_ProduitID: 0,
+                EchangeProduitDetails_FromeID: 0,
+                EchangeProduitDetails_Quantite: 0,
+                EchangeProduitDetails_UniteID: 0.00,
+            }
+
+            Details.EchangeProduitDetails_ProduitID = produit.toString().split(",")[0];
+            Details.EchangeProduitDetails_FromeID = forme;
+            Details.EchangeProduitDetails_Quantite = quantite;
+            Details.EchangeProduitDetails_UniteID = unite;
+            ListDetailsEchanges.push(Details);
+        }
+
+        var echange =
+        {
+            EchangeProduits_PdvFournisseurID: pdv,
+            EchangeProduits_PdvRecepID: lieu,
+            details: ListDetailsEchanges,
+        };
+
+       // document.getElementById('envbutton').disabled = true;
+        $.ajax({
+            url: '@Url.Action("EchangeProduits", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: echange ,
+            success: function (data) {
+                if (data == true) {
+                    ShowNotification("Ordre de transfert ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 2000);
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("EchangeProduits", "PointVente")';
+                        }, 2000);
+                }
+            },
+            error: function () {
+                alert("non ajoute");
+            }
+        });
+        }
+    function formesList()
+    {
+        var data = { concat: $("#produit").val() + "," + $("#pdv").val() };
+          if ($("#produit").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getListFormesByProduit", "PointVente")',
+                type: "POST",
+                cache: false,
+                async: false,
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+              $.ajax({
+                  url: '@Url.Action("getUniteVente", "PointVente")',
+                  type: "POST",
+                  cache: false,
+                  async: false,
+                  data: data,
+                  success: function (data) {
+                  if ($("#unite option").length > 1) {
+                      $.each($("#unite option"), function (i, item) {
+                          item.remove();
+                      });
+                      //$("#unite").append("<option value='' selected disabled>Sélectionnez l'unite de vente</option>");
+                  }
+                  $.each(data, function (i, item) {
+                      $("#unite").append($('<option>', {
+                          value: item.value,
+                          text: item.text
+                      }));
+                  });
+              },
+        error: function () {
+            alert("non ajoute");
+        }
+              });
+
+          }
+    }
+    function produitsList()
+    {
+        var data = { pointventeID: parseInt($("#pdv").val()) };
+        if ($("#pdv").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getListAllProduitStock", "PointVente")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    $("#quantite").val("");
+                    $("#forme").val("");
+                    $("#lieu").val("");
+                    $("#unite").val("");
+                    $("#quantiteMag").val("");
+                    if ($("#produit option").length > 1) {
+
+                        $.each($("#produit option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#produit").append("<option value='' selected disabled>Sélectionnez un produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#produit").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+
+          }
+    }
+    function lieuList()
+    {
+        var categ = $("#produit").val().split(",")[1];
+        var formeId = parseInt($("#forme").val());
+        var str = $("#produit").val().split(",")[2];
+        var pdv = parseInt($("#pdv").val());
+        var data = {
+            concat: str,
+            pdv : pdv,
+        };
+        var data2 = {
+            categ: categ,
+            forme: formeId,
+            pdv: pdv,
+        };
+        $.ajax({
+            url: '@Url.Action("getListPointVenteByCateg", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data,
+            success: function (data) {
+                if ($("#lieu option").length > 1) {
+                    $.each($("#lieu option"), function (i, item) {
+                        item.remove();
+                    });
+                }
+                $.each(data, function (i, item) {
+                    $("#lieu").append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            },
+            error: function (e) {
+                alert("non ajoute");
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("getQteFome", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2,
+            success: function (data) {
+                $("#quantiteMag").val(data);
+            },
+            error: function (e) {
+                alert("non ajoute");
+            }
+        });
+    }
+    function refresh() {
+        // $('#myModal').modal('toggle');
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 500);
+    }
+    function checkqte() {
+
+        var qteMag = parseFloat($("#quantiteMag").val());
+        var qteDemande = parseFloat($("#quantite").val());
+        if (isNaN(qteDemande))
+            qteDemande = 0;
+
+        if (qteDemande > qteMag) {
+            $("#quantite").val(qteMag);
+            swal({
+                title: "Attention",
+                text: "la quantité demandée ne doit pas être supérieure à la quantité disponible au magasin",
+                type: "warning",
+                showCancelButton: false,
+                cancelButtonText: "Annuler",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            });
+        }
+    }
+
+</script>

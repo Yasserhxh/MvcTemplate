@@ -1,0 +1,381 @@
+﻿@model IEnumerable<Domain.Models.FournisseurMatiereModel>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Consulter matieres";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFournisseur">Liste des matières premières </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive ">
+                                                        <div>
+                                                            @{ var a = @Model.FirstOrDefault(); }
+                                                            @if (a == null)
+                                                            {<h4 class="card-title">Aucune matière première est fournie par ce fournisseur</h4> }
+                                                            else
+                                                            {<h4> Liste des matières fournies par "@Model.FirstOrDefault().Founisseur.Founisseur_RaisonSocial"</h4>}
+                                                        </div>
+
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Matières premières</th>
+                                                                    <th>Statut</th>
+                                                                    <th><span>Actions</span></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Matiere_Premiere.MatierePremiere_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@(item.IsActive == 0 ? "Desactivé": "Activé")</td>
+
+                                                                        <td>
+                                                                            @if (item.IsActive == 1)
+                                                                            {
+                                                                                <button class="btn btn-outline-google btn-table round text-sm-center" onclick="DeleteMatieresLink(@item.Id, 0)"><i class="bx bx-trash-alt"></i> </button>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <button class="btn btn-outline-facebook btn-table round text-sm-center" onclick="DeleteMatieresLink(@item.Id, 1)"><i class="bx bx-redo"></i> </button>
+                                                                            }
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal" onclick="fct()"><i class="bx bx-plus"></i><span class="align-middle ml-25">Ajouter une matière première</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter des matières premières.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Fournisseur: </label>
+                                    <input type="text" id="fournisseur" class="form-control" disabled>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Matière première: </label>
+                                    <select id="matiere" class="form-control" data-search="true" asp-items="@ViewBag.matieres">
+                                        <option value="" selected disabled>Sélectionnez une matère première...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto" style="display: none">
+                                <table id="tableCamions" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Fournisseur</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Matière première</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="envbutton" onclick="CreatePrix()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+
+<script>
+
+    function DeleteMatieresLink(id, code)
+    {
+        var data = {
+            id: id,
+            code : code
+        };
+        $.ajax({
+            url: '@Url.Action("DeleteMatieresLink", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data)
+            {
+                if (data == true)
+                {
+                    if (code == 0) {
+                        ShowNotification("Matière première désactivée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    else {
+                        ShowNotification("Matière première activée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.reload();
+
+                            if ($("#usertbody tr").length == 0)
+                            {
+                                document.getElementById('usertable').style.display = "none";
+                            }
+
+                        }, 1500);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.reload();
+                            }, 1500);
+                    }
+                },
+            error: function ()
+            {
+                alert("Erreur");
+
+            }
+
+        });
+
+    }
+
+
+    function fct() {
+        var url = window.location.pathname;
+        var Id = url.substring(url.lastIndexOf('/') + 1);
+        var data = { Id: Id }
+            $("#mbody").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
+             $.ajax({
+            url: '@Url.Action("getFournisseurNom", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                $("#fournisseur").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+        }
+        function camionAdd() {
+
+            if (
+                $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+                $("#matiere").val() != null && $("#matiere").val() != ''
+
+            ) {
+                camionAjout();
+                formCamionClear();
+            }
+        }
+
+
+
+
+        function camionAjout() {
+            var desc = $("#fournisseur").val();
+            var prix = $("#matiere option:selected").val();
+
+            if ($("#tableCamions tbody").length == 0) {
+                $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+                document.getElementById('divTable').style.display = "block";
+                document.getElementById('envbutton').style.display = "block";
+            }
+
+            $("#tbodyCamions").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+                "<td class='text-sm-left'>" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text()+ "</td>" +
+                "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+        function formCamionClear() {
+            $("#matiere").val("");
+        }
+
+        //delete
+        function CamionDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tableCamions tbody tr").length == 0) {
+                document.getElementById('divTable').style.display = "none";
+            }
+        }
+
+    function CreatePrix() {
+        document.getElementById('envbutton').disabled = true;
+        var ListIdMatiere = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+            var matierF = {
+                MatierePremiere_Id: prix,
+            };
+            ListIdMatiere.push(prix);
+        }
+
+
+        var data = {
+            idFournisseur: parseInt($("#spanVal").text()),
+            listMatiere: ListIdMatiere,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterMatiere", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    var jq14 = jQuery.noConflict(true);
+
+    (function ($) {
+        $(document).ready(function () {
+            $("select").selectize({
+                placeholder: "Séléctionnez une unité d'utilisation...",
+                allowClear: true
+            });
+        });
+    }(jq14));
+</script>

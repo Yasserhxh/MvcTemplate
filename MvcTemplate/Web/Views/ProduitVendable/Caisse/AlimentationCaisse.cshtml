@@ -1,0 +1,250 @@
+﻿@{ ViewData["Title"] = "Gestion de caisse";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.AllimentationCaisseModel
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeAlimentations">Liste des alimentations</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Alimentation de caisse</legend>
+                        <div class="form-row">
+                            @if (User.IsInRole("Client"))
+                            {
+                                <div class="col-md-4 mb-1">
+                                <label for="Pdv">Point de vente</label>
+                                <div>
+                                    <select class="custom-select" id="pdv" data-search="true" asp-items="@ViewBag.pdv" required onchange="getPositions()">
+                                        <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-1">
+                                <label for="Fournisseur">Caisse</label>
+                                <div>
+                                    <select class="custom-select" id="caisse" data-search="true" asp-for="AllimentationCaisse_PositionVenteID" asp-items="@ViewBag.Positions" required>
+                                        <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-1">
+                                <label for="Quantite">Montant</label>
+                                <input type="number" min="0" id="montant" step=".01" asp-for="AllimentationCaisse_Montant" class="form-control" required />
+                            </div>
+                            <div class=" text-md-right">
+                                <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                            </div>
+                            }
+                            else { 
+                            <div class="col-md-5 mb-1">
+                                <label for="Fournisseur">Caisse</label>
+                                <div>
+                                    <select class="custom-select" id="caisse" data-search="true" asp-for="AllimentationCaisse_PositionVenteID" asp-items="@ViewBag.Positions" required>
+                                        <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-1">
+                                <label for="Quantite">Montant</label>
+                                <input type="number" min="0" id="montant" step=".01" asp-for="AllimentationCaisse_Montant" class="form-control" required />
+                            </div>
+                            <div class=" text-md-right">
+                                <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                            </div>
+                            }
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <div class="table-responsive">
+                                    <table id="tableCamions" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Caisse</th>
+                                                <th>Montant en DH</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="card-footer d-flex justify-content-between text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#caisse").val() != null && $("#caisse").val() != '' &&
+            $("#montant").val() != null && $("#montant").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var fournisseurval = $("#caisse").val();
+        var quaniteval = $("#montant").val();
+        var pointval = $("#pdv").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#caisse option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + quaniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + pointval + "</td>" +
+            "<td>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' + "</td>" +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#pdv").val("");
+        $("#caisse").val("");
+        $("#montant").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListeAlim = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var Caisse = 0;
+        var Montant = 0.00;
+        var point = 0;
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            Caisse = table.rows[i].cells[0].innerHTML;
+            Montant = table.rows[i].cells[2].innerHTML;
+            point = table.rows[i].cells[3].innerHTML;
+
+            var Alimentation = {
+                AllimentationCaisse_PositionVenteID: 0,
+                AllimentationCaisse_Montant: 0,
+                AllimentationCaisse_PointVenteID: 0,
+            }
+
+            Alimentation.AllimentationCaisse_PositionVenteID = Caisse;
+            Alimentation.AllimentationCaisse_Montant = parseFloat(Montant).toFixed(2).replace(".",",");
+            Alimentation.AllimentationCaisse_PointVenteID = point;
+            ListeAlim.push(Alimentation);
+
+        }
+            var data = {
+                alimentationModel: ListeAlim
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("AlimentationCaisse", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Alimentation ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.reload();
+                            }, 1000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("AlimentationCaisse", "ProduitVendable")';
+                            }, 1000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+    function getPositions() {
+        var data = {
+            Id: $("#pdv option:selected").val(),
+        };
+        $.ajax({
+            url: '@Url.Action("GetPositions", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                  if ($("#caisse option").length > 1) {
+                      $.each($("#caisse option"), function (i, item) {
+                          item.remove();
+                      });
+                      $("#caisse").append("<option value='' selected disabled>Sélectionnez une caisse </option>");
+                  }
+                  $.each(data, function (i, item) {
+                      $("#caisse").append($('<option>', {
+                          value: item.value,
+                          text: item.text
+                      }));
+                  });
+              },
+        error: function () {
+            alert("Error");
+        }
+          });
+    }
+</script>
+

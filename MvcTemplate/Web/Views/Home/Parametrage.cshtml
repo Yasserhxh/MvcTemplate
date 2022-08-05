@@ -1,0 +1,51 @@
+﻿
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+
+    (async () => {
+        const { value: pdv } = await Swal.fire({
+            icon: 'info',
+            title: "Veuillez selectionner un site",
+            html: `<select id="type" data-search="true" class="swal2-select" >
+                       @foreach (var item in ViewBag.data) {
+                           @:<option value="@item.Value" style="text-align:center;">@item.Text</option>
+                       }
+                </select> `,
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            },
+            allowOutsideClick: false,
+            showCancelButton: false,
+            confirmButtonText: "Confirmer",
+            cancelButtonText: "Annuler",
+            preConfirm: () => {
+                return $('#type option:selected').val()
+            }
+        })
+        if (pdv) {
+            var data = {
+                id: pdv,
+            };
+            $.ajax({
+                url: '@Url.Action("Confirmer", "Home")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data != null)
+                        window.location.href = '@Url.Action("Index", "Home")';
+                        },
+                error: function () {
+                }
+            });
+        }
+    })();
+</script>

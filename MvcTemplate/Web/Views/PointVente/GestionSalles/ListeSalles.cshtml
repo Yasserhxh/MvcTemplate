@@ -1,0 +1,517 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ ViewData["Title"] = "Liste des salle de vente"; }
+@model IEnumerable<Domain.Models.SalleModel>
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListePositionsVente">Liste des positions de vente</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-area="">Liste des salles</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Liste des salles  </h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Salle</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Position de vente</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Point de vente </th>
+                                                                    <th><spasn style="margin-left:13%"></spasn>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                    <tr>
+                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Salle_Libelle)</td>
+                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Position_Vente.PositionVente_Libelle)</td>
+                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Position_Vente.Point_Vente.PointVente_Nom)</td>
+                                                        <td>
+                                                            <a class="btn btn-outline-success btn-table round" asp-action="ConsulterTables" asp-route-id="@item.Salle_Id"><i class="bx bx-plus"></i> Ajouter des tables</a>
+                                                            @*<a class="btn btn-outline-secondary btn-table round"><i class="bx bx-pencil"></i> </a>*@
+@*                                                            <button class="btn btn-outline-danger btn-table round"><i class="bx bx-trash-alt"></i> </button>
+*@                                                        </td>
+                                                    </tr>
+                                                    }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right">
+                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter des salles  </span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter des salles.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>Position de vente: </label>
+                                    <input type="text" id="produit" class="form-control" placeholder="Position de vente" disabled>
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Désignation: </label>
+                                    <input type="text" id="desc" class="form-control" placeholder="Nom de la salle">
+                                </div>
+                                <div class=" col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto">
+                                <table id="tableCamions" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Position de vente</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Salle</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="envbutton" onclick="ModifierQteProduite()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="prixModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter des tables à la salle .</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mPrixbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Nom de la salle: </label>
+                                    <input type="text" id="salleNom" class="form-control"  disabled>
+
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Numéro de la table: </label>
+                                    <input type="text" id="descPrix" class="form-control" placeholder="Numéro de la table">
+
+                                </div>
+                                
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="prixAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTablePrix" class="overflow-x-auto" style="display: none">
+                                <table id="tablePrix" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Nom de la salle </th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Numéro de la table</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="envbuttonPrix" onclick="CreatePrix()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        enregistrer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    var url = window.location.pathname;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    $("#mbody").append("<span style='display:none' id='spanVal'> " + id + " </span>")
+    var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("getPositionDesi", "PointVente")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data != null) {
+                        $("#produit").val(data);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListePositionsVente", "PointVente")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+    function camionAdd() {
+
+        if (
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#desc").val() != null && $("#desc").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+    function camionAjout() {
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+           // document.getElementById('divTable').style.display = "block";
+            document.getElementById('envbutton').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td >" + $("#produit").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5' >" + $("#desc").val() + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+       // $("#produit").val("");
+        $("#desc").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function ModifierQteProduite() {
+        document.getElementById('envbutton').disabled = true;
+        var ListFormes = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var desc = "";
+        var produitId = 0;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            produitId = parseInt($("#spanVal").text());
+            desc = table.rows[i].cells[1].innerHTML;
+            var salle = {
+                Salle_PositionVenteId: parseInt(produitId) ,
+                Salle_Libelle: desc,
+            };
+            ListFormes.push(salle);
+        }
+
+
+        var data = {
+            id: parseInt($("#spanVal").text()),
+            salle: ListFormes,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterSalle", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+
+     function fct(Id) {
+         var data = {
+             Id: id,
+             salleid: Id
+         }
+         $("#mPrixbody").append("<span style='display:none' id='spanValPrix'> " + Id + " </span>")
+          $.ajax({
+                url: '@Url.Action("getSalleDesi", "PointVente")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data != null) {
+                           $("#salleNom").val(data);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                             //      window.location.href = '@Url.Action("ListePositionsVente", "PointVente")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+        }
+        function prixAdd() {
+
+            if (
+                $("#descPrix").val() != null && $("#descPrix").val() != ''
+
+            ) {
+                prixAjout();
+                prixClear();
+            }
+        }
+
+
+
+
+            function prixAjout() {
+                var desc = $("#descPrix").val();
+                var salleName = $('#salleNom').val();
+
+                if ($("#tablePrix tbody").length == 0) {
+                $("#tablePrix").append("<tbody id='tbodyPrix'></tbody>");
+                document.getElementById('divTablePrix').style.display = "block";
+                document.getElementById('envbuttonPrix').style.display = "block";
+            }
+
+            $("#tbodyPrix").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanValPrix").val() + "</td>" +
+                "<td >" + salleName + "</td>" +
+                "<td >" + desc + "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+         function prixClear() {
+            $("#descPrix").val("");
+        }
+
+        //delete
+        function prixDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tbodyPrix tbody tr").length == 0) {
+                document.getElementById('divTable').style.display = "none";
+            }
+        }
+
+    function CreatePrix() {
+        document.getElementById('envbuttonPrix').disabled = true;
+        var ListTables = new Array();
+        var tablenum = 2;
+        var table = document.getElementById("tbodyPrix");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            salleId = table.rows[i].cells[0].innerHTML;
+            tablenum = table.rows[i].cells[2].innerHTML;
+            var tableSalle = {
+                Table_IsActive:1,
+                Table_Numero: tablenum ,
+                Table_SalleId: parseInt($("#spanValPrix").text()),
+            };
+            ListTables.push(tableSalle);
+        }
+
+
+        var data = {
+            id: parseInt($("#spanValPrix").text()),
+            table: ListTables,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterTable", "PointVente")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function deleteSalle(id, code) {
+        var data = {
+            id: id,
+            code: code
+        };
+        $.ajax({
+            url: '@Url.Action("DeleteSalle", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data == true) {
+                    if (code == 0) {
+                        ShowNotification("Salle désactivée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    else {
+                        ShowNotification("Salle activée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    }
+                    setTimeout(
+                        function () {
+                                window.location.reload();
+                            if ($("#usertbody tr").length == 0) {
+                                document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1500);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.reload();
+                                }, 1500);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+</script>

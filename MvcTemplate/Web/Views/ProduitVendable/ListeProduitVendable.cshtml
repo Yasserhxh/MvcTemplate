@@ -1,0 +1,512 @@
+﻿@model IEnumerable<Domain.Models.ProduitVendableModel>
+@using Web.Helpers;
+@addTagHelper *,ReflectionIT.Mvc.Paging
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Produits Vendable";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitVendable">Liste des produits maison</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-3 offset-md-1 mb-1">
+                        <label for="role">Catégories</label>
+                        <div>
+                            <select class="custom-select" id="categ" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="familleList()">
+                                <option value="" selected disabled>Sélectionnez une Catégorie de produits...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <div class="form-group">
+                            <label for="Statut">Sous-Catégories</label>
+                            <div>
+                                <select class="custom-select" id="SousCateg" data-search="true">
+                                    <option value="" selected>Sélectionnez une sous-catégorie...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <div class="form-group">
+                            <label for="Name"> Désignation</label>
+                            <div>
+                                <input type="text" id="name" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> Liste des produits maison </h4>
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Photo</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Désignation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Unité de vente</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Type de production </th>
+                                                                    <th class="text-sm-left">Forme de conservation</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img src="~/@item.ProduitVendable_GrandePhoto"
+                                                                                 class="rounded-circle"
+                                                                                 height="40" width="40"
+                                                                                 asp-append-version="true" />
+                                                                        </td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.ProduitVendable_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                        @if (item.ProduitVendable_PlanificationFlag == 1)
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-sm-left">Avec planification</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-bold-600 pr-0 text-sm-left">Sans planification</td>
+                                                                        }
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Stockage.FormStockage_Libelle)</td>
+
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <a class="dropdown-item btn-outline-primary" asp-action="Consulter" asp-route-id="@item.ProduitVendable_Id"><i class="bx bx-detail"></i>Liste des fiches techniques</a>
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="Formes" asp-route-id="@item.ProduitVendable_Id"><i class="bx bx-detail"></i>Liste des formes de produit</a>
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="Modification" asp-route-id="@item.ProduitVendable_Id"><i class="bx bx-detail"></i>Modifier le produit</a>
+                                                                                    <button class="dropdown-item btn-outline-danger" asp-area="" onclick="deleteProduitVendable(@item.ProduitVendable_Id)"><i class="bx bx-trash-alt"></i>Supprimer le produit</button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </td>
+
+
+
+
+
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+
+            <div class="container">
+                
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeProduitVendable" asp-route-pg="1" asp-route-categ="@Context.Request.Query["categ"]" asp-route-SousCateg="@Context.Request.Query["SousCateg"]"  asp-route-name="@Context.Request.Query["name"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeProduitVendable" asp-route-pg="@(pager.CurrentPage - 1)"  asp-route-categ="@Context.Request.Query["categ"]" asp-route-SousCateg="@Context.Request.Query["SousCateg"]" asp-route-name="@Context.Request.Query["name"]"><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link" asp-action="ListeProduitVendable" asp-route-pg="@pge"  asp-route-categ="@Context.Request.Query["categ"]" asp-route-SousCateg="@Context.Request.Query["SousCateg"]" asp-route-name="@Context.Request.Query["name"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeProduitVendable" asp-route-pg="@(pager.CurrentPage + 1)"  asp-route-categ="@Context.Request.Query["categ"]" asp-route-SousCateg="@Context.Request.Query["SousCateg"]" asp-route-name="@Context.Request.Query["name"]"><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeProduitVendable" asp-route-pg="@(pager.TotalPages)"  asp-route-categ="@Context.Request.Query["categ"]" asp-route-SousCateg="@Context.Request.Query["SousCateg"]" asp-route-name="@Context.Request.Query["name"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+            <div class="breadcrumb-item text-sm-right ">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="Ajouter"><i class="bx bx-dish"></i><span class="align-middle ml-25">Ajouter un produit maison</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Réglage de prix du produit.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Description: </label>
+                                    <input type="text" id="desc" class="form-control" placeholder="Description du prix">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Prix: </label>
+                                    <input type="number" id="prix" class="form-control" placeholder="Prix">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Quantité minimale: </label>
+                                    <input type="number" id="qtemin" placeholder="Quantité min" class="form-control">
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto" style="display: none">
+                                <table id="tableCamions" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Description du prix</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantité minimale</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Prix</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="envbutton" onclick="CreatePrix()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+
+<script>
+
+    function deleteProduitVendable(id)
+    {
+           swal({
+            title: "Êtes-vous sûr?",
+            text: "Le produit sera supprimé",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui",
+            cancelButtonText: "Annuler",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    var data = {
+                        id: id,
+                    };
+                    $.ajax({
+                        url: '@Url.Action("DeleteproduitVendable", "ProduitVendable")',
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        data: data,
+                        success: function (data) {
+                            if (data == true) {
+                                swal("Spprimé!", " Le produit a été supprimé", "success");
+                                setTimeout(
+                                    function () {
+                                        window.location.reload();
+                                    }, 2000);
+                            } else {
+                                swal("Non Spprimé!", "Le produit n'a pas été supprimé", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Non Spprimé!", "le produit n'a pas été supprimé", "error");
+                        }
+                        });
+                }
+            }
+        );
+    }
+    function EstEnStock(id)
+    {
+            //var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("EstEnStock", "ProduitVendable")' + "?id=" + id,
+                type: "POST",
+                cache: false,
+                async: true,
+                //data: data,
+                success: function (data)
+                {
+
+                },
+
+            });
+    }
+    function Details(Libelle) {
+        console.log(Libelle)
+        window.location.href = '@Url.Action("Consulter", "ProduitVendable")' + "?id=" + Libelle;
+    }
+           function refresh() {
+        setTimeout(
+            function () {
+                window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+            }, 500);
+        }
+        function fct(Id) {
+        var data = { Id: Id }
+        $("#mbody").append("<span style='display:none' id='spanVal'> "+Id+" </span>")
+        }
+        function camionAdd() {
+
+            if (
+                $("#desc").val() != null && $("#desc").val() != '' &&
+                $("#prix").val() != null && $("#prix").val() != '' &&
+                $("#qtemin").val() != null && $("#qtemin").val() != ''
+
+            ) {
+                camionAjout();
+                formCamionClear();
+            }
+        }
+
+
+
+
+        function camionAjout() {
+            var desc = $("#desc").val();
+            var prix = $("#prix").val();
+            var qtemin = $("#qtemin").val();
+
+            if ($("#tableCamions tbody").length == 0) {
+                $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+                document.getElementById('divTable').style.display = "block";
+                document.getElementById('envbutton').style.display = "block";
+            }
+
+            $("#tbodyCamions").append("<tr>" +
+                "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+                "<td >" + desc + "</td>" +
+                "<td class='border-b dark:border-dark-5'  style='text-align: center;'>" + qtemin  + "</td>" +
+                "<td class='border-b dark:border-dark-5'style='text-align: center;'>" + prix+ "</td>" +
+                "<td class='text-right'>" +
+                '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+                "</tr>");
+
+        }
+        function formCamionClear() {
+            $("#desc").val("");
+            $("#prix").val("");
+            $("#qtemin").val("");
+        }
+
+        //delete
+        function CamionDelete(ctl) {
+            $(ctl).parents("tr").remove();
+            if ($("#tableCamions tbody tr").length == 0) {
+                document.getElementById('divTable').style.display = "none";
+            }
+        }
+
+    function CreatePrix() {
+        var ListPrix = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            produitid = table.rows[i].cells[0].innerHTML;
+            desc = table.rows[i].cells[1].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+            qtemin = table.rows[i].cells[2].innerHTML;
+            var prix = {
+                PrixProduit_IsActive:1,
+                PrixProduit_Description: desc ,
+                PrixProduit_ProduitVendableId: parseInt($("#spanVal").text()),
+                PrixProduit_Prix: parseFloat(prix).toFixed(2).replace(".",","),
+                PrixProduit_QuantiteMinimale: parseFloat(qtemin).toFixed(2).replace(".", ","),
+            };
+            ListPrix.push(prix);
+        }
+
+
+        var data = {
+            id: parseInt($("#spanVal").text()),
+            prix: ListPrix,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterPrixProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function displayDashboard() {
+        var categ = $("#categ").val();
+        var SousCateg = $("#SousCateg").val();
+        var nom = $("#name").val();
+        window.location.href = '/ProduitVendable/ListeProduitVendable?categ=' + categ + "&SousCateg=" + SousCateg + "&name=" + nom;
+    }
+    function familleList()
+    {
+        var data = { familleParent: parseInt($("#categ").val()) };
+        if ($("#categ").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#SousCateg option").length > 1) {
+                        $.each($("#SousCateg option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#SousCateg").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#SousCateg").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+</script>

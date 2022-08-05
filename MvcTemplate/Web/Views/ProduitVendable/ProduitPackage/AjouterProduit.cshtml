@@ -1,0 +1,503 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.ProduitPackageModel
+
+@{ ViewData["Title"] = "Ajouter Fournisseur"; }
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitsPackage">Liste des produits packagés</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter un produit packagé</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" enctype="multipart/form-data" novalidate>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="RiasonSocial">Désignation</label>
+                                                            <input type="text" id="desi" asp-for="ProduitPackage_Designation" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="RiasonSocial">Unité de vente</label>
+                                                            <select class="custom-select" id="unite" data-search="true" asp-for="ProduitPackage_UniteVente" asp-items="@ViewBag.Unite" required>
+                                                                <option value="" selected>Séléctionnez une unité de mesure...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="FamilleProduit">Famille de produit</label>
+                                                                <div>
+                                                                    <select class="custom-select" id="inputGroupSelected" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="Categorie()" required>
+                                                                        <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="SousFamille">Sous-famille</label>
+                                                                <div>
+                                                                    <select class="custom-select" asp-for="ProduitPackage_FamilleID" id="sousfamille1" data-search="true" required>
+                                                                        <option value="" selected>Sélectionnez une sous-famille...</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-1">
+                                                            <label for="ICE">Photo de produit</label>
+                                                            <div class="custom-file">
+                                                                <input type="file" name="files" asp-for="ProduitPackage_Photo" class="custom-file-input" id="fileinput" required>
+                                                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->                                                                                              
+                                                <fieldset>
+                                                    <legend>Composants Produit</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="ContactName">Produits maison / prêt à consommer</label>
+                                                            <select class="custom-select" id="produit" data-search="true"  asp-items="@ViewBag.Produits"onchange="familleList()" required>
+                                                                <option value="" selected>Séléctionnez un produit...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="ContactName">Forme de produit</label>
+                                                            <select class="custom-select" id="forme" data-search="true" asp-for="@Model.Sous_ProduitPackage[0].SousProduitPackage_FormeProduittID" onchange="getCoutRevient()"  required>
+                                                                <option value="" selected>Séléctionnez une forme...</option>
+                                                            </select>
+                                                            <p id="cdr" style="display:none;"></p>
+                                                        </div>
+                                                        @*<div class="col-md-3 mb-1">
+                                                            <label for="ContactFonction">Quantite</label>
+                                                            <input class="form-control" id="qteprod" type="number" data-search="true" asp-for="@Model.Sous_ProduitPackage[0].SousProduitPackage_QuantiteProduit" required />
+                                                        </div>*@
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter le produit</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableCamions" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Produits maison / prêt à consommer</th>
+                                                                            <th>Forme</th>
+                                                                            @*<th>Quantité</th>*@
+                                                                            <th>Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                                <fieldset>
+                                                    <legend>
+                                                        Composants Matières premières  
+                                                        <a href="#0" style="color: #ffffff" name="Ce champ peut être utilisé pour ajouter des matières premières au produit" class="tooltip"><i class='bx bx-info-circle'></i></a>
+                                                    </legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="ContactName">Matière Première</label>
+                                                            <select class="custom-select" id="matiere" data-search="true" asp-items="@ViewBag.MatierePremiere" required>
+                                                                <option value="" selected>Séléctionnez une matière...</option>
+                                                            </select>
+                                                        </div>
+
+                                                        @*<div class="col-md-3 mb-1">
+                <label for="ContactFonction">Quantite</label>
+                <input class="form-control" id="qteprod" type="number" data-search="true" asp-for="@Model.Sous_ProduitPackage[0].SousProduitPackage_QuantiteProduit" required />
+            </div>*@
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="matiereAdd()">Ajouter la matière</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableMatiere" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Produit Packagé</th>
+                                                                            <th>Matière Première</th>
+                                                                            @*<th>Quantité</th>*@
+                                                                            <th>Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != ''
+           // $("#qteprod").val() != null && $("#qteprod").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+    function matiereAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != ''
+           // $("#qteprod").val() != null && $("#qteprod").val() != ''
+
+        ) {
+            matiereAjout();
+            formMatiereClear();
+        }
+    }
+
+    function camionAjout()
+    {
+
+        var formeproduitval = $("#forme option:selected").val();
+        var table = document.getElementById("tbodyCamions");
+        //var qte = $("#qteprod").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        } else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[0].innerHTML == formeproduitval) {
+                    table.rows[i].remove();
+                    // table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
+                    // table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML;
+
+                }
+            }
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#forme option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#produit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#forme option:selected").text()+ "</td>" +
+            "<td style='display:none;'>" + $("#produit option:selected").val() + "</td>" +
+            //"<td class='border-b dark:border-dark-5'>" + $("#qteprod").val() + "</td>" +
+            //"<td style='display:none;'>" + $("#cdr").val() + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function matiereAjout()
+    {
+        var formeproduitval = $("#matiere option:selected").val();
+        var table = document.getElementById("tbodyMatiere");
+        //var qte = $("#qteprod").val();
+        if ($("#tableMatiere tbody").length == 0) {
+            $("#tableMatiere").append("<tbody id='tbodyMatiere'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+        else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[0].innerHTML == formeproduitval) {
+                    table.rows[i].remove();
+                    // table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
+                    // table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML;
+
+                }
+            }
+        }
+        $("#tbodyMatiere").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#matiere option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#desi").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text()+ "</td>" +
+            //"<td class='border-b dark:border-dark-5'>" + $("#qteprod").val() + "</td>" +
+            //"<td style='display:none;'>" + $("#cdr").val() + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="MatiereDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#produit").val("");
+        $("#qteprod").val("");
+    }
+    function formMatiereClear() {
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function MatiereDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableMatiere tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        disabled
+        var packageNom = $("#desi").val() ;
+        var quantite = 0;//$("#qte").val() ;
+        var forme = 0;
+        var sousP = new Array();
+        var sousM = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var tableMatiere = document.getElementById("tbodyMatiere");
+        var matiere = 0;
+        if (table != null)
+        {
+
+            for (var i = 0; i < table.rows.length; i++) {
+                forme = table.rows[i].cells[0].innerHTML;
+                poduit = table.rows[i].cells[3].innerHTML;
+                var Sous_ProduitPackage = {
+                    SousProduitPackage_FormeProduittID: 0,
+                    SousProduitPackage_CoutDeRevient: 0,
+                    SousProduitPackage_QuantiteProduit: 0,
+                };
+
+                Sous_ProduitPackage.SousProduitPackage_FormeProduittID = parseInt(forme);
+                sousP.push(Sous_ProduitPackage);
+
+
+            }
+        }
+        if (tableMatiere != null)
+        {
+            for (var i = 0; i < tableMatiere.rows.length; i++) {
+                matiere = tableMatiere.rows[i].cells[0].innerHTML;
+                var SousMatierePackages = {
+                    SousMatierePackage_MatiereID: 0,
+                };
+
+                SousMatierePackages.SousMatierePackage_MatiereID = parseInt(matiere);
+                sousM.push(SousMatierePackages);
+
+
+            }
+        }
+        
+
+            var formData = new FormData();
+            var file = document.getElementById("fileinput").files[0];
+            formData.append("ProduitPackage_Photo", file);
+            formData.append("ProduitPackage_Designation", packageNom);
+            formData.append("ProduitPackage_Quantite", parseFloat(quantite).toFixed(2).replace(".", ","));
+            formData.append("ProduitPackage_UniteVente", parseInt($('#unite').val()));
+            formData.append("ProduitPackage_FamilleID", parseInt($('#sousfamille1').val()));
+            for (let i = 0; i < sousP.length; i++) {
+                var name = "Sous_ProduitPackage[" + i + "].SousProduitPackage_FormeProduittID";
+                var value = sousP[i].SousProduitPackage_FormeProduittID;
+
+                //var name1 = "Sous_ProduitPackage[" + i + "].SousProduitPackage_ProduitID";
+                //var value1 = sousP[i].SousProduitPackage_ProduitID;
+                //var name2 = "Sous_ProduitPackage[" + i + "].SousProduitPackage_CoutDeRevient";
+                //var value2 = sousP[i].SousProduitPackage_CoutDeRevient;
+                //var name3 = "Sous_ProduitPackage[" + i + "].SousProduitPackage_QuantiteProduit";
+                //var value3 = sousP[i].SousProduitPackage_QuantiteProduit;
+
+                formData.append(name, value);
+                //formData.append(name1, value1);
+                //formData.append(name2, value2);
+                //formData.append(name3, value3);
+        }
+
+        for (let i = 0; i < sousM.length; i++)
+        {
+            var name = "SousMatierePackages[" + i + "].SousMatierePackage_MatiereID";
+            var value = sousM[i].SousMatierePackage_MatiereID;
+            formData.append(name, value);
+        }
+
+        $.ajax({
+            url: '@Url.Action("PackagerProduit", "ProduitVendable")',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formData,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Produit  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeProduitsPackage", "ProduitVendable")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+
+        }
+       function familleList()
+    {
+           var data = { filter: $("#produit option:selected").val() };
+          if ($("#produit").val() != null) {
+            $.ajax({
+                url: '@Url.Action("formeStockPV", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function getCoutRevient()
+    {
+        var data = { Id: parseInt($("#forme").val()) };
+        if ($("#forme").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getFormeCoutdeRevient", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    $('#cdr').val(data);
+                    console.log(parseFloat($('#cdr').val()).toFixed(2));
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+     function Categorie()
+    {
+        var data = { familleParent: parseInt($("#inputGroupSelected").val()) };
+        if ($("#inputGroupSelected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousfamille1 option").length > 1) {
+                        $.each($("#sousfamille1 option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousfamille1").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousfamille1").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+    function show() {
+        document.getElementById("span").style.display = "block";
+    }
+    function hide() {
+        document.getElementById("span").style.display = "none";
+    }
+</script>

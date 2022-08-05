@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Produits de base ";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.ProduitBaseModel
+
+@{
+    ViewData["Title"] = "Ajouter un Produit";
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitBase">Liste des produits de base</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form">  Ajouter produit de base</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+                        <fieldset>
+                            <legend> Détails du produit de base</legend>
+                            <form class="form" action="AjouterProduitBase" method="post" onsubmit="theButton.disabled = true; return true;" enctype="multipart/form-data">
+                                <div class="form-body">
+                                    <h4 class="form-section">
+                                        <i class="icon-user"></i>
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Designation">Désignation </label>
+                                                <input type="text" asp-for="ProduitBase_Designation" class="form-control" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="Unite_FT">Forme de stockage</label>
+                                                <select class="custom-select" id="inputGroupSelected01" data-search="true" asp-for="ProduitBase_FormeStockageID" asp-items="@ViewBag.ProduitVendable_FormStockageId" required>
+                                                    <option value="" selected>Sélectionnez une forme de stockage ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="Unite_FT">Unité de mesure</label>
+                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitBase_UniteMesureID" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
+                                                    <option value="" selected>Sélectionnez une unite de mesure ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                       @* <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Photo de produit</label>
+                                                <div class="custom-file">
+                                                    <input type="file" name="files" class="custom-file-input" id="fileinput" required>
+                                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div class="form-actions text-right">
+                                    <button type="submit" name="theButton" class="btn btn-success">
+                                        <i class="icon-note"></i> Enregistrer
+                                    </button>
+                                    <a class="btn btn-danger" asp-action="ListeProduitBase">
+                                        Annuler
+                                    </a>
+                                </div>
+                            </form>
+                        </fieldset>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+
+
+
+<script>
+</script>
+
+

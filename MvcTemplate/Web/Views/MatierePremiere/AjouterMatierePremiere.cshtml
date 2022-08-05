@@ -1,0 +1,655 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.MatierePremiereModel
+
+@{ ViewData["Title"] = "Matiere Premiere"; }
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeMatierePremiere">Liste des matières première</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Ajouter une matière première</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <section id="info-tabs-">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card icon-tab">
+                        <div class="card-body">
+                            <fieldset>
+                                <legend>Nouvelle matière premières</legend>
+                                <form class="wizard-horizontal wizard clearfix">
+                                    <div class="content clearfix">
+                                        <!-- Step 1 -->
+                                        <h6 id="steps-uid-1-h-0" tabindex="-1" class="title current">
+                                        </h6>
+                                        <!-- Step 1 end-->
+                                        <!-- body content of step 1 -->
+                                        <fieldset id="steps-uid-1-p-0" role="tabpanel" aria-labelledby="steps-uid-1-h-0" class="body current" aria-hidden="false" style="border:2px solid #fff">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h6 class="py-50"></h6>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Libellé</label>
+                                                        <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matière" onchange="changeLib()" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Catégorie de matière première</label>
+                                                        <select class="custom-select" id="parentID" data-search="true" asp-items="@ViewBag.FamilleParent" onchange="familleList()" required>
+                                                            <option value="" selected>Sélectionnez une catégorie ...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#familleModal" data-toggle="modal"><small>Ajouter une catégorie</small></a>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Sous-catégorie de matière première</label>
+                                                        <select class="custom-select" id="childID" data-search="true" asp-for="MatierePremiere_FamilleID" required>
+                                                            <option selected disabled>Sélectionnez une sous-catégorie ...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#myModal2" data-toggle="modal"><small>Ajouter une sous-catégorie</small></a>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="AchatUniteMesure">Unité d'achat</label>
+                                                        <select class="custom-select" id="uniteAchat" data-search="true" asp-for="MatierePremiere_AchatUniteMesureId" asp-items="@ViewBag.MatierePremiere_UniteMesureId_FT" required>
+                                                            <option value="" selected>Sélectionnez l'unite de mesure ...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="Quantite_FT">Quantité d'achat</label>
+                                                        <input type="number" min="0" step=".01" id="QteTotal" asp-for="MatierePremiere_Quantite_FT" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="FormeStockage">Forme de stockage</label>
+                                                        <select class="custom-select" id="forme" data-search="true" asp-for="MatierePremiere_FormeStockageId" asp-items="@ViewBag.MatierePremiere_FormeStockageId">
+                                                            <option value="" selected>Sélectionnez une forme de stockage...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="PrixMoyen">Prix moyen d'achat par unité</label>
+                                                        <input type="number" min="0" id="prix" step=".01" asp-for="MatierePremiere_PrixMoyenAchat" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="PourcentrageTolerancePerte"> Pourcentage de tolérance de perte</label>
+                                                        <input type="number" min="0" id="TolePerte" max="100" step=".01" asp-for="MatierePremiere_PourcentrageTolerancePerte" onchange="onchangeevent()" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="">Quantité utilisée</label>
+                                                        <input type="number" id="QteUsed" min="0" step=".01" onchange="onchangeQte()" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <p><label for="EstAllergene">Matière allergène:</label></p>
+                                                        <ul class="list-unstyled mb-0">
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset style="border:2px solid #fff">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" checked="checked" class="custom-control-input" onclick="fct1()" value="0" id="customColorRadio3" asp-for="MatierePremiere_EstAllergene">
+                                                                        <label class="custom-control-label" for="customColorRadio3">Non</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset style="border:2px solid #fff">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" class="custom-control-input" value="1" id="customColorRadio4" onclick="fct1()" asp-for="MatierePremiere_EstAllergene">
+                                                                        <label class="custom-control-label" for="customColorRadio4">Oui</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="Allergene">Nom d'allergène</label>
+                                                        <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="MatierePremiere_AllergeneId" asp-items="@ViewBag.MatierePremiere_AllergeneId" disabled="disabled">
+                                                            <option value="" selected disabled>Sélectionnez une allergene...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une allergène</small></a>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <hr>
+                                            <fieldset>
+                                                <legend>Liste des unités d'utilisations</legend>
+                                                <div class="form-row">
+                                                    <div class="col-md-4 mb-1">
+                                                        <label for="QuantiteMatiere">Matière Première</label>
+                                                        <input id="matiereP" type="text" disabled class="form-control" />
+
+                                                    </div>
+                                                    <div class="col-md-4 mb-1">
+                                                        <label for="validationTooltip01">Unité d'utilisation</label>
+                                                        <select class="custom-select" id="uniteUti" data-search="true" asp-items="@ViewBag.MatierePremiere_UniteMesureId_FT" onchange="UniteList()">
+                                                            <option value="" selected disabled>Choisir une unité d'utilisation...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class=" text-md-right">
+                                                        <a class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="uniteAdd()">Ajouter à la liste</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-12 mt-2">
+                                                        <div class="table-responsive">
+                                                            <table id="tableCamions" class="table mb-0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Matière première</th>
+                                                                        <th>Unité d'utilisation</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </fieldset>
+                                        <!-- body content of step 1 end-->
+                                    </div>
+                                    <div class="form-actions text-right">
+                                        <button class="btn btn-success" id="disabled" onclick="AjouterM()">
+                                            <i class="icon-note"></i> Enregistrer
+                                        </button>
+                                        <a asp-action="ListeMatierePremiere" class="btn btn-danger">
+                                            Annuler
+                                        </a>
+
+                                    </div>
+                                </form>
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter une allergène </h4>
+                <button class="close" data-toggle="modal" data-dismiss="modal" aria-label="Close" onclick="refresh1()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form class="form">
+                <div class="modal-body text-center" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12 ">
+                            <div class="form-row">
+                                <div class="col-md-12 ">
+                                    <div class="form-group">
+                                        <label for="AllergeneLabel" style="margin-right:62%">Nom d'allegrie</label>
+                                        <input type="text" id="nom" class="form-control" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <a class="btn btn-primary" id="envbutton" onclick="camionAdd()">
+                                <span style="color:aliceblue;">
+                                    Enregistrer
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal2" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter une sous-famille </h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form class="form">
+                <div class="modal-body text-center" id="mbody" style="height:auto;">
+                    <div class="row">
+                        <div class="form-row">
+                            <div>
+                                <div class="form-group">
+                                    <label for="AllergeneLabel" >Famille parent</label>
+                                    <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.FamilleParent">
+                                        <option value="" selected>Sélectionnez un parent ...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <div class="form-group">
+                                    <label for="AllergeneLabel">Nom du sous famille</label>
+                                    <input type="text" id="sousFamille" class="form-control" required />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" id="envbutton" onclick="ajouterSousFamille()">
+                        <span style="color:aliceblue;">
+                            Enregistrer
+                        </span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="familleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#6c3c36">
+                <h4 class="modal-title white" id="myModalLabel33">Ajouter une categorie </h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form class="form text-sm-center">
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="AllergeneLabel">Nom de famille</label>
+                                        <input type="text" id="familleParent1" class="form-control" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" id="envbutton" onclick="ajouterFamille()">
+                        <span style="color:aliceblue;">
+                            Enregistrer
+                        </span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#nom").val() != null && $("#nom").val() != '') { ajouterAllergene(); }
+
+    }
+    function uniteAdd() {
+
+        if ($("#matiereP").val() != null && $("#matiereP").val() != '' &&
+            $("#uniteUti").val() != null && $("#uniteUti").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    
+    function fct1()
+    {
+        if (document.getElementById('customColorRadio3').checked) {
+            document.getElementById('inputGroupSelected02').disabled = true;
+        } else if (document.getElementById('customColorRadio4').checked) {
+            document.getElementById('inputGroupSelected02').disabled = false;
+
+        }
+    }
+    function onchangeevent() {
+        var val = ($('#TolePerte').val() * $('#QteTotal').val()) / 100;
+        var reste = $('#QteTotal').val() - val;
+        if (reste < 0) {
+            reste = 0;
+        }
+        if (reste > $('#QteTotal').val()) {
+            reste = $('#QteTotal').val();
+        }
+        $('#QteUsed').val(reste);
+    }
+    function onchangeQte() {
+        var val = ($('#QteUsed').val() * 100) / $('#QteTotal').val();
+        var pourcentage = 100 - val;
+        if (pourcentage < 0) {
+            pourcentage = 0;
+        }
+        if (pourcentage > 100) {
+            pourcentage = 100;
+        }
+        $('#TolePerte').val(parseFloat(pourcentage).toFixed(2));
+    }
+    function AjouterM() {
+        document.getElementById('disabled').disabled = true;
+        var alerg = 0;
+        if (document.getElementById('customColorRadio3').checked) {
+            alerg = $('#customColorRadio3').val()
+        }
+        else if (document.getElementById('customColorRadio4').checked) {
+            alerg = $('#customColorRadio4').val()
+
+        }
+        var tableForme = document.getElementById("tbodyForme");
+        var ListeUnite = new Array();
+        for (var i = 0; i < tableForme.rows.length; i++)
+        {
+            matiere = tableForme.rows[i].cells[0].innerHTML;
+            unite = tableForme.rows[i].cells[2].innerHTML;
+            ListeUnite.push(unite);
+
+        }
+        console.log(ListeUnite);
+        var matiereModel = {
+            MatierePremiere_Libelle: $('#libelle').val(),
+            MatierePremiere_FournisseurID: $('#fournisseur option:selected').val(),
+            MatierePremiere_AchatUniteMesureId: $('#uniteAchat option:selected').val(),
+            MatierePremiere_Quantite_FT: parseFloat($('#QteTotal').val()).toFixed(2).replace(".",","),
+            MatierePremiere_PourcentrageTolerancePerte: parseFloat($('#TolePerte').val()).toFixed(2).replace(".", ","),
+            MatierePremiere_PrixMoyenAchat: parseFloat($('#prix').val()).toFixed(2).replace(".", ","),
+            MatierePremiere_FormeStockageId: $('#forme option:selected').val(),
+            MatierePremiere_EstAllergene: alerg,
+            MatierePremiere_AllergeneId: $('#inputGroupSelected02 option:selected').val(),
+            MatierePremiere_FamilleID: $('#childID option:selected').val(),
+        }
+        console.log(matiereModel);
+        var data = {
+            matiereModel: matiereModel,
+            ListeUnite: ListeUnite
+        };
+                $.ajax({
+            url: '@Url.Action("AjouterMatierePremiere", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Matiere première ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeMatierePremiere", "MatierePremiere")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+       function refresh() {
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 500);
+    }
+      function refresh1() {
+          $("#nom").val('');
+       }
+
+    function ajouterAllergene() {
+        var allergeneModel = {
+
+            Allergene_Libelle: $('#nom').val(),
+
+        };
+        console.log(allergeneModel);
+            $.ajax({
+             url: '@Url.Action("AjouterAllergene", "MatierePremiere")',
+             type: "POST",
+             cache: false,
+             async: true,
+                data: allergeneModel,
+                 success: function (data) {
+                if (data == true)
+                {
+                    ShowNotification("Point de vente ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                        }, 1000);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                            }, 1000);
+                    }
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+    }
+    function familleList()
+    {
+        var data = { familleParent: parseInt($("#parentID").val()) };
+        if ($("#parentID").val() != null) {
+            $.ajax({
+                url: '@Url.Action("familleList", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#childID option").length > 1) {
+                        $.each($("#childID option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#childID").append("<option value='' selected disabled>Sélectionnez une sous-catégorie</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#childID").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+     function ajouterFamille() {
+         var matiereFamille_ParentModel = {
+
+             MatiereFamilleParent_Libelle: $('#familleParent1').val(),
+
+        };
+         $.ajax({
+
+             url: '@Url.Action("AjouterFamilleParent", "MatierePremiere")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: matiereFamille_ParentModel,
+                 success: function (data) {
+                if (data == true)
+                {
+                    ShowNotification("Famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                        }, 1000);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                                   window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                            }, 1000);
+                    }
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+    }
+    function ajouterSousFamille() {
+        var matiereFamilleModel = {
+
+            MatiereFamille_Libelle: $('#sousFamille').val(),
+            MatiereFamille_ParentID: parseInt($("#familleParent2").val()),
+
+        };
+                 $.ajax({
+
+             url: '@Url.Action("AjouterFamille", "MatierePremiere")',
+             type: "POST",
+             cache: false,
+             async: true,
+                     data: matiereFamilleModel,
+                 success: function (data) {
+                if (data == true)
+                {
+                    ShowNotification("Sous-famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function ()
+                        {
+                            window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                        }, 1000);
+                } else
+                {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout
+                        (
+                            function ()
+                            {
+                            window.location.href = '@Url.Action("AjouterMatierePremiere", "MatierePremiere")';
+                            }, 1000);
+                    }
+                     },
+             error: function () {alert("non ajoute");}
+
+         });
+    }
+
+    function camionAjout() {
+        var matiereTxt = $("#matiereP").text();
+        var matiereVal = $("#matiereP").val();
+
+        var uniteformetxt = $("#uniteUti option:selected").text();
+        var uniteformeval = $("#uniteUti option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyForme'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+        $("#tbodyForme").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteformeval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + uniteformetxt + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+    }
+
+
+    function formCamionClear() {
+        $("#uniteUti").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+    function changeLib() {
+        var lib = $("#libelle").val();
+        $("#matiereP").val(lib);
+    }
+</script>

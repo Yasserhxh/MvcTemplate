@@ -1,0 +1,32 @@
+﻿
+@{  
+    ViewData["Title"] = "Not Authorized";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+   <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- not authorized start -->
+                <section class="row flexbox-container">
+                    <div class="col-xl-7 col-md-8 col-12">
+                        <div class="card bg-transparent shadow-none">
+                            <div class="card-body text-center bg-transparent">
+                                <img src="~/assets/images/login/not-authorized.png" class="img-fluid" alt="not authorized" width="400" />
+                                <h1 class="my-2 error-title">Vous n’êtes pas autorisé!</h1>
+                                <p>Vous n’avez pas la permission de consulter cet annuaire ou cette page en utilisant les informations d’identification que vous avez fournies.</p>
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-primary round glow mt-2">RETOUR À L'ACCUEIL</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- not authorized end -->
+
+            </div>
+        </div>
+    </div>
+  

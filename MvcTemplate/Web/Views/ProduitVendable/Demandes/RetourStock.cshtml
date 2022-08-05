@@ -1,0 +1,360 @@
+﻿@{ ViewData["Title"] = "Produits Vendable ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.RetourStockModel
+
+@{ ViewData["Title"] = "Retour stock"; }
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeDeDemandes">Liste des demandes</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Ajouter une demande.</h4>
+                <a class="heading-elements-toggle">
+                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                </a>
+                <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                        <li>
+                            <a data-action="collapse">
+                                <i class="bx bx-chevron-down"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-action="expand">
+                                <i class="bx bx-fullscreen"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a data-action="reload">
+                                <i class="bx bx-revision"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-content collapse show">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- table success start -->
+
+                            <div class="card mb-1">
+                                <!-- form start -->
+                                <form class="needs-validation" novalidate="">
+                                    <div class="form-row">
+
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Motif">Motif</label>
+                                            <div>
+                                                <input id="motif" type="text" class="form-control" asp-for="RetourStok_Motif" />
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            <label for="planificationProduction">Planification de production</label>
+                                            <div>
+                                                <select class="custom-select" id="planification" data-search="true" asp-for="RetourStok_PlanificationID" asp-items="@ViewBag.Demande_PlanificationID" required>
+                                                    <option value="" selected>Choisir une planification ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- form ends -->
+                                <fieldset>
+                                    <legend>Détails du demande</legend>
+                                    <div class="form-row">
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Matiere">Matière Première</label>
+                                            <div>
+                                                <select class="custom-select" id="matiere" data-search="true" asp-items="@ViewBag.MatierePremiere" asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_MatiereId" required>
+                                                    <option value="" selected>Sélectionnez une matière première ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Quantite">Quantité</label>
+                                            <input id="quantite" type="number" min="0" step=".01" class="form-control"asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_Quantite" />
+
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            <label for="Unite">Unité de mesure</label>
+                                            <div>
+                                                <select class="custom-select" id="unite" data-search="true" asp-items="@ViewBag.ProduitVendable_UniteMesureId" asp-for="@Model.BonDe_Sortie.Bon_Details[0].BonDeSortie_UniteMesureId" required>
+                                                    <option value="" selected>Sélectionnez une unité ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <a class="btn btn-icon rounded-circle btn-success" onclick="camionAdd()" data-repeater-create="">
+                                                <i class="bx bx-plus"></i>
+                                            </a>
+                                            <span class="ml-1 font-weight-bold text-primary">Ajouter à la liste</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="table-responsive">
+                                                <table id="tableCamions" class="table mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Matière première</th>
+                                                            <th>Quantite</th>
+                                                            <th>Unite de mesure</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+
+                            <!-- table success ends -->
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div><div>
+                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                    </div><div>
+                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                    </div><div>
+                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer la demande </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Détails.</h4>
+                    <a class="heading-elements-toggle">
+                        <i class="bx bx-dots-vertical font-medium-3"></i>
+                    </a>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li>
+                                <a data-action="collapse">
+                                    <i class="bx bx-chevron-down"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-action="expand">
+                                    <i class="bx bx-fullscreen"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-action="reload">
+                                    <i class="bx bx-revision"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">-->
+        <!-- datatable start -->
+        <!--<div class="table-responsive">
+                        <div id="divTable" class="overflow-x-auto" style="display: none">
+                            <table id="tableCamions" class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantité</th>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Unité Mesure </th>
+                                        <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Matière Première</th>
+                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                            <button class="btn btn-success" onclick="AjoutTrpMoral()">
+                                <i class="bx bx-play"></i> Enregistrer
+                            </button>
+
+                            <a class="btn btn-danger" asp-action="ListeDesPlans">
+                                Annuler
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>-->
+    </div>
+</div>
+
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (
+            $("#quantite").val() != null && $("#quantite").val() != '' &&
+            $("#planification").val() != null && $("#planification").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout()
+    {
+        var demandeTxt = $("#demande option:selected").text();
+        var demandeVal = $("#demande option:selected").val();
+
+        var planTxt = $("#planification option:selected").text();
+        var planVal = $("#planification option:selected").val();
+
+        var matiereTxt = $("#matiere option:selected").text();
+        var matiereVal = $("#matiere option:selected").val();
+
+        var quantitetxt = $("#quantite").text();
+        var quantiteval = $("#quantite").val();
+
+        var uniteText = $("#unite").text();
+        var uniteVal = $("#unite").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+
+
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;' >" + demandeVal +
+            "</td>" + "<td class='border-b dark:border-dark-5'>" + matiereTxt + "</td>" +
+
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2).replace(".", ",") + "</td>" +
+
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + uniteVal + "</td>" +
+            "<td>" + $("#unite option:selected").text() + "</td>" +
+
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5'  style='display:none;'>" + planVal + "</td>" +
+
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+        $("#unite").val("");
+        $("#quantite").val("");
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ListDetails = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var plan = 0;
+        var type = "";
+        var motif = $("#motif").val();
+        var bonQte = 0;
+        var bonUnite = 0;
+        var bonMatiere = 0;
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+
+            type = table.rows[i].cells[0].innerHTML;
+            plan = table.rows[i].cells[6].innerHTML;
+            bonQte = table.rows[i].cells[2].innerHTML;
+
+            bonUnite = table.rows[i].cells[3].innerHTML;
+            bonMatiere = table.rows[i].cells[5].innerHTML;
+
+                         var details = {
+                             BonDeSortie_Quantite: parseFloat(bonQte),
+                             BonDeSortie_UniteMesureId: bonUnite,
+                             BonDeSortie_MatiereId: bonMatiere,
+                         };
+                         ListDetails.push(details);
+
+
+            }
+            console.log(ListDetails);
+
+            var retour = {
+                RetourStok_PlanificationID: plan,
+                RetourStok_Etat: 0,
+                RetourStok_Motif: motif,
+                BonDe_Sortie : {
+                    Bon_Details: ListDetails,
+                },
+
+            }
+
+            var data = {
+                demandeModel: retour
+        };
+            console.log(data);
+
+        $.ajax({
+            url: '@Url.Action("Retour", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Demande ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("RetourStock", "ProduitVendable")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("RetourStock", "ProduitVendable")';
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+</script>

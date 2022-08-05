@@ -1,0 +1,340 @@
+﻿@{ ViewData["Title"] = "Gestion de caisse";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.RetraitCaisseModel
+
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeRetraits">Liste des retraits</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form"></h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Retrait de caisse</legend>
+                        <div class="form-row">
+                            @if (User.IsInRole("Client"))
+                            {
+                                <div class="col-md-2 mb-1">
+                                    <label for="pdv">Point de vente</label>
+                                    <div>
+                                        <select class="custom-select" id="pdv" data-search="true" asp-items="@ViewBag.pdv" required onchange="getPositions()">
+                                            <option value="" selected disabled>Sélectionnez un point de vente...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="Fournisseur">Caisse</label>
+                                    <div>
+                                        <select class="custom-select" id="caisse" data-search="true" asp-for="RetraitCaisse_PositionVenteID" asp-items="@ViewBag.Positions" required onchange="getsolde()">
+                                            <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="montantcaisse">Montant en caisse</label>
+                                    <input type="text" id="montatnactu" step=".01" disabled class="form-control" required />
+                                </div>
+                                <div class="col-md-1 mb-1">
+                                    <label for="Quantite">Montant</label>
+                                    <input type="number" min="0" id="montant" step=".01" asp-for="RetraitCaisse_Montant" class="form-control" required onkeyup="checkqte()" />
+                                </div>
+                                <div class="col-md-1 mb-1">
+                                    <label for="Fournisseur">Type de retrait</label>
+                                    <div>
+                                        <select class="custom-select" id="type" data-search="true" asp-for="RetraitCaisse_TypeRetraitID" asp-items="@ViewBag.Type" required>
+                                            <option value="" selected disabled>Sélectionnez un type...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 mb-1">
+                                    <label for="motif">Motif</label>
+                                    <input type="text" id="motif" asp-for="RetraitCaisse_Motif" class="form-control" required />
+                                </div>
+                                <div class=" text-md-right">
+                                    <button class="btn btn-sm btn-success glow mt-md-2" onclick="camionAdd()">Ajouter à la liste</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2 mb-1">
+                                    <label for="Fournisseur">Caisse</label>
+                                    <div>
+                                        <select class="custom-select" id="caisse" data-search="true" asp-for="RetraitCaisse_PositionVenteID" asp-items="@ViewBag.Positions" required  onchange="getsolde()">
+                                            <option value="" selected disabled>Sélectionnez une caisse...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="montantcaisse">Montant en caisse</label>
+                                    <input type="text" id="montatnactu" step=".01" disabled class="form-control" required />
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="Quantite">Montant</label>
+                                    <input type="number" min="0" id="montant" step=".01" asp-for="RetraitCaisse_Montant" class="form-control" required onkeyup="checkqte()" />
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="Fournisseur">Type de retrait</label>
+                                    <div>
+                                        <select class="custom-select" id="type" data-search="true" asp-for="RetraitCaisse_TypeRetraitID" asp-items="@ViewBag.Type" required>
+                                            <option value="" selected disabled>Sélectionnez un type...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <label for="motif">Motif</label>
+                                    <input type="text" id="motif" asp-for="RetraitCaisse_Motif" class="form-control" required />
+                                </div>
+                                <div class=" text-md-right">
+                                    <button class="btn btn-sm btn-success glow mt-md-2" onclick="camionAdd()">Ajouter à la liste</button>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <div class="table-responsive">
+                                    <table id="tableCamions" class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Caisse</th>
+                                                <th>Type de retrait</th>
+                                                <th>Montant</th>
+                                                <th>Motif</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="card-footer d-flex justify-content-between text-sm-right">
+                    <div>
+                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                    </div>
+
+                    <div>
+                        <button type="button" id="disabled" class="btn btn-success glow " onclick="AjoutTrpMoral()">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#caisse").val() != null && $("#caisse").val() != '' &&
+            $("#type").val() != null && $("#type").val() != '' &&
+            $("#motif").val() != null && $("#motif").val() != '' &&
+            $("#montant").val() != null && $("#montant").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var fournisseurval = $("#caisse").val();
+        var typeval = $("#type").val();
+        var quaniteval = $("#montant").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + typeval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#caisse option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#type option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + quaniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#motif").val() + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#caisse").val("");
+        $("#montant").val("");
+        $("#type").val("");
+        $("#motif").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            //document.getElementById('divTable').style.display = "none";
+        }
+    }
+     function AjoutTrpMoral() {
+         document.getElementById('disabled').disabled = true;
+         var ListeAlim = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var Caisse = 0;
+        var Montant = 0.00;
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            Caisse = table.rows[i].cells[0].innerHTML;
+            Montant = table.rows[i].cells[4].innerHTML;
+            Type = table.rows[i].cells[1].innerHTML;
+            Motif = table.rows[i].cells[5].innerHTML;
+
+            var Retrait = {
+                RetraitCaisse_PositionVenteID: 0,
+                RetraitCaisse_Montant: 0,
+                RetraitCaisse_TypeRetraitID: 0,
+                RetraitCaisse_Motif: "",
+            }
+
+            Retrait.RetraitCaisse_PositionVenteID = Caisse;
+            Retrait.RetraitCaisse_TypeRetraitID = Type;
+            Retrait.RetraitCaisse_Motif = Motif;
+            Retrait.RetraitCaisse_Montant = parseFloat(Montant).toFixed(2).replace(".",",");
+            ListeAlim.push(Retrait);
+
+        }
+
+
+
+            var data = {
+                retraitModel: ListeAlim
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("RetraitCaisse", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Retrait ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.reload();
+                            }, 1000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("RetraitCaisse", "ProduitVendable")';
+                            }, 1000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+     }
+    function getPositions() {
+        var data = {
+            Id: $("#pdv option:selected").val(),
+        };
+        $.ajax({
+            url: '@Url.Action("GetPositions", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                  if ($("#caisse option").length > 1) {
+                      $.each($("#caisse option"), function (i, item) {
+                          item.remove();
+                      });
+                      $("#caisse").append("<option value='' selected disabled>Sélectionnez une caisse </option>");
+                  }
+                  $.each(data, function (i, item) {
+                      $("#caisse").append($('<option>', {
+                          value: item.value,
+                          text: item.text
+                      }));
+                  });
+              },
+        error: function () {
+            alert("Error");
+        }
+          });
+    }
+    function getsolde() {
+        var data = {
+            caisseId: $("#caisse option:selected").val(),
+        };
+          $.ajax({
+            url: '@Url.Action("getSoldeTotal", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data,
+              success: function (data) {
+                  $("#montatnactu").val(data);
+              },
+        error: function () {
+            alert("Error");
+        }
+          });
+
+    }
+    function checkqte() {
+
+        var montantactu = parseFloat($("#montatnactu").val());
+        var montant = parseFloat($("#montant").val());
+        if (isNaN(montant))
+            montant = 0;
+
+        if (montant > montantactu) {
+            $("#montant").val(montantactu);
+            swal({
+                title: "Attention",
+                text: "le montant demandé dépasse le montant disponible en caisse",
+                type: "warning",
+                showCancelButton: false,
+                cancelButtonText: "Annuler",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            });
+        }
+    }
+
+</script>
+

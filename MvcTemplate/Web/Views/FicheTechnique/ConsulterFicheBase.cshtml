@@ -1,0 +1,192 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ ViewData["Title"] = "Fiches Technique"; }
+@model IEnumerable<Domain.Models.FicheTech_ProduitBaseModel>
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFichesTechniques" asp-controller="FicheTechnique">Liste des fiches techniques</a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitBase">Liste des produits de base</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                @{ var a = @Model.FirstOrDefault(); }
+                                @if (a == null)
+                                {
+                                    <h4 class="card-title">Cette fiche technique ne contient aucun produit de base </h4>
+                                }
+                                else
+                                {
+                                    <h4 class="card-title">Liste des produits de base de "@a.FicheTechnique_Bridge.FicheTechniqueBridge_Libelle"</h4>
+                                }
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Produit de base</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unite de mesure</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Active</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                   <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.ProduitBase.ProduitBase_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.ProduitQte) </td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            
+        </div>
+    </div>
+</div>
+<script>
+    function deleteProduitVendable(id)
+    {
+            var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("DeleteFicheTechnique", "FicheTechnique")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Produit désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1000);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+
+     function setInUse(id)
+    {
+            var data = { id: id };
+            $.ajax({
+                url: '@Url.Action("SetInUse", "FicheTechnique")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Success", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeProduitVendable", "ProduitVendable")';
+                                if ($("#usertbody tr").length == 0) {
+                                    document.getElementById('usertable').style.display = "none";
+                                }
+                                }, 1000);
+
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                   window.location.href = '@Url.Action("Consulter", "ProduitVendable")';
+                                }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("non supprime");
+                }
+            });
+    }
+
+</script>

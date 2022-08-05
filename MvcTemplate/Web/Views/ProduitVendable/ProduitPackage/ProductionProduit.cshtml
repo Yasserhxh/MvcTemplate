@@ -1,0 +1,533 @@
+﻿@{ ViewData["Title"] = "Produits packagés";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@model Domain.Models.PackageProductionModel
+
+@{ ViewData["Title"] = "Ajouter un produit package"; }
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-area="">Liste des produits packagés </a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Production d'un produit packagé</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+                                                        <div class="col-md-4 mb-2">
+                                                            <label for="validationTooltip01">Produit packagé</label>
+                                                            <div>
+                                                                <select class="custom-select" id="produit" data-search="true" asp-items="@ViewBag.prduits" onchange="familleList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-1">
+                                                            <label for="validationTooltip01">Forme de produit packagé</label>
+                                                            <div>
+                                                                <select class="custom-select" id="forme" asp-for="PackageProduction_ProduitPackageID" data-search="true" required>
+                                                                    <option value="" selected disabled>Sélectionnez une forme de produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="QuantiteMatiere">Quantité à produire</label>
+                                                            <input id="qteprod" type="number" min="0" step=".01" class="form-control" onkeyup="SousP()" asp-for="PackageProduction_Quantite" />
+                                                        </div>
+                                                        <div class="col-md-1 mt-2">
+                                                            <label></label>
+                                                            <button type="button" id="prodButton" onclick="AjoutTrpMoral()" class="btn btn-icon btn-success">
+                                                                Produire
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->
+                                                <fieldset id="fieldset" style="display:none;">
+                                                    <legend>Détails des composants</legend>
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableForme" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Produit maison/prêt à consommer</th>
+                                                                            <th>Forme de produit</th>
+                                                                            <th>Quantité demandée</th>
+                                                                            <th>Quantité en magasin</th>
+                                                                            <th>Unite de mesure</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="row">
+                                                            <div class="col-12 mt-2">
+                                                                <div class="table-responsive">
+                                                                    <table id="tableFormePret" class="table mb-0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Produit prêt à consommer</th>
+                                                                                <th>Forme de produit</th>
+                                                                                <th>Quantité à produire</th>
+                                                                                <th>Quantité en stock</th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+                                                </fieldset>
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="demandebutton" onclick="demander()" class="btn btn-icon btn-success" style="display:none;">Demander les produits prêts à consommer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function familleList()
+    {
+          var data = {produitId: parseInt($("#produit").val())};
+          if ($("#produit").val() != null) {
+              var data2 = {
+                  Id: parseInt($("#produit").val())
+              };
+              $.ajax({
+                url: '@Url.Action("formeProduitPackage", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data2,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+              });
+
+              $.ajax({
+                url: '@Url.Action("sousProduitPackageDesi", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousp option").length > 1) {
+                        $.each($("#sousp option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousp").append("<option value='' selected disabled>Sélectionnez un produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousp").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function sousproduit()
+    {
+        var data = {
+            produitId: parseInt($("#produit").val()),
+            Id: parseInt($('#sousp').val())
+        };
+          if ($("#produit").val() != null) {
+
+            $.ajax({
+                url: '@Url.Action("sousProduitPackage", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousproduit option").length > 1) {
+                        $.each($("#sousproduit option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousproduit").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousproduit").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+        }
+    }
+    function CoutDeRevient()
+    {
+        var data = {
+            Id: parseInt($('#sousproduit').val())
+        };
+        if ($("#sousproduit").val() != null) {
+
+            $.ajax({
+                url: '@Url.Action("getFormeCoutdeRevient", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    $('#cdr').val(data);
+                    //console.log(data);
+                },
+                error: function () {
+                }
+            });
+
+        }
+      }
+    function camionAdd() {
+
+        if (
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != '' &&
+            $("#sousproduit").val() != null && $("#sousproduit").val() != '' &&
+            $("#sousp").val() != null && $("#sousp").val() != '' &&
+            $("#qteforme").val() != null && $("#qteforme").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var produitpack = $("#produit").val();
+        var formeproduit = $("#forme").val();
+        var phoneval = $("#qteforme").val();
+        document.getElementById('fieldset').style.display = "block";
+        if ($("#tableForme tbody").length == 0) {
+            $("#tableForme").append("<tbody id='tbodyCamions'></tbody>");
+            $("#tableFormePret").append("<tbody id='tbodyCamionsPret'></tbody>");
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' >" + $("#sousp option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#sousproduit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousproduit option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousp option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + phoneval + "</td>" +
+            "</tr>");
+        $("#tableFormePret").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' >" + $("#sousp option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#sousproduit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousproduit option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousp option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + phoneval + "</td>" +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#qteforme").val("");
+        $("#sousp").val("");
+        $("#sousproduit").val("");
+       // $("#forme").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableForme tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+        function AjoutTrpMoral() {
+        var ListeProduction = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var produitpackage = "";
+        var sousproduit = "";
+        var sousforme = "";
+        var quantite = 0;
+        var forme = "";
+
+        //for (var i = 0; i < table.rows.length; i++)
+        //{
+        //    sousproduit = table.rows[i].cells[3].innerHTML;
+        //    sousforme = table.rows[i].cells[2].innerHTML;
+        //    quantite = table.rows[i].cells[4].innerHTML;
+        //    var detail = {
+        //        ProductionDetails_FormeID: "",
+        //        ProductionDetails_Quantite: "",
+        //        ProductionDetails_CoutDeRevient: 0 ,
+        //    }
+        //    detail.ProductionDetails_FormeID = parseInt(sousforme);
+        //    detail.ProductionDetails_Quantite = parseFloat(quantite).toFixed(2).replace(".", ",");
+        //    detail.ProductionDetails_CoutDeRevient = parseFloat(quantite * $('#cdr').val()).toFixed(2).replace(".",",");
+        //    ListeProduction.push(detail);
+        //}
+
+
+            var production = {
+                PackageProduction_ProduitPackageID: $("#forme").val(),
+                PackageProduction_ProduitID: $("#produit").val(),
+                PackageProduction_Quantite: $("#qteprod").val(),
+                //detailsProduction: ListeProduction
+            }
+            var data = {
+                productionModel: production
+        };
+            //console.log(data);
+        $.ajax({
+            url: '@Url.Action("ProduirePackage", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Production ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                 window.location.reload();
+                            }, 2000);
+                    } else {
+                        ShowNotification("La quantité d'un ou plusieur produits est inférieure à la quantité demandé!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+
+
+    var donee;
+    function result() {
+        var listprod = new Array();
+        var obj = {
+            listprods: new Array(),
+            qte: 0
+        };
+        document.getElementById('prodButton').disabled = false;
+        document.getElementById('demandebutton').style.display = "none";
+        if ($("#produit").val() != null) {
+            var data2 = {
+                packageId: parseInt($("#produit option:selected").val()),
+                formeID: parseInt($("#forme option:selected").val())
+            };
+            $.ajax({
+                url: '@Url.Action("getPackageFormeDetails", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data2,
+                success: function (data) {
+                    console.log(data);
+                    $("#tableForme tbody").remove();
+                    //$("#tableFormePret tbody").remove();
+                    document.getElementById('fieldset').style.display = "block";
+                    $("#tableForme").append("<tbody id='tbodyCamions'></tbody>");
+                    //$("#tableFormePret").append("<tbody id='tbodyCamionsPret'></tbody>");
+
+                    for (i = 0; i < data.length; i++)
+                    {
+                        $("#tbodyCamions").append("<tr>" +
+                            "<td class='border-b dark:border-dark-5' >" + data[i].sousProduit_ProduitDesi + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].sousProduit_FormeProduit + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(data[i].sousProduit_Quantite) * $("#qteprod").val()).toFixed(2) + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].sousProduit_QuantiteEnStock + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].sousProduit_UniteMesureDesi + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].sousProduit_ProduitID + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].sousProduit_FormeProduitID + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].sousProduit_ProduitType + "</td>" +
+                            "</tr>");
+                        if (parseFloat(parseFloat(data[i].sousProduit_Quantite) * $("#qteprod").val()) > parseFloat(data[i].sousProduit_QuantiteEnStock)) {
+                            //console.log("DISABLED");
+                            document.getElementById('prodButton').disabled = true;
+                            if (data[i].sousProduit_ProduitType == "consommable")
+                            {
+                                document.getElementById('demandebutton').style.display = "block";
+                            }
+                            listprod.push(data[i]);
+                            obj.qte = parseFloat($("#qteprod").val());
+                            document.getElementById('tbodyCamions').rows[i].cells[0].style.color = "#ff4d4d";
+                            document.getElementById('tbodyCamions').rows[i].cells[1].style.color = "#ff4d4d";
+                            document.getElementById('tbodyCamions').rows[i].cells[2].style.color = "#ff4d4d";
+                            document.getElementById('tbodyCamions').rows[i].cells[3].style.color = "#ff4d4d";
+                            document.getElementById('tbodyCamions').rows[i].cells[4].style.color = "#ff4d4d";
+                        }
+
+                    }
+                    obj.listprods = listprod;
+                },
+                error: function () {
+                }
+            });
+        }
+        return obj;
+    }
+
+
+    function SousP() {
+        donee = result();
+    }
+    function demander()
+    {
+        console.log(donee);
+        for (i = 0; i < donee.listprods.length; i++) {
+            donee.listprods[i].sousProduit_Quantite = parseFloat(donee.listprods[i].sousProduit_Quantite).toFixed(2).replace(".", ",");
+        }
+        (async () => {
+        const { value: pdv } = await Swal.fire({
+            icon: 'info',
+            title: "Veuillez selectionner un point de stockage",
+            html: `<select id="type" data-search="true" class="swal2-select" >
+                       @foreach (var item in ViewBag.lieuStock) {
+                           @:<option value="@item.Value" style="text-align:center;">@item.Text</option>
+                       }
+                </select> `,
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            },
+            allowOutsideClick: false,
+            showCancelButton: false,
+            confirmButtonText: "Confirmer",
+            cancelButtonText: "Annuler",
+            preConfirm: () => {
+                return $('#type option:selected').val()
+            }
+        })
+        if (pdv) {
+            
+            var data = {
+                sousProds: donee.listprods,
+                qte: parseFloat(donee.qte).toFixed(2).replace(".",","),
+                lieuId : pdv,
+            };
+            console.log(data);
+            $.ajax({
+                url: '@Url.Action("DemanderComposants", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Demande ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                    else
+                    {
+                        ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function ()
+                            {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+                error: function ()
+                {
+                    alert("non ajoute");
+                }
+            });
+        }
+        })();
+    }
+</script>
+

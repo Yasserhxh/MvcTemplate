@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.Zone_StockageModel
+
+@{
+    ViewData["Title"] = "Ajouter une Zone";
+}
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeZoneStockage">Liste des zones de stockage</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                @*                <div class="card-header">
+                        <div class="card-title-wrap bar-success">
+                            <h4 class="card-title" id="basic-layout-form">Ajouter une zone de stockage</h4>
+                        </div>
+                    </div>*@
+                <div class="card-body">
+                    <form class="form" asp-action="AjouterZone" nsubmit="theButton.disabled = true; return true;" method="post">
+                        <div class="form-body">
+                            <div class="px-3">
+                                <fieldset>
+                                    <legend>Ajouter une zone de stockage </legend>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Designatio">Désignation</label>
+                                                <input type="text" asp-for="ZoneStockage_Designation" class="form-control" required />
+                                            </div>
+                                        </div>  <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="LieuStockage">Point de stockage</label>
+                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ZoneStockage_LieuStockageId" asp-items="@ViewBag.ZoneStockage_LieuStockageId">
+                                                    <option value="" selected>Sélectionnez le point de stockage ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Forme Stockage">Forme de stockage </label>
+                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ZoneStockage_FormeStockageId" asp-items="@ViewBag.ZoneStockage_FormeStockageId">
+                                                    <option value="" selected>Sélectionnez la forme de stockage ...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Capacite"> Capacité de stockage</label>
+                                                <input type="text" asp-for="ZoneStockage_CapaciteStockage" class="form-control" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="UnitedeMesure">Unité de mesure</label>
+                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ZoneStockage_UniteMesureId" asp-items="@ViewBag.ZoneStockage_UniteMesureId">
+                                                    <option value="" selected>Sélectionnez une unite de mesure...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="TypeContenu">Type de contenu </label>
+                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ZoneStockage_TypeContenuId" asp-items="@ViewBag.ZoneStockage_TypeContenuId">
+                                                    <option value="" selected>Sélectionnez le type de contenu...</option>
+                                                </select>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-actions text-sm-right">
+                            <a class="btn btn-danger" asp-action="ListeZoneStockage">
+                                Annuler
+                            </a>
+                            <button type="submit" name="theButton" class="btn btn-success">
+                                <i class="icon-note"></i> Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function disable() {
+        document.getElementById("disabled").disabled = true;
+    }
+</script>

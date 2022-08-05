@@ -1,0 +1,560 @@
+﻿@{ ViewData["Title"] = "Produits packagés";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@model Domain.Models.PackageProductionModel
+
+@{ ViewData["Title"] = "Ajouter un produit package"; }
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeProduitsPackage">Liste des produits packagés </a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter une fiche technique des produits packages </h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+
+                                                        <div class="col-md-6 mb-2">
+                                                            <label for="validationTooltip01">Produit packagé</label>
+                                                            <div>
+                                                                <select class="custom-select" id="produit" data-search="true" asp-items="@ViewBag.prduits" onchange="familleList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 mb-1">
+                                                            <label for="validationTooltip01">Forme de produit packagé</label>
+                                                            <div>
+                                                                <select class="custom-select" id="forme" asp-for="PackageProduction_ProduitPackageID" data-search="true" required>
+                                                                    <option value="" selected disabled>Sélectionnez une forme de produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="col-md-4 mb-1">
+                                                            <label for="QuantiteMatiere">Quantité à produire</label>
+                                                            <input id="qteprod" type="number" min="0" step=".01" class="form-control" asp-for="PackageProduction_Quantite" />
+
+                                                        </div>*@
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->
+                                                <fieldset>
+                                                    <legend>Détails des composants</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Produit maison/prêt à consommer</label>
+                                                            <div>
+                                                                <select class="custom-select" id="sousp" data-search="true" required onchange="sousproduit()">
+                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Forme de produit maison/prêt à consommer</label>
+                                                            <div>
+                                                                <select class="custom-select" id="sousproduit" data-search="true" required onchange="CoutDeRevient()">
+                                                                    <option value="" selected disabled>Sélectionnez une forme de produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="QuantiteMatiere">Quantité</label>
+                                                            <input id="qteforme" type="number" min="0" step=".01" class="form-control" asp-for="PackageProduction_Quantite" />
+                                                            <input id="cdr" type="number" min="0" step=".01" class="form-control" disabled style="display:none;" />
+
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="QuantiteMatiere">Unité de mesure</label>
+                                                            <select class="custom-select" id="UniteV" data-search="true"  required>
+                                                                <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableForme" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Produit maison/prêt à consommer</th>
+                                                                            <th>Forme de produit</th>
+                                                                            <th>Quantité à produire</th>
+                                                                            <th>Unité de mesure</th>
+                                                                            <th>Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                                <fieldset>
+                                                    <legend>Matière premières</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip001">Matière première</label>
+                                                            <div>
+                                                                <select class="custom-select" id="sousM" data-search="true" required onchange="sousMatiere()">
+                                                                    <option value="" selected disabled>Sélectionnez une matière première...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="QuantiteMatiere">Quantité</label>
+                                                            <input id="qtematiere" type="text" class="form-control" />
+                                                            <input id="cdrMatiere" type="text" min="0" step=".01" class="form-control" disabled style="display:none;" />
+
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="QuantiteMatiere">Unité de mesure</label>
+                                                            <select class="custom-select" id="UniteM" data-search="true" onchange="CalculeCdr()" required>
+                                                                <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                                            </select>
+
+                                                        </div>
+
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="matiereAdd()">Ajouter à la liste</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableForme" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Matière première</th>
+                                                                            <th>Quantité</th>
+                                                                            <th>Unité de mesure</th>
+                                                                            <th>Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function familleList()
+    {
+          var data = {produitId: parseInt($("#produit").val())};
+          if ($("#produit").val() != null) {
+              var data2 = {
+                  Id: parseInt($("#produit").val())
+              };
+              $.ajax({
+                url: '@Url.Action("formeProduitPackage", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data2,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+              });
+
+              $.ajax({
+                url: '@Url.Action("sousProduitPackageDesi", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousp option").length > 1) {
+                        $.each($("#sousp option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousp").append("<option value='' selected disabled>Sélectionnez un produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousp").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+              });
+              $.ajax({
+                url: '@Url.Action("sousMatieresPackageDesi", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousM option").length > 1) {
+                        $.each($("#sousM option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousM").append("<option value='' selected disabled>Sélectionnez une matière première</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousM").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function sousproduit()
+    {
+        var data = {
+            produitId: parseInt($("#produit").val()),
+            Id: $('#sousp').val()
+        };
+          if ($("#produit").val() != null) {
+
+            $.ajax({
+                url: '@Url.Action("sousProduitPackage", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#sousproduit option").length > 1) {
+                        $.each($("#sousproduit option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#sousproduit").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#sousproduit").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+              $.ajax({
+                  url: '@Url.Action("getUniteVente", "ProduitVendable")',
+                  type: "POST",
+                  cache: false,
+                  async: true,
+                  data: { produitId: parseInt($('#sousp').val().split(",")[2]) },
+                success: function (data) {
+                    if ($("#UniteV option").length > 1) {
+                        $.each($("#UniteV option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#UniteV").append("<option value='' selected disabled>Sélectionnez une unite de mesure </option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#UniteV").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+        }
+    }
+    function sousMatiere()
+    {
+        var data = {
+            produitId: parseInt($("#produit").val()),
+            SousMatiereId: parseInt($('#sousM').val())
+        };
+          if ($("#produit").val() != null) {
+
+            $.ajax({
+                url: '@Url.Action("getUniteDeMesure", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#UniteM option").length > 1) {
+                        $.each($("#UniteM option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#UniteM").append("<option value='' selected disabled>Sélectionnez une unité de mesure</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#UniteM").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+              $.ajax({
+                url: '@Url.Action("getCoutDeRevient", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    $('#cdrMatiere').val(data);
+                    console.log(data);
+                },
+                error: function () {
+                }
+            });
+
+        }
+    }
+    function CalculeCdr()
+    {
+        var cdr = $("#cdrMatiere").val();
+        var qteMatiere = $("qtematiere").val();
+        var UniteMatiere = $("#UniteM option:selected").val();
+        const values = cdr.split('_');
+        console.log(values);
+        var CdrFinal = 0;
+        if ((UniteMatiere == 1 && values[1] == 2) || (UniteMatiere == 1 && values[1] == 3))
+            CdrFinal = (qteMatiere * values[0]) / 1000;
+        else if ((UniteMatiere == 2 && values[1] == 1) || (UniteMatiere == 3 && values[1]== 4))
+            CdrFinal = (qteMatiere * values[0]) * 1000;
+        else
+            CdrFinal = (qteMatiere * values[0]);
+    }
+    function CoutDeRevient()
+    {
+        var data = {
+            Id: parseInt($('#sousproduit').val())
+        };
+        if ($("#sousproduit").val() != null) {
+
+            $.ajax({
+                url: '@Url.Action("getFormeCoutdeRevient", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    $('#cdr').val(data);
+                    console.log(data);
+                },
+                error: function () {
+                }
+            });
+
+        }
+      }
+    function camionAdd() {
+
+        if (
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != '' &&
+            $("#sousproduit").val() != null && $("#sousproduit").val() != '' &&
+            $("#sousp").val() != null && $("#sousp").val() != '' &&
+            $("#qteforme").val() != null && $("#qteforme").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout() {
+        var produitpack = $("#produit").val();
+        var formeproduit = $("#forme").val();
+        var phoneval = $("#qteforme").val();
+        if ($("#tableForme tbody").length == 0) {
+            $("#tableForme").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' >" + $("#sousp option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#sousproduit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousproduit option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='display:none;'>" + $("#sousp option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + phoneval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#cdr").val() + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#qteforme").val("");
+        $("#sousp").val("");
+        $("#sousproduit").val("");
+       // $("#forme").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableForme tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+
+        var ListeProduction = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var produitpackage = "";
+        var sousproduit = "";
+        var sousforme = "";
+        var quantite = 0;
+        var forme = "";
+        var sous = "";
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            sousproduit = table.rows[i].cells[3].innerHTML;
+            sous = sousproduit.split(",")
+            sousforme = table.rows[i].cells[2].innerHTML;
+            quantite = table.rows[i].cells[4].innerHTML;
+            cdr = table.rows[i].cells[5].innerHTML;
+            var detail = {
+                PackageFormeDetails_SousProduitID: "",
+                PackageFormeDetails_Quantite: "",
+                PackageFormeDetails_CoutdeRevient: 0 ,
+            }
+            detail.PackageFormeDetails_SousProduitID = parseInt(sous[1]);
+            detail.PackageFormeDetails_Quantite = parseFloat(quantite).toFixed(2).replace(".", ",");
+            detail.PackageFormeDetails_CoutdeRevient = parseFloat(quantite * cdr).toFixed(2).replace(".",",");
+            ListeProduction.push(detail);
+        }
+
+
+            var production = {
+                PackageForme_FormeProduitID: $("#forme").val(),
+                PackageForme_ProduitPackageID: $("#produit").val(),
+                //PackageProduction_Quantite: $("#qteprod").val(),
+                details: ListeProduction
+            }
+
+
+            var data = {
+                packFormeModel: production
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("PackageProd", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Production ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                 window.location.href = '@Url.Action("ListeProduitsPackage", "ProduitVendable")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Erreur!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+</script>
+

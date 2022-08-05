@@ -1,0 +1,217 @@
+/*================================================================================
+	Item Name: TREPHO Template
+	Version: 1.0
+	Author: Alexsys
+	Author URL: http://www.alexsys.solutions
+================================================================================
+*/
+.table-intragroupe th, .table-intragroupe td {
+  font-size: 13px
+}
+.table-intragroupe td {
+  padding: 0 .5rem !important;
+}
+.table-intragroupe a i.icn-action {
+  position: relative;
+  top: 3px;
+}
+.table-intragroupe a i.icn-action-form {
+  position: relative;
+  top: 3px;
+  margin-right: 10px;
+}
+.table-intragroupe a i.ic-delete {
+  color: #d71111
+}
+.table-intragroupe a i.ic-edit {
+  color: #39DA8A
+}
+.table-intragroupe a:hover i.ic-delete, .table-intragroupe a:hover i.ic-edit {
+  color: #0f263d
+}
+.comava {
+  border-radius: 5px
+}
+.btn-table {
+  padding: .0rem .7rem !important;
+  font-size: .8rem;
+  margin-right: .2rem !important;
+}
+.nav-cms-logo span {
+  font-family: 'El Messiri', sans-serif;
+  padding-left: 5px;
+  position: relative;
+  top: 5px;
+	font-size: 20px;
+}
+.flaticon-pdf-file-format-symbol {
+  top: 2px !important
+}
+/*** Table ***/
+th.table-checkbox, td.table-checkbox {
+  padding: 0 .1rem !important;
+  width: 20px
+}
+.table-checkbox .checkbox {
+  left: 5px
+}
+.table .checkbox label:after, .table .checkbox label:before {
+  height: 16px;
+  width: 16px;
+  top: 1px;
+}
+.checkbox input:checked ~ label:after {
+  height: .3rem;
+  width: .6rem;
+  top: 5px;
+  left: 4px;
+}
+/*** Table ***/
+th.table-checkbox, td.table-checkbox {
+    padding: 0 .1rem !important;
+    width: 20px
+}
+
+.table-checkbox .checkbox {
+    left: 5px
+}
+
+.table .checkbox label:after, .table .checkbox label:before {
+    height: 16px;
+    width: 16px;
+    top: 1px;
+}
+
+.checkbox input:checked ~ label:after {
+    height: .3rem;
+    width: .6rem;
+    top: 5px;
+    left: 4px;
+}
+/*** End Table ***/
+.dropdown-menu .dropdown-item {
+    text-transform: none !important;
+}
+
+    .dropdown-menu .dropdown-item i {
+        margin-right: 6px;
+    }
+
+.modal-content {
+    border: none
+}
+
+@media (max-width: 1024px) {
+    .table td a {
+        width: max-content;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 425px) {
+    .content-header-title {
+        display: none
+    }
+
+    .btn {
+        padding: .467rem 1rem;
+    }
+}
+
+.dropdown-item {
+    padding: .5rem 1.6rem;
+}
+
+#table-success .card {
+    min-height: 315px
+}
+
+.check-tb {
+}
+/* 03/08/2021  Notification css*/
+.notif {
+    margin-left: 10px;
+    border-radius: 50%;
+    background: /*#76bd1d*/ #74278d;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    text-align: center
+}
+/*End Notif*/
+
+/******* 30/08/2021 *******/
+
+.card-dashboard{
+    height: 200px;
+    display: flex;
+  justify-content: center;
+  padding: 20px;
+    margin-bottom: 10px;
+}
+.card-dashboard-2{
+    height: 95px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+.card-dashboard-3{
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+.col-dashboard{ padding-left: 0; padding-right: 0px}
+.card-dashboard .card-title, .card-dashboard-2 .card-title, .card-dashboard-3 .card-title{ margin-bottom: 5px; color:#6464ff}
+.card-dashboard .card-body, .card-dashboard-2 .card-body, .card-dashboard-3 .card-body{ padding: 5px}
+
+.card-dashboard h1, .card-dashboard-2 h1, .card-dashboard-3 h1{ margin-bottom: 0}
+@media (max-width: 768px) {
+  .col-dashboard{ padding-left: 15px; padding-right: 15px}
+}
+
+.dashicon{ position: absolute; right:15px; top:15px; width: 40px; height: 40px}
+
+
+/******* Star Tooltip ********/
+.tooltip {
+    display:inline-block;
+    position: relative;
+    opacity: 100;
+}
+    .tooltip i {
+        position: relative;
+        top: 3px;
+    }
+    .tooltip:hover:after {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        background: #1f1f14;
+        border-radius: 10px;
+        color: #fff;
+        content: attr(name);
+        margin: -105px auto 0;
+        font-size: 16px;
+        padding: 1px 13px;
+        width: 220px;
+        position: absolute;
+    }
+
+    .tooltip:hover:before {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        border-left: 24px solid #1f1f14;
+        border-right: 12px solid transparent;
+        border-top: 12px solid #1f1f14;
+        border-bottom: 20px solid transparent;
+        left: 10px;
+        bottom: 25px;
+    }
+/******* End Tooltip ********/

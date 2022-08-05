@@ -1,0 +1,66 @@
+﻿
+@model Domain.Models.UserModel
+
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+<div class="app-content content">
+    <section id="basic-form-layouts">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title" id="basic-layout-form"> Modifier un utilisateur</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="px-3">
+                    <form class="form" asp-action="Modification" method="post">
+                        <div class="form-body">
+                            <h4 class="form-section">
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Nom">Nom</label>
+                                        <input type="text" asp-for="Nom" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Prenom">Prénom</label>
+                                        <input type="text" asp-for="Prenom" class="form-control" required />
+                                    </div>
+                                </div>
+                               
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Code Postal">Numéro de téléphone</label>
+                                        <input type="number" id="code" class="form-control" asp-for="Gsm" maxlength="10" minlength="10" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Adresse e-mail</label>
+                                        <input type="email" asp-for="Email" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="form-actions text-sm-right">
+                            <a class="btn btn-danger" asp-action="Utilisateurs">
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-note"></i> Modifier
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+<script>
+
+</script>
+
+

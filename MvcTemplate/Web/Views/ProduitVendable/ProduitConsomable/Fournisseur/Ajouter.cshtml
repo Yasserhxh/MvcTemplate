@@ -1,0 +1,288 @@
+﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.FournisseurProduitsModel
+
+@{ ViewData["Title"] = "Ajouter Fournisseur"; }
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeFournisseurProduits">Liste des fournisseurs des produits prêts à consommer</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter un fournisseur</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="RiasonSocial">Raison sociale</label>
+                                                            <input type="text" id="rs" asp-for="FournisseurProduitConso_RaisonSocial" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="ICE">ICE </label>
+                                                            <input type="number" id="ICE" asp-for="FournisseurProduitConso_ICE" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="Ville">Ville</label>
+                                                            <select class="custom-select" id="ville" data-search="true" asp-for="FournisseurProduitConso_VilleID" asp-items="@ViewBag.Ville">
+                                                                <option value="" selected>Séléctionnez une ville...</option>
+                                                            </select>
+                                                        </div> 
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="Adresse"> Adresse</label>
+                                                            <input type="text" id="adresse" asp-for="FournisseurProduitConso_Adresse" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="contact">Contact d'usine</label>
+                                                            <input type="text" id="nomcontact" asp-for="FournisseurProduitConso_NomContact" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="noTel">Téléphone d'usine</label>
+                                                            <input type="tel" id="noTel" maxlength="10" asp-for="FournisseurProduitConso_TelephoneContact" class="form-control" required />
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <!-- form ends -->
+                                                <fieldset>
+                                                    <legend>Contacts du fornisseur</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="ContactName"> Nom de contact</label>
+                                                            <input type="text" id="Nom" asp-for="@Model.Fournisseur_Contact[0].FournisseurContact_Nom" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="ContactFonction">Fonction</label>
+                                                            <select class="custom-select" id="Fonction" data-search="true" asp-for="@Model.Fournisseur_Contact[0].FournisseurContact_FonctionID" asp-items="@ViewBag.Fonction">
+                                                                <option value="" selected>Séléctionnez une Fonction...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="ContactMail">Contact e-mail</label>
+                                                            <input type="email" id="email" asp-for="@Model.Fournisseur_Contact[0].FournisseurContact_Email" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="Tel">Numéro de téléphone </label>
+                                                            <input type="tel" id="phone" maxlength="10" asp-for="@Model.Fournisseur_Contact[0].FournisseurContact_GSM" class="form-control" required />
+                                                        </div>
+                                                        <div class=" text-md-right">
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter le contact</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableCamions" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nom de contat</th>
+                                                                            <th>Fonction</th>
+                                                                            <th>Contact e-mail</th>
+                                                                            <th>Numéro de téléphone</th>
+                                                                            <th>Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer le fournisseur </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function camionAdd() {
+
+        if (//$("#Fonction").val() != null && $("#Fonction").val() != '' &&
+            $("#Nom").val() != null && $("#Nom").val() != '' &&
+            $("#email").val() != null && $("#email").val() != '' &&
+            $("#phone").val() != null && $("#phone").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+    function camionAjout()
+    {
+        var nomval = $("#Nom").val();
+        var emailval = $("#email").val();
+        var phoneval = $("#phone").val();
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+                    "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#produit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + nomval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#Fonction option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + emailval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + phoneval+ "</td>" +
+            "<td style='display:none;'>" + $("#Fonction option:selected").val() + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+
+    }
+    function formCamionClear() {
+        $("#Fonction").val("");
+        $("#Nom").val("");
+        $("#email").val("");
+        $("#phone").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+
+    function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var FournisseurRS = $("#rs").val() ;
+        var ICE = $("#ICE").val() ;
+        var Adresse = $("#adresse").val() ;
+        var ListeContact = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var NomContact = "";
+        var FonctionContact = 0;
+        var EmailContact = "";
+        var GsmContact = "";
+
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            NomContact = table.rows[i].cells[1].innerHTML;
+            FonctionContact = table.rows[i].cells[5].innerHTML;
+            EmailContact = table.rows[i].cells[3].innerHTML;
+            GsmContact = table.rows[i].cells[4].innerHTML;
+
+            var FournisseurContact = {
+                FournisseurContact_Nom: "",
+                FournisseurContact_FonctionID: "",
+                FournisseurContact_Email: "",
+                FournisseurContact_GSM: "",
+            }
+
+            FournisseurContact.FournisseurContact_Nom = NomContact;
+            FournisseurContact.FournisseurContact_FonctionID = FonctionContact;
+            FournisseurContact.FournisseurContact_Email = EmailContact;
+            FournisseurContact.FournisseurContact_GSM = GsmContact;
+            ListeContact.push(FournisseurContact);
+
+        }
+
+            var Fournisseur = {
+                FournisseurProduitConso_RaisonSocial: FournisseurRS,
+                FournisseurProduitConso_ICE: parseInt(ICE),
+                FournisseurProduitConso_Adresse: Adresse,
+                FournisseurProduitConso_NomContact: $("#nomcontact").val(),
+                FournisseurProduitConso_TelephoneContact: $("#noTel").val(),
+                FournisseurProduitConso_VilleID: $("#ville option:selected").val(),
+                Fournisseur_Contact: ListeContact,
+
+            }
+
+            var data = {
+                fournisseurModel: Fournisseur
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("FournisseurProduits", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Fournisseur  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeFournisseurProduits", "ProduitVendable")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("ListeFournisseurProduits", "ProduitVendable")';
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+</script>

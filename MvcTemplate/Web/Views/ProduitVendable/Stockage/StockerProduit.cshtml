@@ -1,0 +1,252 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.ProduitConsomableStokageModel
+
+@{
+    ViewData["Title"] = "Stocker un Produit";
+}
+
+<div class="app-content content">
+   <div class="content-wrapper">
+    <div class="content-header row">
+        <div class="content-header-left col-12 mb-2 mt-1">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h5 class="content-header-title float-left pr-1 mb-0">Gestion des produits maison</h5>
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb p-0 mb-0">
+                            <li class="breadcrumb-item">
+                                <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                <a asp-action="ProduitEnStock">Liste des Produits Stockés</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="basic-form-layouts">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title" id="basic-layout-form">Mettre le produit en stock</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="px-3">
+                    <form class="form" asp-action="StockerProduit" method="post">
+                        <div class="form-body">
+                            <h4 class="form-section">
+                                <i class="bx bx-detail"></i> Details.
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Formes"> Formes de produit</label>
+                                        <div>
+                                            <select class="custom-select" id="formelist" data-search="true" asp-for="ProduitConsomableStokage_FormeProduitId" >
+                                                <option value="" selected disabled>Selectionnez une forme...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Lieu"> Lieu de Stockage</label>
+                                        <div>
+                                            <select class="custom-select" id="villeLiv" data-search="true" asp-items="@ViewBag.ZoneStockage_LieuStockageId" onchange="zoneList()">
+                                                <option value="" selected disabled>Choisir un Lieu...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>*@
+                               @* <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Zone"> Zone de Stockage</label>
+                                        <div>
+                                            <select class="custom-select" data-search="true" id="secteurLiv" asp-items="@ViewBag.Section_ZoneStockageId" onchange="sectionList()">
+                                                <option value="" selected disabled>Choisir une Section...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>*@
+                                <div id="EditCustomerPartial" style="display:none;">
+                                    @ViewContext.RouteData.Values["id"]
+                                </div>
+                                @*<div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="Section"> Section de Stockage</label>
+                                        <div>
+                                            <select class="custom-select" data-search="true" id="sectionLiv" asp-items="@ViewBag.ProduitVendableStokage_SectionStockageId">
+                                                <option value="" selected>Choisir une Section...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*</div>
+                            <div class="row">*@
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="StockMin">Minimum du Stock </label>
+                                        <input type="number" min="0" step=".01" maxlength="10" asp-for="ProduitConsomableStokage_StockMinimum" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="StockMax">Maximum du Stock</label>
+                                        <input type="number" min="0" step=".01" maxlength="10" asp-for="ProduitConsomableStokage_StockMaximum" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a class="btn btn-danger" asp-action="ListeProduitConsomable">
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-note"></i> Stocker le Produit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+   </div>
+</div>
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function zoneList() {
+        var data = { lieuId: parseInt($("#villeLiv").val()) };
+            console.log(data)
+            if ($("#villeLiv").val() != null) {
+                $.ajax({
+                    url: '@Url.Action("zoneList", "ProduitVendable")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if ($("#secteurLiv option").length > 1) {
+                            $.each($("#secteurLiv option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#secteurLiv").append("<option value='' selected disabled>Sélectionnez une Zone</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#secteurLiv").append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+    }
+    function sectionList() {
+        var data = { zoneId: parseInt($("#secteurLiv").val()) };
+            console.log(data)
+        if ($("#secteurLiv").val() != null) {
+                $.ajax({
+                    url: '@Url.Action("sectionList", "ProduitVendable")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        console.log(data)
+                        if ($("#sectionLiv option").length > 1) {
+                            $.each($("#sectionLiv option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#sectionLiv").append("<option value='' selected disabled>Sélectionnez un secteur</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#sectionLiv").append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+    }
+    function init() {
+        
+           @*     $.ajax({
+                    url: '@Url.Action("formeProduit", "ProduitVendable")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if ($("#formelist option").length > 1) {
+                            $.each($("#formelist option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#formelist").append("<option value='' selected disabled>Sélectionnez une forme</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#formelist").append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });*@
+            
+    }
+    $(document).ready(function () {
+        var id = $('#EditCustomerPartial').text();
+        var data = { id: id };
+        console.log(parseInt(data));
+         $.ajax({
+            url: '@Url.Action("FormesPretList", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if ($("#formelist option").length > 1) {
+                    $.each($("#formelist option"), function (i, item) {
+                        item.remove();
+                    });
+                    $("#formelist").append("<option value='' selected disabled>Sélectionnez une forme</option>");
+                }
+                $.each(data, function (i, item) {
+                    $("#formelist").append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            },
+            error: function () {
+
+            }
+        });
+    });
+</script>
+
+

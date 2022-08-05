@@ -1,0 +1,964 @@
+﻿@{Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.IndecVenteModel
+<!-- BEGIN: Content-->
+<div class="app-content content">
+    <div class="content-area-wrapper">
+        <div class="content-left">
+            <div class="content-overlay"></div>
+            <div class="content-wrapper">
+                <div class="content-header row"> </div>
+                <div class="content-body">
+                    <!-- File Manager app overlay -->
+                    <div class="app-cart-overlay"></div>
+                    <div class="app-cart-area">
+                        <!-- File App Content Area -->
+                        <!-- App File Content Starts -->
+                        <div class="app-cart-content p-2">
+                            <h5>Menu</h5>
+
+                            <!-- Section Boulangerie et viennoiseries Starts -->
+                            <label class="app-cart-label">Boulangerie et viennoiseries</label>
+                            <div class="row app-cart-recent-access">
+                                @{ var name = "";}
+                                @foreach (var item in Model.tuple.Item1.GroupBy(p => new { key = p.PointVenteStock_ProduitID, item = p.Produit_Vendable.ProduitVendable_Designation ,photo=p.Produit_Vendable.ProduitVendable_GrandePhoto }))
+                                {
+                    <div class="col-md-3 col-6">
+                        <div class="card border shadow-none mb-1 app-cart-info">
+                            <div class="app-cart-content-logo card-img-top" onclick="fct1(@item.Key.key)">
+                                <img style="height: 155px;" src="~/@item.Key.photo.ToString()" />
+                            </div>
+                            <div class="card-body p-50">
+                                <div class="app-cart-recent-details text-center">
+                                    @{name = item.Key.item; }
+                                    <div class="app-cart-name font-size-small font-weight-bold"> @item.Key.item</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+                                @foreach (var item in Model.tuple.Item2)
+                                {
+                    <div class="col-md-3 col-6">
+                        <div class="card border shadow-none mb-1 app-cart-info">
+                            <div class="app-cart-content-logo card-img-top" onclick="fct2(@item.ProduitPackage_ID)">
+                                <img style="height: 155px;" src="~/@item.ProduitPackage_Photo" />
+                            </div>
+                            <div class="card-body p-50">
+                                <div class="app-cart-recent-details text-center">
+                                    @{name = item.ProduitPackage_Designation; }
+                                    <div class="app-cart-name font-size-small font-weight-bold"> @item.ProduitPackage_Designation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>} @foreach (var item in Model.ProduitPret)
+                                {
+                    <div class="col-md-3 col-6">
+                        <div class="card border shadow-none mb-1 app-cart-info">
+                            <div class="app-cart-content-logo card-img-top" onclick="fct3(@item.ProduitPretConsomer_ID)">
+                                <img style="height: 155px;" src="~/@item.ProduitPretConsomer_Photo" />
+                            </div>
+                            <div class="card-body p-50">
+                                <div class="app-cart-recent-details text-center">
+                                    @{name = item.ProduitPretConsomer_Designation; }
+                                    <div class="app-cart-name font-size-small font-weight-bold"> @item.ProduitPretConsomer_Designation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-right">
+            <div class="sidebar">
+                <div class="app-cart-sidebar sidebar-content d-flex">
+                    <!-- App File sidebar - Left section Starts -->
+                    <div class="app-cart-sidebar-right">
+                        <div class="form-group date-hour-group">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-6">
+                                    <p id="current_date" class="text-left"></p>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-6">
+                                    <p id="current_time" class="text-right"></p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4 col-6">
+                                    <label class="text">Commande</label>
+                                    <input type="checkbox" hidden="hidden" id="username">
+                                    <label class="switch" for="username"></label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="app-cart-sidebar-content" id="content">
+                            <!-- Boulangerie et viennoiseries Content Starts -->
+                            <!-- Pâtisserie marocaine Content Starts -->
+
+
+                        </div>
+                        <div class="form-group footer-total">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-6">
+                                    <p class="text-left">Total : </p>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-6">
+                                    <p class="text-right font-weight-bold font-size-large" id="total"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group btn-Facturer text-center">
+                            <!-- Button -->
+                            <button class="btn btn-ikbal btn-block glow text-uppercase" onclick="test()"><i class="bx bx-receipt"></i> Facturer</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- App File sidebar - Right section Starts -->
+                <div class="app-cart-sidebar-info">
+                    <div class="card shadow-none mb-0 p-0 pb-1">
+                        <div id="modalAppend">
+                        </div>
+                        <div class="card-header d-flex justify-content-between align-items-center border-bottom btn-Facturer text-center" id="addcart">
+                            <!-- Button -->                    
+                        </div>
+
+                    </div>
+                </div>
+                <!-- App File sidebar - Right section Ends -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Indiquer quantite produite.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body text-center">
+
+                    <div class="row">
+                        <div class="card text-center">
+                            <div class="mx-auto" id="mbody">
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 mt-2">
+                                        <div class="table-responsive">
+                                            <table id="tableCamions" class="table mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>produit </th>
+                                                        <th>Quantité</th>
+                                                        <th>Unité</th>
+                                                        <th>Prix</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id='tbodyCamions'></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 mt-2">
+                                        <div class="table-responsive">
+                                            <table id="tableVente" class="table mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FormeId </th>
+                                                        <th>ProduitId</th>
+                                                        <th>Quantite</th>
+                                                        <th>Prix</th>
+                                                        <th>Marge</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id='tbodyVente'></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="prixModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Mode de paiement.</h4>
+                <button class="close" data-toggle="modal" aria-label="Close">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form action="#">
+                <div class="modal-body" id="mPrixbody">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label>Mode paiement: </label>
+                                    <select class="custom-select" id="mode" data-search="true" asp-items="@ViewBag.mode" onchange="enableComment()" required>
+                                        <option value="" selected disabled>Sélectionnez un mode de paiement...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Commentaire: </label>
+                                    <input type="text" id="comment" class="form-control" placeholder="Commentaire" disabled>
+                                </div>
+                                <div class="col-md-1">
+                                    <label></label>
+                                    <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" id="addprix" onclick="prixAdd()">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive" id="PrixTable">
+                            <div id="divTablePrix" class="overflow-x-auto" style="display: none">
+                                <table id="tablePrix" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Mode paiement</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Commentaire</th>
+                                            <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success" id="envbuttonPrix" onclick="Facturer()" style="display: none">
+                        <i class="bx bx-send"></i>
+                        enregistrer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    function fct1(id) {
+        var data = { Id: id }
+        $("#modalAppend").children().remove();
+        $("#addcart").children().remove();
+         $.ajax({
+            url: '@Url.Action("getFormes", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data ,
+             success: function (data) {
+                 console.log(data);
+                 $("#modalAppend").append(
+                     "<div class='card-header d-flex justify-content-between align-items-center border-bottom'><h6 class='mb-0'>" + data[0].produit_Vendable.produitVendable_Designation +"</h6>"+
+                         "<div class='app-cart-action-icons d-flex align-items-center'> <i class='bx bx-x close-icon cursor-pointer'></i> </div></div>"
+                 );
+                 $("#modalAppend").append(
+                     "<h6 class='mb-0' id='produitId' style='display:none;'>" + data[0].produit_Vendable.produitVendable_Id +"</h6>"
+                 );
+                 for (var i = 0; i < data.length; i++) {
+                     formeID = data[i].formeProduit_ID;
+                     $("#modalAppend").append(
+
+                         "<div id='products' class='row app-cart-info-recent-access'>" +
+                         "<div class='col-md-6'>" +
+                         "<div class='card border shadow-none mb-1 app-cart-info'>" +
+                         "<div class='app-cart-content-logo card-img-top'> <img class='d-block mx-auto'  src='/" + data[i].produit_Vendable.produitVendable_GrandePhoto + "' alt=''> </div>" +
+                         "<div class='card-body p-50'>" +
+                         "<div class='app-cart-recent-details text-center'>" +
+                         "<div class='app-cart-name font-size-small font-weight-bold'>" + data[i].formeProduit_Libelle + "</div>" +
+                         "</div></div></div></div>" +
+                         "<div class='col-md-6'>" +
+                         "<div style='display:none;' id='prixF-" + data[i].formeProduit_ID + "'></div>" +
+                         "<h5 class='mb-1 text-success' id='prixForme-" + data[i].formeProduit_ID + "'>" + parseFloat(data[i].formeProduit_PrixVente).toFixed(2) + " DH</h5>" +
+                         "</row>" +
+                         "<p style='display:none;' id='unite-" + data[i].formeProduit_ID + "'>" + data[i].produit_Vendable.produitVendable_UniteMesureId + "</p>"+
+                         "<p class='card-text' id='qteforme-" + data[i].formeProduit_ID+"'>" + " " + data[i].produit_Vendable.unite_Mesure.uniteMesure_Libelle + "</p>" +
+                         "<div class='input-group bootstrap-touchspin bootstrap-touchspin-injected'>"+
+                             "<span class='input-group-btn input-group-prepend'>"+
+                                 "<button class='btn btn-ikbal bootstrap-touchspin-down' type='button'>-</button>"+
+                             "</span>"+
+                         "<input type='number' class='touchspin form-control' value='0'id='qte-" + data[i].formeProduit_ID + "'@*onchange='getprix(" + data[i].formeProduit_ID + ")*@'>"+
+                                 "<span class='input-group-btn input-group-append'>"+
+                                     "<button class='btn btn-ikbal bootstrap-touchspin-up' type='button'>+</button>"+
+                                 "</span>"+
+                                 "</div>"+
+                         "</div>" +
+                         "</div>"
+                     );
+            var data2 = { formeId: formeID };
+            $.ajax({
+            url: '@Url.Action("getStockPointVente", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2,
+                success: function (data) {
+                    if (data <= 0) {
+                        data = 0;
+                        document.getElementById("qteforme-" + data2.formeId).innerHTML = data + document.getElementById("qteforme-" + data2.formeId).innerHTML;
+
+                    } else {
+                        document.getElementById("qteforme-" + data2.formeId).innerHTML = data + document.getElementById("qteforme-" + data2.formeId).innerHTML;
+
+                    }
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+                 }
+                 $("#addcart").append(
+                     "<button class='btn btn-ikbal btn-block glow text-uppercase' onclick='addToCart()'><i class='bx bx-cart-alt'></i> Ajouter au panier</button>");
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+
+    }
+
+@*    function getprix(id) {
+        var quantite = parseFloat($("#qte-" + id).val()).toFixed(2).replace(".", ",");
+        var produitId = parseInt($('#produitId').text());
+        var data = {
+            Id: id,
+            qte: parseFloat($("#qte-"+id).val()).toFixed(2).replace(".", ","),
+        }
+
+           $.ajax({
+            url: '@Url.Action("GetPrix", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+               success: function (data) {
+                   var table = document.getElementById("tbodyCamions");
+                   if (table.rows.length >0) {
+                       for (var i = 0; i < table.rows.length; i++) {
+                           formeID = table.rows[i].cells[0].innerHTML;
+                           if (formeID == id) {
+                               document.getElementById("tbodyCamions").deleteRow(0);
+                           }
+                       }
+                   }
+                   $('#prixForme-'+id).text(parseFloat(data).toFixed(2)+" DH");
+                   $('#prixF-'+id).text(parseFloat(data).toFixed(2));
+                   $("#tbodyCamions").append("<tr>" +
+                       "<td id='ID' class='border-b dark:border-dark-5'>" + id + "</td>" +
+                       "<td class='border-b dark:border-dark-5'>" + parseFloat(data).toFixed(2) + "</td>" +
+                       "<td class='border-b dark:border-dark-5'>" + quantite + "</td>" +
+                       "<td class='border-b dark:border-dark-5'>" + produitId + "</td>" +
+                       "<td class='border-b dark:border-dark-5'>" + document.getElementById("unite-" + id).innerHTML + "</td>" +
+                       "<td class='text-right'>" +
+                       '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+                       "</tr>");
+
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+           });
+
+    }*@
+    function refresh() {
+       // $('#myModal').modal('toggle');
+        setTimeout(
+            function () {
+                window.location.href = '@Url.Action("Index", "Home")';
+            }, 500);
+    }
+
+
+    var ListProduits = new Array();
+    var total = 0;
+
+    function addToCart() {
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++) {
+            formeP = table.rows[i].cells[0].innerHTML;
+            prixProduit = table.rows[i].cells[1].innerHTML;
+            qte = table.rows[i].cells[2].innerHTML;
+            prd = table.rows[i].cells[3].innerHTML;
+            unite = table.rows[i].cells[4].innerHTML;
+            var forme = {
+                unite : "",
+                produit:"",
+                formeproduit: "",
+                prix: "",
+                quantite: "",
+            }
+            forme.unite = unite;
+            forme.produit = prd;
+            forme.formeproduit = formeP;
+            forme.prix = parseFloat(prixProduit);
+            forme.quantite = qte;
+            ListProduits.push(forme);
+
+        }
+
+      //  console.log(ListProduits);
+        var data = { id: parseInt($('#produitId').text()), };
+                 $.ajax({
+            url: '@Url.Action("GetProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+             data: data,
+             success: function (data) {
+                 // console.log(data);
+                 if (ListProduits.length==0) {
+                 }
+                 else {
+                     $("#content").append("<label class='app-cart-label'>" + data.produitVendable_Designation + " </label>");
+
+                 }
+
+                     },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+                 });
+        for (var i = 0; i < ListProduits.length; i++) {
+            var data2 = { id: ListProduits[i].formeproduit ,};
+            $.ajax({
+            url: '@Url.Action("GetFormeProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2 ,
+                success: function (data) {
+             //       console.log(data);
+                    $("#content").append(
+                        "<div class='card-shadow justify-content-between align-items-center py-25'> <div class='row'>" +
+                        "<div class= 'col-xs-6 col-sm-6 col-6' >" +
+                        "<h6 class='text-left mt-1'>" + parseFloat(ListProduits[i].quantite) + " " + data.formeProduit_Libelle + "</h6>" +
+                        "</div>" +
+                        "<div class='col-xs-6 col-sm-6 col-6'>" +
+                        "<h6 class='text-right mt-1'>" + parseFloat(parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite)) + "dh</h6>" +
+                        "</div></div ></div >"
+                    );
+                    $("#tbodyVente").append("<tr>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].formeproduit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].produit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(ListProduits[i].quantite).toFixed(2).replace(".", ",") + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2)) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(data.formeProduit_CoutDeRevient).toFixed(2) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2) - parseFloat(data.formeProduit_CoutDeRevient).toFixed(2)) + "</td>"+
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].unite + "</td>"
+                        + "</tr>");
+                    total = total + parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite).toFixed(2);
+                },
+
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+         });
+
+        }
+        $('#total').text(total);
+        $("#tbodyCamions tr").remove();
+        ListProduits = [];
+
+    }
+    function Facturer() {
+        var ListDetailsVente = new Array();
+        var table = document.getElementById("tbodyVente");
+        if (table.rows.length > 0) {
+            var formeId = 0;
+            var Quantite = 0;
+            var CoutDeRevient = 0;
+            var Prix = 0;
+            var totalPrix = 0;
+            var totalMarge = 0;
+            for (var i = 0; i < table.rows.length; i++) {
+                formeId = table.rows[i].cells[0].innerHTML;
+                Quantite = table.rows[i].cells[2].innerHTML;
+                CoutDeRevient = table.rows[i].cells[4].innerHTML;
+                Prix = table.rows[i].cells[3].innerHTML;
+                Marge = table.rows[i].cells[5].innerHTML;
+                UniteMesure = table.rows[i].cells[6].innerHTML;
+                var Details = {
+                    VenteDetails_UniteId: "",
+                    VenteDetails_FormeProduitId: "",
+                    VenteDetails_Quantite: "",
+                    VenteDetails_CoutDeRevient: "",
+                    VenteDetails_Prix: "",
+                    VenteDetails_Marge: "",
+                }
+                Details.VenteDetails_UniteId = parseInt(UniteMesure);
+                Details.VenteDetails_FormeProduitId = parseInt(formeId);
+                Details.VenteDetails_Quantite = Quantite;
+                Details.VenteDetails_CoutDeRevient = parseFloat(parseFloat(CoutDeRevient).toFixed(2) * parseFloat(Quantite).toFixed(2)).toFixed(2).replace(".", ",");
+                Details.VenteDetails_Prix = parseFloat(Prix).toFixed(2).replace(".", ",");
+                Details.VenteDetails_Marge = parseFloat(parseFloat(Prix).toFixed(2) - parseFloat(parseFloat(CoutDeRevient).toFixed(2) * parseFloat(Quantite).toFixed(2)).toFixed(2)).toFixed(2).replace(".", ",");
+                totalMarge = totalMarge + parseFloat(Details.VenteDetails_Marge).toFixed(2);
+                totalPrix = totalPrix + parseFloat(Details.VenteDetails_Prix).toFixed(2);
+                ListDetailsVente.push(Details);
+
+            }
+
+            var tableMode = document.getElementById("tbodyPrix");
+            mode = tableMode.rows[0].cells[0].innerHTML;
+            comment = tableMode.rows[0].cells[2].innerHTML;
+            var Vente = {
+                Vente_ModePaiement: mode,
+                Vente_Commentaire: comment,
+                Details: ListDetailsVente,
+            }
+
+            var data = {
+                venteModel: Vente
+            };
+          //  console.log(data);
+            $.ajax({
+                url: '@Url.Action("Vente", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if (data == true) {
+                        ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 1000);
+                    } else {
+                        ShowNotification("Une ou plusieurs matières premières ne sont pas en stock !", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.href = '@Url.Action("Index", "Home")';
+                            }, 1000);
+                    }
+                },
+                error: function () {
+                    alert("non ajoute");
+                }
+            });
+        } else {
+            alert("La liste des ventes est vide");
+
+        }
+
+     }
+
+        function fct2(id) {
+        var data = { Id: id }
+        $("#modalAppend").children().remove();
+        $("#addcart").children().remove();
+            $.ajax({
+            url: '@Url.Action("getFormesPackage", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data ,
+             success: function (data) {
+                 $("#modalAppend").append(
+                     "<div class='card-header d-flex justify-content-between align-items-center border-bottom'><h6 class='mb-0'>" + data[0].produitPackage.produitPackage_Designation +"</h6>"+
+                         "<div class='app-cart-action-icons d-flex align-items-center'> <i class='bx bx-x close-icon cursor-pointer'></i> </div></div>"
+                 );
+                 $("#modalAppend").append(
+                     "<h6 class='mb-0' id='produitId' style='display:none;'>" + data[0].produitPackage.produitPackage_ID +"</h6>"
+                 );
+                 for (var i = 0; i < data.length; i++) {
+                     formeID = data[i].formeProduit_ID;
+                     $("#modalAppend").append(
+
+                         "<div id='products' class='row app-cart-info-recent-access'>" +
+                         "<div class='col-md-6'>" +
+                         "<div class='card border shadow-none mb-1 app-cart-info'>" +
+                         "<div class='app-cart-content-logo card-img-top'> <img class='d-block mx-auto'  src='/" + data[i].produitPackage.produitPackage_Photo + "' alt=''> </div>" +
+                         "<div class='card-body p-50'>" +
+                         "<div class='app-cart-recent-details text-center'>" +
+                         "<div class='app-cart-name font-size-small font-weight-bold'>" + data[i].formeProduit_Libelle + "</div>" +
+                         "</div></div></div></div>" +
+                         "<div class='col-md-6'>" +
+                         "<div style='display:none;' id='prixF-" + data[i].formeProduit_ID + "'></div>" +
+                         "<h5 class='mb-1 text-success' id='prixForme-" + data[i].formeProduit_ID + "'>" + parseFloat(data[i].prixProduits[0].prixProduit_Prix).toFixed(2) + " DH</h5>" +
+                         "</row>" +
+                         "<p style='display:none;' id='unite-" + data[i].formeProduit_ID + "'>" + data[i].produitPackage.produitPackage_UniteVente + "</p>"+
+                         "<p class='card-text' id='qteforme-" + data[i].formeProduit_ID + "'>" + " " + data[i].produitPackage.unite_Mesure.uniteMesure_Libelle + "</p>" +
+                         "<div class='input-group bootstrap-touchspin bootstrap-touchspin-injected'>"+
+                             "<span class='input-group-btn input-group-prepend'>"+
+                                 "<button class='btn btn-ikbal bootstrap-touchspin-down' type='button'>-</button>"+
+                             "</span>"+
+                         "<input type='number' class='touchspin form-control' value='0'id='qte-" + data[i].formeProduit_ID + "'onchange='getprix(" + data[i].formeProduit_ID + ")'>"+
+                                 "<span class='input-group-btn input-group-append'>"+
+                                     "<button class='btn btn-ikbal bootstrap-touchspin-up' type='button'>+</button>"+
+                                 "</span>"+
+                                 "</div>"+
+                         "</div>" +
+                         "</div>"
+                     );
+            var data2 = { Id: formeID };
+            $.ajax({
+            url: '@Url.Action("getFormeDetails", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2,
+                success: function (data) {
+                    document.getElementById("qteforme-" + data.formeDetails_FormeProduitID).innerHTML = data.formeDetails_Quantite + document.getElementById("qteforme-" + data.formeDetails_FormeProduitID).innerHTML ;
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+                 }
+                 $("#addcart").append(
+                     "<button class='btn btn-ikbal btn-block glow text-uppercase' onclick='addToCartPackage()'><i class='bx bx-cart-alt'></i> Ajouter au panier</button>");
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+    } function addToCartPackage () {
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++) {
+            formeP = table.rows[i].cells[0].innerHTML;
+            prixProduit = table.rows[i].cells[1].innerHTML;
+            qte = table.rows[i].cells[2].innerHTML;
+            prd = table.rows[i].cells[3].innerHTML;
+            unite = table.rows[i].cells[4].innerHTML;
+            var forme = {
+                unite : "",
+                produit:"",
+                formeproduit: "",
+                prix: "",
+                quantite: "",
+            }
+            forme.unite = unite;
+            forme.produit = prd;
+            forme.formeproduit = formeP;
+            forme.prix = parseFloat(prixProduit);
+            forme.quantite = qte;
+            ListProduits.push(forme);
+
+        }
+
+        var data = { id: parseInt($('#produitId').text()), };
+                 $.ajax({
+            url: '@Url.Action("getProduitpackage", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+             data: data,
+             success: function (data) {
+                 // console.log(data);
+                 if (ListProduits.length==0) {
+                 }
+                 else {
+                     $("#content").append("<label class='app-cart-label'>" + data.produitPackage_Designation + " </label>");
+
+                 }
+
+                     },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+                 });
+        for (var i = 0; i < ListProduits.length; i++) {
+            var data2 = { id: ListProduits[i].formeproduit ,};
+            $.ajax({
+            url: '@Url.Action("GetFormeProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2 ,
+                success: function (data) {
+                    $("#content").append(
+                        "<div class='card-shadow justify-content-between align-items-center py-25'> <div class='row'>" +
+                        "<div class= 'col-xs-6 col-sm-6 col-6' >" +
+                        "<h6 class='text-left mt-1'>" + parseFloat(ListProduits[i].quantite) + " " + data.formeProduit_Libelle + "</h6>" +
+                        "</div>" +
+                        "<div class='col-xs-6 col-sm-6 col-6'>" +
+                        "<h6 class='text-right mt-1'>" + parseFloat(parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite)) + "dh</h6>" +
+                        "</div></div ></div >"
+                    );
+                    $("#tbodyVente").append("<tr>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].formeproduit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].produit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(ListProduits[i].quantite).toFixed(2).replace(".", ",") + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2)) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(data.formeProduit_CoutDeRevient).toFixed(2) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2) - parseFloat(data.formeProduit_CoutDeRevient).toFixed(2)) + "</td>"+
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].unite + "</td>"
+                        + "</tr>");
+                    total = total + parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite).toFixed(2);
+                },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+         });
+
+        }
+        $('#total').text(total);
+        $("#tbodyCamions tr").remove();
+        ListProduits = [];
+
+    }
+
+    function fct3(id) {
+        var data = { Id: id }
+        $("#modalAppend").children().remove();
+        $("#addcart").children().remove();
+            $.ajax({
+            url: '@Url.Action("getFormesPret", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data ,
+                success: function (data) {
+                 $("#modalAppend").append(
+                     "<div class='card-header d-flex justify-content-between align-items-center border-bottom'><h6 class='mb-0'>" + data[0].produit_PretConsomer.produitPretConsomer_Designation +"</h6>"+
+                         "<div class='app-cart-action-icons d-flex align-items-center'> <i class='bx bx-x close-icon cursor-pointer'></i> </div></div>"
+                 );
+                 $("#modalAppend").append(
+                     "<h6 class='mb-0' id='produitId' style='display:none;'>" + data[0].produit_PretConsomer.produitPretConsomer_ID +"</h6>"
+                 );
+                 for (var i = 0; i < data.length; i++) {
+                     formeID = data[i].formeProduit_ID;
+                     $("#modalAppend").append(
+
+                         "<div id='products' class='row app-cart-info-recent-access'>" +
+                         "<div class='col-md-6'>" +
+                         "<div class='card border shadow-none mb-1 app-cart-info'>" +
+                         "<div class='app-cart-content-logo card-img-top'> <img class='d-block mx-auto'  src='/" + data[i].produit_PretConsomer.produitPretConsomer_Photo + "' alt=''> </div>" +
+                         "<div class='card-body p-50'>" +
+                         "<div class='app-cart-recent-details text-center'>" +
+                         "<div class='app-cart-name font-size-small font-weight-bold'>" + data[i].formeProduit_Libelle + "</div>" +
+                         "</div></div></div></div>" +
+                         "<div class='col-md-6'>" +
+                         "<div style='display:none;' id='prixF-" + data[i].formeProduit_ID + "'></div>" +
+                         "<h5 class='mb-1 text-success' id='prixForme-" + data[i].formeProduit_ID + "'>" + parseFloat(data[i].prixProduits[0].prixProduit_Prix).toFixed(2) + " DH</h5>" +
+                         "</row>" +
+                         "<p style='display:none;' id='unite-" + data[i].formeProduit_ID + "'>" + data[i].produit_PretConsomer.produitPretConsomer_UniteMesureAchatId + "</p>"+
+                         "<p class='card-text' id='qteforme-" + data[i].formeProduit_ID + "'>" + " " + data[i].produit_PretConsomer.unite_Mesure.uniteMesure_Libelle + "</p>" +
+                        "<div class='input-group bootstrap-touchspin bootstrap-touchspin-injected'>"+
+                             "<span class='input-group-btn input-group-prepend'>"+
+                                 "<button class='btn btn-ikbal bootstrap-touchspin-down' type='button'>-</button>"+
+                             "</span>"+
+                         "<input type='number' class='touchspin form-control' value='0'id='qte-" + data[i].formeProduit_ID + "'onchange='getprix(" + data[i].formeProduit_ID + ")'>"+
+                                 "<span class='input-group-btn input-group-append'>"+
+                                     "<button class='btn btn-ikbal bootstrap-touchspin-up' type='button'>+</button>"+
+                                 "</span>"+
+                                 "</div>"+
+                         "</div>" +
+                         "</div>"
+                     );
+            var data2 = { Id: formeID };
+            $.ajax({
+            url: '@Url.Action("getListFormePretEnStock", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2,
+                success: function (data) {
+                    //console.log(data);
+                    //
+                    document.getElementById("qteforme-" + data.pdV_ProduitsPret_FormeProduitId).innerHTML = data.pdV_ProduitsPret_Quantite + document.getElementById("qteforme-" + data.pdV_ProduitsPret_FormeProduitId).innerHTML;
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+                 }
+                 $("#addcart").append(
+                     "<button class='btn btn-ikbal btn-block glow text-uppercase' onclick='addToCartPret()'><i class='bx bx-cart-alt'></i> Ajouter au panier</button>");
+             },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+         });
+    }
+
+     function addToCartPret () {
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++) {
+            formeP = table.rows[i].cells[0].innerHTML;
+            prixProduit = table.rows[i].cells[1].innerHTML;
+            qte = table.rows[i].cells[2].innerHTML;
+            prd = table.rows[i].cells[3].innerHTML;
+            unite = table.rows[i].cells[4].innerHTML;
+            var forme = {
+                unite : "",
+                produit:"",
+                formeproduit: "",
+                prix: "",
+                quantite: "",
+            }
+            forme.unite = unite;
+            forme.produit = prd;
+            forme.formeproduit = formeP;
+            forme.prix = parseFloat(prixProduit);
+            forme.quantite = qte;
+            ListProduits.push(forme);
+
+        }
+
+        var data = { id: parseInt($('#produitId').text()), };
+                 $.ajax({
+            url: '@Url.Action("getProduitpret", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+             data: data,
+             success: function (data) {
+                //  console.log(data);
+                 if (ListProduits.length==0) {
+                 }
+                 else {
+                     $("#content").append("<label class='app-cart-label'>" + data.produitPretConsomer_Designation + " </label>");
+                     $("#content").append("<label class='app-cart-label' id='price' style='display:none;'>" + data.produitPretConsomer_PrixMoyenAchat + " </label>");
+
+                 }
+
+                     },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+                 });
+        for (var i = 0; i < ListProduits.length; i++) {
+            var data2 = { id: ListProduits[i].formeproduit ,};
+            $.ajax({
+            url: '@Url.Action("GetFormeProduit", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: false,
+            data: data2 ,
+                success: function (data) {
+                    $("#content").append(
+                        "<div class='card-shadow justify-content-between align-items-center py-25'> <div class='row'>" +
+                        "<div class= 'col-xs-6 col-sm-6 col-6' >" +
+                        "<h6 class='text-left mt-1'>" + parseFloat(ListProduits[i].quantite) + " " + data.formeProduit_Libelle + "</h6>" +
+                        "</div>" +
+                        "<div class='col-xs-6 col-sm-6 col-6'>" +
+                        "<h6 class='text-right mt-1'>" + parseFloat(parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite)) + "dh</h6>" +
+                        "</div></div ></div >"
+                    );
+                    $("#tbodyVente").append("<tr>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].formeproduit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].produit + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(ListProduits[i].quantite).toFixed(2).replace(".", ",") + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2)) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(data.formeProduit_CoutDeRevient).toFixed(2) @* $('#price').text()*@+ "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(ListProduits[i].prix).toFixed(2) * parseFloat(ListProduits[i].quantite).toFixed(2) - parseFloat(data.formeProduit_CoutDeRevient).toFixed(2)) + "</td>"+
+                        "<td class='border-b dark:border-dark-5'>" + ListProduits[i].unite + "</td>"
+                        + "</tr>");
+                    total = total + parseFloat(ListProduits[i].prix) * parseFloat(ListProduits[i].quantite).toFixed(2);
+                },
+
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+         });
+
+        }
+        $('#total').text(total);
+        $("#tbodyCamions tr").remove();
+        ListProduits = [];
+
+    }
+
+    function test() {
+        var table = document.getElementById("tbodyVente");
+        if (table.rows.length > 0) {
+            $('#prixModal').modal('toggle');
+            $("#tbodyPrix").children().remove();
+        } else {
+            ShowNotification("La liste des ventes est vide", NotifToaster.WarningType, NotifToaster.Top_Full_Width);
+             setTimeout(
+                 function () {
+                     window.location.href = '@Url.Action("Index", "Home")';}, 1000);}
+
+
+
+    } function prixAdd() {
+
+        if ($("#mode").val() != null && $("#mode").val() != '') {
+            prixAjout();
+            prixClear();
+        }
+    }
+
+    function prixAjout() {
+        var mode = $("#mode").val();
+        var comment = $("#comment").val();
+
+        if ($("#tablePrix tbody").length == 0) {
+            $("#tablePrix").append("<tbody id='tbodyPrix'></tbody>");
+            document.getElementById('divTablePrix').style.display = "block";
+            document.getElementById('envbuttonPrix').style.display = "block";
+            document.getElementById('addprix').style.display = "none";
+        }
+
+
+        $("#tbodyPrix").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + mode + "</td>" +
+            "<td >" + $("#mode option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'  style='text-align: center;'>" + comment + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="prixDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+
+    }
+    function prixClear() {
+        $("#comment").val("");
+        $("#mode").val("");
+    }
+
+    function prixDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tbodyPrix tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+
+        }
+    }
+    function enableComment() {
+        if ($("#mode option:selected").val() == 1 || $("#mode option:selected").val() == 2) {
+            document.getElementById("comment").disabled = false;
+        } else {
+            document.getElementById("comment").disabled = true;
+
+        }
+
+    }
+
+
+</script>

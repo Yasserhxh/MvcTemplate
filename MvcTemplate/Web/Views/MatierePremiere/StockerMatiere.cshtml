@@ -1,0 +1,182 @@
+﻿@{
+    ViewData["Title"] = "Matieres Premiere";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+@model Domain.Models.MatierePremiereStockageModel
+
+@{
+    ViewData["Title"] = "Stocker une Matiere";
+}
+
+<div class="app-content content">
+    <div class="content-wrapper">
+
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h5 class="content-header-title float-left pr-1 mb-0">Gestion des Matieres Premiere</h5>
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title" id="basic-layout-form">Mettre la matiere en stock</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="px-3">
+                        <form class="form" asp-action="StockerMatiere" onsubmit="theButton.disabled = true; return true;" method="post">
+                            <div class="form-body">
+                                <h4 class="form-section">
+                                    <i class="bx bx-detail"></i> Details.
+                                </h4>
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="Lieu"> Point de Stockage</label>
+                                            <div>
+                                                <select class="custom-select" id="villeLiv" data-search="true" asp-items="@ViewBag.ZoneStockage_LieuStockageId" onchange="zoneList()">
+                                                    <option value="" selected disabled>Choisir un point de stockage...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="Zone"> Zone de Stockage</label>
+                                            <div>
+                                                <select class="custom-select" data-search="true" id="secteurLiv" asp-items="@ViewBag.Section_ZoneStockageId" onchange="sectionList()">
+                                                    <option value="" selected disabled>Choisir une Zone...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="Section"> Section de Stockage</label>
+                                            <div>
+                                                <select class="custom-select" data-search="true" asp-for="MatierePremiereStokage_SectionStockageId" id="sectionLiv" asp-items="@ViewBag.ProduitVendableStokage_SectionStockageId">
+                                                    <option value="" selected>Choisir une Section...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="StockMin">Stock Minimum  </label>
+                                            <input type="text" id="StockMin" asp-for="MatierePremiereStokage_StockMinimum" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="StockMax"> Stock Maximum</label>
+                                            <input type="text" id="StockMax" asp-for="MatierePremiereStokage_StockMaximum" class="form-control" required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <a class="btn btn-danger" asp-action="ListeMatierePremiere">
+                                    Annuler
+                                </a>
+                                <button type="submit" name="theButton" class="btn btn-success">
+                                    <i class="icon-note"></i> Affecter la Matiere
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+    function zoneList() {
+        var data = { lieuId: parseInt($("#villeLiv").val()) };
+            console.log(data)
+            if ($("#villeLiv").val() != null) {
+                $.ajax({
+                    url: '@Url.Action("zoneList", "MatierePremiere")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if ($("#secteurLiv option").length > 1) {
+                            $.each($("#secteurLiv option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#secteurLiv").append("<option value='' selected disabled>Sélectionnez un secteur</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#secteurLiv").append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+    }
+    function sectionList() {
+        var data = { zoneId: parseInt($("#secteurLiv").val()) };
+        if ($("#secteurLiv").val() != null) {
+                $.ajax({
+                    url: '@Url.Action("sectionList", "MatierePremiere")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        console.log(data)
+                        if ($("#sectionLiv option").length > 1) {
+                            $.each($("#sectionLiv option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#sectionLiv").append("<option value='' selected disabled>Sélectionnez un secteur</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#sectionLiv").append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+    }
+
+    </script>
+
+

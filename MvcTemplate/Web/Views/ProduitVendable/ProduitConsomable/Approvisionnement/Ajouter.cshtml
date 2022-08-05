@@ -1,0 +1,194 @@
+﻿
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.Approvisionnement_ProduitConsoModel
+
+@{ ViewData["Title"] = "Approvisionnement des produit prêt à consomer"; }
+
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeApprovisionnementProduits">Liste des approvisionnements</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section id="basic-form-layouts">
+            <div class="card">
+                <div class="card-body">
+                    <div class="px-3">
+                        <fieldset>
+                            <legend>Approvisionner un point de vente</legend>
+                            <form class="form" action="ApprovisionnementProduits" onsubmit="theButton.disabled = true; return true;" method="post">
+                                <div class="form-body">
+                                    <h4 class="form-section">
+                                    </h4>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="Produit">Produit prêt à consomer</label>
+                                                <select class="custom-select" id="produit" data-search="true" asp-items="@ViewBag.produit" onchange="familleList()" required>
+                                                    <option value="" selected>Séléctionnez un produit prêt à consomer...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-1">
+                                            <label for="ContactName">Forme de produit</label>
+                                            <select class="custom-select" id="forme" data-search="true" asp-for="ApprovisionnementProduit_ProduitStockageId" onchange="getQteProduite()">
+                                                <option value="" selected>Séléctionnez une forme...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="PdV">Point de vente</label>
+                                                <select class="custom-select" id="pdv" data-search="true" asp-for="ApprovisionnementProduit_PointVenteID" asp-items="@ViewBag.PdV" required>
+                                                    <option value="" selected>Choisissez un point de vente...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Qte Produite">Quantité en stock</label>
+                                                <input type="text" class="form-control" id="qteproduite" placeholder="Quantite en stock" disabled />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="qteDist">Quantité à livrer</label>
+                                                <input type="text" class="form-control" id="qteDistu" asp-for="ApprovisionnementProduit_Quantite" placeholder="Quantite à livrer" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Unite">Unite de mesure</label>
+                                                <select class="custom-select" id="unite" data-search="true" asp-for="ApprovisionnementProduit_UniteMesureId" asp-items="@ViewBag.unite" required>
+                                                    <option value="" selected>Choisissez une unite de mesure...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="date">Date d'approvisionnement </label>
+                                                <input type="date" class="form-control" asp-for="ApprovisionnementProduit_Date" id="dateDist" required />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions text-sm-right">
+                                    <button class="btn btn-danger" asp-action="ListeApprovisionnementProduits">
+                                        Annuler
+                                    </button>
+                                    <button type="submit" name="theButton" class="btn btn-success">
+                                        <i class="icon-note"></i> Enregistrer
+                                    </button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<script>
+
+     function familleList()
+    {
+         var data = { Id: parseInt($("#produit").val()) };
+          if ($("#produit").val() != null) {
+            $.ajax({
+                url: '@Url.Action("FormePretstockage", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+
+              $.ajax({
+                url: '@Url.Action("getProduitpret", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: false,
+                data: data,
+                  success: function (data) {
+                      console.log(data);
+                      if ($("#unite option").length > 1) {
+                          $.each($("#unite option"), function (i, item) {
+                              item.remove();
+                          });
+                          $("#unite").append("<option value='' selected disabled>Choisissez une unite de mesure</option>");
+                      }
+                      $("#unite").append($('<option>', {
+                          value: data.unite_Mesure.uniteMesure_Id,
+                          text: data.unite_Mesure.uniteMesure_Libelle
+                      }));
+
+                },
+                error: function () {
+                }
+            });
+        }
+     }
+    function getQteProduite() {
+        var data = { forme: parseInt($('#forme option:selected').val()) }
+        console.log(data);
+         $.ajax({
+
+             url: '@Url.Action("getQte", "ProduitVendable")',
+             type: "POST",
+             cache: false,
+             async: true,
+             data: data,
+                 success: function (data) {
+                     console.log(data);
+                     $("#qteproduite").val(data);
+
+                     },
+             error: function () {alert("non ajoute");}
+
+             });
+    }
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('dateDist').value = new Date().toDateInputValue();
+</script>

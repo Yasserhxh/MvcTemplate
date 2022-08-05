@@ -1,0 +1,813 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+<!DOCTYPE html>
+
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Trepho / @{@User.Identity.Name.ToUpper()}  </title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" href="~/assets/images/favicon/apple-touch-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/vendors/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/table/datatables.min.css">
+    <!-- END: Vendor CSS-->
+
+
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/colors.min.css">
+    <link type="text/css" href="~/assets/css/sweetalert.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/css/components.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/themes/dark-layout.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/themes/semi-dark-layout.min.css">
+    <!-- END: Theme CSS-->
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/vertical-menu.min.css">
+    <link href="~/assets/plugins/wizard/wizard.min.css" rel="stylesheet" />
+    <link href="~/assets/css/app-cart-manager.min.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery.bootstrap-touchspin.css" rel="stylesheet" />
+    <!-- END: Page CSS-->
+    <!-- BEGIN: Custom CSS-->
+    <link href="~/css/toastr.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/loader/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- END: Custom CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
+</head>
+<!-- END: Head-->
+<!-- BEGIN: Body-->
+<body class="vertical-layout vertical-menu-modern 2-columns  cart-manager-application navbar-static footer-static  semi-dark-layout  menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns" onload="GetPlanifications()">
+    <div class="modal fade" id="loadMe" tabindex="-1" aria-labelledby="loadMeLabel" style="padding-right: 17px;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <div class="loader"></div>
+                            <div clas="loader-txt">
+                                <p>Veuillez attendre quelques instants. <br><br><small></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:none;" id="s"> @Context.Session.GetString("mysession")</div>
+            @if (User.IsInRole("Gerant_de_stock"))
+            {<div style="display:none;" id="role">1</div>}
+            @if (User.IsInRole("Chef_Patissier"))
+            {<div style="display:none;" id="role">2</div>}
+            <!-- BEGIN: Header-->
+            <div class="header-navbar-shadow"></div>
+            <nav class="header-navbar main-header-navbar navbar-expand-lg navbar navbar-with-menu navbar-static-top ">
+                <div class="navbar-wrapper">
+                    <div class="navbar-container content">
+                        <div class="navbar-collapse" id="navbar-mobile">
+                            <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                                <ul class="nav navbar-nav">
+                                    <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon bx bx-menu"></i></a></li>
+                                </ul>
+
+                                <ul class="nav navbar-nav bookmark-icons">
+                                    <li class="nav-item d-none d-lg-block">
+                                        <a class="nav-link nav-cms-logo" href="#0" data-toggle="tooltip" data-placement="top" title=" Trepho ">
+                                            <!--<img class="cmslight d-none" width="60" src="assets/images/logo/CMS.svg"/><img class="cmsdark" width="60" src="assets/images/logo/CMS-dark.svg"/>-->@if (!User.IsInRole("Client"))
+                                            {<span> Trepho / @Context.Session.GetString("point")</span>}
+                                        else
+                                        { <span>Trepho / Admin</span>}
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <ul class="nav navbar-nav float-right">
+                                @*                        <li class="nav-item d-lg-block"><a class="nav-link nav-link-dark dark-btn"><i class="ficon bx icn-moon bx-moon"></i></a></li>
+                                *@
+                                @*                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
+                                *@
+                                <li class="nav-item nav-search">
+                                    <a class="nav-link nav-link-search"><i class="ficon bx bx-search"></i></a>
+                                    <div class="search-input">
+                                        <div class="search-input-icon"><i class="bx bx-search primary"></i></div>
+                                        <input class="input" type="text" placeholder="Recherche..." tabindex="-1" data-search="template-search">
+                                        <div class="search-input-close"><i class="bx bx-x"></i></div>
+                                        <ul class="search-list"></ul>
+                                    </div>
+                                </li>
+                                <li class="dropdown dropdown-notification nav-item">
+                                    @*<a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span class="badge badge-pill badge-danger badge-up">1</span></a>*@
+                                    <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
+                                        <li class="dropdown-menu-header">
+                                            <div class="dropdown-header px-1 py-75 d-flex justify-content-between"><span class="notification-title">1 nouvelle notification</span><span class="text-bold-400 cursor-pointer">Tout marquer comme lu</span></div>
+                                        </li>
+                                        <li class="scrollable-container media-list">
+                                            <a class="d-flex justify-content-between" href="javascript:void(0)">
+                                                <div class="media d-flex align-items-center">
+                                                    @*                                            <div class="media-left pr-0">
+                                                      <div class="avatar mr-1 m-0"><img src="assets/images/avatar/cms.jpg" alt="avatar" height="39" width="39"></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                      <h6 class="media-heading"><span class="text-bold-500">Saisie de cartographie 2020</span> C'M'S</h6><small class="notification-text">Jeu 15 12:32</small>
+                                                    </div>*@
+                                                </div>
+                                            </a>
+
+
+
+
+
+                                        </li>
+                                        <li class="dropdown-menu-footer"><a class="dropdown-item p-50 text-primary justify-content-center" href="javascript:void(0)">Lire toutes les notifications</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown dropdown-user nav-item">
+                                    <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                        <div class="user-nav d-sm-flex d-none"><span class="user-name"></span><span class="user-status text-muted">@{@User.Identity.Name.ToUpper()} @*Admin*@</span></div><span><img class="round" src="~/assets/images/avatar/avatar.png" alt="avatar" height="40" width="40"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right pb-0">
+                                        @if (!User.IsInRole("Client"))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Home" asp-action="Parametrage"><i class="bx bx-home mr-50"></i>Changer le site</a><div class="dropdown-divider mb-0"></div>
+                                        }
+                                        <a class="dropdown-item" asp-controller="Authentification" asp-action="EditProfil"><i class="bx bx-user mr-50"></i> Editer le profil</a>
+                                        <div class="dropdown-divider mb-0"></div><button class="dropdown-item" onclick="logout()"><i class="bx bx-power-off mr-50"></i> Se déconnecter</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- END: Header-->
+            <!-- BEGIN: Main Menu-->
+            <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+                <div class="navbar-header">
+                    <ul class="nav navbar-nav flex-row">
+                        <li class="nav-item mr-auto">
+                            <a class="navbar-brand" asp-controller="home" asp-action="Index">
+                                <div class="brand-logo"><img class="logo" src="~/@User.FindFirst("logo").Value.ToString()" /></div>
+                               @*<div class="brand-logo"><img class="logo" src="~/assets/images/logo/logo-alexsys.svg" /></div>*@
+                                <h2 class="brand-text mb-0" style="color:#371450">Trepho</h2>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="bx bx-x d-block d-xl-none font-medium-5 primary"></i><i class="toggle-icon bx bx-toggle-right font-large-1 d-none d-xl-block primary" data-ticon="bx-toggle-right" style="color:#371450"></i></a></li>
+                    </ul>
+                </div>
+                <div class="shadow-bottom"></div>
+                <div class="main-menu-content">
+                    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
+                        @if (User.IsInRole("Client") == true)
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-user-account"></i><span class="menu-title">Gestion des utilisateurs</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="Authentification" asp-action="Utilisateurs"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des utilisateurs</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-cog"></i><span class="menu-title">Gestion de référentiels</span></a>
+                                <ul class="menu-content">
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion de stock</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="Stockages" asp-action="ListeLieuStockage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item text-truncate" data-i18n="Second Level">Points de stockage </span></a>
+                                                @*<ul class="menu-content">
+                        <li>
+                            <a asp-controller="Stockages" asp-action="ListeZoneStockage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Third Level">Liste des zones de stockage</span></a>
+                        </li>
+                        <li>
+                            <a  asp-controller="Stockages" asp-action="ListeSectionStockage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Third Level">Liste des sections de stockage</span></a>
+                        </li>
+                    </ul>*@
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="Stockages" asp-action="ListeZoneStockage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item text-truncate" data-i18n="Second Level">Zones de stockage </span></a>
+
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
+                                   
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion de production</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="FamilleProduits" asp-action="ListeProduits"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Catégories des produits</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="Clients" asp-action="ListeAtelier"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Points de Production</span></a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="PointVente" asp-action="ListePointVente"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Points de vente</span></a>
+                                    </li>
+                                    @*  <li>
+            <a asp-controller="Stockages" asp-action="ListeLieuStockage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Points de stockage</span></a>
+        </li>*@
+
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des fournisseurs</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a asp-controller="Fournisseur" asp-action="ListeFournisseur"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fournisseurs des matières premières</span></a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="ProduitVendable" asp-action="ListeFournisseurProduits"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fournisseurs des produits prêts à consommer</span></a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-package"></i><span class="menu-title">Gestion des produits</span></a>
+                                <ul class="menu-content">
+
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="ListeMatierePremiere"><i class="bx bx-right-arrow-alt"></i><span class="menu-item"></span>Gestion des matières premières</a>
+                                    </li>
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels"></span>Gestion des produits</a>
+                                        <ul class="menu-content">
+
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitBase"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits de base</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitVendable"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits maison</span></a>
+                                            </li>
+                                            @*<li>
+                    <a asp-controller="MatierePremiere" asp-action="ListeDeclarations"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des matières premières (Points de production)</span></a>
+                </li>
+                <li>
+                    <a asp-controller="MatierePremiere" asp-action="ListeDeclarationsStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des matières premières (Points de stockage)</span></a>
+                </li>*@
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitConsomable"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item"></span>Produits prêts à consommer</a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits packagés</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    @*<li class=" nav-item">
+            <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des produits prêts à consommer</span></a>
+            <ul class="menu-content">
+                <li>
+                    <a asp-controller="ProduitVendable" asp-action="ListeProduitConsomable"><i class="bx bx-right-arrow-alt"></i><span class="menu-item"></span>Liste des produits prêts à consommer</a>
+                </li>
+                <li>
+                    <a asp-controller="ProduitVendable" asp-action="ListeDeclarationsPret"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des produits prêts à consommer</span></a>
+                </li>
+            </ul>
+        </li>*@
+                                    @* <li>
+            <a asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Gestion des produits packagés</span></a>
+        </li>*@
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des fiches techniques</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="FicheTechnique" asp-action="ListeFichesTechniques"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fiches techniques (Produits maison)</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="FicheTechnique" asp-action="ListeFichesTechniquesBase"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fiches techniques (Produits de base)</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesPlans"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des planifications</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-dollar"></i><span class="menu-title">Gestion des ventes </span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des approvisionnements</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="PointVente" asp-action="ListeEchanges"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des échanges des produits</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeVentes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des ventes</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeRetours"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des retours des produits  </span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeCommandes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des commandes</span></a>
+                                    </li>
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des Pertes</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListePertes"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Pertes des produits maison</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeDeclarationsPret"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Pertes des produits prêts à consommer</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a"  asp-controller="MatierePremiere" asp-action="ListeDeclarations"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Pertes des matières premières (Points de production)</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a"  asp-controller="MatierePremiere" asp-action="ListeDeclarationsStock"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Pertes des matières premières (Points de stockage)</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeGratuites"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des Gratuités</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ConsulterInventaire"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Inventaire magasin</span></a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-plus"></i><span class="menu-title">Gestion des caisses </span></a>
+                                <ul class="menu-content">
+
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeAlimentations"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Alimentation de caisse</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeRetraits"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Retrait de caisse</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesClotures"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Clôture de caisse</span></a>
+                                    </li>
+                                   @* <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesClotures"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Historique des clôtures</span></a>
+                                    </li>*@
+                                </ul>
+                            </li>
+                        }
+                        @if (User.IsInRole("Chef_Patissier") == true)
+
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-plus"></i><span class="menu-title">Gestion des produits de base</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="PlanificationBase"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Planification de production</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="DeclarationPerte"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Déclaration des pertes des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesPlansBase"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des planifications</span><span id="nbrPlanifAtelier"></span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getMatiereStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des matières premières en atelier</span></a>
+                                    </li>
+                               @*     <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDeRetour"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des  retours des matières premières</span></a>
+                                    </li>*@
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getProduitBaseMagasin"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des produits de base en atelier</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-plus"></i><span class="menu-title">Gestion des produits maison</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="Planification"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Planification de production</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="Demande"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Demandes spéciales des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="DeclarationPerte"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Déclaration des pertes des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="Approvisionnement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Approvisionnement des points de vente</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesPlans"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des planifications</span><span id="nbrPlanifAtelier"></span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getMatiereStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des matières premières en atelier</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getProduitMagasin"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des produits maison en atelier</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des approvisionnements des points de vente</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-plus"></i><span class="menu-title">Gestion des produits packagés</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ProductionPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Production des produits packagés </span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="DemanderPret"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Demande des produits prêts à consommer</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="DeclarationPertePret"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Déclaration des pertes des produits prêts à consommer</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ApprovisionnementPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Approvisionnement des points de vente</span></a>
+                                    </li>
+
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des produits packagés </span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getDemandesPrets"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des demandes des produits prêts à consommer</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getProduitPretAtelier"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des produits prêts à consommer en atelier</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnementPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des approvisionnements des points de vente</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        }
+                        @if (User.IsInRole("Gerant_de_stock") == true)
+
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-box"></i><span class="menu-title">Gestion de stock</span></a>
+                                <ul class="menu-content">
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion de Zones</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="Stockages" asp-action="ListeZoneStockage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item text-truncate" data-i18n="Second Level">Zones de stockage </span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="Stockages" asp-action="ListeSectionStockage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item text-truncate" data-i18n="Second Level">Sections de stockage </span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="ListeMatierePremiere"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Affectation des matières premières aux zones</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="Receptionfournisseur"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="AlimentationStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Alimentation intra-stock</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="DeclarationPerteStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Déclaration des pertes des matières premières</span></a>
+                                    </li>
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Liste des planifications de production </span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeDesPlans"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits Maison</span><span id="nbrPlanif"></span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeDesPlansBase"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits de base</span><span></span></a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                    
+                                    
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDeDemandes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des demandes spéciales des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="ListeDeclarationsStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="MatiereStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des matières première en stock</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="Mouvements"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des mouvements de stock</span></a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-dish"></i><span class="menu-title">Gestion des produits prêts à consommer</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeProduitConsomable"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Affectation des produits prêts à consommer aux zones</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ReceptionProduitsConsomable"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des produits prêts à consommer</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnementProduits"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Approvisionnement des points de vente</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="getDemandesPrets"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des demandes des produits prêts à consommer</span></a>
+                                    </li>
+
+
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ProduitEnStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des produits prêts à consommer en stock</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Responsable_Vente") == true)
+
+                        {
+                            @*<li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-plus"></i><span class="menu-title">Gestion de production</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Produits packagés </span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ProductionPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Production des produits packagés </span></a>
+                                    </li>
+
+
+
+                                </ul>
+                            </li>*@
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-list-ul"></i><span class="menu-title">Gestion des approvisionnements</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnement"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des produits maison</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnementProduits"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des produits prêts à consommer</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeApprovisionnementPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des produits packagés</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="PointVente" asp-action="ListeEchangesSortant"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des échanges sortants</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="PointVente" asp-action="ListeEchangesEntrant"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des échanges entrants</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-dish"></i><span class="menu-title">Gestion des salles</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="PointVente" asp-action="ListePositionsVente"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des positions de vente</span></a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-dollar"></i><span class="menu-title">Gestion des ventes</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeVentes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des ventes</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeRetours"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des retours des produits  </span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeCommandes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des commandes</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListePertes"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des Pertes</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeGratuites"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des Gratuités</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ConsulterInventaire"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Inventaire magasin</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-calculator"></i><span class="menu-title">Gestion des caisses</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeAlimentations"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Alimentation de caisse</span></a>
+
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeRetraits"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Retrait de caisse</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesClotures"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Historique des clôtures</span></a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+            <!-- END: Main Menu-->
+            <div>
+                @RenderBody()
+            </div>
+            <environment include="Development">
+                <script src="~/lib/jquery/dist/jquery.js"></script>
+                <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+                <script src="~/js/site.js" asp-append-version="true"></script>
+            </environment>
+            <environment exclude="Development">
+                <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                        asp-fallback-test="window.jQuery"
+                        crossorigin="anonymous"
+                        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                        crossorigin="anonymous"
+                        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"></script>
+                <script src="~/js/site.min.js" asp-append-version="true"></script>
+
+            </environment>
+            <!-- BEGIN: Footer-->
+            <footer class="footer footer-static footer-light">
+                <p class="clearfix mb-0">
+                    <span class="float-left d-inline-block">2021 &copy; Système de Gestion des Métiers de Bouche</span><span class="float-right d-sm-inline-block d-none">Crafted by<a class="text-uppercase" href="http://alexsys.solutions" target="_blank">Alexsys</a></span>
+                    <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="bx bx-up-arrow-alt"></i></button>
+                </p>
+            </footer>
+            <!-- END: Footer-->
+            <!-- BEGIN: Vendor JS-->
+            <script src="~/assets/plugins/vendors/vendors.min.js"></script>
+            <script src="~/assets/plugins/LivIconsEvo/LivIconsEvo.defaults.min.js"></script>
+            <script src="~/assets/plugins/LivIconsEvo/LivIconsEvo.min.js"></script>
+            <!-- BEGIN Vendor JS-->
+            <!-- BEGIN: Page Vendor JS-->
+            <script src="~/assets/plugins/table/datatables.min.js"></script>
+            <script src="~/lib/jquery/dist/jquery.steps.min.js"></script>
+            <script src="~/assets/plugins/forms/jquery.validate.min.js"></script>
+            <!-- END: Page Vendor JS-->
+            <!-- BEGIN: Theme JS-->
+            <script src="~/assets/js/vertical-menu-light.min.js"></script>
+            <script src="~/assets/js/app-menu.min.js"></script>
+            <script src="~/assets/js/app.min.js"></script>
+            <script src="~/assets/js/components.min.js"></script>
+            <script src="~/assets/js/footer.min.js"></script>
+            <script src="~/assets/js/customizer.min.js"></script>
+
+
+            <!-- END: Theme JS-->
+            <!--BEGIN: pdf table-->
+            @* <script src="~/assets/plugins/table/datatables.min.js"></script>
+            <script src="~/assets/js/buttons.bootstrap4.min.js"></script>
+            <script src="~/assets/js/buttons.html5.min.js"></script>
+            <script src="~/assets/js/jquery.dataTables.min.js"></script>
+            <script src="~/assets/js/dataTables.bootstrap4.min.js"></script>
+            <script src="~/assets/js/dataTables.buttons.min.js"></script>
+            <script src="~/assets/js/buttons.print.min.js"></script>
+            <script src="~/assets/js/pdfmake.min.js"></script>
+            <script src="~/assets/js/vfs_fonts.js"></script>*@
+            <!--END: pdf table-->
+            <!-- BEGIN: Page JS-->
+            <script src="~/js/toastr.js"></script>
+            <script src="~/js/wizard-steps.min.js"></script>
+            <script src="~/assets/js/app-cart-manager.min.js"></script>
+            <script src="~/assets/js/jquery.bootstrap-touchspin.js"></script>
+            <script src="~/assets/js/number-input.min.js"></script>
+            <script src="~/assets/plugins/chartjs/chart.min.js"></script>
+            <script src="~/loader/script.js"></script>
+            <script src="~/assets/js/select2.min.js"></script>
+            <!-- END: Page JS-->
+            <script>
+    function logout() {
+    $.ajax({
+    url: '@Url.Action("Logout", "Authentification")',
+    type: "POST",
+    cache: false,
+    async: true,
+    success: function (data) {
+    if (data) {
+    window.location.href = '@Url.Action("Login", "Authentification")'
+    }
+    else {
+    alert('Un problème est survenu!')
+    }
+    },
+    error: function () {
+    }
+    });
+
+    }
+
+
+    function GetPlanifications() {
+        var Id = $("#s").text();
+        if (Id === " ")
+            Id = 0;
+        var data = {
+            Id: Id,
+        };
+        console.log(data);
+        var v = $("#role").text();
+        if (v == 1) {
+            $.ajax({
+            url: '@Url.Action("GetPlanifications", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                var span = document.getElementById("nbrPlanif");
+                if (data != 0) {
+                    span.classList.add("notif")
+                    span.innerHTML = data;
+                }
+            },
+            error: function () {
+            }
+        });
+        }
+
+        if(v==2) {
+        $.ajax({
+            url: '@Url.Action("GetPlanificationsAtelier", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                var span = document.getElementById("nbrPlanifAtelier");
+                if (data != 0) {
+                    span.classList.add("notif")
+                    span.innerHTML = data;
+                }
+            },
+            error: function () {
+            }
+        });
+        }
+
+    }
+    var NotifToaster = {
+    SucessType: "success",
+    InfoType: "info",
+    WarningType: "warning",
+    ErrorType: "error",
+    Bottom_Right: "toast-bottom-right",
+    Top_Full_Width: "toast-top-full-width",
+    Bottom_Full_Width: "toast-bottom-full-width",
+    }
+
+    function ShowNotification(NotificationMessage, NotificationType, NotificationPosition) {
+
+    NotificationMessage = NotificationMessage.replace("'", "&rsquo");
+    if (NotificationType == "")
+    NotificationType = "error";
+
+    if (NotificationPosition == "")
+    NotificationPosition = "toast-top-full-width";
+
+    toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "positionClass": NotificationPosition,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "2000",
+    "timeOut": "7000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut",
+    }
+
+    Command: toastr[NotificationType](NotificationMessage);
+    }
+            </script>
+            <!-- END: JS Assets-->
+</body>
+<!-- END: Body-->
+</html>

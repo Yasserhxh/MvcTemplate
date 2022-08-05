@@ -1,0 +1,182 @@
+﻿@model IEnumerable<Domain.Models.GratuiteModel>
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+@{ ViewData["Title"] = "Liste des Gratuites"; }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-area="">Liste des gratuités</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                @if (User.IsInRole("Client"))
+                {
+                    <div class="form-row">
+                        <div class="col-md-4 mb-1 offset-md-1 text-center">
+                            <label for="PointDeVente">Point de vente</label>
+                            <div>
+                                <select class="custom-select" id="point" data-search="true" asp-items="@ViewBag.pdv">
+                                    <option selected disabled>Sélectionnez un point de vente...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-1 text-sm-center">
+                            <div class="form-group">
+                                <label for="Date">Date de gratuité</label>
+                                <div>
+                                    <input type="date" id="date" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" text-md-right">
+                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="form-row">
+                        <div class="col-md-4 offset-md-4 mb-1 text-sm-center">
+                            <div class="form-group">
+                                <label for="Date">Date de gratuite</label>
+                                <div>
+                                    <input type="date" id="date" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" text-md-right">
+                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                @if (Model.Count() == 0)
+                                {
+                                    <h4 class="card-title">Veuillez sélectionnez un point de vente</h4>
+                                }
+                                else
+                                {<h4 class="card-title">Liste des gratuités : @Model.FirstOrDefault().Position_Vente.Point_Vente.PointVente_Nom</h4>}
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table table  ">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de creation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Caisse</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Valeur de gratuité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Gratuite_DateCreation)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Position_Vente.PositionVente_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Gratuite_CoutDeRevientTotal) DH</td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="ConsulterGratuite" asp-route-id="@item.Gratuite_ID"><i class="bx bx-detail"></i>Afficher les détails</a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+    function displayDashboard() {
+        var pdvId = $("#point").val();
+        var date = $("#date").val();
+        window.location.href = '/ProduitVendable/ListeGratuites?point=' + pdvId + "&date=" + date;
+    }
+</script>

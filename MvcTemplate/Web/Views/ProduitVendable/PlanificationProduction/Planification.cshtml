@@ -1,0 +1,822 @@
+﻿@{ ViewData["Title"] = "Planification Production  ";
+    Layout = "~/Views/Shared/_Layout1.cshtml"; }
+
+@model Domain.Models.PlanificationJourneeModel
+@using Microsoft.AspNetCore.Http;
+@{ ViewData["Title"] = "Planification de Production"; }
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeDesPlans">Liste des planifications</a>
+                                </li>
+
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter une planification de production</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <!-- form ends -->
+                                                <fieldset>
+                                                    <legend>Liste des planificaitons</legend>
+                                                    <div class="form-row">
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="date">Date de production</label>
+                                                            <div>
+                                                                <input type="datetime-local" id="date" asp-for="PlanificationJournee_Date" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="validationTooltip01">Produit maison</label>
+                                                            <div>
+                                                                <select id="produit" data-search="true" class="form-control" asp-for="@Model.Planification_Production[0].PlanificationProduction_ProduitVendableId" asp-items="@ViewBag.PlanificationProduction_ProduitVendableId" onchange="familleList()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un produit...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="validationTooltip01">Forme de produit</label>
+                                                            <div>
+                                                                <select class="custom-select" id="forme" data-search="true" asp-for="@Model.Planification_Production[0].PlanificationProduction_FormeProduitId" required>
+                                                                    <option value="" selected>Choisissez un produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 mb-1">
+                                                            <label for="Quantite">Quantité</label>
+                                                            <input id="quantite" type="number" min="0" step=".01" maxlength="8" asp-for="@Model.Planification_Production[0].PlanificationProduction_QuantitePrevue" class="form-control" />
+
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="unite">Unité</label>
+                                                            <select class="custom-select" id="unite" data-search="true" required>
+                                                                <option value="" selected>Choisissez l'unite de vente ...</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="lieu">Point de stockage</label>
+                                                            <div>
+                                                                <select class="custom-select" id="lieu" data-search="true" asp-for="PlanificationJournee_LieuStockageID" asp-items="@ViewBag.ZoneStockage_LieuStockageId" required>
+                                                                    <option value="" selected>Choisissez un Lieu ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-1 mt-2">
+                                                            <label></label>
+                                                            <button type="button" class="btn btn-icon btn-light-secondary mr-1 mb-1" onclick="camionAdd()">
+                                                                <i class="bx bx-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Buttons with Icon -->
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableCamions" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Date de production</th>
+                                                                            <th>Produit maison</th>
+                                                                            <th>Forme de produit</th>
+                                                                            <th>Quantité prévisionnelle</th>
+                                                                            <th>Unité de mesure</th>
+                                                                            <th>Point de stockage</th>
+                                                                            <th>Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+
+
+
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; ">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; ">Enregistrer la planification</button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()"> <i class="fa fa-spinner fa-spin" id="spiner" style="display:none;"></i>Enregistrer la planification</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Extrait du bon de sortie des matières premières</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div style="display:none;" id="plandiv"> </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTable" class="overflow-x-auto">
+                                <table id="table" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Matière Première</th>
+                                            <th>Quantité demandée</th>
+                                            <th>Quantité en magasin</th>
+                                            <th>Quantité à demnander</th>
+                                            <th>Unité de mesure</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" id="envbutton" onclick="valider()">
+                        <i class="bx bx-send"></i>
+                        Valider
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="BaseModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33"> Liste des produits de base pour créer ces produits</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div style="display:none;" id="Basediv"> </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <div id="divTableModal" class="overflow-x-auto">
+                                <table id="tableModal" class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Produit de base</th>
+                                            <th>Quantité demandée</th>
+                                            <th>Unité de mesure</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" id="cntbutton" onclick="refresh()">
+                        <i class="bx bx-send"></i>
+                        Continuer
+                    </button>
+                    <button class="btn btn-primary" type="button" style="display:none;" id="planBasebutton" onclick="planifBase()">
+                        <i class="bx bx-send"></i>
+                        Planifier les produits de base
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+
+<script>
+    function camionAdd() {
+
+        if (
+            $("#quantite").val() != null && $("#quantite").val() != '' &&
+            $("#produit").val() != null && $("#produit").val() != '' &&
+            $("#lieu").val() != null && $("#lieu").val() != '' &&
+            $("#forme").val() != null && $("#forme").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != '' &&
+            $("#date").val() != null && $("#date").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout()
+    {
+        var quantiteval = $("#quantite").val();
+        var formeval = $("#forme option:selected").val();
+        var dateVal = $("#date").val();
+        var uniteTxt = $("#unite option:selected").text();
+        var uniteval = $("#unite option:selected").val();
+        var table = document.getElementById("tbodyCamions");
+        var forme = 0;
+        var quantite = 0;
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+         //   document.getElementById('divTable').style.display = "block";
+        }
+        else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[4].innerHTML == formeval) {
+                    if ((uniteval == 1 && table.rows[i].cells[10].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[10].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                    else if ((uniteval == 2 && table.rows[i].cells[10].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[10].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                    else { quantiteval = parseFloat(quantiteval); }
+                    forme = table.rows[i].cells[4].innerHTML;
+                    quantite = table.rows[i].cells[5].innerHTML;
+                    uniteval = table.rows[i].cells[10].innerHTML;
+                    uniteTxt = table.rows[i].cells[6].innerHTML;
+                    table.rows[i].remove();
+
+                }
+            }
+        }
+        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+
+
+
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#produit option:selected").val() + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + dateVal + "</td>" +
+            "<td>" + $("#produit option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#forme option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#forme option:selected").val() + "</td>" +
+
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(3) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + uniteTxt + "</td>" +
+            "<td style='display:none;'>" + parseFloat(quantiteval).toFixed(3) + "</td>" +
+            "<td style='display:none;'>" + $("#lieu option:selected").val() + "</td>" +
+            "<td >" + $("#lieu option:selected").text() + "</td>" +
+            "<td style='display:none;'>" + uniteval + "</td>" +
+
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+       // $("#produit").select2("val","");
+        $("#quantite").val("");
+        $("#lieu").val("");
+        $("#forme").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+    var plan;
+    function Sum(a, b) {
+        return parseFloat(parseFloat(a) + parseFloat(b)).toFixed(3);
+    }
+    function result() {
+        $("#loadMe").modal({
+            backdrop: "static", //remove ability to close modal with click
+            keyboard: false, //remove option to close with keyboard
+            show: true //Display loader!
+        });
+        document.getElementById('spiner').style.display = "block"
+        document.getElementById('disabled').disabled = true;
+        var ListPlans = new Array();
+        var ListDetails = new Array();
+        var table = document.getElementById("tbodyCamions");
+        var quantite = 0;
+        var fichebridgeQte = 0;
+        var lieu = 0;
+        var totalprix = 0.00;
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            var coutDeRevient = 0.00;
+            var bonQte = 0;
+            var bonUnite = "";
+            var bonMatiere = "";
+            var bonQteStock = "";
+            var lib = "";
+            var unitelib = "";
+            produit = table.rows[i].cells[0].innerHTML;
+            date = table.rows[i].cells[1].innerHTML;
+            forme = table.rows[i].cells[4].innerHTML;
+            lieu = table.rows[i].cells[8].innerHTML;
+            quantite = table.rows[i].cells[5].innerHTML;
+            var Id ={ Id : parseInt(produit) };
+             $.ajax({
+
+             url: '@Url.Action("GetFicheTech", "ProduitVendable")',
+             type: "POST",
+             cache: false,
+             async: false,
+             data: Id,
+                 success: function (data) {
+                     fichebridgeQte = 0;
+                     console.log(data);
+                     for (var i in data.fiche_Forme) {
+                         if (data.fiche_Forme[i].ficheForme_FormeProduit == forme) {
+                             fichebridgeQte = parseFloat(data.fiche_Forme[i].ficheForme_Quantite);
+                         }
+                     }
+                     //for(var j in data.)
+                     for (var k in data.produit_FicheTechnique) {
+                         bonQte = data.produit_FicheTechnique[k].ficheTechnique_QuantiteMatiere;
+                         bonUnite = data.produit_FicheTechnique[k].ficheTechnique_UniteMesureId;
+                         bonMatiere = data.produit_FicheTechnique[k].ficheTechnique_MatierePremiereId;
+                          $.ajax({
+                             url: '@Url.Action("getQteEnMagasin", "ProduitVendable")',
+                             type: "POST",
+                             cache: false,
+                             async: false,
+                              data: { 'matiereId': parseInt(bonMatiere), 'uniteId': bonUnite },
+                              success: function (data) {
+                                  lib = data.matierePremiere_Libelle;
+                                  bonQteStockActu = data.matierePremiere_QuantiteEnMagasin;
+                                  if (data.matierePremiere_QuantiteAvecPlanification == 0)
+                                      bonQteStockAvecPlan = 0.0;
+                                  else
+                                      bonQteStockAvecPlan = data.matierePremiere_QuantiteAvecPlanification;
+                                  unitelib = data.matierePremiere_UniteMesureLibelle;
+                                  uniteMag = data.matierePremiere_UniteMesureMag;
+
+                             },
+                             error: function () {
+                                 alert("non ajoute");
+                             }
+                         });
+                         coutDeRevient += data.produit_FicheTechnique[k].ficheTechnique_Prix;
+                         var details = {
+                             BonDeSortie_Quantite: parseFloat((parseFloat(quantite) / fichebridgeQte) * parseFloat(bonQte)).toFixed(3),
+                             BonDeSortie_UniteMesureId: bonUnite,
+                             BonDeSortie_MatiereId: bonMatiere,
+                             BonDeSortie_QuantiteEnStock: parseFloat(bonQteStockActu).toFixed(3),
+                             BonDeSortie_QuantiteEnStockAvecPlan: parseFloat(bonQteStockAvecPlan).toFixed(3),
+                             BonDeSortie_QuantiteDemandee: 0,
+                             BonDeSortie_MatiereLibelle: lib,
+                             BonDeSortie_UniteLibelle: unitelib,
+                             BonDeSorite_UniteStock: uniteMag,
+
+                         };
+
+                         if (uniteMag === "Kilogramme(s)" && unitelib === "Gramme(s)")
+                         {
+                             details.BonDeSortie_Quantite = parseFloat((parseFloat(quantite).toFixed(3) / fichebridgeQte) * parseFloat(bonQte)).toFixed(3) / 1000;
+                             details.BonDeSortie_UniteLibelle = "Kilogramme(s)";
+                             details.BonDeSortie_UniteMesureId = 2;
+                         }
+                         if (uniteMag === "Gramme(s)" && unitelib === "Kilogramme(s)")
+                         {
+                             details.BonDeSortie_Quantite = parseFloat((parseFloat(quantite).toFixed(3) / fichebridgeQte) * parseFloat(bonQte)).toFixed(3) * 1000;
+                             details.BonDeSortie_UniteLibelle = "Gramme(s)";
+                             details.BonDeSortie_UniteMesureId = 2;
+                         }
+
+                         ListDetails.push(details);
+                     }
+
+                 },
+             error: function () {alert("non ajoute");}
+
+             });
+
+            var plan = {
+                PlanificationProduction_ProduitVendableId: "",
+                PlanificationProduction_QuantitePrevue: "",
+                PlanificationProduction_Date: "",
+                PlanificationProduction_CoutRevient: 0.00,
+                PlanificationProduction_FormeProduitId: 0,
+           }
+            var cout = 0;
+            plan.PlanificationProduction_ProduitVendableId = produit;
+            plan.PlanificationProduction_FormeProduitId = forme;
+            plan.PlanificationProduction_QuantitePrevue = parseFloat(quantite).toFixed(3).replace(".",",");
+            plan.PlanificationProduction_Date = date;
+            cout = ((coutDeRevient / fichebridgeQte) * parseFloat(plan.PlanificationProduction_QuantitePrevue).toFixed(3)).toFixed(3)
+            plan.PlanificationProduction_CoutRevient = parseFloat(coutDeRevient / fichebridgeQte).toFixed(3).replace(".", ",");
+            ListPlans.push(plan);
+            totalprix = totalprix + parseFloat(cout);
+            console.log(plan);
+        }
+        //var grouped = groupArrayOfObjects(ListDetails, "BonDeSortie_MatiereId");
+        var result = [];
+        var i = 0;
+       // console.log(ListDetails);
+        ListDetails.reduce(function (res, value) {
+            if (!res[value.BonDeSortie_MatiereId]) {
+                res[value.BonDeSortie_MatiereId] = {
+                    BonDeSortie_Quantite: parseFloat(value.BonDeSortie_Quantite),
+                    BonDeSortie_MatiereId: value.BonDeSortie_MatiereId,
+                    BonDeSortie_UniteMesureId: value.BonDeSortie_UniteMesureId,
+                    BonDeSortie_QuantiteEnStock: parseFloat(value.BonDeSortie_QuantiteEnStock),
+                    BonDeSortie_QuantiteAvecPlanification: parseFloat(value.BonDeSortie_QuantiteEnStockAvecPlan),
+                    BonDeSortie_UniteLibelle: value.BonDeSortie_UniteLibelle,
+                    BonDeSortie_MatiereLibelle: value.BonDeSortie_MatiereLibelle,
+                    BonDeSorite_UniteStock: value.BonDeSorite_UniteStock,
+                    BonDeSortie_QuantiteDemandee: value.BonDeSortie_QuantiteDemandee,
+                };
+
+                var qte = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite);
+                if (qte <0) {
+                    console.log("qte if less than zero" + qte)
+
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite).toFixed(3);
+                    //res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification) - parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite);
+                } else {
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = 0;
+                  //  res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification) - parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite);
+
+                    i++;
+                }
+                result.push(res[value.BonDeSortie_MatiereId])
+            }
+            else {
+                res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite = Sum(value.BonDeSortie_Quantite, res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite)
+                res[value.BonDeSortie_MatiereId].BonDeSortie_MatiereId = value.BonDeSortie_MatiereId
+                res[value.BonDeSortie_MatiereId].BonDeSortie_UniteMesureId = value.BonDeSortie_UniteMesureId
+                res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock = parseFloat(value.BonDeSortie_QuantiteEnStock),
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = value.BonDeSortie_QuantiteEnStockAvecPlan,
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_UniteLibelle = value.BonDeSortie_UniteLibelle
+                res[value.BonDeSortie_MatiereId].BonDeSortie_MatiereLibelle = value.BonDeSortie_MatiereLibelle
+                res[value.BonDeSortie_MatiereId].BonDeSorite_UniteStock = value.BonDeSorite_UniteStock
+                res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = value.BonDeSortie_QuantiteDemandee
+                @*var qte = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite);
+                if (qte >= 0) {
+                    i++
+                    //console.log(qte)
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = 0;
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite; //Sum(value.BonDeSortie_QuantiteEnStockAvecPlan,parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification) - parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite));
+
+                }else
+                {
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite).toFixed(3);
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite;
+
+                }*@ 
+                var qte = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite);
+                if (qte < 0) {
+                    console.log("qte if less than zero" + qte)
+
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite).toFixed(3);
+                //    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite;
+                } else {
+                    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteDemandee = 0;
+                //    res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification = res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteEnStock - res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite; //Sum(value.BonDeSortie_QuantiteEnStockAvecPlan,parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_QuantiteAvecPlanification) - parseFloat(res[value.BonDeSortie_MatiereId].BonDeSortie_Quantite));
+
+                    i++;
+                }
+
+            }
+
+            return res;
+        }, {});
+        console.log(result);
+
+            var planJournee = {
+                PlanificationJournee_Date: date,
+                PlanificationJournee_Etat: "En traitement",
+                PlanificationJournee_LieuStockageID: lieu,
+                Planification_Production: ListPlans,
+                PlanificationJournee_CoutDeRevient: parseFloat(totalprix).toFixed(3).replace(".", ","),
+                BonDe_Sortie: {
+                    BonDeSortie_StockID: lieu,
+                    BonDeSortie_Libelle: "LibTest",
+                    Bon_Details: result,
+                },
+
+        }
+        if (i == result.length) {
+           // console.log(i, result.length);
+            planJournee.PlanificationJournee_Etat = "Matière première disponible";
+        }
+
+            var data = {
+                plan: planJournee
+        };
+        // console.log(data);=
+        @*setTimeout(
+            function () {
+                $("#loadMe").modal("hide");
+            }, 2000);*@
+        setTimeout(
+            function () {
+
+                $('#myModal').modal('show');
+                $("#loadMe").modal("hide");
+            }, 3000);
+
+            $("#table").append("<tbody id='tbody'></tbody>");
+
+            for (var i = 0; i < planJournee.BonDe_Sortie.Bon_Details.length; i++)
+            {
+                if (planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteAvecPlanification - planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite < 0) {
+                    $("#table").append("<tr>" +
+                        "<td class='border-b dark:border-dark-5 '>" + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_MatiereLibelle + "</td>" +
+                        "<td >" + parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite).toFixed(3) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + /*parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock).toFixed(3) */ parseFloat("0").toFixed(3) + " " + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSorite_UniteStock + "</td>" +
+                        "<td class='border-b dark:border-dark-5 '>" + parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee).toFixed(3).replace(".", ",") + "</td>" +
+                        "<td class='border-b dark:border-dark-5 text-sm-left'>" + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_UniteLibelle + "</td>" +
+                        "</tr>");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite = parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite).toFixed(3).replace(".", ",");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock = parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock).toFixed(3).replace(".", ",");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee = parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee).toFixed(3).replace(".", ",");
+                } else {
+                    $("#table").append("<tr>" +
+                        "<td class='border-b dark:border-dark-5 '>" + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_MatiereLibelle + "</td>" +
+                        "<td >" + parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite).toFixed(3) + "</td>" +
+                        "<td class='border-b dark:border-dark-5'>" + parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock).toFixed(3) + " " + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSorite_UniteStock + "</td>" +
+                        "<td class='border-b dark:border-dark-5 '>" + parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee).toFixed(3) + "</td>" +
+                        "<td class='border-b dark:border-dark-5 text-sm-left'>" + planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_UniteLibelle + "</td>" +
+                        "</tr>");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite = parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_Quantite).toFixed(3).replace(".", ",");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock = parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteEnStock).toFixed(3).replace(".", ",");
+                    planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee = 0;//parseFloat(planJournee.BonDe_Sortie.Bon_Details[i].BonDeSortie_QuantiteDemandee).toFixed(3).replace(".", ",");
+                }
+
+            }
+            return data;
+    }
+    async function ffct() {
+
+    }
+
+    function start() {
+        return ffct();
+    }
+    function AjoutTrpMoral() {
+        (async () => {
+            //console.log('before start');
+            await start();
+           // console.log('after start');
+            plan = result();
+        })();
+    }
+    function valider() {
+        $('#myModal').modal('hide');
+
+       // console.log(plan);
+        $("#loadMe").modal({
+            backdrop: "static", //remove ability to close modal with click
+            keyboard: false, //remove option to close with keyboard
+            show: true //Display loader!
+        });
+        document.getElementById('envbutton').disabled = true;
+
+        $.ajax({
+            url: '@Url.Action("Planifier", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: plan ,
+            success: function (data) {
+                if (data != null) {
+                    $('#Basediv').val(parseInt(data));
+                    ShowNotification("Planification ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    $.ajax({
+                        url: '@Url.Action("getProdsBasePlans", "ProduitVendable")',
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        data: { planID: data },
+                        success: function (data) {
+                            if (data.length > 0) {
+                              //  $('#myModal').modal('hide');
+                                setTimeout(
+                                    function () {
+                                        $("#loadMe").modal("hide");
+                                        $('#BaseModal').modal('show');
+                                    }, 2000);
+                                $("#tableModal").append("<tbody id='tbody'></tbody>");
+
+                                for (var i = 0; i < data.length; i++) {
+
+                                    $("#tableModal").append("<tr>" +
+                                        "<td class='border-b dark:border-dark-5 '>" + data[i].matiereLibelle + "</td>" +
+                                        "<td class='border-b dark:border-dark-5 '>" + parseFloat(data[i].qteEnStock).toFixed(3) + "</td>" +
+                                        "<td class='border-b dark:border-dark-5 '>" + data[i].uniteStock + "</td>" +
+                                        "</tr>");
+                                }
+                            }
+                            else {
+                              //  ShowNotification("Planification ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                                setTimeout(
+                                    function () {
+                                        $("#loadMe").modal("hide");
+
+                                        window.location.reload();
+                                    }, 2000);
+                            }
+                        },
+                        error: function () {
+                            alert("non ajoute");
+                        }
+                    });
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            $("#loadMe").modal("hide");
+
+                            window.location.href = '@Url.Action("Planification", "ProduitVendable")';
+                        }, 2000);
+                }
+            },
+            error: function () {
+                alert("non ajoute");
+            }
+        });
+    }
+
+    function familleList()
+    {
+          var data = { Id: parseInt($("#produit").val()) };
+          if ($("#produit").val() != null) {
+            $.ajax({
+                url: '@Url.Action("formeProduit", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#forme option").length > 1) {
+                        $.each($("#forme option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#forme").append("<option value='' selected disabled>Sélectionnez une forme de produit</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#forme").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+          }
+          var data2 = {
+              produitId: $("#produit").val(),
+          };
+          $.ajax({
+            url: '@Url.Action("getUniteVente", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data2,
+            success: function (data) {
+                  if ($("#unite option").length > 1) {
+                      $.each($("#unite option"), function (i, item) {
+                          item.remove();
+                      });
+                      $("#unite").append("<option value='' selected disabled>Sélectionnez l'unite de vente</option>");
+                  }
+                  $.each(data, function (i, item) {
+                      $("#unite").append($('<option>', {
+                          value: item.value,
+                          text: item.text
+                      }));
+                  });
+              },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+    }
+    function refresh() {
+        // $('#myModal').modal('toggle');
+        setTimeout(
+            function () {
+                window.location.reload();
+            }, 500);
+    }
+      function planifBase() {
+        document.getElementById('planBasebutton').disabled = true;
+        data = { "planID": $('#Basediv').val()};
+         $.ajax({
+            url: '@Url.Action("PlanificationBaseAuto", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data != null) {
+                    ShowNotification("Planification de base ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 3000);
+                }
+                else
+                {
+                      ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("Planification", "ProduitVendable")';
+                        }, 2000);
+                }
+
+             },
+             error: function () {
+                 alert("non ajoute");
+             }
+
+        });
+    }
+
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
+
+    var jq14 = jQuery.noConflict(true);
+    (function ($) {
+        $(document).ready(function () {
+            $("#produit").selectize({
+                placeholder: "Séléctionnez un produit maison...",
+                allowClear: true
+            });
+        });
+    }(jq14));
+
+
+</script>

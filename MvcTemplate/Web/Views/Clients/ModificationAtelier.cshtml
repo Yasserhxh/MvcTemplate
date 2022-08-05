@@ -1,0 +1,91 @@
+﻿
+@model Domain.Models.AtelierModel
+
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+<div class="app-content content">
+    <section id="basic-form-layouts">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title" id="basic-layout-form"> Modifier un point de production</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="px-3">
+                    <form class="form" asp-action="ModificationAtelier" method="post">
+                        <div class="form-body">
+                            <h4 class="form-section">
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PointVente_Nom">Point de production</label>
+                                        <input type="text" asp-for="Atelier_Nom" class="form-control" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ville">Ville</label>
+                                        <select class="custom-select" id="ville" data-search="true" asp-for="Atelier_VilleID" asp-items="@ViewBag.Atelier_VilleID">
+                                            <option value="" id="ville" selected disabled>Sélectionnez une ville...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Code Postal">Code Postal</label>
+                                        <input type="number" id="code" class="form-control" asp-for="Atelier_CodePostal" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Adresse">Adresse</label>
+                                        <input type="text" asp-for="Atelier_Adresse" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4 class="form-section">
+                                <i class="icon-book-open"></i>Contact Info
+                            </h4>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ContactName">Responsable</label>
+                                        <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="Atelier_NomResponsable" asp-items="@ViewBag.Atelier_NomResponsable" required>
+                                        </select>
+                                        @*<input type="text" asp-for="PointVente_NomResponsable" class="form-control" required />*@
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Tel">Numéro de Téléphone </label>
+                                        <input type="tel" asp-for="Atelier_Telephone" id="gsm" class="form-control" maxlength="10" minlength="10" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions text-sm-right">
+                            <a class="btn btn-danger" asp-action="ListeAtelier">
+                                Annuler
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-note"></i> Modifier
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+<script>
+
+</script>
+
+
