@@ -124,6 +124,9 @@
                                                                     }@if (item.Role == "Chef_Patissier")
                                                                     {
                                                                         <td class="border-b dark:border-dark-5 text-sm-left">Chef patissier</td>
+                                                                    }@if (item.Role == "Gerant_des_achats")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Responsable des achats</td>
                                                                     }
 
                                                                     <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Affectation)</td>
