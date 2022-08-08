@@ -10,6 +10,7 @@ namespace Domain.Models
             Planification_Production = new List<PlanificationdeProductionModel>();
         }
         public int PlanificationJournee_ID { get; set; }
+        public string Planification_GeneratedID { get; set; }
         public DateTime PlanificationJournee_Date { get; set; }
         public string PlanificationJournee_Etat { get; set; }
         public decimal PlanificationJournee_CoutDeRevient { get; set; }

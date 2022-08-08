@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Domain.Entities
+namespace Domain.Models
 {
-    [Table("Article_BL")]
-    public class Article_BL
+    public class ArticleBL_Model
     {
-        [Key]
         public int AcrticleBL_ID { get; set; }
         public string ArticleBL_Designation { get; set; }
-        [ForeignKey("MatierePremiere_Stokage")]
         public int ArticleBL_MatiereID { get; set; }
         public decimal ArticleBL_Quantie { get; set; }
         public decimal ArticleBL_PU { get; set; }
         public decimal ArticleBL_PrixTotal { get; set; }
         public int ArticleBL_BonLivraisonID { get; set; }
-        public BonDeLivraison bonDeLivraison { get; set; }
-        public MatierePremiereStockage MatierePremiere_Stokage { get; set;}
+        public BonDeLivraison_Model bonDeLivraison { get; set; }
+        public MatierePremiereStockageModel MatierePremiere_Stokage { get; set; }
     }
 }

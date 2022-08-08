@@ -117,6 +117,10 @@ namespace Repository.Data
         public DbSet<Planification_ProdBase>  planification_ProdBases { get; set; }
         public DbSet<Reception_Stock>  reception_Stocks { get; set; }
         public DbSet<Approvisionnement_Matiere>  approvisionnement_Matieres { get; set; }
+        public DbSet<BonDeCommande> bonDeCommandes { get; set; }
+        public DbSet<BonDeLivraison> bonDeLivraisons { get; set; }
+        public DbSet<Article_BC> article_BCs { get; set; }
+        public DbSet<Article_BL> article_BLs { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

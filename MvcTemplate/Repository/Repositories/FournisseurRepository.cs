@@ -54,6 +54,18 @@ namespace Repository.Repositories
                 return null;
         }
 
+        public async Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande)
+        {
+            bonDeCommande.BonDeCommande_DateCreation = DateTime.UtcNow;
+          
+            await _db.bonDeCommandes.AddAsync(bonDeCommande);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return bonDeCommande.BonDeCommande_ID;
+            else
+                return null;
+        }
+
         public async Task<int?> CreateFournisseur(Fournisseur fournisseur)
         {
             fournisseur.Founisseur_IsActive = 1;
@@ -115,6 +127,18 @@ namespace Repository.Repositories
         public Fournisseur findFormulaireFournisseur(int formulaireFourisseurId)
         {
             return _db.fournisseurs.Where(e => e.Founisseur_Id == formulaireFourisseurId).FirstOrDefault();
+        }
+
+        public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date)
+        {
+            var query = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID);
+            if (pointStockID != null)
+                query = query.Where(p => p.BonDeCommande_PointStockID == pointStockID);
+            if (fournisseurID != null)
+                query = query.Where(p => p.BonDeCommande_FournisseurID == fournisseurID);
+            if (date != "")
+                query = query.Where(p => Convert.ToDateTime(p.BonDeCommande_DateCreation).ToString("yyyy-MM-dd") == date);
+            return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable();
         }
 
         public IEnumerable<Fonction> getListFonction()

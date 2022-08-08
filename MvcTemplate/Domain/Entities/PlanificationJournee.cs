@@ -15,6 +15,8 @@ namespace Domain.Entities
         }
         [Key]
         public int PlanificationJournee_ID { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string Planification_GeneratedID { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime PlanificationJournee_Date { get; set; }
         [Column(TypeName = "nvarchar(250)")]

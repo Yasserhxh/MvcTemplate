@@ -17,6 +17,9 @@ namespace Repository.IRepositories
         Task<bool> deleteMatieresLink(int ID, int code);
         IEnumerable<MatierePremiere> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
+        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date);
+        Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
+
             
     }
 }

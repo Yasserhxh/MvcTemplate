@@ -302,7 +302,7 @@ namespace Repository.Repositories
             {
                 produit.ProduitVendable_FamilleProduitId = newProduit.ProduitVendable_FamilleProduitId;
                 produit.ProduitVendable_Designation = newProduit.ProduitVendable_Designation;
-               // produit.ProduitVendable_Description = newProduit.ProduitVendable_Description;
+                //produit.ProduitVendable_FamilleProduitId = newProduit.ProduitVendable_FamilleProduitId;
                 //produit.ProduitVendable_FormStockageId = newProduit.ProduitVendable_FormStockageId;
                 //produit.ProduitVendable_UniteMesureId = newProduit.ProduitVendable_UniteMesureId;
                 produit.ProduitVendable_StockMaximum = newProduit.ProduitVendable_StockMaximum;
@@ -1166,7 +1166,8 @@ namespace Repository.Repositories
 
         public async Task<int?> Planifier(PlanificationJournee plan)
         {
-            plan.PlanificationJournee_DateCreation = DateTime.Now;
+            plan.PlanificationJournee_DateCreation = DateTime.UtcNow;
+            plan.Planification_GeneratedID = "Planification de:" + " " + DateTime.UtcNow.ToString();
             plan.PlanificationJournee_SeenByStock = false;
             await _db.planificationJournees.AddAsync(plan);
             var confirm = await unitOfWork.Complete();

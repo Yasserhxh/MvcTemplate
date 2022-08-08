@@ -125,7 +125,7 @@
     </div>
 </div>
 <div class="modal fade show" id="familleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#6c3c36">
                 <h4 class="modal-title white" id="myModalLabel33">Ajouter une famille de produit</h4>
@@ -133,7 +133,7 @@
                     <i class="bx bx-x"></i>
                 </button>
             </div>
-            <form class="form">
+               <form class="wizard-horizontal wizard clearfix" asp-action="Ajouter" asp-controller="FamilleProduits" method="post" onsubmit="theButton.disabled = true; return true;" enctype="multipart/form-data">
                 <div class="modal-body" style="height:auto;min-height: 100px;" id="mbody">
                     <div class="row">
                         <div class="col-sm-12">
@@ -141,20 +141,31 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="AllergeneLabel">Nom de famille</label>
-                                        <input type="text" id="familleParent1" class="form-control" required style="width: fit-content;" />
+                                        <input type="text"type="text" id="libelle" asp-for="@Model.FirstOrDefault().FamilleProduit_Libelle"   class="form-control" required style="width: fit-content;" />
                                     </div>
                                 </div>
-
+                                 <div class="col-md-6">
+                                       <div class="form-group">
+                                           <label>Photo de produit</label>
+                                           <div class="custom-file">
+                                               <input type="file" name="files" class="custom-file-input" id="fileinput" required>
+                                               <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                           </div>
+                                           </div>
+                                           </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" id="envbutton1" onclick="ajouterFamille()">
+                    @*<a class="btn btn-primary" id="envbutton1" onclick="ajouterFamille()">
                         <span style="color:aliceblue;">
                             Enregistrer
                         </span>
-                    </a>
+                    </a>*@
+                      <button type="submit" name="theButton"  class="btn btn-success">
+                                            <i class="icon-note"></i> Modifier
+                                        </button>
                 </div>
             </form>
         </div>
