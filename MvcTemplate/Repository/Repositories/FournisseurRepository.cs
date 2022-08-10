@@ -66,6 +66,18 @@ namespace Repository.Repositories
                 return null;
         }
 
+        public async Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
+        {
+            bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.UtcNow;
+
+            await _db.bonDeLivraisons.AddAsync(bonDeLivraison);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return bonDeLivraison.BonDeLivraison_ID;
+            else
+                return null;
+        }
+
         public async Task<int?> CreateFournisseur(Fournisseur fournisseur)
         {
             fournisseur.Founisseur_IsActive = 1;
@@ -129,6 +141,11 @@ namespace Repository.Repositories
             return _db.fournisseurs.Where(e => e.Founisseur_Id == formulaireFourisseurId).FirstOrDefault();
         }
 
+        public IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID)
+        {
+            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).AsEnumerable();
+        }
+
         public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date)
         {
             var query = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID);
@@ -139,6 +156,16 @@ namespace Repository.Repositories
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeCommande_DateCreation).ToString("yyyy-MM-dd") == date);
             return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable();
+        }
+
+        public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date)
+        {
+            var query = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_AbonnementID == aboID);
+            if (bonCommandeID != null)
+                query = query.Where(p => p.BonDeLivraison_BCID == bonCommandeID);
+            if (date != "")
+                query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
+            return query.Include(p => p.Bon_De_Commande).AsEnumerable();
         }
 
         public IEnumerable<Fonction> getListFonction()

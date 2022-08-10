@@ -1,6 +1,7 @@
 ﻿using Domain.Authentication;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,11 +21,13 @@ namespace Web.Controllers
     {
         private readonly IFournisseurService fournisseurService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IGestionMouvementService gestionMouvementService;
 
-        public FournisseurController(IFournisseurService fournisseurService, UserManager<ApplicationUser> userManager)
+        public FournisseurController(IFournisseurService fournisseurService, UserManager<ApplicationUser> userManager, IGestionMouvementService gestionMouvementService)
         {
             this.fournisseurService = fournisseurService;
             _userManager = userManager;
+            this.gestionMouvementService = gestionMouvementService;
         }
 
         public IActionResult Ajouter()
@@ -125,6 +128,40 @@ namespace Web.Controllers
             {
                 return false;
             }
+        }
+        public IActionResult ListeBonDeCommande(int? fournisseurID, string date, int pg = 1)
+        {
+            if (date == null || date == "null" || date == "")
+                date = "";
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(model);
+        }
+        public IActionResult ListeBonDeLivraison(int bonCommandeID, string date, int pg = 1)
+        {
+            if (date == null || date == "null" || date == "")
+                date = "";
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(model);
         }
     }
 }

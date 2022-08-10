@@ -17,6 +17,8 @@ namespace Domain.Entities
         public decimal BonDeLivraison_TotalHT { get; set; }
         public decimal BonDeLivraison_TotalTVA { get; set; }
         public decimal BonDeLivraison_TotalTTC { get; set; }
+        public DateTime BonDeLivraison_DateLivraison { get; set; }
+        public DateTime BonDeLivraison_DateSaisie { get; set; }
         public BonDeCommande Bon_De_Commande { get; set; }    
 
     }

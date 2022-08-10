@@ -86,6 +86,8 @@ namespace Repository.Mapping
             CreateMap<matStockViewModel, MatStockView>();
             CreateMap<Reception_StockModel, Reception_Stock>();
             CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
+            CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
+            CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
         }
     }
 }

@@ -47,6 +47,46 @@ namespace Service.Services
             }
         }
 
+        public async Task<bool> CreateBonDeCommande(BonDeCommande_Model bonDeCommandeModel)
+        {
+            using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    BonDeCommande bonCommande = mapper.Map<BonDeCommande_Model, BonDeCommande>(bonDeCommandeModel);
+                    var id = await fournisseurRepository.CreateBonDeCommande(bonCommande);
+
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel)
+        {
+            using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    BonDeLivraison bonDeLivraison = mapper.Map<BonDeLivraison_Model, BonDeLivraison>(bonDeLivraisonModel);
+                    var id = await fournisseurRepository.CreateBonDeLivraison(bonDeLivraison);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public async Task<bool> CreateFournisseur(FournisseurModel fournisseurModel)
         {
             using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
@@ -82,6 +122,21 @@ namespace Service.Services
         public FournisseurModel findFormulaireFournisseur(int formulaireFourisseurId)
         {
             return mapper.Map<Fournisseur, FournisseurModel>(fournisseurRepository.findFormulaireFournisseur(formulaireFourisseurId));
+        }
+
+        public IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID)
+        {
+            return mapper.Map<IEnumerable<Article_BC>, IEnumerable<ArticleBC_Model>>(fournisseurRepository.GetArticlesBC(bonCommandeID));
+        }
+
+        public IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date)
+        {
+            return mapper.Map<IEnumerable<BonDeCommande>, IEnumerable<BonDeCommande_Model>>(fournisseurRepository.GetBonDeCommandes(aboID, pointStockID, fournisseurID, date));
+        }
+
+        public IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date)
+        {
+            return mapper.Map<IEnumerable<BonDeLivraison>, IEnumerable<BonDeLivraison_Model>>(fournisseurRepository.GetBonDeLivraisons(bonCommandeID, aboID, date));
         }
 
         public IEnumerable<VilleModel> getListeVille()
