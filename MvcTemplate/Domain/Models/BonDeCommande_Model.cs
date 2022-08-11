@@ -7,7 +7,7 @@ namespace Domain.Models
     public class BonDeCommande_Model
     {
         public int BonDeCommande_ID { get; set; }
-        public int BonDeCommande_Numero { get; set; }
+        public string BonDeCommande_Numero { get; set; }
         public int BonDeCommande_FournisseurID { get; set; }
         public string BonDeCommande_CreePar { get; set; }
         public int BonDeCommande_PointStockID { get; set; }

@@ -163,5 +163,20 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View(model);
         }
+        public IActionResult AjouterBC()
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            return View();
+        }
+        [HttpPost]
+        public async Task<bool> AjouterBC(BonDeCommande_Model bonDeCommande_Model)
+        {
+            bonDeCommande_Model.BonDeCommande_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            bonDeCommande_Model.BonDeCommande_CreePar = _userManager.GetUserId(HttpContext.User);
+            bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var redirect = await fournisseurService.CreateBonDeCommande(bonDeCommande_Model);
+            return redirect;
+        }
     }
 }
