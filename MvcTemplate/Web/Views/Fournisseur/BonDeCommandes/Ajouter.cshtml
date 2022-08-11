@@ -95,7 +95,7 @@
                                                 <fieldset>
                                                     <legend>Détails des articles</legend>
                                                     <div class="form-row">
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-3 mb-1">
                                                             <label for="matierePremiere">Matière première</label>
                                                             <div>
                                                                 <select class="custom-select" id="matiere" data-search="true" onchange="uniteListe()">
@@ -105,9 +105,9 @@
                                                         </div>
                                                         <div class="col-md-2 mb-1">
                                                             <label for="Quantite">Quantité</label>
-                                                            <input type="number" min="0" id="qte" step=".01" class="form-control" required />
+                                                            <input type="text" id="qte" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-3 mb-1">
                                                             <label for="UniteMesure">Unité</label>
                                                             <div>
                                                                 <select class="custom-select" id="unite" data-search="true">
@@ -117,14 +117,14 @@
                                                         </div>  
                                                         <div class="col-md-2 mb-1">
                                                             <label for="UniteMesure">Prix / Unité</label>
-                                                            <input type="text" class="form-control" required />
+                                                            <input type="text" id="prix" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                      @*  <div class="col-md-2 mb-1">
                                                             <label for="total">Total</label>
-                                                            <input type="text" disabled class="form-control" required />
-                                                        </div>
+                                                            <input type="text" id="total" disabled class="form-control" required />
+                                                        </div>*@
                                                         <div class=" text-md-right">
-                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="formeadd()">Ajouter à la liste</button>
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="articleAdd()">Ajouter à la liste</button>
                                                         </div>
                                                     </div>
 
@@ -139,7 +139,7 @@
                                                                             <th>Unité</th>
                                                                             <th>Prix / unité</th>
                                                                             <th>Prix total</th>
-                                                                            <th></th>
+                                                                            <th>Action</th>
                                                                          
                                                                         </tr>
                                                                     </thead>
@@ -147,7 +147,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                   
+                                                    
 
                                                     
                                                 </fieldset>
@@ -241,4 +241,254 @@
             });
         }
     }
+       function articleAdd() {
+
+        if ($("#matiere").val() != null && $("#matiere").val() != '' &&
+            $("#qte").val() != null && $("#qte").val() != '' &&
+            //$("#total").val() != null && $("#total").val() != '' &&
+            $("#prix").val() != null && $("#prix").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != ''
+
+        ) {
+            articleAjout();
+            articleClear();
+        }
+    } 
+function articleAjout() {
+    var matieretxt = $("#matiere option:selected").text();
+    var matiereval = $("#matiere option:selected").val();
+
+    var fournisseurtxt = $("#fournisseur option:selected").text();
+    var fournisseurval = $("#fournisseur option:selected").val();
+
+    var quantitetxt = $("#qte").text();
+    var quantiteval = $("#qte").val();
+
+    var unitetxt = $("#unite option:selected").text();
+    var uniteval = $("#unite option:selected").val();
+
+    var prixtxt = $("#prix option:selected").text();
+    var prixval = $("#prix option:selected").val();
+
+    var totaltxt = $("#total option:selected").text();
+    var totalval = $("#total option:selected").val();
+
+    var table = document.getElementById("tbodyCamions");
+
+    if ($("#tableCamions tbody").length == 0) {
+        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+        //document.getElementById('divTable').style.display = "block";
+    }
+
+    @*else {
+        for (var i = 0; i < table.rows.length; i++) {
+        matiere = table.rows[i].cells[6].innerHTML;
+        quantite = table.rows[i].cells[7].innerHTML;
+        unite = table.rows[i].cells[8].innerHTML;
+        if (matiere == matiereval && unite == uniteval) {
+        table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
+        table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML ;
+
+        }
+        }
+        }*@
+        var calPrix =
+    {
+        matiere: $("#matiere option:selected").val(),
+        unite: $("#unite option:selected").val(),
+        quantite: parseFloat($("#quantite").val()).toFixed(3).replace(".", ","),
+    };
+    var table = document.getElementById("tbodyCamions");
+    var matiere = 0;
+    var prix = 0;
+    var quantite = 0;
+    var unite = 0;
+    var total = 0;
+    var unitetext = "";
+    var val = 0;
+    if ($("#tableCamions tbody").length == 0) {
+        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+        //document.getElementById('divTable').style.display = "block";
+        }else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[1].innerHTML == matiereval) {
+                    if ((uniteval == 1 && table.rows[i].cells[2].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[2].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                    else if ((uniteval == 2 && table.rows[i].cells[2].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[2].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                    else { quantiteval = parseFloat(quantiteval); }
+                    matiere = table.rows[i].cells[1].innerHTML;
+                    quantite = table.rows[i].cells[4].innerHTML;
+                    uniteval = table.rows[i].cells[2].innerHTML;
+                    unitetxt = table.rows[i].cells[5].innerHTML;
+                    table.rows[i].remove();
+                }
+            }
+        }
+        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)  + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="articleDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+            
+            
+   
+    var res = 0;
+    for (var i = 0; i <table.rows.length; i++)
+    {
+        var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
+        var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
+        res += parseFloat(prixtable);
+        
+        $("#prixHT").val(res);
+    }
+}
+
+ function articleClear() {
+        //$("#fournisseur").val("");
+        $("#prix").val("");
+        $("#matiere").val("");
+        $("#qte").val("");
+        $("#unite").val("");
+    }
+
+    //delete
+    function articleDelete(ctl) 
+    {
+        $(ctl).parents("tr").remove();
+       
+        if ($("#tableCamions tbody tr").length == 0) 
+        {
+            $("#prixHT").val(0);
+        }
+
+        change();
+    }
+function change() {
+
+ var table = document.getElementById("tbodyCamions");
+        var res = 0;
+        for (var i = 0; i <table.rows.length; i++)
+        {
+            var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
+            var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
+            res += parseFloat(prixtable);
+            $("#prixHT").val(res);
+        }
+}
+ function AjoutTrpMoral() {
+        document.getElementById('disabled').disabled = true;
+        var ProduitId = $("#produit option:selected").val() ;
+        var Libelle = $("#libelle").val() ;
+        var ListMatieres = new Array();
+        var ListFormes = new Array();
+        var ListProds = new Array();
+        var prixT =parseFloat(0);
+        var table = document.getElementById("tbodyCamions");
+        var tableForme = document.getElementById("tbodyForme");
+        var tablebase = document.getElementById("tbodybase");
+        var formeproduit = 0;
+        var prodBase = 0;
+        var unitebase = 0;
+        var qtebase = 0;
+        var qteforme = 0;
+        var uniteforme = 0;
+        var matiere = 0;
+        var quantite = 0;
+        var unite = 0;
+        var prix = 0;
+        var fichebridge = {
+            FicheTechniqueBridge_ProduitVendableID: ProduitId,
+            FicheTechniqueBridge_Libelle: Libelle,
+            //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
+            //Produit_FicheTechnique: ListMatieres,
+            //Fiche_Forme: ListFormes,
+            //FicheTech_ProduitBase = new Array(),
+        }
+        if (table != null)
+        {
+            for (var i = 0; i < table.rows.length; i++) {
+                produit = table.rows[i].cells[5].innerHTML;
+                matiere = table.rows[i].cells[6].innerHTML;
+                quantite = table.rows[i].cells[7].innerHTML;
+                unite = table.rows[i].cells[8].innerHTML;
+                prix = table.rows[i].cells[9].innerHTML;
+
+                var fiche = {
+                    FicheTechnique_ProduitVendableId: "",
+                    FicheTechnique_MatierePremiereId: "",
+                    FicheTechnique_UniteMesureId: "",
+                    FicheTechnique_QuantiteMatiere: "",
+                    FicheTechnique_Prix: "",
+                }
+
+                fiche.FicheTechnique_ProduitVendableId = produit;
+                fiche.FicheTechnique_MatierePremiereId = matiere;
+                fiche.FicheTechnique_UniteMesureId = unite;
+                fiche.FicheTechnique_QuantiteMatiere = quantite;
+                fiche.FicheTechnique_Prix = prix;
+                ListMatieres.push(fiche);
+
+            }
+        }
+        fichebridge.Produit_FicheTechnique = ListMatieres;
+
+
+        if (tablebase != null) {
+            for (var i = 0; i < tablebase.rows.length; i++) {
+                prodBase = tablebase.rows[i].cells[6].innerHTML;
+                qtebase = tablebase.rows[i].cells[2].innerHTML;
+                unitebase = tablebase.rows[i].cells[8].innerHTML;
+                var ProduitBase = {
+                    ProduitBase_ID: "",
+                    UniteMesure_ID: "",
+                    ProduitQte: "",
+                }
+                ProduitBase.ProduitBase_ID = prodBase;
+                ProduitBase.UniteMesure_ID = unitebase;
+                ProduitBase.ProduitQte = parseFloat(qtebase).toFixed(3).replace(".", ",");
+                ListProds.push(ProduitBase);
+
+            }
+
+        }
+        fichebridge.FicheTech_ProduitBase = ListProds;
+
+            var data = {
+                fiche: fichebridge
+        };
+            console.log(data);
+        $.ajax({
+            url: '@Url.Action("AjouterFiche", "FicheTechnique")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Fiche Technique ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeFichesTechniques", "FicheTechnique")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+        }
 </script>
