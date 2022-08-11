@@ -59,48 +59,72 @@
                                                 <!-- form start -->
                                                 <form class="needs-validation" novalidate>
                                                     <div class="form-row">
-                                                        <div class="col-md-5 mb-1">
-                                                            <label for="validationTooltip01">Libellé</label>
+                                                       
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Fournisseur</label>
                                                             <div>
-                                                                <input type="text" id="libelle" asp-for="FicheTechniqueBridge_Libelle" class="form-control" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-5 mb-2">
-                                                            <label for="validationTooltip01">Produit maison</label>
-                                                            <div>
-                                                                <select class="custom-select" id="produit" data-search="true" asp-for="FicheTechniqueBridge_ProduitVendableID" asp-items="@ViewBag.FicheTechnique_ProduitVendableId" onchange="familleList()" required>
-                                                                    <option value="" selected disabled>Sélectionnez un produit ...</option>
+                                                                <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur"  onchange="matiereListe()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un fournisseur ...</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    
+                                                     <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Prix total HT</label>
+                                                            <div>
+                                                                <input type="text" id="prixHT" disabled value="0" class="form-control" />
+                                                            </div>
+                                                        </div> 
+                                                        
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Prix TTC</label>
+                                                            <div>
+                                                                <input type="text" id="prixTTC" disabled value="0" class="form-control" />
+                                                            </div>
+                                                        </div> 
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Prix total TVA</label>
+                                                            <div>
+                                                                <input type="text" id="prixTVA" disabled value="0" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        </div>
                                                 </form>
                                                 <!-- form ends -->
 
                                                 <fieldset>
-                                                    <legend>Détails de la fiche technique</legend>
+                                                    <legend>Détails des articles</legend>
                                                     <div class="form-row">
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Matière première</label>
-                                                            <select class="custom-select" id="matiere" data-search="true" asp-for="@Model.Produit_FicheTechnique[0].FicheTechnique_MatierePremiereId" asp-items="@ViewBag.FicheTechnique_MatierePremiereId" onchange="UniteList()">
-                                                                <option value="" selected disabled>Choisir une matière première ...</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="QuantiteMatiere">Quantité</label>
-                                                            <input id="quantite" type="number" min="0" step=".01" asp-for="@Model.Produit_FicheTechnique[0].FicheTechnique_QuantiteMatiere" class="form-control" />
-
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="UniteMesure"> Unité de mesure</label>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="matierePremiere">Matière première</label>
                                                             <div>
-                                                                <select class="custom-select" id="unite" data-search="true" asp-for="@Model.Produit_FicheTechnique[0].FicheTechnique_UniteMesureId">
-                                                                    <option value="" selected disabled>Choisir une unité de mesure ...</option>
+                                                                <select class="custom-select" id="matiere" data-search="true" onchange="uniteListe()">
+                                                                    <option value="" selected disabled>Sélectionnez la matière première...</option>
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="Quantite">Quantité</label>
+                                                            <input type="number" min="0" id="qte" step=".01" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="UniteMesure">Unité</label>
+                                                            <div>
+                                                                <select class="custom-select" id="unite" data-search="true">
+                                                                    <option value="" selected disabled>Sélectionnez une unité de mesure...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>  
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="UniteMesure">Prix / Unité</label>
+                                                            <input type="text" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-2 mb-1">
+                                                            <label for="total">Total</label>
+                                                            <input type="text" disabled class="form-control" required />
+                                                        </div>
                                                         <div class=" text-md-right">
-                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd()">Ajouter à la liste</button>
+                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="formeadd()">Ajouter à la liste</button>
                                                         </div>
                                                     </div>
 
@@ -113,8 +137,10 @@
                                                                             <th>Matière première</th>
                                                                             <th>Quantité</th>
                                                                             <th>Unité</th>
-                                                                            <th>Prix</th>
+                                                                            <th>Prix / unité</th>
+                                                                            <th>Prix total</th>
                                                                             <th></th>
+                                                                         
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -124,98 +150,6 @@
                                                    
 
                                                     
-                                                </fieldset>
-                                                <fieldset>
-                                                    <legend>Produits de base</legend>
-                                                    <div class="form-row">
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip02">Produit de base</label>
-                                                            <select class="custom-select" id="prodbase" data-search="true" asp-for="@Model.FicheTech_ProduitBase[0].ProduitBase_ID" asp-items="@ViewBag.produitBase" >
-                                                                <option value="" selected disabled>Choisissez un produit de base...</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="QuantiteBase">Quantité</label>
-                                                            <input id="quantitebase" type="number" min="0" step=".01" asp-for="@Model.FicheTech_ProduitBase[0].ProduitQte" class="form-control" />
-
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="UniteMesureBase"> Unité de mesure</label>
-                                                            <div>
-                                                                <select class="custom-select" id="unitebase" data-search="true" asp-for="@Model.FicheTech_ProduitBase[0].UniteMesure_ID" asp-items="@ViewBag.FicheTechnique_UniteMesureId">
-                                                                    <option value="" selected disabled>Choisissez une unité de mesure ...</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class=" text-md-right">
-                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="camionAdd2()">Ajouter à la liste</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-12 mt-2">
-                                                            <div class="table-responsive">
-                                                                <table id="tablebase" class="table mb-0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Produit de base</th>
-                                                                            <th>Quantité</th>
-                                                                            <th>Unité</th>
-                                                                            <th>Prix</th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                                <fieldset>
-                                                    <legend>Formes de produit</legend>
-                                                    <div class="form-row">
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Forme de Produit</label>
-                                                            <div>
-                                                                <select class="custom-select" id="forme" data-search="true" asp-for="@Model.Fiche_Forme[0].Forme_Produit" required>
-                                                                    <option value="" selected disabled>Sélectionnez une forme de produit ...</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="QuantiteMatiere">Quantité</label>
-                                                            <input id="qteforme" type="number" min="0" step=".01" class="form-control" asp-for="@Model.Fiche_Forme[0].FicheForme_Quantite" />
-
-                                                        </div>
-                                                        <div class="col-md-3 mb-1">
-                                                            <label for="UniteMesure"> Unité de mesure</label>
-                                                            <div>
-                                                                <select class="custom-select" id="uniteforme" data-search="true" asp-for="@Model.Fiche_Forme[0].FicheForme_uniteMesure">
-                                                                    <option value="" selected disabled>Choisir une unité de mesure ...</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class=" text-md-right">
-                                                            <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="formeadd()">Ajouter à la liste</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-12 mt-2">
-                                                            <div class="table-responsive">
-                                                                <table id="tableForme" class="table mb-0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Produit</th>
-                                                                            <th>Forme de produit</th>
-                                                                            <th>Quantité à produire</th>
-                                                                            <th>Unité </th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </fieldset>
                                             </div>
 
@@ -231,7 +165,7 @@
                                     </div><div>
                                         <button type="button" class="btn btn-success glow " style="display:none; "></button>
                                     </div><div>
-                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer la fiche technique</button>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer le bon de commande</button>
                                     </div>
                                 </div>
                             </div>
@@ -247,3 +181,64 @@
 
 <script src="~/js/toastr.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    
+    function matiereListe()
+    {
+        var data = { fournisseurId: parseInt($("#fournisseur").val()) };
+        if ($("#fournisseur").val() != null) {
+            $.ajax({
+                url: '@Url.Action("matiereListe", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#matiere option").length > 1) {
+                        $.each($("#matiere option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#matiere").append("<option value='' selected disabled>Sélectionnez La matiere premiere</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#matiere").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+        function uniteListe()
+    {
+        var data = { MatierePremiereStokage_Id: parseInt($("#matiere option:selected").val()) };
+        if ($("#matiere option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getUnite", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#unite option").length > 1) {
+                        $.each($("#unite option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#unite").append("<option value='' selected disabled>Sélectionnez L'unite de mesure</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#unite").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+</script>

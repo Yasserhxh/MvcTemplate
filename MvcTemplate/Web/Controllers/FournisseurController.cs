@@ -15,7 +15,7 @@ using Web.Helpers;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Client, Gerant_de_stock")]
 
     public class FournisseurController : Controller
     {
@@ -167,7 +167,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
-            return View();
+            return View("~/Views/Fournisseur/BonDeCommandes/Ajouter.cshtml");
         }
         [HttpPost]
         public async Task<bool> AjouterBC(BonDeCommande_Model bonDeCommande_Model)
