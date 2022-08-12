@@ -12,9 +12,11 @@ namespace Domain.Models
         public decimal ArticleBC_PU { get; set; }
         public decimal ArticleBC_Total { get; set; }
         public decimal ArticleBC_QteRest { get; set; }
+        public int ArticleBC_UniteMesure { get; set; }
         public decimal ArticleBC_Quantite { get; set; }
         public int ArticleBC_BCID { get; set; }
         public BonDeCommande_Model bonDeCommande { get; set; }
         public MatierePremiereStockageModel MatierePremiere_Stokage { get; set; }
+        public Unite_MesureModel Unite_Mesure { get; set; }
     }
 }

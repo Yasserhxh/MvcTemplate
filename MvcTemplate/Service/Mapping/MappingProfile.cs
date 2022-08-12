@@ -46,6 +46,7 @@ namespace Service.Mapping
             CreateMap<FamilleProduitModel, FamilleProduit>();
             CreateMap<Echange_Produits, Echange_ProduitsModel>();
             CreateMap<EchangeProduit_Details, EchangeProduit_DetailsModel>();
+            CreateMap<BonDeLivraison, BonDeLivraison_Model>();
 
 
 
@@ -88,6 +89,7 @@ namespace Service.Mapping
             CreateMap<MatStockView, matStockViewModel>();
             CreateMap<Reception_Stock, Reception_StockModel>();
             CreateMap<Approvisionnement_Matiere, Approvisionnement_MatiereModel>();
+            CreateMap<BonDeLivraison_Model, BonDeLivraison>();
 
         }
     }

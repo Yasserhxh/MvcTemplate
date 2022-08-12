@@ -24,7 +24,7 @@ namespace Domain.Entities
         public int BonDeCommande_PointStockID { get; set; }
         public string BonDeCommande_ValidéPar { get; set; }   
         public DateTime BonDeCommande_DateCreation { get; set; }   
-        public DateTime BonDeCommande_DateValidation { get; set; }   
+        public DateTime? BonDeCommande_DateValidation { get; set; }   
         public int BonDeCommande_AbonnementID { get; set; }
         public decimal BonDeCommande_TotalHT { get; set; }   
         public decimal BonDeCommande_TotalTVA { get; set; }   

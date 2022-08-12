@@ -18,10 +18,13 @@ namespace Domain.Entities
         public decimal ArticleBC_PU { get; set; }
         public decimal ArticleBC_Total { get; set; }
         public decimal ArticleBC_QteRest { get; set; }
+        [ForeignKey("Unite_Mesure")]
+        public int ArticleBC_UniteMesure { get; set; }
         public decimal ArticleBC_Quantite { get; set; }
-        [ForeignKey("Bon_De_Commande")]
+        [ForeignKey("bonDeCommande")]
         public int ArticleBC_BCID { get; set; }
         public BonDeCommande bonDeCommande { get; set; }
         public MatierePremiereStockage MatierePremiere_Stokage { get; set; }
+        public Unite_Mesure Unite_Mesure { get; set; }
     }
 }

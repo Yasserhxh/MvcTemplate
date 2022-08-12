@@ -83,7 +83,7 @@
                                                             </div>
                                                         </div> 
                                                         <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Prix total TVA</label>
+                                                            <label for="validationTooltip01">Montant TVA</label>
                                                             <div>
                                                                 <input type="text" id="prixTVA" disabled value="0" class="form-control" />
                                                             </div>
@@ -165,7 +165,7 @@
                                     </div><div>
                                         <button type="button" class="btn btn-success glow " style="display:none; "></button>
                                     </div><div>
-                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutTrpMoral()">Enregistrer le bon de commande</button>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer le bon de commande</button>
                                     </div>
                                 </div>
                             </div>
@@ -345,8 +345,10 @@ function articleAjout() {
         var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
         var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
         res += parseFloat(prixtable);
-        
         $("#prixHT").val(res);
+        $("#prixTTC").val(parseFloat($("#prixHT").val()) * parseFloat("1.2"));
+        $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
+
     }
 }
 
@@ -366,6 +368,8 @@ function articleAjout() {
         if ($("#tableCamions tbody tr").length == 0) 
         {
             $("#prixHT").val(0);
+            $("#prixTTC").val(0);
+            $("#prixTVA").val(0);
         }
 
         change();
@@ -380,32 +384,31 @@ function change() {
             var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
             res += parseFloat(prixtable);
             $("#prixHT").val(res);
+            console.log(parseFloat(res) * parseFloat("1.2"))
+            $("#prixTTC").val(parseFloat(res) * parseFloat("1.2"));
+            $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
+
         }
 }
- function AjoutTrpMoral() {
+ function AjoutBonCommande() {
         document.getElementById('disabled').disabled = true;
-        var ProduitId = $("#produit option:selected").val() ;
-        var Libelle = $("#libelle").val() ;
-        var ListMatieres = new Array();
-        var ListFormes = new Array();
-        var ListProds = new Array();
+        var foursnisseurId = $("#fournisseur option:selected").val() ;
+        var ttc = $("#prixTTC").val() ;
+        var tva = $("#prixTVA").val() ;
+        var ht = $("#prixHT").val() ;
+        var ListArticles = new Array();
         var prixT =parseFloat(0);
         var table = document.getElementById("tbodyCamions");
-        var tableForme = document.getElementById("tbodyForme");
-        var tablebase = document.getElementById("tbodybase");
-        var formeproduit = 0;
-        var prodBase = 0;
-        var unitebase = 0;
-        var qtebase = 0;
-        var qteforme = 0;
-        var uniteforme = 0;
         var matiere = 0;
+        var desi = "";
         var quantite = 0;
         var unite = 0;
-        var prix = 0;
-        var fichebridge = {
-            FicheTechniqueBridge_ProduitVendableID: ProduitId,
-            FicheTechniqueBridge_Libelle: Libelle,
+        var prixU = 0;
+        var BonDeCommandeModel = {
+            BonDeCommande_FournisseurID: foursnisseurId,
+            BonDeCommande_TotalTVA: parseFloat(tva).toFixed(2).replace(".",","),
+            BonDeCommande_TotalHT:  parseFloat(ht).toFixed(2).replace(".",","),
+            BonDeCommande_TotalTTC:  parseFloat(ttc).toFixed(2).replace(".",",")
             //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
             //Produit_FicheTechnique: ListMatieres,
             //Fiche_Forme: ListFormes,
@@ -414,69 +417,54 @@ function change() {
         if (table != null)
         {
             for (var i = 0; i < table.rows.length; i++) {
-                produit = table.rows[i].cells[5].innerHTML;
-                matiere = table.rows[i].cells[6].innerHTML;
-                quantite = table.rows[i].cells[7].innerHTML;
-                unite = table.rows[i].cells[8].innerHTML;
-                prix = table.rows[i].cells[9].innerHTML;
+                matiere = table.rows[i].cells[1].innerHTML;
+                quantite = table.rows[i].cells[4].innerHTML;
+                unite = table.rows[i].cells[2].innerHTML;
+                prixU = table.rows[i].cells[6].innerHTML;
+                prixT = table.rows[i].cells[7].innerHTML;
+                desi = table.rows[i].cells[3].innerHTML;
 
-                var fiche = {
-                    FicheTechnique_ProduitVendableId: "",
-                    FicheTechnique_MatierePremiereId: "",
-                    FicheTechnique_UniteMesureId: "",
-                    FicheTechnique_QuantiteMatiere: "",
-                    FicheTechnique_Prix: "",
+                var article = {
+                    ArticleBC_MatiereID: "",
+                    ArticleBC_UniteMesure: "",
+                    ArticleBC_Quantite: "",
+                    ArticleBC_PU: "",
+                    ArticleBC_Total:"",
+                    ArticleBC_Designation:"",
+                    ArticleBC_QteRest:""
                 }
 
-                fiche.FicheTechnique_ProduitVendableId = produit;
-                fiche.FicheTechnique_MatierePremiereId = matiere;
-                fiche.FicheTechnique_UniteMesureId = unite;
-                fiche.FicheTechnique_QuantiteMatiere = quantite;
-                fiche.FicheTechnique_Prix = prix;
-                ListMatieres.push(fiche);
+                article.ArticleBC_MatiereID = matiere;
+                article.ArticleBC_UniteMesure = unite;
+                article.ArticleBC_Designation =  desi;
+                article.ArticleBC_Quantite =  parseFloat(quantite).toFixed(2).replace(".",",");
+                article.ArticleBC_QteRest =  parseFloat(quantite).toFixed(2).replace(".",",");
+                article.ArticleBC_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
+                article.ArticleBC_Total =  parseFloat(prixT).toFixed(2).replace(".",",");
+                ListArticles.push(article);
 
             }
         }
-        fichebridge.Produit_FicheTechnique = ListMatieres;
+        BonDeCommandeModel.listeArticles = ListArticles;
 
-
-        if (tablebase != null) {
-            for (var i = 0; i < tablebase.rows.length; i++) {
-                prodBase = tablebase.rows[i].cells[6].innerHTML;
-                qtebase = tablebase.rows[i].cells[2].innerHTML;
-                unitebase = tablebase.rows[i].cells[8].innerHTML;
-                var ProduitBase = {
-                    ProduitBase_ID: "",
-                    UniteMesure_ID: "",
-                    ProduitQte: "",
-                }
-                ProduitBase.ProduitBase_ID = prodBase;
-                ProduitBase.UniteMesure_ID = unitebase;
-                ProduitBase.ProduitQte = parseFloat(qtebase).toFixed(3).replace(".", ",");
-                ListProds.push(ProduitBase);
-
-            }
-
-        }
-        fichebridge.FicheTech_ProduitBase = ListProds;
 
             var data = {
-                fiche: fichebridge
+                bonDeCommande_Model: BonDeCommandeModel
         };
             console.log(data);
-        $.ajax({
-            url: '@Url.Action("AjouterFiche", "FicheTechnique")',
+            $.ajax({
+            url: '@Url.Action("AjouterBC", "Fournisseur")',
             type: "POST",
             cache: false,
             async: true,
             data: data,
             success: function (data) {
              if (data == true) {
-                        ShowNotification("Fiche Technique ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        ShowNotification("Bon de commande  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
-                               window.location.href = '@Url.Action("ListeFichesTechniques", "FicheTechnique")';
+                               window.location.href = '@Url.Action("ListeBonDeCommande", "Fournisseur")';
                             }, 2000);
                     } else {
                         ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
@@ -490,5 +478,6 @@ function change() {
             alert("non ajoute");
         }
     });
+     
         }
 </script>
