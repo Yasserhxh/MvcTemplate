@@ -10,9 +10,10 @@ namespace Domain.Entities
     public class Article_BL
     {
         [Key]
-        public int AcrticleBL_ID { get; set; }
+        public int ArticleBL_ID { get; set; }
         public string ArticleBL_Designation { get; set; }
         public string ArticleBL_LotFournisseur { get; set; }
+        public string ArticleBL_LotTemp { get; set; }
         [ForeignKey("MatierePremiere_Stokage")]
         public int ArticleBL_MatiereID { get; set; }
         [ForeignKey("Unite_Mesure")]

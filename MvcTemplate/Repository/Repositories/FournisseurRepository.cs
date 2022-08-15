@@ -57,7 +57,8 @@ namespace Repository.Repositories
         public async Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande)
         {
             bonDeCommande.BonDeCommande_DateCreation = DateTime.UtcNow;
-            bonDeCommande.BonDeCommande_Numero = "BC :" + DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() +" "+ " - " + _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == bonDeCommande.BonDeCommande_AbonnementID).Count() + 1;
+            var count = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == bonDeCommande.BonDeCommande_AbonnementID).Count() +1;
+            bonDeCommande.BonDeCommande_Numero = "BC :" + DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() +" "+ " - " + count;
             await _db.bonDeCommandes.AddAsync(bonDeCommande);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
@@ -68,7 +69,7 @@ namespace Repository.Repositories
 
         public async Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
         {
-            bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.UtcNow;
+            bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.Now;
             await _db.bonDeLivraisons.AddAsync(bonDeLivraison);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)

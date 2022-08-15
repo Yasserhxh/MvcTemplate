@@ -2,7 +2,7 @@
     ViewData["Title"] = "Bon de livraison";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
-@model Domain.Models.BonDeCommande_Model
+@model Domain.Models.BonDeLivraison_Model
 
 @{
     ViewData["Title"] = "Ajouter un bon de livraison";
@@ -75,6 +75,18 @@
                                                                 <select class="custom-select" id="bondecommande" data-search="true"   onchange="SousP()" required>
                                                                     <option value="" selected disabled>Sélectionnez un bon de commande ...</option>
                                                                 </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Libellé</label>
+                                                            <div>
+                                                                <input type="text" id="libelle" asp-for="BonDeLivraison_Designation" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Date de livraison</label>
+                                                            <div>
+                                                                <input type="datetime-local" id="date" asp-for="BonDeLivraison_DateLivraison" class="form-control" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -181,124 +193,9 @@
             });
         }
     }
-       function articleAdd() {
 
-        if ($("#matiere").val() != null && $("#matiere").val() != '' &&
-            $("#qte").val() != null && $("#qte").val() != '' &&
-            //$("#total").val() != null && $("#total").val() != '' &&
-            $("#prix").val() != null && $("#prix").val() != '' &&
-            $("#unite").val() != null && $("#unite").val() != ''
 
-        ) {
-            articleAjout();
-            articleClear();
-        }
-    } 
-function articleAjout() {
-    var matieretxt = $("#matiere option:selected").text();
-    var matiereval = $("#matiere option:selected").val();
-
-    var fournisseurtxt = $("#fournisseur option:selected").text();
-    var fournisseurval = $("#fournisseur option:selected").val();
-
-    var quantitetxt = $("#qte").text();
-    var quantiteval = $("#qte").val();
-
-    var unitetxt = $("#unite option:selected").text();
-    var uniteval = $("#unite option:selected").val();
-
-    var prixtxt = $("#prix option:selected").text();
-    var prixval = $("#prix option:selected").val();
-
-    var totaltxt = $("#total option:selected").text();
-    var totalval = $("#total option:selected").val();
-
-    var table = document.getElementById("tbodyCamions");
-
-    if ($("#tableCamions tbody").length == 0) {
-        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
-        //document.getElementById('divTable').style.display = "block";
-    }
-
-    @*else {
-        for (var i = 0; i < table.rows.length; i++) {
-        matiere = table.rows[i].cells[6].innerHTML;
-        quantite = table.rows[i].cells[7].innerHTML;
-        unite = table.rows[i].cells[8].innerHTML;
-        if (matiere == matiereval && unite == uniteval) {
-        table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
-        table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML ;
-
-        }
-        }
-        }*@
-        var calPrix =
-    {
-        matiere: $("#matiere option:selected").val(),
-        unite: $("#unite option:selected").val(),
-        quantite: parseFloat($("#quantite").val()).toFixed(3).replace(".", ","),
-    };
-    var table = document.getElementById("tbodyCamions");
-    var matiere = 0;
-    var prix = 0;
-    var quantite = 0;
-    var unite = 0;
-    var total = 0;
-    var unitetext = "";
-    var val = 0;
-    if ($("#tableCamions tbody").length == 0) {
-        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
-        //document.getElementById('divTable').style.display = "block";
-        }else {
-            for (var i = 0; i < table.rows.length; i++) {
-                if (table.rows[i].cells[1].innerHTML == matiereval) {
-                    if ((uniteval == 1 && table.rows[i].cells[2].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[2].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
-                    else if ((uniteval == 2 && table.rows[i].cells[2].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[2].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
-                    else { quantiteval = parseFloat(quantiteval); }
-                    matiere = table.rows[i].cells[1].innerHTML;
-                    quantite = table.rows[i].cells[4].innerHTML;
-                    uniteval = table.rows[i].cells[2].innerHTML;
-                    unitetxt = table.rows[i].cells[5].innerHTML;
-                    table.rows[i].remove();
-                }
-            }
-        }
-        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
-        $("#tbodyCamions").append("<tr>" +
-            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
-            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
-            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
-            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#matiere option:selected").text() + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2) + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)  + "</td>" +
-            "<td >" +
-            '<button class="btn btn-outline-secondary btn-table round" onclick="articleDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
-            "</tr>");
-            
-            
-   
-    var res = 0;
-    for (var i = 0; i <table.rows.length; i++)
-    {
-        var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
-        var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
-        res += parseFloat(prixtable);
-        $("#prixHT").val(res);
-        $("#prixTTC").val(parseFloat($("#prixHT").val()) * parseFloat("1.2"));
-        $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
-
-    }
-}
-
- function articleClear() {
-        //$("#fournisseur").val("");
-        $("#prix").val("");
-        $("#matiere").val("");
-        $("#qte").val("");
-        $("#unite").val("");
-    }
+ 
 
     //delete
     function articleDelete(ctl) 
@@ -314,41 +211,24 @@ function articleAjout() {
 
         change();**/
     }
-function change() {
 
- var table = document.getElementById("tbodyCamions");
-        var res = 0;
-        for (var i = 0; i <table.rows.length; i++)
-        {
-            var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
-            var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
-            res += parseFloat(prixtable);
-            $("#prixHT").val(res);
-            console.log(parseFloat(res) * parseFloat("1.2"))
-            $("#prixTTC").val(parseFloat(res) * parseFloat("1.2"));
-            $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
-
-        }
-}
  function AjoutBonCommande() {
         document.getElementById('disabled').disabled = true;
         var foursnisseurId = $("#fournisseur option:selected").val() ;
-        var ttc = $("#prixTTC").val() ;
-        var tva = $("#prixTVA").val() ;
-        var ht = $("#prixHT").val() ;
+        var boncommande = $("#bondecommande option:selected").val() ;
         var ListArticles = new Array();
-        var prixT =parseFloat(0);
         var table = document.getElementById("tbodyCamions");
         var matiere = 0;
         var desi = "";
         var quantite = 0;
         var unite = 0;
         var prixU = 0;
-        var BonDeCommandeModel = {
-            BonDeCommande_FournisseurID: foursnisseurId,
-            BonDeCommande_TotalTVA: parseFloat(tva).toFixed(2).replace(".",","),
-            BonDeCommande_TotalHT:  parseFloat(ht).toFixed(2).replace(".",","),
-            BonDeCommande_TotalTTC:  parseFloat(ttc).toFixed(2).replace(".",",")
+        var prixtot = 0;
+        var lotF ="";
+        var BonDeLivraison_Model = {
+            BonDeLivraison_BCID: boncommande,
+            BonDeLivraison_Designation : $("#libelle").val(), 
+            BonDeLivraison_DateLivraison : $("#date").val() 
             //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
             //Produit_FicheTechnique: ListMatieres,
             //Fiche_Forme: ListFormes,
@@ -357,50 +237,51 @@ function change() {
         if (table != null)
         {
             for (var i = 0; i < table.rows.length; i++) {
-                matiere = table.rows[i].cells[1].innerHTML;
-                quantite = table.rows[i].cells[4].innerHTML;
-                unite = table.rows[i].cells[2].innerHTML;
-                prixU = table.rows[i].cells[6].innerHTML;
-                prixT = table.rows[i].cells[7].innerHTML;
-                desi = table.rows[i].cells[3].innerHTML;
-
+                matiere = table.rows[i].cells[9].innerHTML;
+                quantite = table.rows[i].cells[2].getElementsByTagName('input')[0].value;
+                unite = table.rows[i].cells[8].innerHTML;
+                prixU = table.rows[i].cells[4].innerHTML;
+                prixtot = table.rows[i].cells[5].innerHTML;
+                desi = table.rows[i].cells[0].innerHTML;
+                lotF = table.rows[i].cells[6].getElementsByTagName('input')[0].value;
+                 
                 var article = {
-                    ArticleBC_MatiereID: "",
-                    ArticleBC_UniteMesure: "",
-                    ArticleBC_Quantite: "",
-                    ArticleBC_PU: "",
-                    ArticleBC_Total:"",
-                    ArticleBC_Designation:"",
-                    ArticleBC_QteRest:""
+                    ArticleBL_MatiereID: "",
+                    ArticleBL_UniteMesureID: "",
+                    ArticleBL_Quantie: "",
+                    ArticleBL_PU: "",
+                    ArticleBL_PrixTotal:"",
+                    ArticleBL_Designation:"",
+                    ArticleBL_LotFournisseur:""
                 }
 
-                article.ArticleBC_MatiereID = matiere;
-                article.ArticleBC_UniteMesure = unite;
-                article.ArticleBC_Designation =  desi;
-                article.ArticleBC_Quantite =  parseFloat(quantite).toFixed(2).replace(".",",");
-                article.ArticleBC_QteRest =  parseFloat(quantite).toFixed(2).replace(".",",");
-                article.ArticleBC_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
-                article.ArticleBC_Total =  parseFloat(prixT).toFixed(2).replace(".",",");
+                article.ArticleBL_MatiereID = matiere;
+                article.ArticleBL_UniteMesureID = unite;
+                article.ArticleBL_Designation =  desi;
+                article.ArticleBL_LotFournisseur =  lotF;
+                article.ArticleBL_Quantie =  parseFloat(quantite).toFixed(2).replace(".",",");
+                article.ArticleBL_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
+                article.ArticleBL_PrixTotal =  parseFloat(prixtot).toFixed(2).replace(".",",");
                 ListArticles.push(article);
 
             }
         }
-        BonDeCommandeModel.listeArticles = ListArticles;
+        BonDeLivraison_Model.listeArticles = ListArticles;
 
 
             var data = {
-                bonDeCommande_Model: BonDeCommandeModel
+                bonDeLivraison_Model: BonDeLivraison_Model
         };
             console.log(data);
             $.ajax({
-            url: '@Url.Action("AjouterBC", "Fournisseur")',
+            url: '@Url.Action("AjouterBL", "Fournisseur")',
             type: "POST",
             cache: false,
             async: true,
             data: data,
             success: function (data) {
              if (data == true) {
-                        ShowNotification("Bon de commande  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
@@ -459,7 +340,7 @@ function change() {
                             "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='totLiv'>"+ data[i].articleBC_Total +"</td>" +
 
-                            "<td class='border-b dark:border-dark-5'>  <input type='text'/></td>" +
+                            "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
 
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +

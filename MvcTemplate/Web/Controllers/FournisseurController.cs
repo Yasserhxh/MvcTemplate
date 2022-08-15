@@ -207,8 +207,18 @@ namespace Web.Controllers
         public async Task<bool> AjouterBL(BonDeLivraison_Model bonDeLivraison_Model)
         {
             bonDeLivraison_Model.BonDeLivraison_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            bonDeLivraison_Model.BonDeLivraison_TotalHT = bonDeLivraison_Model.listeArticles.Sum(p => p.ArticleBL_PrixTotal);
+            bonDeLivraison_Model.BonDeLivraison_TotalTTC = bonDeLivraison_Model.BonDeLivraison_TotalHT * (decimal)1.2;
+            bonDeLivraison_Model.BonDeLivraison_TotalTVA = bonDeLivraison_Model.BonDeLivraison_TotalTTC - bonDeLivraison_Model.BonDeLivraison_TotalHT;
+            foreach(var item in bonDeLivraison_Model.listeArticles)
+            {
+                int _min = 1000;
+                int _max = 9999;
+                Random _rdm = new Random();
+                item.ArticleBL_LotTemp = DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() + DateTime.UtcNow.Day.ToString() + "LOT" + _rdm.Next(_min, _max);
+            }
             //bonDeLivraison_Model.cree = _userManager.GetUserId(HttpContext.User);
-           // bonDeLivraison_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            // bonDeLivraison_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateBonDeLivraison(bonDeLivraison_Model);
             return redirect;
         }
