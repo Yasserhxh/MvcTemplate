@@ -78,6 +78,30 @@ namespace Repository.Repositories
                 return null;
         }
 
+        public async Task<int?> CreateFacture(Facture facture)
+        {
+            facture.Facture_DateSaisie = DateTime.Now;
+            await _db.factures.AddAsync(facture);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return await updateBonLivraison(facture.listeBL, facture.Facture_ID);
+            else
+                return null;
+        }
+
+        public async Task<int?> updateBonLivraison(ICollection<BonDeLivraison> listeBL, int factureID)
+        {
+            foreach(var item in listeBL)
+            {
+                item.BonDeLivraison_FactureID = factureID;
+                _db.Entry(item).State = EntityState.Modified;
+            }
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return confirm;
+            else
+                return null;
+        }
         public async Task<int?> CreateFournisseur(Fournisseur fournisseur)
         {
             fournisseur.Founisseur_IsActive = 1;
@@ -166,6 +190,16 @@ namespace Repository.Repositories
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
             return query.Include(p => p.Bon_De_Commande).AsEnumerable();
+        }
+
+        public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)
+        {
+            var query = _db.factures.Where(p => p.Facture_AbonnementID == aboID);
+            if (point != null)
+                query = query.Where(p => p.Facture_PointStockID == point);
+            if (date != "")
+                query = query.Where(p => Convert.ToDateTime(p.Facture_DateFacture).ToString("yyyy-MM-dd") == date);
+            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).Include(p => p.Lieu_Stockage).AsEnumerable();
         }
 
         public IEnumerable<Fonction> getListFonction()

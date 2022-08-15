@@ -22,6 +22,8 @@ namespace Repository.IRepositories
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID,int aboID, string date);
         Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
+        Task<int?> CreateFacture(Facture facture);
+        IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
 
 
     }

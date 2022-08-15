@@ -45,6 +45,8 @@ namespace Repository.Mapping
             CreateMap<ModePaiementModel, ModePaiement>();
             CreateMap<Echange_ProduitsModel, Echange_Produits>();
             CreateMap<EchangeProduit_DetailsModel, EchangeProduit_Details>();
+            CreateMap<Facture, FactureModel>();
+
             // Models to Entities mapping
             CreateMap<Abonnement_ClientModel, Abonnement_Client>();
             CreateMap<FournisseurModel, Fournisseur>();
@@ -88,6 +90,8 @@ namespace Repository.Mapping
             CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
             CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
             CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
+            CreateMap<FactureModel, Facture>();
+
         }
     }
 }

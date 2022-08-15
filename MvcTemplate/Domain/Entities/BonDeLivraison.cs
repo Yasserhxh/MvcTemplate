@@ -21,6 +21,10 @@ namespace Domain.Entities
         public int BonDeLivraison_BCID { get; set; }
         public string BonDeLivraison_Designation { get; set; }
         public int BonDeLivraison_AbonnementID { get; set; }
+        [ForeignKey("Facture")]
+        public int BonDeLivraison_FactureID { get; set; }
+        [ForeignKey("Statut_BL")]
+        public int BonDeLivraison_StatutID { get; set; }
         public decimal BonDeLivraison_TotalHT { get; set; }
         public decimal BonDeLivraison_TotalTVA { get; set; }
         public decimal BonDeLivraison_TotalTTC { get; set; }
@@ -28,6 +32,8 @@ namespace Domain.Entities
         public DateTime BonDeLivraison_DateSaisie { get; set; }
         public BonDeCommande Bon_De_Commande { get; set; }   
         public ICollection<Article_BL> listeArticles { get; set; }
+        public Facture Facture { get; set; }
+        public Statut_BL Statut_BL { get; set; }
 
     }
 }

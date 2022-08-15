@@ -47,6 +47,7 @@ namespace Service.Mapping
             CreateMap<Echange_Produits, Echange_ProduitsModel>();
             CreateMap<EchangeProduit_Details, EchangeProduit_DetailsModel>();
             CreateMap<BonDeLivraison, BonDeLivraison_Model>();
+            CreateMap<Facture, FactureModel>();
 
 
 
@@ -90,6 +91,7 @@ namespace Service.Mapping
             CreateMap<Reception_Stock, Reception_StockModel>();
             CreateMap<Approvisionnement_Matiere, Approvisionnement_MatiereModel>();
             CreateMap<BonDeLivraison_Model, BonDeLivraison>();
+            CreateMap<FactureModel, Facture>();
 
         }
     }
