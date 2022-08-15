@@ -145,7 +145,7 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-            return View(model);
+            return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeCommande.cshtml", model);
         }
         public IActionResult ListeBonDeLivraison(int bonCommandeID, string date, int pg = 1)
         {
@@ -161,7 +161,7 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-            return View(model);
+            return View("~/Views/Fournisseur/BonDeCommandes/Ajouter.cshtml", model);
         }
         public IActionResult AjouterBC()
         {
@@ -176,6 +176,40 @@ namespace Web.Controllers
             bonDeCommande_Model.BonDeCommande_CreePar = _userManager.GetUserId(HttpContext.User);
             bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateBonDeCommande(bonDeCommande_Model);
+            return redirect;
+        }  
+        [HttpPost]
+        public IEnumerable<ArticleBC_Model> GetArticlesBCforBL(int Id)
+        {
+            var model = fournisseurService.GetArticlesBC(Id);
+            return model;
+        }
+        public IActionResult GetArticlesBC(int Id)
+        {
+            var model = fournisseurService.GetArticlesBC(Id);
+            return View("~/Views/Fournisseur/BonDeCommandes/ListeArticles.cshtml",model);
+        }
+        public IActionResult AjouterBL()
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            return View("~/Views/Fournisseur/BonDeLivraison/Ajouter.cshtml");
+        }
+        [HttpPost]
+        public SelectList getBcFournisseur(int fournisseurID)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "");
+            return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
+        }
+        [HttpPost]
+        public async Task<bool> AjouterBL(BonDeLivraison_Model bonDeLivraison_Model)
+        {
+            bonDeLivraison_Model.BonDeLivraison_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            //bonDeLivraison_Model.cree = _userManager.GetUserId(HttpContext.User);
+           // bonDeLivraison_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var redirect = await fournisseurService.CreateBonDeLivraison(bonDeLivraison_Model);
             return redirect;
         }
     }

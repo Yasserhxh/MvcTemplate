@@ -1,0 +1,496 @@
+﻿@{
+    ViewData["Title"] = "Bon de livraison";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@model Domain.Models.BonDeCommande_Model
+
+@{
+    ViewData["Title"] = "Ajouter un bon de livraison";
+}
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeBonDeLivraison">Liste des bons de livraisons</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Ajouter un bon de livraison</h4>
+                                <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li> <a data-action="collapse"> <i class="bx bx-chevron-down"></i> </a> </li>
+                                        <li> <a data-action="expand"> <i class="bx bx-fullscreen"></i> </a> </li>
+                                        <li> <a data-action="reload"> <i class="bx bx-revision"></i> </a> </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+
+                                            <div class="card mb-1">
+                                                <!-- form start -->
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="form-row">
+                                                       
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Fournisseur</label>
+                                                            <div>
+                                                                <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur"  onchange="getBcFournisseur()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un fournisseur ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Bon de commande</label>
+                                                            <div>
+                                                                <select class="custom-select" id="bondecommande" data-search="true"   onchange="SousP()" required>
+                                                                    <option value="" selected disabled>Sélectionnez un bon de commande ...</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                </form>
+                                                <!-- form ends -->
+                                                <fieldset id="fieldset" style="display:none;">
+                                                    <legend>Détails des articles</legend>
+                                                    <div class="row">
+                                                        <div class="col-12 mt-2">
+                                                            <div class="table-responsive">
+                                                                <table id="tableForme" class="table mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Designation</th>
+                                                                            <th>Quantité demandée</th>
+                                                                            <th>Quantité reçue</th>
+                                                                            <th>Unité de mesure </th>
+                                                                            <th>PU</th>
+                                                                            <th>Total</th>
+                                                                            <th>Lot fournisseur</th>
+                                                                            <th>Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="row">
+                                                            <div class="col-12 mt-2">
+                                                                <div class="table-responsive">
+                                                                    <table id="tableFormePret" class="table mb-0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Produit prêt à consommer</th>
+                                                                                <th>Forme de produit</th>
+                                                                                <th>Quantité à produire</th>
+                                                                                <th>Quantité en stock</th>
+                                                                                <th></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+                                                </fieldset>
+
+                                            </div>
+
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between border-top text-sm-right">
+                                    <div>
+                                        <button type="button" class="btn btn-success glow " style="display:none;"></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " style="display:none; "></button>
+                                    </div><div>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer le bon de livraison</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/toastr.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function getBcFournisseur()
+    {
+        var data = { fournisseurID: parseInt($("#fournisseur option:selected").val()) };
+        if ($("#fournisseur option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getBcFournisseur", "Fournisseur")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#bondecommande option").length > 1) {
+                        $.each($("#bondecommande option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#bondecommande").append("<option value='' selected disabled>Sélectionnez un bon de commande ...</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#bondecommande").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+       function articleAdd() {
+
+        if ($("#matiere").val() != null && $("#matiere").val() != '' &&
+            $("#qte").val() != null && $("#qte").val() != '' &&
+            //$("#total").val() != null && $("#total").val() != '' &&
+            $("#prix").val() != null && $("#prix").val() != '' &&
+            $("#unite").val() != null && $("#unite").val() != ''
+
+        ) {
+            articleAjout();
+            articleClear();
+        }
+    } 
+function articleAjout() {
+    var matieretxt = $("#matiere option:selected").text();
+    var matiereval = $("#matiere option:selected").val();
+
+    var fournisseurtxt = $("#fournisseur option:selected").text();
+    var fournisseurval = $("#fournisseur option:selected").val();
+
+    var quantitetxt = $("#qte").text();
+    var quantiteval = $("#qte").val();
+
+    var unitetxt = $("#unite option:selected").text();
+    var uniteval = $("#unite option:selected").val();
+
+    var prixtxt = $("#prix option:selected").text();
+    var prixval = $("#prix option:selected").val();
+
+    var totaltxt = $("#total option:selected").text();
+    var totalval = $("#total option:selected").val();
+
+    var table = document.getElementById("tbodyCamions");
+
+    if ($("#tableCamions tbody").length == 0) {
+        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+        //document.getElementById('divTable').style.display = "block";
+    }
+
+    @*else {
+        for (var i = 0; i < table.rows.length; i++) {
+        matiere = table.rows[i].cells[6].innerHTML;
+        quantite = table.rows[i].cells[7].innerHTML;
+        unite = table.rows[i].cells[8].innerHTML;
+        if (matiere == matiereval && unite == uniteval) {
+        table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
+        table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML ;
+
+        }
+        }
+        }*@
+        var calPrix =
+    {
+        matiere: $("#matiere option:selected").val(),
+        unite: $("#unite option:selected").val(),
+        quantite: parseFloat($("#quantite").val()).toFixed(3).replace(".", ","),
+    };
+    var table = document.getElementById("tbodyCamions");
+    var matiere = 0;
+    var prix = 0;
+    var quantite = 0;
+    var unite = 0;
+    var total = 0;
+    var unitetext = "";
+    var val = 0;
+    if ($("#tableCamions tbody").length == 0) {
+        $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+        //document.getElementById('divTable').style.display = "block";
+        }else {
+            for (var i = 0; i < table.rows.length; i++) {
+                if (table.rows[i].cells[1].innerHTML == matiereval) {
+                    if ((uniteval == 1 && table.rows[i].cells[2].innerHTML == 2) || (uniteval == 4 && table.rows[i].cells[2].innerHTML == 3)) { quantiteval = parseFloat(quantiteval) / 1000; }
+                    else if ((uniteval == 2 && table.rows[i].cells[2].innerHTML == 1) || (uniteval == 3 && table.rows[i].cells[2].innerHTML == 4)) { quantiteval = parseFloat(quantiteval) * 1000; }
+                    else { quantiteval = parseFloat(quantiteval); }
+                    matiere = table.rows[i].cells[1].innerHTML;
+                    quantite = table.rows[i].cells[4].innerHTML;
+                    uniteval = table.rows[i].cells[2].innerHTML;
+                    unitetxt = table.rows[i].cells[5].innerHTML;
+                    table.rows[i].remove();
+                }
+            }
+        }
+        quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)  + "</td>" +
+            "<td >" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="articleDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+            
+            
+   
+    var res = 0;
+    for (var i = 0; i <table.rows.length; i++)
+    {
+        var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
+        var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
+        res += parseFloat(prixtable);
+        $("#prixHT").val(res);
+        $("#prixTTC").val(parseFloat($("#prixHT").val()) * parseFloat("1.2"));
+        $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
+
+    }
+}
+
+ function articleClear() {
+        //$("#fournisseur").val("");
+        $("#prix").val("");
+        $("#matiere").val("");
+        $("#qte").val("");
+        $("#unite").val("");
+    }
+
+    //delete
+    function articleDelete(ctl) 
+    {
+        $(ctl).parents("tr").remove();
+       
+        /**if ($("#tableCamions tbody tr").length == 0) 
+        {
+            $("#prixHT").val(0);
+            $("#prixTTC").val(0);
+            $("#prixTVA").val(0);
+        }
+
+        change();**/
+    }
+function change() {
+
+ var table = document.getElementById("tbodyCamions");
+        var res = 0;
+        for (var i = 0; i <table.rows.length; i++)
+        {
+            var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
+            var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
+            res += parseFloat(prixtable);
+            $("#prixHT").val(res);
+            console.log(parseFloat(res) * parseFloat("1.2"))
+            $("#prixTTC").val(parseFloat(res) * parseFloat("1.2"));
+            $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
+
+        }
+}
+ function AjoutBonCommande() {
+        document.getElementById('disabled').disabled = true;
+        var foursnisseurId = $("#fournisseur option:selected").val() ;
+        var ttc = $("#prixTTC").val() ;
+        var tva = $("#prixTVA").val() ;
+        var ht = $("#prixHT").val() ;
+        var ListArticles = new Array();
+        var prixT =parseFloat(0);
+        var table = document.getElementById("tbodyCamions");
+        var matiere = 0;
+        var desi = "";
+        var quantite = 0;
+        var unite = 0;
+        var prixU = 0;
+        var BonDeCommandeModel = {
+            BonDeCommande_FournisseurID: foursnisseurId,
+            BonDeCommande_TotalTVA: parseFloat(tva).toFixed(2).replace(".",","),
+            BonDeCommande_TotalHT:  parseFloat(ht).toFixed(2).replace(".",","),
+            BonDeCommande_TotalTTC:  parseFloat(ttc).toFixed(2).replace(".",",")
+            //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
+            //Produit_FicheTechnique: ListMatieres,
+            //Fiche_Forme: ListFormes,
+            //FicheTech_ProduitBase = new Array(),
+        }
+        if (table != null)
+        {
+            for (var i = 0; i < table.rows.length; i++) {
+                matiere = table.rows[i].cells[1].innerHTML;
+                quantite = table.rows[i].cells[4].innerHTML;
+                unite = table.rows[i].cells[2].innerHTML;
+                prixU = table.rows[i].cells[6].innerHTML;
+                prixT = table.rows[i].cells[7].innerHTML;
+                desi = table.rows[i].cells[3].innerHTML;
+
+                var article = {
+                    ArticleBC_MatiereID: "",
+                    ArticleBC_UniteMesure: "",
+                    ArticleBC_Quantite: "",
+                    ArticleBC_PU: "",
+                    ArticleBC_Total:"",
+                    ArticleBC_Designation:"",
+                    ArticleBC_QteRest:""
+                }
+
+                article.ArticleBC_MatiereID = matiere;
+                article.ArticleBC_UniteMesure = unite;
+                article.ArticleBC_Designation =  desi;
+                article.ArticleBC_Quantite =  parseFloat(quantite).toFixed(2).replace(".",",");
+                article.ArticleBC_QteRest =  parseFloat(quantite).toFixed(2).replace(".",",");
+                article.ArticleBC_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
+                article.ArticleBC_Total =  parseFloat(prixT).toFixed(2).replace(".",",");
+                ListArticles.push(article);
+
+            }
+        }
+        BonDeCommandeModel.listeArticles = ListArticles;
+
+
+            var data = {
+                bonDeCommande_Model: BonDeCommandeModel
+        };
+            console.log(data);
+            $.ajax({
+            url: '@Url.Action("AjouterBC", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+             if (data == true) {
+                        ShowNotification("Bon de commande  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                               window.location.href = '@Url.Action("ListeBonDeCommande", "Fournisseur")';
+                            }, 2000);
+                    } else {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 2000);
+                    }
+                },
+        error: function () {
+            alert("non ajoute");
+        }
+    });
+     
+        }
+        
+    var donee;
+    function result() {
+        var listprod = new Array();
+        var obj = {
+            listprods: new Array(),
+            qte: 0
+        };
+       // document.getElementById('prodButton').disabled = false;
+    //    document.getElementById('demandebutton').style.display = "none";
+        if ($("#bondecommande").val() != null) {
+            var data2 = {
+                Id: parseInt($("#bondecommande option:selected").val())
+            };
+            $.ajax({
+                url: '@Url.Action("GetArticlesBCforBL", "Fournisseur")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data2,
+                success: function (data) {
+                    
+                    //console.log(data);
+                    $("#tableForme tbody").remove();
+                    //$("#tableFormePret tbody").remove();
+                    document.getElementById('fieldset').style.display = "block";
+                    $("#tableForme").append("<tbody id='tbodyCamions'></tbody>");
+                    //$("#tableFormePret").append("<tbody id='tbodyCamionsPret'></tbody>");
+
+                    for (i = 0; i < data.length; i++)
+                    {
+                        $("#tbodyCamions").append("<tr>" +
+                            "<td class='border-b dark:border-dark-5' >" + data[i].articleBC_Designation + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].articleBC_Quantite + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>  <input type='text' id='qteLiv' value='" + parseFloat(data[i].articleBC_Quantite) + "'onchange='keyUp(this)'/></td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
+                            "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
+                            "<td class='border-b dark:border-dark-5' id='totLiv'>"+ data[i].articleBC_Total +"</td>" +
+
+                            "<td class='border-b dark:border-dark-5'>  <input type='text'/></td>" +
+
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_MatiereID + "</td>" +
+                            "<td >" +"<button class='btn btn-outline-secondary btn-table round' onclick='articleDelete(this)'><i class='bx bx-trash-alt'></i>Supprimer</button>" +"</td>" +
+
+                            "</tr>");
+
+                    }
+                    obj.listprods = listprod;
+                },
+                error: function () {
+                }
+            });
+        }
+        return obj;
+    }
+
+
+    function SousP() {
+        donee = result();
+    }
+    function keyUp(ctl){
+
+        var qteLiv = parseFloat($(ctl).closest("tr").find("#qteLiv").val());
+        var pu = parseFloat($(ctl).closest("tr").find("td:eq(4)").text());
+
+        console.log(qteLiv * pu);
+        $(ctl).closest("tr").find("td:eq(5)").text(parseFloat(qteLiv * pu).toFixed(2));
+       // $(ctl).parents("tr");
+       
+       
+    }
+</script>

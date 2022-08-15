@@ -12,13 +12,18 @@ namespace Domain.Entities
         [Key]
         public int AcrticleBL_ID { get; set; }
         public string ArticleBL_Designation { get; set; }
+        public string ArticleBL_LotFournisseur { get; set; }
         [ForeignKey("MatierePremiere_Stokage")]
         public int ArticleBL_MatiereID { get; set; }
+        [ForeignKey("Unite_Mesure")]
+        public int ArticleBL_UniteMesureID { get; set; }
         public decimal ArticleBL_Quantie { get; set; }
         public decimal ArticleBL_PU { get; set; }
         public decimal ArticleBL_PrixTotal { get; set; }
+        [ForeignKey("bonDeLivraison")]
         public int ArticleBL_BonLivraisonID { get; set; }
         public BonDeLivraison bonDeLivraison { get; set; }
         public MatierePremiereStockage MatierePremiere_Stokage { get; set;}
+        public Unite_Mesure Unite_Mesure { get; set;}
     }
 }

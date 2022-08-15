@@ -142,7 +142,7 @@ namespace Repository.Repositories
 
         public IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID)
         {
-            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).AsEnumerable();
+            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
 
         public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date)

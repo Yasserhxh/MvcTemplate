@@ -1,5 +1,381 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Domain.Models.BonDeCommande_Model>
+@using Web.Helpers;
 @{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
 }
+@{
+    ViewData["Title"] = " Bon de commandes";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeBonDeCommande">Liste des bons de commandes </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-3 offset-md-1 mb-1">
+                        <label for="role">Fournisseur</label>
+                        <div>
+                            <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
+                                <option value="" selected disabled>Sélectionnez un fournisseur ...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <div class="form-group">
+                            <label for="Date">Date</label>
+                            <div>
+                                <input type="date" id="date" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">BC Numero</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Fournisseur</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Date de creation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total HT</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Montant TVA</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total TTC</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr>
+                                                                        @{ var qte = decimal.Parse(item.BonDeCommande_TotalHT.ToString()).ToString("G29");}
+
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_Numero)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Fournisseur.Founisseur_RaisonSocial)</td>
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.BonDeCommande_DateCreation)</td>
+@*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
+*@                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalHT)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalTVA)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalTTC)</td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-plus "></i>Ajouter un bon de livraison</a>
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBC" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="container">
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeCommande" asp-route-pg="1" asp-route-fournisseurID="@Context.Request.Query["fournisseurID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeCommande" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-fournisseurID="@Context.Request.Query["fournisseurID"]" asp-route-date="@Context.Request.Query["date"]" ><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link"  asp-action="ListeBonDeCommande" asp-route-pg="@pge" asp-route-fournisseurID="@Context.Request.Query["fournisseurID"]" asp-route-date="@Context.Request.Query["date"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link"  asp-action="ListeBonDeCommande" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-fournisseurID="@Context.Request.Query["fournisseurID"]" asp-route-date="@Context.Request.Query["date"]" ><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link"  asp-action="ListeBonDeCommande" asp-route-pg="@(pager.TotalPages)" asp-route-fournisseurID="@Context.Request.Query["fournisseurID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+            <div class="breadcrumb-item text-sm-right ">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBC"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un bon de commande</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script>
+
+   @if (TempData["Creation"] != null)
+        {
+            <text>CreationNotifications();</text>
+        }
+
+    @if (TempData["Modification"] != null)
+        {
+            <text>ModificationNotifications();</text>
+        }
+    function CreationNotifications() {
+        ShowNotification("Matiere enregistrée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+    function ModificationNotifications() {
+        ShowNotification("Matiere modifiée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+
+    function deleteMatiere(id) {
+        swal({
+            title: "Êtes-vous sûr?",
+            text: "la matière première sera supprimée",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui",
+            cancelButtonText: "Annuler",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    var data = {
+                        id: id,
+                    };
+                    $.ajax({
+                    url: '@Url.Action("DeleteMatierePremiere", "MatierePremiere")',
+                        type: "POST",
+                        cache: false,
+                        async: true,
+                        data: data,
+                        success: function (data) {
+                            if (data == true) {
+                                swal("Spprimé!", " La matière première a été supprimée", "success");
+                                setTimeout(
+                                    function () {
+                                        window.location.reload();
+                                    }, 2000);
+                            } else {
+                                swal("Non Spprimé!", "Impossible de supprimer cette matière, car elle est utilisée dans une ou plusieurs fiches techniques", "error");
+                            }
+                        },
+                        error: function () {
+                            swal("Non Spprimé!", "La matière première n'a pas été supprimée", "error");
+                        }
+                        });
+                }
+            }
+        );
+    }
+     function refresh() {
+        setTimeout(
+            function () {
+                window.location.href = '@Url.Action("ListeMatierePremiere", "MatierePremiere")';
+            }, 500);
+        }
+    function fct(Id) {
+        $("#tableCamions").children().remove();
+
+        var data = { Id: Id }
+            $("#mbody").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
+             $.ajax({
+            url: '@Url.Action("getMatiere", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                $("#fournisseur").val(data);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+        }
+    function camionAdd() {
+
+        if (
+            $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
+            $("#matiere").val() != null && $("#matiere").val() != ''
+
+        ) {
+            camionAjout();
+            formCamionClear();
+        }
+    }
+
+
+
+
+    function camionAjout() {
+        var desc = $("#fournisseur").val();
+        var prix = $("#matiere option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            document.getElementById('divTable').style.display = "block";
+            document.getElementById('envbutton').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+            "<td >" + desc + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+        function CreatePrix() {
+        var ListIdUnite = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+
+            ListIdUnite.push(prix);
+        }
+
+
+        var data = {
+            idMatiere: parseInt($("#spanVal").text()),
+            listUnite: ListIdUnite,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterUniteUtilisation", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeMatierePremiere", "MatierePremiere")';
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function displayDashboard() {
+        var fournisseurID = $("#fournisseur").val();
+        var date = $("#date").val();
+        window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
+    }
+</script>
