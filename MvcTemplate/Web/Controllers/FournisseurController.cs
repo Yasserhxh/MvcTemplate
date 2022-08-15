@@ -161,7 +161,24 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-            return View("~/Views/Fournisseur/BonDeCommandes/Ajouter.cshtml", model);
+            return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeLivraison.cshtml", model);
+        }   
+        public IActionResult ListeFactures( string date, int pg = 1)
+        {
+            if (date == null || date == "null" || date == "")
+                date = "";
+            var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var query = fournisseurService.GetFactures(Id, point, date);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View("~/Views/Fournisseur/Factures/ListeDesFactures.cshtml", model);
         }
         public IActionResult AjouterBC()
         {
@@ -182,6 +199,13 @@ namespace Web.Controllers
         public IEnumerable<ArticleBC_Model> GetArticlesBCforBL(int Id)
         {
             var model = fournisseurService.GetArticlesBC(Id);
+            return model;
+        }
+        [HttpPost]
+        public IEnumerable<BonDeLivraison_Model> GetBLForBC(int boncommande)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var model = fournisseurService.GetBonDeLivraisons(boncommande, Id, "");
             return model;
         }
         public IActionResult GetArticlesBC(int Id)
@@ -220,6 +244,24 @@ namespace Web.Controllers
             //bonDeLivraison_Model.cree = _userManager.GetUserId(HttpContext.User);
             // bonDeLivraison_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateBonDeLivraison(bonDeLivraison_Model);
+            return redirect;
+        }
+        public IActionResult AjouterFA()
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            return View("~/Views/Fournisseur/Factures/Ajouter.cshtml");
+        }
+        [HttpPost]
+        public async Task<bool> AjouterFA(FactureModel factureModel, List<BonDeLivraison_Model> listeBL)
+        {
+            factureModel.Facture_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+
+            factureModel.Facture_MontantTVA = listeBL.Sum(p=>p.BonDeLivraison_TotalTVA);
+            factureModel.Facture_TotalTTC = listeBL.Sum(p=>p.BonDeLivraison_TotalTTC);
+            factureModel.Facture_TotalHT = listeBL.Sum(p=>p.BonDeLivraison_TotalHT);
+            factureModel.Facture_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var redirect = await fournisseurService.CreateFacture(factureModel, listeBL);
             return redirect;
         }
     }

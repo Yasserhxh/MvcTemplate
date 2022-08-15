@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace Repository.IRepositories
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID,int aboID, string date);
         Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
-        Task<int?> CreateFacture(Facture facture);
+        Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
 
 

@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Bon de livraison";
+    ViewData["Title"] = "Facture";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
-@model Domain.Models.BonDeLivraison_Model
+@model Domain.Models.FactureModel
 
 @{
-    ViewData["Title"] = "Ajouter un bon de livraison";
+    ViewData["Title"] = "Ajouter une facture";
 }
 
 <div class="app-content content">
@@ -23,7 +23,7 @@
                                     <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <a asp-action="ListeBonDeLivraison">Liste des bons de livraisons</a>
+                                    <a asp-action="ListeFactures">Liste des factures</a>
                                 </li>
                             </ol>
                         </div>
@@ -39,7 +39,7 @@
                     <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Ajouter un bon de livraison</h4>
+                                <h4 class="card-title">Ajouter une factures</h4>
                                 <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
@@ -78,15 +78,15 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Libellé</label>
+                                                            <label for="validationTooltip01">Numero Facture</label>
                                                             <div>
-                                                                <input type="text" id="libelle" asp-for="BonDeLivraison_Designation" class="form-control" />
+                                                                <input type="text" id="num" asp-for="Facture_Numero" class="form-control" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Date de livraison</label>
+                                                            <label for="validationTooltip01">Date de facture</label>
                                                             <div>
-                                                                <input type="datetime-local" id="date" asp-for="BonDeLivraison_DateLivraison" class="form-control" />
+                                                                <input type="datetime-local" id="date" asp-for="Facture_DateFacture" class="form-control" />
                                                             </div>
                                                         </div>
                                                         </div>
@@ -101,12 +101,11 @@
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Designation</th>
-                                                                            <th>Quantité demandée</th>
-                                                                            <th>Quantité reçue</th>
-                                                                            <th>Unité de mesure </th>
-                                                                            <th>PU</th>
-                                                                            <th>Total</th>
-                                                                            <th>Lot fournisseur</th>
+                                                                            <th>Total HT</th>
+                                                                            <th>Montant TVA </th>
+                                                                            <th>Total TTC </th>
+                                                                            <th>Date de livraison</th>
+                                                                            <th>Statut</th>
                                                                             <th>Action</th>
                                                                         </tr>
                                                                     </thead>
@@ -147,7 +146,7 @@
                                     </div><div>
                                         <button type="button" class="btn btn-success glow " style="display:none; "></button>
                                     </div><div>
-                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer le bon de livraison</button>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer la facture</button>
                                     </div>
                                 </div>
                             </div>
@@ -216,19 +215,15 @@
         document.getElementById('disabled').disabled = true;
         var foursnisseurId = $("#fournisseur option:selected").val() ;
         var boncommande = $("#bondecommande option:selected").val() ;
-        var ListArticles = new Array();
+        var ListBL = new Array();
         var table = document.getElementById("tbodyCamions");
         var matiere = 0;
         var desi = "";
-        var quantite = 0;
-        var unite = 0;
-        var prixU = 0;
-        var prixtot = 0;
-        var lotF ="";
-        var BonDeLivraison_Model = {
-            BonDeLivraison_BCID: boncommande,
-            BonDeLivraison_Designation : $("#libelle").val(), 
-            BonDeLivraison_DateLivraison : $("#date").val() 
+        var FactureModel = {
+            Facture_BonDeCommandeID: boncommande,
+            Facture_FournisseurID: foursnisseurId,
+            Facture_Numero : $("#num").val(), 
+            Facture_DateFacture : $("#date").val() 
             //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
             //Produit_FicheTechnique: ListMatieres,
             //Fiche_Forme: ListFormes,
@@ -237,55 +232,50 @@
         if (table != null)
         {
             for (var i = 0; i < table.rows.length; i++) {
-                matiere = table.rows[i].cells[9].innerHTML;
-                quantite = table.rows[i].cells[2].getElementsByTagName('input')[0].value;
-                unite = table.rows[i].cells[8].innerHTML;
-                prixU = table.rows[i].cells[4].innerHTML;
-                prixtot = table.rows[i].cells[5].innerHTML;
                 desi = table.rows[i].cells[0].innerHTML;
-                lotF = table.rows[i].cells[6].getElementsByTagName('input')[0].value;
+                ht = table.rows[i].cells[1].innerHTML;
+                tva = table.rows[i].cells[2].innerHTML;
+                ttc = table.rows[i].cells[3].innerHTML;
+                id = table.rows[i].cells[6].innerHTML;
                  
-                var article = {
-                    ArticleBL_MatiereID: "",
-                    ArticleBL_UniteMesureID: "",
-                    ArticleBL_Quantie: "",
-                    ArticleBL_PU: "",
-                    ArticleBL_PrixTotal:"",
-                    ArticleBL_Designation:"",
-                    ArticleBL_LotFournisseur:""
+                var BLS = {
+                    BonDeLivraison_ID: "",
+                    BonDeLivraison_Designation: "",
+                    BonDeLivraison_TotalHT: "",
+                    BonDeLivraison_TotalTVA: "",
+                    BonDeLivraison_TotalTTC:""
                 }
 
-                article.ArticleBL_MatiereID = matiere;
-                article.ArticleBL_UniteMesureID = unite;
-                article.ArticleBL_Designation =  desi;
-                article.ArticleBL_LotFournisseur =  lotF;
-                article.ArticleBL_Quantie =  parseFloat(quantite).toFixed(2).replace(".",",");
-                article.ArticleBL_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
-                article.ArticleBL_PrixTotal =  parseFloat(prixtot).toFixed(2).replace(".",",");
-                ListArticles.push(article);
+                BLS.BonDeLivraison_ID = id;
+                BLS.BonDeLivraison_Designation = desi;
+                BLS.BonDeLivraison_TotalHT =  parseFloat(ht).toFixed(2).replace(".",",");
+                BLS.BonDeLivraison_TotalTVA =  parseFloat(tva).toFixed(2).replace(".",",");
+                BLS.BonDeLivraison_TotalTTC =  parseFloat(ttc).toFixed(2).replace(".",",");
+                ListBL.push(BLS);
 
             }
         }
-        BonDeLivraison_Model.listeArticles = ListArticles;
+        //FactureModel.listeBL = ListBL;
 
 
             var data = {
-                bonDeLivraison_Model: BonDeLivraison_Model
+                factureModel: FactureModel,
+                listeBL : ListBL
         };
             console.log(data);
             $.ajax({
-            url: '@Url.Action("AjouterBL", "Fournisseur")',
+            url: '@Url.Action("AjouterFA", "Fournisseur")',
             type: "POST",
             cache: false,
             async: true,
             data: data,
             success: function (data) {
              if (data == true) {
-                        ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        ShowNotification("Facture ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
-                               window.location.href = '@Url.Action("ListeBonDeCommande", "Fournisseur")';
+                               window.location.reload();
                             }, 2000);
                     } else {
                         ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
@@ -313,17 +303,17 @@
     //    document.getElementById('demandebutton').style.display = "none";
         if ($("#bondecommande").val() != null) {
             var data2 = {
-                Id: parseInt($("#bondecommande option:selected").val())
+                boncommande: parseInt($("#bondecommande option:selected").val())
             };
             $.ajax({
-                url: '@Url.Action("GetArticlesBCforBL", "Fournisseur")',
+                url: '@Url.Action("GetBLForBC", "Fournisseur")',
                 type: "POST",
                 cache: false,
                 async: true,
                 data: data2,
                 success: function (data) {
                     
-                    //console.log(data);
+                    console.log(data);
                     $("#tableForme tbody").remove();
                     //$("#tableFormePret tbody").remove();
                     document.getElementById('fieldset').style.display = "block";
@@ -333,18 +323,15 @@
                     for (i = 0; i < data.length; i++)
                     {
                         $("#tbodyCamions").append("<tr>" +
-                            "<td class='border-b dark:border-dark-5' >" + data[i].articleBC_Designation + "</td>" +
-                            "<td class='border-b dark:border-dark-5'>" + data[i].articleBC_Quantite + "</td>" +
-                            "<td class='border-b dark:border-dark-5'>  <input type='text' id='qteLiv' value='" + parseFloat(data[i].articleBC_QteRest) + "'onchange='keyUp(this)'/></td>" +
-                            "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
-                            "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
-                            "<td class='border-b dark:border-dark-5' id='totLiv'>"+ data[i].articleBC_Total +"</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_Designation + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalHT + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalTVA + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalTTC + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>"+ data[i].bonDeLivraison_DateLivraison +"</td>" +
+                            "<td class='border-b dark:border-dark-5'>"+ data[i].statut_BL.statutBL_Name +"</td>" +
 
-                            "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
-
-                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
-                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +
-                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_MatiereID + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].bonDeLivraison_ID + "</td>" +
+                            "<td class='border-b dark:border-dark-5'style='display:none;'>" +data[i].bonDeLivraison_StatutID  + "</td>" +
                             "<td >" +"<button class='btn btn-outline-secondary btn-table round' onclick='articleDelete(this)'><i class='bx bx-trash-alt'></i>Supprimer</button>" +"</td>" +
 
                             "</tr>");

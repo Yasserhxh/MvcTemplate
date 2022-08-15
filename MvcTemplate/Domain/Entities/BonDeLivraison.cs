@@ -22,9 +22,9 @@ namespace Domain.Entities
         public string BonDeLivraison_Designation { get; set; }
         public int BonDeLivraison_AbonnementID { get; set; }
         [ForeignKey("Facture")]
-        public int BonDeLivraison_FactureID { get; set; }
+        public int? BonDeLivraison_FactureID { get; set; }
         [ForeignKey("Statut_BL")]
-        public int BonDeLivraison_StatutID { get; set; }
+        public int? BonDeLivraison_StatutID { get; set; }
         public decimal BonDeLivraison_TotalHT { get; set; }
         public decimal BonDeLivraison_TotalTVA { get; set; }
         public decimal BonDeLivraison_TotalTTC { get; set; }

@@ -14,8 +14,8 @@ namespace Domain.Models
         public int BonDeLivraison_BCID { get; set; }
         public string BonDeLivraison_Designation { get; set; }
         public int BonDeLivraison_AbonnementID { get; set; }
-        public int BonDeLivraison_FactureID { get; set; }
-        public int BonDeLivraison_StatutID { get; set; }
+        public int? BonDeLivraison_FactureID { get; set; }
+        public int? BonDeLivraison_StatutID { get; set; }
         public decimal BonDeLivraison_TotalHT { get; set; }
         public decimal BonDeLivraison_TotalTVA { get; set; }
         public decimal BonDeLivraison_TotalTTC { get; set; }

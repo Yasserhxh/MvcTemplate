@@ -10,10 +10,10 @@ namespace Domain.Entities
     [Table("Facture")]
     public class Facture
     {
-        public Facture()
+       /* public Facture()
         {
             listeBL = new Collection<BonDeLivraison>();
-        }
+        }*/
         [Key]
         public int Facture_ID { get; set; }
         public string Facture_Numero { get; set; }
@@ -32,6 +32,6 @@ namespace Domain.Entities
         public BonDeCommande bonDeCommande { get; set; }
         public Fournisseur Fournisseur { get; set; }
         public Lieu_Stockage Lieu_Stockage { get; set; }
-        public ICollection<BonDeLivraison> listeBL {get;set;}
+      //  public ICollection<BonDeLivraison> listeBL {get;set;}
     }
 }

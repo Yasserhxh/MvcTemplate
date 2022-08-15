@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using Repository.IRepositories;
@@ -69,7 +70,15 @@ namespace Repository.Repositories
 
         public async Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
         {
+            //var bc = _db.bonDeCommandes.Where(p => p.BonDeCommande_ID == bonDeLivraison.BonDeLivraison_BCID).FirstOrDefault();
+            foreach(var item in bonDeLivraison.listeArticles)
+            {
+                var articleBC = _db.article_BCs.Where(p => p.ArticleBC_BCID == bonDeLivraison.BonDeLivraison_BCID && p.ArticleBC_MatiereID == item.ArticleBL_MatiereID).FirstOrDefault();
+                articleBC.ArticleBC_QteRest -= item.ArticleBL_Quantie;
+                _db.Entry(articleBC).State = EntityState.Modified;
+            }
             bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.Now;
+            bonDeLivraison.BonDeLivraison_StatutID = 1;
             await _db.bonDeLivraisons.AddAsync(bonDeLivraison);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
@@ -78,23 +87,25 @@ namespace Repository.Repositories
                 return null;
         }
 
-        public async Task<int?> CreateFacture(Facture facture)
+        public async Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL)
         {
             facture.Facture_DateSaisie = DateTime.Now;
             await _db.factures.AddAsync(facture);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
-                return await updateBonLivraison(facture.listeBL, facture.Facture_ID);
+                return await updateBonLivraison(listeBL, facture.Facture_ID);
             else
                 return null;
         }
 
-        public async Task<int?> updateBonLivraison(ICollection<BonDeLivraison> listeBL, int factureID)
+        public async Task<int?> updateBonLivraison(List<BonDeLivraison_Model> listeBL, int factureID)
         {
             foreach(var item in listeBL)
             {
-                item.BonDeLivraison_FactureID = factureID;
-                _db.Entry(item).State = EntityState.Modified;
+                var bl = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_ID == item.BonDeLivraison_ID).FirstOrDefault();
+                bl.BonDeLivraison_FactureID = factureID;
+                bl.BonDeLivraison_StatutID = 2;
+                _db.Entry(bl).State = EntityState.Modified;
             }
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
@@ -189,7 +200,7 @@ namespace Repository.Repositories
                 query = query.Where(p => p.BonDeLivraison_BCID == bonCommandeID);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
-            return query.Include(p => p.Bon_De_Commande).AsEnumerable();
+            return query.Include(p => p.Bon_De_Commande).Include(p => p.Statut_BL).AsEnumerable();
         }
 
         public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)

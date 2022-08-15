@@ -87,6 +87,25 @@ namespace Service.Services
             }
         }
 
+        public async Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL)
+        {
+            using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    Facture facture = mapper.Map<FactureModel, Facture>(factureModel);
+                    var id = await fournisseurRepository.CreateFacture(facture, listeBL);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public async Task<bool> CreateFournisseur(FournisseurModel fournisseurModel)
         {
             using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
@@ -137,6 +156,11 @@ namespace Service.Services
         public IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date)
         {
             return mapper.Map<IEnumerable<BonDeLivraison>, IEnumerable<BonDeLivraison_Model>>(fournisseurRepository.GetBonDeLivraisons(bonCommandeID, aboID, date));
+        }
+
+        public IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date)
+        {
+            return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, point, date));
         }
 
         public IEnumerable<VilleModel> getListeVille()
