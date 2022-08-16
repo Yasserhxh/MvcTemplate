@@ -16,6 +16,8 @@ namespace Domain.Models
         public decimal ArticleBL_PrixTotal { get; set; }
         public int ArticleBL_UniteMesureID { get; set; }
         public int ArticleBL_BonLivraisonID { get; set; }
+        public DateTime ArticleBL_DateProduction { get; set; }
+        public DateTime ArticleBL_DateLimiteConso { get; set; }
         public BonDeLivraison_Model bonDeLivraison { get; set; }
         public MatierePremiereStockageModel MatierePremiere_Stokage { get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }

@@ -23,6 +23,8 @@ namespace Domain.Entities
         public decimal ArticleBL_PrixTotal { get; set; }
         [ForeignKey("bonDeLivraison")]
         public int ArticleBL_BonLivraisonID { get; set; }
+        public DateTime ArticleBL_DateProduction { get; set; }
+        public DateTime ArticleBL_DateLimiteConso { get; set; }
         public BonDeLivraison bonDeLivraison { get; set; }
         public MatierePremiereStockage MatierePremiere_Stokage { get; set;}
         public Unite_Mesure Unite_Mesure { get; set;}

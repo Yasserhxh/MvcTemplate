@@ -99,7 +99,7 @@
                                                             <div class="table-responsive">
                                                                 <table id="tableForme" class="table mb-0">
                                                                     <thead>
-                                                                        <tr>
+                                                                        <tr><th><input type="checkbox" class="largerCheckbox" id="chkAll" /></th>
                                                                             <th>Designation</th>
                                                                             <th>Quantité commandée</th>
                                                                             <th>Quantité réceptionnée</th>
@@ -108,7 +108,8 @@
                                                                             <th>PU (HT)</th>
                                                                             <th>Total (HT)</th>
                                                                             <th>Lot fournisseur</th>
-                                                                            <th>Action</th>
+                                                                            <th>Date de production </th>
+                                                                            <th>Date limite de consommation </th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -226,6 +227,8 @@
         var prixU = 0;
         var prixtot = 0;
         var lotF ="";
+        var dateProd = "";
+        var dlc ="";
         var BonDeLivraison_Model = {
             BonDeLivraison_BCID: boncommande,
             BonDeLivraison_Designation : $("#libelle").val(), 
@@ -238,13 +241,17 @@
         if (table != null)
         {
             for (var i = 0; i < table.rows.length; i++) {
-                matiere = table.rows[i].cells[9].innerHTML;
-                quantite = table.rows[i].cells[2].getElementsByTagName('input')[0].value;
-                unite = table.rows[i].cells[8].innerHTML;
-                prixU = table.rows[i].cells[4].innerHTML;
-                prixtot = table.rows[i].cells[5].innerHTML;
-                desi = table.rows[i].cells[0].innerHTML;
-                lotF = table.rows[i].cells[6].getElementsByTagName('input')[0].value;
+                if (table.rows[i].cells[0].getElementsByTagName('input')[0].checked) 
+                {
+                matiere = table.rows[i].cells[13].innerHTML;
+                quantite = table.rows[i].cells[4].getElementsByTagName('input')[0].value;
+                unite = table.rows[i].cells[12].innerHTML;
+                prixU = table.rows[i].cells[6].innerHTML;
+                prixtot = table.rows[i].cells[7].innerHTML;
+                desi = table.rows[i].cells[1].innerHTML;
+                lotF = table.rows[i].cells[8].getElementsByTagName('input')[0].value;
+                dateProd = table.rows[i].cells[9].getElementsByTagName('input')[0].value;
+                dlc = table.rows[i].cells[10].getElementsByTagName('input')[0].value;
                  
                 var article = {
                     ArticleBL_MatiereID: "",
@@ -253,7 +260,9 @@
                     ArticleBL_PU: "",
                     ArticleBL_PrixTotal:"",
                     ArticleBL_Designation:"",
-                    ArticleBL_LotFournisseur:""
+                    ArticleBL_LotFournisseur:"",
+                    ArticleBL_DateProduction:"",
+                    ArticleBL_DateLimiteConso:""
                 }
 
                 article.ArticleBL_MatiereID = matiere;
@@ -263,6 +272,8 @@
                 article.ArticleBL_Quantie =  parseFloat(quantite).toFixed(2).replace(".",",");
                 article.ArticleBL_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
                 article.ArticleBL_PrixTotal =  parseFloat(prixtot).toFixed(2).replace(".",",");
+                article.ArticleBL_DateProduction =  dateProd;
+                article.ArticleBL_DateLimiteConso =  dlc;
                 ListArticles.push(article);
 
             }
@@ -273,7 +284,7 @@
             var data = {
                 bonDeLivraison_Model: BonDeLivraison_Model
         };
-            console.log(data);
+           // console.log(data);
             $.ajax({
             url: '@Url.Action("AjouterBL", "Fournisseur")',
             type: "POST",
@@ -300,6 +311,8 @@
             alert("non ajoute");
         }
     });
+                }
+                
      
         }
         
@@ -333,25 +346,27 @@
 
                     for (i = 0; i < data.length; i++)
                     {
-                        $("#tbodyCamions").append("<tr>" +
+                        var res = data[i].articleBC_Quantite - parseFloat(data[i].articleBC_QteRest);
+                        $("#tbodyCamions").append("<tr>" +                            
+                        "<td class='border-b dark:border-dark-5'>  <input type='checkbox' class='largerCheckbox tblChk chk" + i + "' name='check'/></td>" +
                             "<td class='border-b dark:border-dark-5' >" + data[i].articleBC_Designation + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].articleBC_Quantite + "</td>" +
-                            "<td class='border-b dark:border-dark-5'>" + parseFloatdata[i].articleBC_Quantite) - parseFloat(data[i].articleBC_QteRest) + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + res + "</td>" +
                             "<td class='border-b dark:border-dark-5'>  <input type='text' id='qteLiv' value='" + parseFloat(data[i].articleBC_QteRest) + "'onchange='keyUp(this)'/></td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='totLiv'>"+ data[i].articleBC_Total +"</td>" +
-
                             "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
-
+                            "<td class='border-b dark:border-dark-5' id='dateProd'>  <input type='date'/></td>" +
+                            "<td class='border-b dark:border-dark-5' id='dlc'>  <input type='date'/></td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_MatiereID + "</td>" +
-                            "<td >" +"<button class='btn btn-outline-secondary btn-table round' onclick='articleDelete(this)'><i class='bx bx-trash-alt'></i>Supprimer</button>" +"</td>" +
 
                             "</tr>");
 
                     }
+                   
                     obj.listprods = listprod;
                 },
                 error: function () {
@@ -376,4 +391,18 @@
        
        
     }
+    $('#tableForme').on('change', '.tblChk', function() {
+        if ($('.tblChk:checked').length == $('.tblChk').length) {
+            $('#chkAll').prop('checked', true);
+        } else {
+            $('#chkAll').prop('checked', false);
+        }
+    });
+    $("#chkAll").change(function () {
+        if ($(this).prop('checked')) {
+          $('.tblChk').not(this).prop('checked', true);
+        } else {
+          $('.tblChk').not(this).prop('checked', false);
+        }
+      });
 </script>

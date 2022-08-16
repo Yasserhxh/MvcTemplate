@@ -116,7 +116,7 @@
                                                             </div>
                                                         </div>  
                                                         <div class="col-md-2 mb-1">
-                                                            <label for="UniteMesure">Prix / Unité</label>
+                                                            <label for="UniteMesure">Prix / Unité (HT)</label>
                                                             <input type="text" id="prix" class="form-control" required />
                                                         </div>
                                                       @*  <div class="col-md-2 mb-1">
@@ -210,7 +210,6 @@
                 error: function () {
                 }
             });
-            document.getElementById('fournisseur').disabled = true;
 
         }
     }
@@ -352,6 +351,8 @@ function articleAjout() {
         $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
 
     }
+    document.getElementById('fournisseur').disabled = true;
+
 }
 
  function articleClear() {
