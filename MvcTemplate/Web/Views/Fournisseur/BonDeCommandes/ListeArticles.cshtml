@@ -79,6 +79,13 @@
                                                 <div class="card">
                                                     <!-- datatable start -->
                                                     <div class="table">
+                                                        <div>
+                                                            @{ var a = @Model.FirstOrDefault(); }
+                                                            @if (a == null)
+                                                            {<h4 class="card-title">Aucun</h4> }
+                                                            else
+                                                            {<h4> Liste des articles du bon de commande:  "@Model.FirstOrDefault().bonDeCommande.BonDeCommande_Numero"</h4>}
+                                                        </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
                                                                 <tr>
@@ -86,8 +93,8 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Designation</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap ">Quantite </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unite de mesure </th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">PU</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix total </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix Unitaire (HT)</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix total (HT) </th>
 
                                                                 </tr>
                                                             </thead>

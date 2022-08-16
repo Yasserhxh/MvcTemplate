@@ -39,7 +39,7 @@
                     <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Ajouter un bon de livraison</h4>
+                                <h4 class="card-title">Réception des matières premières</h4>
                                 <a class="heading-elements-toggle"> <i class="bx bx-dots-vertical font-medium-3"></i> </a>
                                 <div class="heading-elements">
                                     <ul class="list-inline mb-0">
@@ -78,7 +78,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Libellé</label>
+                                                            <label for="validationTooltip01">Numéro de BL</label>
                                                             <div>
                                                                 <input type="text" id="libelle" asp-for="BonDeLivraison_Designation" class="form-control" />
                                                             </div>
@@ -101,11 +101,12 @@
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Designation</th>
-                                                                            <th>Quantité demandée</th>
-                                                                            <th>Quantité reçue</th>
+                                                                            <th>Quantité commandée</th>
+                                                                            <th>Quantité réceptionnée</th>
+                                                                            <th>Quantité à réceptioner</th>
                                                                             <th>Unité de mesure </th>
-                                                                            <th>PU</th>
-                                                                            <th>Total</th>
+                                                                            <th>PU (HT)</th>
+                                                                            <th>Total (HT)</th>
                                                                             <th>Lot fournisseur</th>
                                                                             <th>Action</th>
                                                                         </tr>
@@ -147,7 +148,7 @@
                                     </div><div>
                                         <button type="button" class="btn btn-success glow " style="display:none; "></button>
                                     </div><div>
-                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer le bon de livraison</button>
+                                        <button type="button" class="btn btn-success glow " id="disabled" onclick="AjoutBonCommande()">Enregistrer la réception</button>
                                     </div>
                                 </div>
                             </div>
@@ -335,6 +336,7 @@
                         $("#tbodyCamions").append("<tr>" +
                             "<td class='border-b dark:border-dark-5' >" + data[i].articleBC_Designation + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].articleBC_Quantite + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + parseFloatdata[i].articleBC_Quantite) - parseFloat(data[i].articleBC_QteRest) + "</td>" +
                             "<td class='border-b dark:border-dark-5'>  <input type='text' id='qteLiv' value='" + parseFloat(data[i].articleBC_QteRest) + "'onchange='keyUp(this)'/></td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
