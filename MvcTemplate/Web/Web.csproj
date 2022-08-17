@@ -88,6 +88,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="PdfSharp" Version="1.50.5147" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
   </ItemGroup>
@@ -96,6 +97,14 @@
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Reference Include="wnvhtmltopdf">
+			<HintPath>Dlls\wnvhtmltopdf.dll</HintPath>
+		</Reference>
+		<Reference Include="WnvHtmlToPdfClient">
+			<HintPath>Dlls\WnvHtmlToPdfClient.dll</HintPath>
+		</Reference>
+	</ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

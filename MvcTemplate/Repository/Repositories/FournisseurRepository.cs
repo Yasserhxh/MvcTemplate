@@ -182,15 +182,17 @@ namespace Repository.Repositories
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
 
-        public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date)
+        public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut)
         {
             var query = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID);
             if (pointStockID != null)
                 query = query.Where(p => p.BonDeCommande_PointStockID == pointStockID);
             if (fournisseurID != null)
                 query = query.Where(p => p.BonDeCommande_FournisseurID == fournisseurID);
-            if (date != "")
+            if (!string.IsNullOrEmpty(date))
                 query = query.Where(p => Convert.ToDateTime(p.BonDeCommande_DateCreation).ToString("yyyy-MM-dd") == date);
+            if (!string.IsNullOrEmpty(statut))
+                query = query.Where(p => p.BonDeCommande_Statut == statut);
             return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable();
         }
 
@@ -294,6 +296,17 @@ namespace Repository.Repositories
                     return false;
             }
             return false;
+        }
+
+        public BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID)
+        {
+            var bC = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID && p.BonDeCommande_ID == bonCommandeID)
+                .Include(p=>p.Fournisseur)
+                .Include(p=>p.Abonnement_Client)
+                .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.listeArticles).ThenInclude(p=>p.Unite_Mesure)
+                .FirstOrDefault();
+            return bC;
         }
     }
 }

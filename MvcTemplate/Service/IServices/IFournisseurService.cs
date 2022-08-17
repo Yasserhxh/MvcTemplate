@@ -18,12 +18,13 @@ namespace Service.IServices
         IEnumerable<MatierePremiereModel> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
         IEnumerable<FournisseurMatiereModel> getListMatiereLink(int fournisseurId);
-        IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date);
+        IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut);
         Task<bool> CreateBonDeCommande(BonDeCommande_Model bonDeCommandeModel);
         IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);
         Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL);
         IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date);
+        BonDeCommande_Model FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
     }
 }

@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Helpers;
+using Web.Tools;
 
 namespace Web.Controllers
 {
@@ -141,7 +142,7 @@ namespace Web.Controllers
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date);
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date, null);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -229,7 +230,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "");
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "", "Non réceptionné");
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
@@ -308,8 +309,34 @@ namespace Web.Controllers
             var redirect = await fournisseurService.CreateFacture(factureModel, listeBL);
             return redirect;
         }
-    
+        public Task<ActionResult> GeneratePDf(int? id)
+        {
+            try
+            {
+                var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+
+                var bc = this.fournisseurService.FindFormulaireBonDeCommande(Id, (int)id);
+                //var tableau = this.declarationService.GetDeclaration((int)id);
+                /*var model = new ViewModelValidation
+                {
+                    cartographie = carto,
+                    tableauDeclaration = tableau
+                };*/
+
+                Controller controller = this;
+
+
+                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, bc, "Pdf","Bon_de_Commande_"+bc.BonDeCommande_Numero);
+                return lFileResult;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
+
     public static class BitmapExtension
     {
         public static byte[] BitmapToByteArray(this Bitmap bitmap)

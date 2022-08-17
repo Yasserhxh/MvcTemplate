@@ -24,13 +24,16 @@ namespace Domain.Entities
         public int BonDeCommande_PointStockID { get; set; }
         public string BonDeCommande_ValidéPar { get; set; }   
         public DateTime BonDeCommande_DateCreation { get; set; }   
-        public DateTime? BonDeCommande_DateValidation { get; set; }   
+        public DateTime? BonDeCommande_DateValidation { get; set; }
+        [ForeignKey("Abonnement_Client")]
         public int BonDeCommande_AbonnementID { get; set; }
         public decimal BonDeCommande_TotalHT { get; set; }   
         public decimal BonDeCommande_TotalTVA { get; set; }   
         public decimal BonDeCommande_TotalTTC { get; set; }   
+        public string BonDeCommande_Statut { get; set; }
         public Fournisseur Fournisseur { get; set; }
         public Lieu_Stockage Lieu_Stockage { get; set; }
         public ICollection<Article_BC> listeArticles { get; set; }
+        public Abonnement_Client Abonnement_Client { get; set; }
     }
 }

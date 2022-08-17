@@ -1,0 +1,199 @@
+﻿@model Domain.Models.BonDeCommande_Model
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<style>
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+    .Fb{font-weight: bold}
+    .text-left{text-align: left}
+    .text-right{text-align: right}
+    .text-center{text-align: center}
+    .entetp{ text-transform: uppercase; font-size: 18px; font-weight: 500; text-align: left}
+    .entetitle{ width: 30%; text-align: left}
+    .entet td{ border: none; font-size: 12px; line-height: 18px;}
+    h1.gtitle{text-align: left; font-size: 30px; margin: 15px 0; font-weight: bold}
+    h3.signature{text-align: center; font-size: 18px; margin: 250px  auto 100px; font-weight: bold}
+    .Destin1{ background: #f2f2f2; border: 2px solid #000;}
+    .Destin1 td{padding: 5px;}
+    .Destin2{ line-height: 12px}
+    .Destin2 h2{font-size: 20px;}
+    .Destin2 p{color:#616161}
+    .titable{ margin-top:20px}
+    .titable th{background: #f1f1f1; padding: 10px 0; border:1px solid #000}
+    .titable td{background: #ffffff; padding: 2px 0; border:1px solid #000}
+    page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        } 
+
+            page[size='A4'] {
+                width: 21cm;
+                height: 29.7cm;
+            }
+
+                page[size='A4'][layout='portrait'] {
+                    width: 29.7cm;
+                    height: 21cm;
+                }
+    footer {
+        flex-shrink: 0;
+        text-align: center;
+    }
+</style>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<div style=" width:95%; margin:  auto; flex: 1 0 auto;">
+    <table class="entet">
+      <tbody>
+        <tr>
+          <td class="text-left" width="35%"><img src="~/@User.FindFirst("logo").Value.ToString()" alt="" width="160"/></td>
+          <td><table>
+              <p class="entetp">@Model.Abonnement_Client.Abonnement_NomClient</p>
+
+        <tr>
+          <td class="entetitle">Adresse</td>
+          <td class="text-left">@Model.Abonnement_Client.Abonnement_Adresse/td>
+        </tr>
+              <tr>
+          <td class="entetitle">Tél</td>
+          <td class="text-left">@Model.Abonnement_Client.Abonnement_ContactTelephone</td>
+        </tr>
+              <tr>
+          <td class="entetitle">Fax</td>
+          <td class="text-left">05 22 91 62 32</td>
+        </tr>
+              <tr>
+          <td class="entetitle">E-mail</td>
+          <td class="text-left">@Model.Abonnement_Client.Abonnement_ContactEmail</td>
+        </tr>
+              <tr>
+          <td class="entetitle">Site Web</td>
+          <td class="text-left">www.serraj.com</td>
+        </tr>
+
+      </table>
+      </td>
+      </tr>
+      </tbody>
+    </table>
+    <h1 class="gtitle">BON DE COMMANDE</h1>  
+    <table>
+        <tbody>
+            <tr>
+                <td width="45%">
+                <table class="Destin1">
+        <tbody>
+            <tr>
+                <td width="55%">Date</td>
+                <td width="5%">:</td>
+                <td>@Model.BonDeCommande_DateCreation</td>
+                    </tr>
+            <tr>
+                <td>Bon de commande N°</td>
+                <td>:</td>
+                <td>@Model.BonDeCommande_Numero</td>
+                    </tr>
+        </tbody>
+    </table>
+                </td>
+                <td width="10%">&nbsp;</td>
+                <td class="Destin2"><h2 class="Fb">Destinataire :</h2><p class="Fb">@Model.Fournisseur.Founisseur_RaisonSocial</p><p>@Model.Fournisseur.Founisseur_Adresse</p><p>ICE :@Model.Fournisseur.Founisseur_ICE</p></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="titable">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Désignation</th>
+                <th>Qté.</th>
+                <th>Unité</th>
+                <th>P.U HT</th>
+                <th>% TVA</th>
+                <th>MT TVA</th>
+                <th>Total TTC</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach(var item in Model.listeArticles)
+                {   
+                    <tr>
+                
+                        <td class="text-center">@item.ArticleBC_MatiereID</td>
+                        <td>@item.MatierePremiere_Stokage.Matiere_Premiere.MatierePremiere_Libelle</td>
+                        <td class="text-center">@item.ArticleBC_Quantite.ToString("G29")</td>
+                        <td class="text-center">@item.Unite_Mesure.UniteMesure_Libelle</td>
+                        <td class="text-right">@item.ArticleBC_PU</td>
+                        <td class="text-center">20%</td>
+                        @{var mtTVA = item.ArticleBC_Total *(decimal) 0.2;}
+                        @{var totalTTC = item.ArticleBC_Total + mtTVA;}
+                        <td class="text-right">@mtTVA</td>
+                        <td class="text-right">@totalTTC</td>
+                        
+                    </tr>
+                    
+                }
+             
+
+            <tr>
+                
+                <td class="text-right Fb" colspan="7"> Total HT : &nbsp;&nbsp;</td>
+                <td class="text-right">@Model.BonDeCommande_TotalHT</td>
+                    </tr>
+            <tr>
+                
+                <td class="text-right Fb" colspan="7"> Total TVA : &nbsp;&nbsp;</td>
+                <td class="text-right">@Model.BonDeCommande_TotalTVA</td>
+                    </tr>
+            <tr>
+                
+                <td class="text-right Fb" colspan="7"> Total TTC : &nbsp;&nbsp;</td>
+                <td class="text-right"> @Model.BonDeCommande_TotalTTC</td>
+                    </tr>
+        </tbody>
+    </table>
+      <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <footer>
+            <h3 class="signature">Signature</h3>
+            <!--<p style="font-size: 12px" class="text-center">
+            <span class="Fb">Atelier Marocain de Gourmandises</span> - Lot N°5 Lotissement Sidi Omar, Lissasfa Hay-Hassani (AR), Maroc. <span class="Fb">Téléphone :</span> 05 22 91 89 00<br>
+            <span class="Fb">Email :</span> amg.yousra@gmail.com <span class="Fb">IF :</span> 00000000 - <span class="Fb">ICE :</span> 000000000000000 – <span class="Fb">RC :</span> 000000 – Patente : 00000000
+        </p>-->
+        </footer>
+        <br />
+        <br />
+       
+        
+        <hr />
+        <footer>
+            <p style="font-size: 12px" class="text-center">
+                <span class="Fb">@Model.Abonnement_Client.Abonnement_NomClient</span> - @Model.Abonnement_Client.Abonnement_Adresse. <span class="Fb">Téléphone :</span> @Model.Abonnement_Client.Abonnement_ContactTelephone<br>
+                <span class="Fb">Email :</span> amg.yousra@gmail.com <span class="Fb">IF :</span> @Model.Abonnement_Client.Abonnement_IdentifiantFiscal - <span class="Fb">ICE :</span> @Model.Abonnement_Client.Abonnement_ICE – <span class="Fb">RC :</span> @Model.Abonnement_Client.Abonnement_RegistreCommercial Patente : 00000000
+            </p>
+        </footer>
+</div>
+</body>
+</html>

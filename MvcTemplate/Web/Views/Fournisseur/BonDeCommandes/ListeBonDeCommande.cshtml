@@ -133,6 +133,7 @@
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-plus "></i>Ajouter un bon de livraison</a>
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBC" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-history "></i>Afficher la liste des articles</a>
+                                                                                    <a asp-action="GeneratePDf" asp-route-id="@item.BonDeCommande_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>

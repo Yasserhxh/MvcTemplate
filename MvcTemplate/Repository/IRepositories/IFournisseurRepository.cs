@@ -18,14 +18,14 @@ namespace Repository.IRepositories
         Task<bool> deleteMatieresLink(int ID, int code);
         IEnumerable<MatierePremiere> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
-        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date);
+        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut);
         Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID,int aboID, string date);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
         Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
-
+        BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
 
     }
 }
