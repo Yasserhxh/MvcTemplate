@@ -153,12 +153,12 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeCommande.cshtml", model);
         }
-        public IActionResult ListeBonDeLivraison(int bonCommandeID, string date, int pg = 1)
+        public IActionResult ListeBonDeLivraison(int? bonCommandeID, string date, int pg = 1)
         {
             if (date == null || date == "null" || date == "")
                 date = "";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date);
+            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date, null);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -198,20 +198,21 @@ namespace Web.Controllers
             bonDeCommande_Model.BonDeCommande_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             bonDeCommande_Model.BonDeCommande_CreePar = _userManager.GetUserId(HttpContext.User);
             bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            bonDeCommande_Model.BonDeCommande_Statut = "Non réceptionné";
             var redirect = await fournisseurService.CreateBonDeCommande(bonDeCommande_Model);
             return redirect;
         }  
         [HttpPost]
         public IEnumerable<ArticleBC_Model> GetArticlesBCforBL(int Id)
         {
-            var model = fournisseurService.GetArticlesBC(Id);
+            var model = fournisseurService.GetArticlesBCForBL(Id);
             return model;
         }
         [HttpPost]
         public IEnumerable<BonDeLivraison_Model> GetBLForBC(int boncommande)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var model = fournisseurService.GetBonDeLivraisons(boncommande, Id, "");
+            var model = fournisseurService.GetBonDeLivraisons(boncommande, Id, "",1);
             return model;
         }
         public IActionResult GetArticlesBC(int Id)

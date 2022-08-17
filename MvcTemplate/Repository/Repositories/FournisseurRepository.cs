@@ -70,13 +70,21 @@ namespace Repository.Repositories
 
         public async Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
         {
-            //var bc = _db.bonDeCommandes.Where(p => p.BonDeCommande_ID == bonDeLivraison.BonDeLivraison_BCID).FirstOrDefault();
+            var bc = _db.bonDeCommandes.Where(p => p.BonDeCommande_ID == bonDeLivraison.BonDeLivraison_BCID).FirstOrDefault();
+            var i = 0;
             foreach(var item in bonDeLivraison.listeArticles)
             {
                 item.ArticleBL_DateReception = bonDeLivraison.BonDeLivraison_DateLivraison;
                 var articleBC = _db.article_BCs.Where(p => p.ArticleBC_BCID == bonDeLivraison.BonDeLivraison_BCID && p.ArticleBC_MatiereID == item.ArticleBL_MatiereID).FirstOrDefault();
                 articleBC.ArticleBC_QteRest -= item.ArticleBL_Quantie;
+                if (articleBC.ArticleBC_QteRest == 0)
+                    i++;
                 _db.Entry(articleBC).State = EntityState.Modified;
+            }
+            if (bc.listeArticles.Count() == i)
+            { 
+                bc.BonDeCommande_Statut = "Réceptionné";
+                _db.Entry(bc).State = EntityState.Modified;
             }
             bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.Now;
             bonDeLivraison.BonDeLivraison_StatutID = 1;
@@ -180,6 +188,10 @@ namespace Repository.Repositories
         public IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID)
         {
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
+        } 
+        public IEnumerable<Article_BC> GetArticlesBCForBL(int bonCommandeID)
+        {
+            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID && p.ArticleBC_QteRest >0).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
 
         public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut)
@@ -196,13 +208,15 @@ namespace Repository.Repositories
             return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable();
         }
 
-        public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date)
+        public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut)
         {
             var query = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_AbonnementID == aboID);
             if (bonCommandeID != null)
                 query = query.Where(p => p.BonDeLivraison_BCID == bonCommandeID);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
+            if (date != null)
+                query = query.Where(p => p.BonDeLivraison_StatutID == statut);
             return query.Include(p => p.Bon_De_Commande).Include(p => p.Statut_BL).AsEnumerable();
         }
 
