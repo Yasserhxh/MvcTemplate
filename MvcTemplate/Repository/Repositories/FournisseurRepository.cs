@@ -205,7 +205,7 @@ namespace Repository.Repositories
                 query = query.Where(p => Convert.ToDateTime(p.BonDeCommande_DateCreation).ToString("yyyy-MM-dd") == date);
             if (!string.IsNullOrEmpty(statut))
                 query = query.Where(p => p.BonDeCommande_Statut == statut);
-            return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable();
+            return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable().OrderByDescending(p => p.BonDeCommande_DateCreation);
         }
 
         public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut)
@@ -215,9 +215,9 @@ namespace Repository.Repositories
                 query = query.Where(p => p.BonDeLivraison_BCID == bonCommandeID);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
-            if (date != null)
+            if (statut  != null)
                 query = query.Where(p => p.BonDeLivraison_StatutID == statut);
-            return query.Include(p => p.Bon_De_Commande).Include(p => p.Statut_BL).AsEnumerable();
+            return query.Include(p => p.Bon_De_Commande).Include(p => p.Statut_BL).AsEnumerable().OrderByDescending(p => p.BonDeLivraison_DateLivraison);
         }
 
         public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)
@@ -227,7 +227,7 @@ namespace Repository.Repositories
                 query = query.Where(p => p.Facture_PointStockID == point);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.Facture_DateFacture).ToString("yyyy-MM-dd") == date);
-            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).Include(p => p.Lieu_Stockage).AsEnumerable();
+            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).Include(p => p.Lieu_Stockage).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
         }
 
         public IEnumerable<Fonction> getListFonction()
