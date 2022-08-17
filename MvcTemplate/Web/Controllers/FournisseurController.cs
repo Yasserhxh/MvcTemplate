@@ -5,10 +5,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using QRCoder;
 using Repository.IRepositories;
 using Service.IServices;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Web.Helpers;
@@ -161,7 +166,7 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
-            return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeLivraison.cshtml", model);
+            return View("~/Views/Fournisseur/BonDeLivraison/ListeBonDeLivraison.cshtml", model);
         }   
         public IActionResult ListeFactures( string date, int pg = 1)
         {
@@ -228,7 +233,7 @@ namespace Web.Controllers
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
-        public async Task<bool> AjouterBL(BonDeLivraison_Model bonDeLivraison_Model)
+        public async Task<List<QrClassM>> AjouterBL(BonDeLivraison_Model bonDeLivraison_Model)
         {
             bonDeLivraison_Model.BonDeLivraison_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             bonDeLivraison_Model.BonDeLivraison_TotalHT = bonDeLivraison_Model.listeArticles.Sum(p => p.ArticleBL_PrixTotal);
@@ -241,10 +246,49 @@ namespace Web.Controllers
                 Random _rdm = new Random();
                 item.ArticleBL_LotTemp = DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() + DateTime.UtcNow.Day.ToString() + "LOT" + _rdm.Next(_min, _max);
             }
-            //bonDeLivraison_Model.cree = _userManager.GetUserId(HttpContext.User);
-            // bonDeLivraison_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateBonDeLivraison(bonDeLivraison_Model);
-            return redirect;
+            var listQr = new List<QrClassM>();
+            foreach (var item in redirect)
+            { 
+                var qRCode = new QRCodeModel()
+                {
+                    // QRCodeText = redirect.ToString(),
+                    REFERENCE = item.ArticleBL_Designation.ToUpper(),
+                    LOT_INTERN = item.ArticleBL_LotTemp,
+                    LOT_FOURNISSEUR = item.ArticleBL_LotFournisseur.ToUpper(),
+                    DATE_RECEP = item.bonDeLivraison.BonDeLivraison_DateLivraison.ToString(),
+                    DATE_P = item.ArticleBL_DateProduction.Value.ToShortDateString(),
+                    DLC = item.ArticleBL_DateLimiteConso.Value.ToShortDateString()
+                };
+               
+
+                var serializer = new JsonSerializer();
+                var stringWriter = new StringWriter();
+                using (var writer = new JsonTextWriter(stringWriter))
+                {
+                    writer.QuoteName = false;
+                    writer.Indentation = 6;
+                    writer.Formatting = Formatting.Indented;
+                    serializer.Serialize(writer, qRCode);
+                }
+                var json = stringWriter.ToString();
+                //string output = JsonConvert.SerializeObject(qRCode, Formatting.Indented);
+                QRCodeGenerator QrGenerator = new QRCodeGenerator();
+                //json = json.Replace("/{|}/g", " ");
+                QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(json, QRCodeGenerator.ECCLevel.Q);
+                QRCode QrCode = new QRCode(QrCodeInfo);
+                Bitmap QrBitmap = QrCode.GetGraphic(60);
+                byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+                string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+                var qRCodeM = new QrClassM()
+                {
+                    qRCodeIMG = QrUri,
+                    qRCodeTITLE = item.ArticleBL_Designation
+                };
+                listQr.Add(qRCodeM);
+            }
+
+            return listQr;
         }
         public IActionResult AjouterFA()
         {
@@ -263,6 +307,18 @@ namespace Web.Controllers
             factureModel.Facture_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateFacture(factureModel, listeBL);
             return redirect;
+        }
+    
+    }
+    public static class BitmapExtension
+    {
+        public static byte[] BitmapToByteArray(this Bitmap bitmap)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bitmap.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
+            }
         }
     }
 }

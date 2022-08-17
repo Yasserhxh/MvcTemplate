@@ -68,11 +68,12 @@ namespace Repository.Repositories
                 return null;
         }
 
-        public async Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
+        public async Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison)
         {
             //var bc = _db.bonDeCommandes.Where(p => p.BonDeCommande_ID == bonDeLivraison.BonDeLivraison_BCID).FirstOrDefault();
             foreach(var item in bonDeLivraison.listeArticles)
             {
+                item.ArticleBL_DateReception = bonDeLivraison.BonDeLivraison_DateLivraison;
                 var articleBC = _db.article_BCs.Where(p => p.ArticleBC_BCID == bonDeLivraison.BonDeLivraison_BCID && p.ArticleBC_MatiereID == item.ArticleBL_MatiereID).FirstOrDefault();
                 articleBC.ArticleBC_QteRest -= item.ArticleBL_Quantie;
                 _db.Entry(articleBC).State = EntityState.Modified;
@@ -82,7 +83,7 @@ namespace Repository.Repositories
             await _db.bonDeLivraisons.AddAsync(bonDeLivraison);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
-                return bonDeLivraison.BonDeLivraison_ID;
+                return bonDeLivraison.listeArticles.ToList();
             else
                 return null;
         }

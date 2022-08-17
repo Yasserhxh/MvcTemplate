@@ -22,7 +22,7 @@ namespace Repository.IRepositories
         Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID,int aboID, string date);
-        Task<int?> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
+        Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
         Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
 

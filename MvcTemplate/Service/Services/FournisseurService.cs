@@ -68,7 +68,7 @@ namespace Service.Services
             }
         }
 
-        public async Task<bool> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel)
+        public async Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel)
         {
             using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
             {
@@ -77,12 +77,12 @@ namespace Service.Services
                     BonDeLivraison bonDeLivraison = mapper.Map<BonDeLivraison_Model, BonDeLivraison>(bonDeLivraisonModel);
                     var id = await fournisseurRepository.CreateBonDeLivraison(bonDeLivraison);
                     transaction.Commit();
-                    return true;
+                    return id;
                 }
                 catch (Exception)
                 {
                     transaction.Rollback();
-                    return false;
+                    return null;
                 }
             }
         }

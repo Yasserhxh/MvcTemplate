@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace Service.IServices
         Task<bool> CreateBonDeCommande(BonDeCommande_Model bonDeCommandeModel);
         IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID);
         IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date);
-        Task<bool> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);
+        Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);
         Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL);
         IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date);
     }

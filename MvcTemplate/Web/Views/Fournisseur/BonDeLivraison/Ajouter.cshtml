@@ -80,13 +80,13 @@
                                                         <div class="col-md-3 mb-1">
                                                             <label for="validationTooltip01">Numéro de BL</label>
                                                             <div>
-                                                                <input type="text" id="libelle" asp-for="BonDeLivraison_Designation" class="form-control" />
+                                                                <input type="text" id="libelle" asp-for="BonDeLivraison_Designation" class="form-control" required />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3 mb-1">
                                                             <label for="validationTooltip01">Date de livraison</label>
                                                             <div>
-                                                                <input type="datetime-local" id="date" asp-for="BonDeLivraison_DateLivraison" class="form-control" />
+                                                                <input type="datetime-local" id="date" asp-for="BonDeLivraison_DateLivraison" class="form-control" required/>
                                                             </div>
                                                         </div>
                                                         </div>
@@ -162,6 +162,24 @@
     </div>
 </div>
 
+<div class="modal fade show" id="BaseModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33"> Liste des QR codes</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div style="display:none;" id="Basediv"> </div>
+                        
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="~/js/toastr.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -215,7 +233,16 @@
     }
 
  function AjoutBonCommande() {
+     if (
+            $("#fournisseur option:selected").val() != null && $("#fournisseur option:selected").val() != '' &&
+            $("#bondecommande option:selected").val() != null && $("#bondecommande option:selected").val() != '' &&
+            $("#libelle").val() != null && $("#libelle").val() != '' &&
+            $("#date").val() != null && $("#date").val() != '') 
+        {
+            
+      
         document.getElementById('disabled').disabled = true;
+
         var foursnisseurId = $("#fournisseur option:selected").val() ;
         var boncommande = $("#bondecommande option:selected").val() ;
         var ListArticles = new Array();
@@ -292,14 +319,25 @@
             async: true,
             data: data,
             success: function (data) {
-             if (data == true) {
-                        ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-                        //ShowNotification("Cout de Revient du produit est modifié avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                if (data.length > 0) {
+                    //$("#loadMe").modal("hide");
+                    $('#BaseModal').modal('show');
+                    for (var i = 0; i < data.length; i++) {
+                        $("#mbody").append(
+                            "<div class='row'id='tableModal' >"+
+                            "<div class='col-md-12'> <span>" + data[i].qRCodeTITLE + " </span></div>"+
+                            "<div class=' col-md-12 text-sm-center'> <img src='" + data[i].qRCodeIMG + "' style='height: 155px;' /></div>"+
+                            "</div>" 
+                          //  "<td class='border-b dark:border-dark-5 '>" + parseFloat(data[i].qteEnStock).toFixed(3) + "</td>" +
+                          //  "<td class='border-b dark:border-dark-5 '>" + data[i].uniteStock + "</td>" +
+                            );
+                    }
+                        /* ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
                                window.location.href = '@Url.Action("ListeBonDeCommande", "Fournisseur")';
                             }, 2000);
-                    } else {
+                    */} else {
                         ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
@@ -313,7 +351,7 @@
     });
                 }
                 
-     
+       }
         }
         
     var donee;
