@@ -123,9 +123,9 @@
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Fournisseur.Founisseur_RaisonSocial)</td>
                                                                         <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.bonDeCommande.BonDeCommande_Numero)</td>
 @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
-*@                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_TotalHT)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_MontantTVA)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_TotalTTC)</td>
+*@                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalHT.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.Facture_MontantTVA.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalTTC.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_DateFacture)</td>
                                                                         <td>
                                                                             <div class="dropdown">
@@ -192,7 +192,7 @@
                 }
             </div>
             <div class="breadcrumb-item text-sm-right ">
-                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBC"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un bon de commande</span></a>
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterFA"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter une facture</span></a>
             </div>
         </div>
     </div>

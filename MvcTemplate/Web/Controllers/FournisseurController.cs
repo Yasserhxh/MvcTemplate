@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
+using Humanizer;
 
 namespace Web.Controllers
 {
@@ -255,7 +256,7 @@ namespace Web.Controllers
                 var qRCode = new QRCodeModel()
                 {
                     // QRCodeText = redirect.ToString(),
-                    REFERENCE = item.ArticleBL_Designation.ToUpper(),
+                    DESIGNATION = item.ArticleBL_Designation.ToUpper(),
                     LOT_INTERN = item.ArticleBL_LotTemp,
                     LOT_FOURNISSEUR = item.ArticleBL_LotFournisseur.ToUpper(),
                     DATE_RECEP = item.bonDeLivraison.BonDeLivraison_DateLivraison.ToString(),
@@ -316,13 +317,25 @@ namespace Web.Controllers
             {
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
 
-                var bc = this.fournisseurService.FindFormulaireBonDeCommande(Id, (int)id);
+                var bc = fournisseurService.FindFormulaireBonDeCommande(Id, (int)id);
                 //var tableau = this.declarationService.GetDeclaration((int)id);
                 /*var model = new ViewModelValidation
                 {
                     cartographie = carto,
                     tableauDeclaration = tableau
                 };*/
+                var check = bc.BonDeCommande_TotalTTC.ToString("G29").Split(",");
+                if(check.Count()>1)
+                {
+                    var dh = check[0];
+                    var cent = check[1];
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams et" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Centimes";
+                }
+                else
+                {
+                    var dh = check[0];
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
+                }
 
                 Controller controller = this;
 

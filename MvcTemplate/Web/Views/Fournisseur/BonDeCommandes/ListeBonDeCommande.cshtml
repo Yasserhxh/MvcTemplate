@@ -103,7 +103,7 @@
                                                             <thead>
                                                                 <tr>
 
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">BC Numero</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Numéro BC</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Fournisseur</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Date de creation</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total HT</th>
@@ -123,9 +123,9 @@
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Fournisseur.Founisseur_RaisonSocial)</td>
                                                                         <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.BonDeCommande_DateCreation)</td>
 @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
-*@                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalHT)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalTVA)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeCommande_TotalTTC)</td>
+*@                                                                        <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalHT.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalTVA.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalTTC.ToString("n2")</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
@@ -192,7 +192,7 @@
                 }
             </div>
             <div class="breadcrumb-item text-sm-right ">
-                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBC"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un bon de commande</span></a>
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBC"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Créer un bon de commande</span></a>
             </div>
         </div>
     </div>

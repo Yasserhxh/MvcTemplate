@@ -47,6 +47,7 @@ namespace Service.Mapping
             CreateMap<Echange_Produits, Echange_ProduitsModel>();
             CreateMap<EchangeProduit_Details, EchangeProduit_DetailsModel>();
             CreateMap<BonDeLivraison, BonDeLivraison_Model>();
+            CreateMap<BonDeCommande, BonDeCommande_Model>().ForMember(b => b.BonDeCommande_TTCWords, opt => opt.Ignore()); ;
             CreateMap<Facture, FactureModel>();
 
 

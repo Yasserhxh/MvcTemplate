@@ -332,8 +332,8 @@ function articleAjout() {
             "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#matiere option:selected").text() + "</td>" +
             "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
             "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2) + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)  + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2).toString("n2") + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + (parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)).toString("n2")  + "</td>" +
             "<td >" +
             '<button class="btn btn-outline-secondary btn-table round" onclick="articleDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
             "</tr>");

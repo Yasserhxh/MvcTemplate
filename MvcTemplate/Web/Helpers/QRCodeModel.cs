@@ -8,7 +8,7 @@ namespace Web.Helpers
     public class QRCodeModel
     {
         //[Display(Name = "Enter QRCode Text")]
-        public string REFERENCE { get; set; }
+        public string DESIGNATION { get; set; }
         public string LOT_INTERN { get; set; }
         public string LOT_FOURNISSEUR { get; set; }
         public string DATE_RECEP { get; set; }

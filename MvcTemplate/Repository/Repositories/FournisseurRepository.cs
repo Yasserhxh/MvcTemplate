@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace Repository.Repositories
 {
     public class FournisseurRepository : IFournisseurRepository
@@ -57,9 +56,9 @@ namespace Repository.Repositories
 
         public async Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande)
         {
-            bonDeCommande.BonDeCommande_DateCreation = DateTime.UtcNow;
+            bonDeCommande.BonDeCommande_DateCreation = DateTime.Now;
             var count = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == bonDeCommande.BonDeCommande_AbonnementID && p.BonDeCommande_DateCreation.Year == DateTime.Now.Year).Count() +1;
-            bonDeCommande.BonDeCommande_Numero = "BC :" + DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() +" "+ " - " + count;
+            bonDeCommande.BonDeCommande_Numero = "BC -" + DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() +" "+ " - " + count;
             await _db.bonDeCommandes.AddAsync(bonDeCommande);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
@@ -217,7 +216,8 @@ namespace Repository.Repositories
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
             if (statut  != null)
                 query = query.Where(p => p.BonDeLivraison_StatutID == statut);
-            return query.Include(p => p.Bon_De_Commande).Include(p => p.Statut_BL).AsEnumerable().OrderByDescending(p => p.BonDeLivraison_DateLivraison);
+            return query.Include(p => p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
+                .Include(p => p.Statut_BL).AsEnumerable().OrderByDescending(p => p.BonDeLivraison_DateLivraison);
         }
 
         public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)

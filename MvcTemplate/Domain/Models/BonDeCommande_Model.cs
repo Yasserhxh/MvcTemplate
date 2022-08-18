@@ -23,6 +23,7 @@ namespace Domain.Models
         public decimal BonDeCommande_TotalTVA { get; set; }
         public decimal BonDeCommande_TotalTTC { get; set; }
         public string BonDeCommande_Statut { get; set; }
+        public string BonDeCommande_TTCWords { get; set; }
         public FournisseurModel Fournisseur { get; set; }
         public Lieu_StockageModel Lieu_Stockage { get; set; }
         public List<ArticleBC_Model> listeArticles { get; set; }

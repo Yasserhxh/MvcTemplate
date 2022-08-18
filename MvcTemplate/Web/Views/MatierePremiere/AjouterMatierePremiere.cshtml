@@ -1,4 +1,14 @@
-﻿@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
+﻿<style>
+
+  .custom-radio {
+  display: inline-block;
+  margin-top: 10px;
+}
+.custom-radio label {
+    font-size: 14px;
+}
+</style>
+@{ Layout = "~/Views/Shared/_Layout1.cshtml"; }
 
 @model Domain.Models.MatierePremiereModel
 
@@ -104,45 +114,39 @@
                                             </div>
                                             <div class="row">
 
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-2">
                                                     <div class="form-group">
-                                                        <label for="PrixMoyen">Prix moyen d'achat par unité</label>
+                                                        <label for="PrixMoyen">Prix d'achat / unité (Avg.)</label>
                                                         <input type="number" min="0" id="prix" step=".01" asp-for="MatierePremiere_PrixMoyenAchat" class="form-control" required />
+                                                    
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-2">
                                                     <div class="form-group">
-                                                        <label for="PourcentrageTolerancePerte"> Pourcentage de tolérance de perte</label>
+                                                        <label for="PourcentrageTolerancePerte"> Tolérance de perte <b>%</b></label>
                                                         <input type="number" min="0" id="TolePerte" max="100" step=".01" asp-for="MatierePremiere_PourcentrageTolerancePerte" onchange="onchangeevent()" class="form-control" required />
+
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-2">
                                                     <div class="form-group">
                                                         <label for="">Quantité utilisée</label>
                                                         <input type="number" id="QteUsed" min="0" step=".01" onchange="onchangeQte()" class="form-control" required />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <p><label for="EstAllergene">Matière allergène:</label></p>
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li class="d-inline-block mr-2 mb-1">
-                                                                <fieldset style="border:2px solid #fff">
-                                                                    <div class="custom-control custom-radio">
-                                                                        <input type="radio" checked="checked" class="custom-control-input" onclick="fct1()" value="0" id="customColorRadio3" asp-for="MatierePremiere_EstAllergene">
-                                                                        <label class="custom-control-label" for="customColorRadio3">Non</label>
-                                                                    </div>
-                                                                </fieldset>
-                                                            </li>
-                                                            <li class="d-inline-block mr-2 mb-1">
-                                                                <fieldset style="border:2px solid #fff">
-                                                                    <div class="custom-control custom-radio">
-                                                                        <input type="radio" class="custom-control-input" value="1" id="customColorRadio4" onclick="fct1()" asp-for="MatierePremiere_EstAllergene">
-                                                                        <label class="custom-control-label" for="customColorRadio4">Oui</label>
-                                                                    </div>
-                                                                </fieldset>
-                                                            </li>
-                                                        </ul>
+                                                        <label class="d-block" for="EstAllergene">Matière allergène:</label>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" checked="checked" class="custom-control-input" onclick="fct1()" value="0" id="customColorRadio3" asp-for="MatierePremiere_EstAllergene">
+                                                            <label class="custom-control-label" for="customColorRadio3">Non</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio">
+                                                            <input type="radio" class="custom-control-input" value="1" id="customColorRadio4" onclick="fct1()" asp-for="MatierePremiere_EstAllergene">
+                                                            <label class="custom-control-label" for="customColorRadio4">Oui</label>
+                                                        </div>
+                                                              
+                                                           
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
