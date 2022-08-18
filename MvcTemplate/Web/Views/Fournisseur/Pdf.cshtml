@@ -23,7 +23,7 @@ table {
     .entetitle{ width: 30%; text-align: left}
     .entet td{ border: none; font-size: 12px; line-height: 18px;}
     h1.gtitle{text-align: left; font-size: 30px; margin: 15px 0; font-weight: bold}
-    h3.signature{text-align: center; font-size: 18px; margin: 250px  auto 100px; font-weight: bold}
+    h3.signature{text-align: center; font-size: 18px; margin: 50px  auto 100px; font-weight: bold}
     .Destin1{ background: #f2f2f2; border: 2px solid #000;}
     .Destin1 td{padding: 5px;}
     .Destin2{ line-height: 12px}
@@ -69,7 +69,7 @@ table {
 
         <tr>
           <td class="entetitle">Adresse</td>
-          <td class="text-left">@Model.Abonnement_Client.Abonnement_Adresse/td>
+          <td class="text-left">@Model.Abonnement_Client.Abonnement_Adresse</td>
         </tr>
               <tr>
           <td class="entetitle">Tél</td>
@@ -170,25 +170,17 @@ table {
                     </tr>
         </tbody>
     </table>
-      <br />
+     <h3 class="signature">Arrêté le présent bon de commande à la somme de .... @Model.BonDeCommande_TTCWords</h3>
         <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <footer>
+        <footer class="text-right">
             <h3 class="signature">Signature</h3>
-            <!--<p style="font-size: 12px" class="text-center">
-            <span class="Fb">Atelier Marocain de Gourmandises</span> - Lot N°5 Lotissement Sidi Omar, Lissasfa Hay-Hassani (AR), Maroc. <span class="Fb">Téléphone :</span> 05 22 91 89 00<br>
-            <span class="Fb">Email :</span> amg.yousra@gmail.com <span class="Fb">IF :</span> 00000000 - <span class="Fb">ICE :</span> 000000000000000 – <span class="Fb">RC :</span> 000000 – Patente : 00000000
-        </p>-->
-        </footer>
+        </footer>  
         <br />
         <br />
-       
-        
-        <hr />
-        <footer>
+        <br />
+        <br />
+        <footer style="padding-top: 150px;">
+            <hr>
             <p style="font-size: 12px" class="text-center">
                 <span class="Fb">@Model.Abonnement_Client.Abonnement_NomClient</span> - @Model.Abonnement_Client.Abonnement_Adresse. <span class="Fb">Téléphone :</span> @Model.Abonnement_Client.Abonnement_ContactTelephone<br>
                 <span class="Fb">Email :</span> amg.yousra@gmail.com <span class="Fb">IF :</span> @Model.Abonnement_Client.Abonnement_IdentifiantFiscal - <span class="Fb">ICE :</span> @Model.Abonnement_Client.Abonnement_ICE – <span class="Fb">RC :</span> @Model.Abonnement_Client.Abonnement_RegistreCommercial Patente : 00000000

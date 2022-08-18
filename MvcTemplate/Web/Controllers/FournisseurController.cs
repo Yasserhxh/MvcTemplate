@@ -329,7 +329,7 @@ namespace Web.Controllers
                 {
                     var dh = check[0];
                     var cent = check[1];
-                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams et" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Centimes";
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
                 }
                 else
                 {
