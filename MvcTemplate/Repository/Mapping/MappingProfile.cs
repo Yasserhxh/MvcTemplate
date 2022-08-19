@@ -46,6 +46,7 @@ namespace Repository.Mapping
             CreateMap<Echange_ProduitsModel, Echange_Produits>();
             CreateMap<EchangeProduit_DetailsModel, EchangeProduit_Details>();
             CreateMap<Facture, FactureModel>();
+            CreateMap<BonDeLivraison, BonDeLivraison_Model>().ForMember(b => b.BonDeLivraison_TTCWords, opt => opt.Ignore());
 
             // Models to Entities mapping
             CreateMap<Abonnement_ClientModel, Abonnement_Client>();

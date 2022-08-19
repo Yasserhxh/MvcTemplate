@@ -103,18 +103,18 @@ table {
             <tr>
                 <td width="55%">Date</td>
                 <td width="5%">:</td>
-                <td>@Model.BonDeCommande_DateCreation</td>
+                <td>@Model.BonDeLivraison_DateLivraison</td>
                     </tr>
             <tr>
                 <td>Bon de commande N°</td>
                 <td>:</td>
-                <td>@Model.BonDeCommande_Numero</td>
+                <td>@Model.BonDeLivraison_Designation</td>
                     </tr>
         </tbody>
     </table>
                 </td>
                 <td width="10%">&nbsp;</td>
-                <td class="Destin2"><h2 class="Fb">Destinataire :</h2><p class="Fb">@Model.Fournisseur.Founisseur_RaisonSocial</p><p>@Model.Fournisseur.Founisseur_Adresse</p><p>ICE :@Model.Fournisseur.Founisseur_ICE</p></td>
+                <td class="Destin2"><h2 class="Fb">Destinataire :</h2><p class="Fb">@Model.Bon_De_Commande.Fournisseur.Founisseur_RaisonSocial</p><p>@Model.Bon_De_Commande.Fournisseur.Founisseur_Adresse</p><p>ICE :@Model.Bon_De_Commande.Fournisseur.Founisseur_ICE</p></td>
             </tr>
         </tbody>
     </table>
@@ -137,14 +137,14 @@ table {
                 {   
                     <tr>
                 
-                        <td class="text-center">@item.ArticleBC_MatiereID</td>
+                        <td class="text-center">@item.ArticleBL_MatiereID</td>
                         <td>@item.MatierePremiere_Stokage.Matiere_Premiere.MatierePremiere_Libelle</td>
-                        <td class="text-center">@item.ArticleBC_Quantite.ToString("G29")</td>
+                        <td class="text-center">@item.ArticleBL_Quantie.ToString("G29")</td>
                         <td class="text-center">@item.Unite_Mesure.UniteMesure_Libelle</td>
-                        <td class="text-right">@item.ArticleBC_PU</td>
+                        <td class="text-right">@item.ArticleBL_PU</td>
                         <td class="text-center">20%</td>
-                        @{var mtTVA = item.ArticleBC_Total *(decimal) 0.2;}
-                        @{var totalTTC = item.ArticleBC_Total + mtTVA;}
+                        @{var mtTVA = item.ArticleBL_PrixTotal *(decimal) 0.2;}
+                        @{var totalTTC = item.ArticleBL_PrixTotal + mtTVA;}
                         <td class="text-right">@mtTVA.ToString("n2")</td>
                         <td class="text-right">@totalTTC.ToString("n2")</td>
                         
@@ -156,21 +156,21 @@ table {
             <tr>
                 
                 <td class="text-right Fb" colspan="7"> Total HT : &nbsp;&nbsp;</td>
-                <td class="text-right">@Model.BonDeCommande_TotalHT.ToString("n2")</td>
+                <td class="text-right">@Model.BonDeLivraison_TotalHT.ToString("n2")</td>
                     </tr>
             <tr>
                 
                 <td class="text-right Fb" colspan="7"> Total TVA : &nbsp;&nbsp;</td>
-                <td class="text-right">@Model.BonDeCommande_TotalTVA.ToString("n2")</td>
+                <td class="text-right">@Model.BonDeLivraison_TotalTVA.ToString("n2")</td>
                     </tr>
             <tr>
                 
                 <td class="text-right Fb" colspan="7"> Total TTC : &nbsp;&nbsp;</td>
-                <td class="text-right"> @Model.BonDeCommande_TotalTTC.ToString("n2")</td>
+                <td class="text-right"> @Model.BonDeLivraison_TotalTTC.ToString("n2")</td>
                     </tr>
         </tbody>
     </table>
-     <h3 class="signature">Arrêté le présent bon de commande à la somme de .... @Model.BonDeCommande_TTCWords</h3>
+     <h3 class="signature">Arrêté le présent bon de commande à la somme de .... @Model.BonDeLivraison_TTCWords</h3>
         <br />
         <footer class="text-right">
             <h3 class="signature">Signature</h3>

@@ -18,7 +18,7 @@ namespace Repository.IRepositories
         Task<bool> deleteMatieresLink(int ID, int code);
         IEnumerable<MatierePremiere> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
-        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut);
+        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut);
         Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID);
@@ -28,6 +28,6 @@ namespace Repository.IRepositories
         Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
         BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
-
+        BonDeLivraison FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
     }
 }

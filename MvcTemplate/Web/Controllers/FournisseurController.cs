@@ -136,10 +136,8 @@ namespace Web.Controllers
                 return false;
             }
         }
-        public IActionResult ListeBonDeCommande(int? fournisseurID, string date, int pg = 1)
+        public IActionResult ListeBonDeCommande(int? fournisseurID, int? date, int pg = 1)
         {
-            if (date == null || date == "null" || date == "")
-                date = "";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
@@ -154,12 +152,13 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeCommande.cshtml", model);
         }
-        public IActionResult ListeBonDeLivraison(int? bonCommandeID, string date, int pg = 1)
+        public IActionResult ListeBonDeLivraison(int? bonCommandeID, string date, int? etat, int pg = 1)
         {
             if (date == null || date == "null" || date == "")
                 date = "";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date, null);
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date, etat);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -233,11 +232,13 @@ namespace Web.Controllers
             return View("~/Views/Fournisseur/BonDeLivraison/Ajouter.cshtml");
         }
         [HttpPost]
-        public SelectList getBcFournisseur(int fournisseurID)
+        public SelectList getBcFournisseur(int fournisseurID, int? date, string etat)
         {
+            if (string.IsNullOrEmpty(etat))
+                etat = "Non réceptionné";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "", "Non réceptionné");
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date, etat);
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
@@ -245,7 +246,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "", "Réceptionné");
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, "Réceptionné");
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
@@ -367,30 +368,30 @@ namespace Web.Controllers
             {
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
 
-                var bc = fournisseurService.FindFormulaireBonDeCommande(Id, (int)id);
+                var bc = fournisseurService.FindFormulaireBonDeLivraison(Id, (int)id);
                 //var tableau = this.declarationService.GetDeclaration((int)id);
                 /*var model = new ViewModelValidation
                 {
                     cartographie = carto,
                     tableauDeclaration = tableau
                 };*/
-                var check = bc.BonDeCommande_TotalTTC.ToString("G29").Split(",");
+                var check = bc.BonDeLivraison_TotalTTC.ToString("G29").Split(",");
                 if (check.Count() > 1)
                 {
                     var dh = check[0];
                     var cent = check[1];
-                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
+                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
                 }
                 else
                 {
                     var dh = check[0];
-                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
+                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
                 }
 
                 Controller controller = this;
 
 
-                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, bc, "Pdf", "Bon_de_Commande_" + bc.BonDeCommande_Numero);
+                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, bc, "Pdf_Livraison", "Bon_de_Livraison_" + bc.BonDeLivraison_Designation);
                 return lFileResult;
             }
             catch (Exception ex)

@@ -143,6 +143,11 @@ namespace Service.Services
             return mapper.Map<BonDeCommande, BonDeCommande_Model>(fournisseurRepository.FindFormulaireBonDeCommande(aboID, bonCommandeID));
         }
 
+        public BonDeLivraison_Model FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison)
+        {
+            return mapper.Map<BonDeLivraison, BonDeLivraison_Model>(fournisseurRepository.FindFormulaireBonDeLivraison(aboID, bondeLivraison));
+        }
+
         public FournisseurModel findFormulaireFournisseur(int formulaireFourisseurId)
         {
             return mapper.Map<Fournisseur, FournisseurModel>(fournisseurRepository.findFormulaireFournisseur(formulaireFourisseurId));
@@ -162,7 +167,7 @@ namespace Service.Services
             return mapper.Map<IEnumerable<Article_BL>, IEnumerable<ArticleBL_Model>>(fournisseurRepository.GetArticlesBL(bondeLivraisonID));
         }
 
-        public IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut)
+        public IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut)
         {
             return mapper.Map<IEnumerable<BonDeCommande>, IEnumerable<BonDeCommande_Model>>(fournisseurRepository.GetBonDeCommandes(aboID, pointStockID, fournisseurID, date, statut));
         }

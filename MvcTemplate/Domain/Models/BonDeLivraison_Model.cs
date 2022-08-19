@@ -19,6 +19,7 @@ namespace Domain.Models
         public decimal BonDeLivraison_TotalHT { get; set; }
         public decimal BonDeLivraison_TotalTVA { get; set; }
         public decimal BonDeLivraison_TotalTTC { get; set; }
+        public string BonDeLivraison_TTCWords { get; set; }
         public DateTime BonDeLivraison_DateLivraison { get; set; }
         public DateTime BonDeLivraison_DateSaisie { get; set; }
         public BonDeCommande_Model Bon_De_Commande { get; set; }

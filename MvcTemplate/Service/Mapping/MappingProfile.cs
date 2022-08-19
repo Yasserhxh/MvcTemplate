@@ -46,8 +46,8 @@ namespace Service.Mapping
             CreateMap<FamilleProduitModel, FamilleProduit>();
             CreateMap<Echange_Produits, Echange_ProduitsModel>();
             CreateMap<EchangeProduit_Details, EchangeProduit_DetailsModel>();
-            CreateMap<BonDeLivraison, BonDeLivraison_Model>();
-            CreateMap<BonDeCommande, BonDeCommande_Model>().ForMember(b => b.BonDeCommande_TTCWords, opt => opt.Ignore()); ;
+            CreateMap<BonDeLivraison, BonDeLivraison_Model>().ForMember(b => b.BonDeLivraison_TTCWords, opt => opt.Ignore());
+            CreateMap<BonDeCommande, BonDeCommande_Model>().ForMember(b => b.BonDeCommande_TTCWords, opt => opt.Ignore());
             CreateMap<Facture, FactureModel>();
 
 
@@ -91,7 +91,7 @@ namespace Service.Mapping
             CreateMap<MatStockView, matStockViewModel>();
             CreateMap<Reception_Stock, Reception_StockModel>();
             CreateMap<Approvisionnement_Matiere, Approvisionnement_MatiereModel>();
-            CreateMap<BonDeLivraison_Model, BonDeLivraison>();
+
             CreateMap<FactureModel, Facture>();
 
         }

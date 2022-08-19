@@ -54,7 +54,7 @@
                         <div class="form-group">
                             <label for="Date">Date</label>
                             <div>
-                                <input type="date" id="date" class="form-control" />
+                                <input type="text" class="form-control" name="datepicker" id="date" onchange="getBcFournisseur()" />
                             </div>
                         </div>
                     </div>
@@ -202,8 +202,8 @@
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/sweetalert.min.js"></script>
-<script src="~/js/sweetalert2.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script>
 
    @if (TempData["Creation"] != null)
@@ -379,4 +379,11 @@
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
     }
+     var $j = jQuery.noConflict();
+    $j("#date").datepicker({
+    format: "yyyy",
+    viewMode: "years", 
+    minViewMode: "years",
+    autoclose:true //to close picker once year is selected
+});
 </script>
