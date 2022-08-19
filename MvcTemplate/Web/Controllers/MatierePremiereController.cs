@@ -168,7 +168,7 @@ namespace Web.Controllers
             {
                 return NotFound();
             }
-            var donnee = matierePremiereService.findFormulaireMatiereP((int)id);
+            var donnee = matierePremiereService.findFormulaireMatiereP(abo,(int)id);
             if (donnee == null)
             {
                 return NotFound();
@@ -210,7 +210,8 @@ namespace Web.Controllers
         [HttpPost]
         public string getMatiere(int id)
         {
-            var matiere = this.matierePremiereService.findFormulaireMatiereP(id);
+            var aboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var matiere = this.matierePremiereService.findFormulaireMatiereP(aboId,id);
             return matiere.MatierePremiere_Libelle;
         }
         [HttpPost]

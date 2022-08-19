@@ -68,9 +68,9 @@ namespace Repository.Repositories
             return false;
         }
 
-        public MatierePremiere findFormulaireMatiereP(int formulaireMatierePId)
+        public MatierePremiere findFormulaireMatiereP(int aboID, int formulaireMatierePId)
         {
-            return _db.matierePremieres.Where(e => e.MatierePremiere_Id == formulaireMatierePId).FirstOrDefault();
+            return _db.matierePremieres.Where(e => e.MatierePremiere_Id == formulaireMatierePId && e.MatierePremiere_AbonnementId == aboID && e.MatierePremiere_IsActive == 1).FirstOrDefault();
         }
 
         public IEnumerable<Allergene> getListAllergene(int Id)
@@ -301,7 +301,7 @@ namespace Repository.Repositories
                 .ThenInclude(w => w.Lieu_Stockage)
                 .AsEnumerable();
             return m;
-        }
+        }  
         public IEnumerable<MatierePremiereStockage> getListMatieresStockesAll(int Id, int lieuId,int? zone,int? section)
         {
             IEnumerable<MatierePremiereStockage> m;

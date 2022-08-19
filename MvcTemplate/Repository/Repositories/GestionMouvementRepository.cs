@@ -149,6 +149,40 @@ namespace Repository.Repositories
             }
             return matiereStockageList;
         }
+          
+        public IEnumerable<MatierePremiere> getListMatierePremieresBC(int Id,int aboId)
+        {
+
+            var matieresAll = _db.matierePremieres.Include(fm => fm.FournisseurLink).ToList();
+            var matieres = new List<MatierePremiere>();
+            var matsRetturn = new List<MatierePremiere>();
+            foreach (var m in matieresAll)
+            {
+                foreach (var fm in m.FournisseurLink)
+                {
+                    if (Id==fm.Founisseur_Id)
+                    {
+                        bool alreadyExists = matieres.Any(x => x.MatierePremiere_Id == m.MatierePremiere_Id);
+                        if (!alreadyExists)
+                            matieres.Add(m);
+                    }
+                }
+            }
+            var matiereAll = _db.matierePremieres.Where(ms => ms.MatierePremiere_AbonnementId == aboId && ms.MatierePremiere_IsActive == 1)
+                .AsEnumerable();
+            foreach(var ms in matiereAll)
+            {
+                foreach(var m in matieres)
+                {
+                    if (ms.MatierePremiere_Id==m.MatierePremiere_Id)
+                    {
+                        matsRetturn.Add(ms);
+                    }
+                }
+               
+            }
+            return matsRetturn;
+        }
 
         public IEnumerable<MouvementType> getListMouvement(int Id)
         {

@@ -167,9 +167,9 @@ namespace Service.Services
             return mapper.Map<IEnumerable<Article_BL>, IEnumerable<ArticleBL_Model>>(fournisseurRepository.GetArticlesBL(bondeLivraisonID));
         }
 
-        public IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut)
+        public IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string name, int? date, string statut)
         {
-            return mapper.Map<IEnumerable<BonDeCommande>, IEnumerable<BonDeCommande_Model>>(fournisseurRepository.GetBonDeCommandes(aboID, pointStockID, fournisseurID, date, statut));
+            return mapper.Map<IEnumerable<BonDeCommande>, IEnumerable<BonDeCommande_Model>>(fournisseurRepository.GetBonDeCommandes(aboID, pointStockID, fournisseurID,name, date, statut));
         }
 
         public IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut)

@@ -12,6 +12,7 @@ namespace Repository.IRepositories
         IEnumerable<MouvementType> getListMouvement(int Id);
         IEnumerable<Fournisseur> getListFournisseur(int Id);
         IEnumerable<MatierePremiereStockage> getListMatiereStockage(int Id, int aboId, int adresse);
+        IEnumerable<MatierePremiere> getListMatierePremieresBC(int Id, int aboId);
         IEnumerable<MatierePremiereStockage> getListMatiereStockageAll( int aboId, int userlieu);
         IEnumerable<MatierePremiereStockage> getListMatiereStockageAdmin(int aboId);
         IEnumerable<MatierePremiere> getListMatierePremiere(int Id);

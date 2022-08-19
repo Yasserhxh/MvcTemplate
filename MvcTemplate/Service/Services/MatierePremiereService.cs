@@ -89,9 +89,9 @@ namespace Service.Services
             return mapper.Map<Allergene, AllergeneModel>(this.matierePremiereRepository.findFormulaireAllergene(formulaireAllergieId));
         }
 
-        public MatierePremiereModel findFormulaireMatiereP(int formulaireMatiereId)
+        public MatierePremiereModel findFormulaireMatiereP(int aboId, int formulaireMatiereId)
         {
-            return mapper.Map<MatierePremiere, MatierePremiereModel>(this.matierePremiereRepository.findFormulaireMatiereP(formulaireMatiereId));
+            return mapper.Map<MatierePremiere, MatierePremiereModel>(this.matierePremiereRepository.findFormulaireMatiereP(aboId, formulaireMatiereId));
         }
 
         public IEnumerable<AllergeneModel> getListAllergene(int Id)

@@ -14,7 +14,7 @@ namespace Domain.Models
         public string BonDeCommande_Numero { get; set; }
         public int BonDeCommande_FournisseurID { get; set; }
         public string BonDeCommande_CreePar { get; set; }
-        public int BonDeCommande_PointStockID { get; set; }
+        //public int BonDeCommande_PointStockID { get; set; }
         public string BonDeCommande_ValidéPar { get; set; }
         public DateTime BonDeCommande_DateCreation { get; set; }
         public DateTime? BonDeCommande_DateValidation { get; set; }
@@ -25,7 +25,7 @@ namespace Domain.Models
         public string BonDeCommande_Statut { get; set; }
         public string BonDeCommande_TTCWords { get; set; }
         public FournisseurModel Fournisseur { get; set; }
-        public Lieu_StockageModel Lieu_Stockage { get; set; }
+        //public Lieu_StockageModel Lieu_Stockage { get; set; }
         public List<ArticleBC_Model> listeArticles { get; set; }
         public Abonnement_ClientModel Abonnement_Client { get; set; }
 

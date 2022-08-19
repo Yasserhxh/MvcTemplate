@@ -205,6 +205,10 @@ namespace Service.Services
             }
         }
 
-       
+        public IEnumerable<MatierePremiereModel> getListMatierePremieresBC(int Id, int aboId)
+        {
+            var result = mapper.Map<IEnumerable<MatierePremiere>, IEnumerable<MatierePremiereModel>>(gestionMouvementRepository.getListMatierePremieresBC(Id, aboId));
+            return result;
+        }
     }
 }

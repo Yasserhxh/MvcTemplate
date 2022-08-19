@@ -20,7 +20,7 @@ namespace Domain.Models
         public DateTime? ArticleBL_DateProduction { get; set; }
         public DateTime? ArticleBL_DateLimiteConso { get; set; }
         public BonDeLivraison_Model bonDeLivraison { get; set; }
-        public MatierePremiereStockageModel MatierePremiere_Stokage { get; set; }
+        public MatierePremiereModel MatierePremiere{ get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }
 
     }

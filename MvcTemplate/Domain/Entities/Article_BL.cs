@@ -14,7 +14,7 @@ namespace Domain.Entities
         public string ArticleBL_Designation { get; set; }
         public string ArticleBL_LotFournisseur { get; set; }
         public string ArticleBL_LotTemp { get; set; }
-        [ForeignKey("MatierePremiere_Stokage")]
+        [ForeignKey("MatierePremiere")]
         public int ArticleBL_MatiereID { get; set; }
         [ForeignKey("Unite_Mesure")]
         public int ArticleBL_UniteMesureID { get; set; }
@@ -27,7 +27,7 @@ namespace Domain.Entities
         public DateTime? ArticleBL_DateProduction { get; set; }
         public DateTime? ArticleBL_DateLimiteConso { get; set; }
         public BonDeLivraison bonDeLivraison { get; set; }
-        public MatierePremiereStockage MatierePremiere_Stokage { get; set;}
+        public MatierePremiere MatierePremiere { get; set;}
         public Unite_Mesure Unite_Mesure { get; set;}
     }
 }

@@ -673,6 +673,14 @@ namespace Web.Controllers
             var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             SelectList secteurSelect = new SelectList(gestionMouvementService.getListMatiereStockage(fournisseurId, AboId, adresse), "MatierePremiereStokage_Id", "Matiere_Premiere.MatierePremiere_Libelle");
             return secteurSelect;
+        }   
+        [HttpPost]
+        public SelectList matiereListeBC(int fournisseurId)
+        {
+            var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            SelectList secteurSelect = new SelectList(gestionMouvementService.getListMatierePremieresBC(fournisseurId, AboId), "MatierePremiere_Id", "MatierePremiere_Libelle");
+            return secteurSelect;
         } 
         [HttpPost]
         public SelectList matiereListePointStock(int point)
@@ -716,6 +724,14 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var unite = matierePremiereService.getListMatiereStocker(Id, MatierePremiereStokage_Id).Select(m => m.Matiere_Premiere.MatierePremiere_AchatUniteMesureId).FirstOrDefault();
+            SelectList uniteselect = new SelectList(produitVendableService.findFormulaireUniteMesure(unite), "UniteMesure_Id", "UniteMesure_Libelle");
+            return uniteselect;
+        }
+        [HttpPost]
+        public SelectList getUniteMatPrem(int matiere)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var unite = matierePremiereService.findFormulaireMatiereP(Id, matiere).MatierePremiere_AchatUniteMesureId;
             SelectList uniteselect = new SelectList(produitVendableService.findFormulaireUniteMesure(unite), "UniteMesure_Id", "UniteMesure_Libelle");
             return uniteselect;
         }

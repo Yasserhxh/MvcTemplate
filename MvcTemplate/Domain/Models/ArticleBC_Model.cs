@@ -16,7 +16,7 @@ namespace Domain.Models
         public decimal ArticleBC_Quantite { get; set; }
         public int ArticleBC_BCID { get; set; }
         public BonDeCommande_Model bonDeCommande { get; set; }
-        public MatierePremiereStockageModel MatierePremiere_Stokage { get; set; }
+        public MatierePremiereModel MatierePremiere { get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }
     }
 }

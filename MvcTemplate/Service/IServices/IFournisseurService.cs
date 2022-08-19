@@ -18,7 +18,7 @@ namespace Service.IServices
         IEnumerable<MatierePremiereModel> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
         IEnumerable<FournisseurMatiereModel> getListMatiereLink(int fournisseurId);
-        IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut);
+        IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string name, int? date, string statut);
         Task<bool> CreateBonDeCommande(BonDeCommande_Model bonDeCommandeModel);
         IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID);
         IEnumerable<ArticleBL_Model> GetArticlesBL(int bondeLivraisonID);

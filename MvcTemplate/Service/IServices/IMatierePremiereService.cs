@@ -32,7 +32,7 @@ namespace Service.IServices
         IEnumerable<Unite_MesureMatiereModel> getListUniteUtilisation(int matiereId);
 
 
-        MatierePremiereModel findFormulaireMatiereP(int formulaireMatiereId);
+        MatierePremiereModel findFormulaireMatiereP(int aboID, int formulaireMatiereId);
         AllergeneModel findFormulaireAllergie(int formulaireAllergieId);
 
         Task<bool> updateFormulaireMatiere(int id, MatierePremiereModel matiereModel);

@@ -27,6 +27,7 @@ namespace Service.IServices
         IEnumerable<ProduitConsomableStokageModel> getProduitPretConsomersByPorduit(int Id, int aboId, int atelierUserId,int produitId);
         IEnumerable<FournisseurProduitsModel> getListFournisseurProduits(int Id);
         IEnumerable<MouvementStockModel> getlistMouvements(int aboId, int? lieuExpe, int? lieuReception, int? matiere, string date);
+        IEnumerable<MatierePremiereModel> getListMatierePremieresBC(int Id, int aboId);
 
     }
 }

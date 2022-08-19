@@ -22,7 +22,7 @@ using Humanizer;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Client, Gerant_de_stock")]
+    [Authorize(Roles = "Client, Gerant_des_achats")]
 
     public class FournisseurController : Controller
     {
@@ -136,12 +136,12 @@ namespace Web.Controllers
                 return false;
             }
         }
-        public IActionResult ListeBonDeCommande(int? fournisseurID, int? date, int pg = 1)
+        public IActionResult ListeBonDeCommande(int? fournisseurID, int? date, string name, int pg = 1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date, null);
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, name, date, null);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -197,7 +197,7 @@ namespace Web.Controllers
         {
             bonDeCommande_Model.BonDeCommande_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             bonDeCommande_Model.BonDeCommande_CreePar = _userManager.GetUserId(HttpContext.User);
-            bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            //bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             bonDeCommande_Model.BonDeCommande_Statut = "Non réceptionné";
             var redirect = await fournisseurService.CreateBonDeCommande(bonDeCommande_Model);
             return redirect;
@@ -238,7 +238,7 @@ namespace Web.Controllers
                 etat = "Non réceptionné";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, date, etat);
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, date, etat);
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
@@ -246,7 +246,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, "Réceptionné");
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, null, "Réceptionné");
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]

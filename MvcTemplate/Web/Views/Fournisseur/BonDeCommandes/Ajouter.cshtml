@@ -188,7 +188,7 @@
         var data = { fournisseurId: parseInt($("#fournisseur").val()) };
         if ($("#fournisseur").val() != null) {
             $.ajax({
-                url: '@Url.Action("matiereListe", "ProduitVendable")',
+                url: '@Url.Action("matiereListeBC", "ProduitVendable")',
                 type: "POST",
                 cache: false,
                 async: true,
@@ -215,10 +215,10 @@
     }
         function uniteListe()
     {
-        var data = { MatierePremiereStokage_Id: parseInt($("#matiere option:selected").val()) };
+        var data = { matiere: parseInt($("#matiere option:selected").val()) };
         if ($("#matiere option:selected").val() != null) {
             $.ajax({
-                url: '@Url.Action("getUnite", "ProduitVendable")',
+                url: '@Url.Action("getUniteMatPrem", "ProduitVendable")',
                 type: "POST",
                 cache: false,
                 async: true,

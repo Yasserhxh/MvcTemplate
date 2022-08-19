@@ -18,7 +18,7 @@ namespace Repository.IRepositories
         Task<bool> deleteMatieresLink(int ID, int code);
         IEnumerable<MatierePremiere> getListMatiere(int Id);
         Task<bool?> AjouterMatiere(int idFournisseur, List<int> listMatiere);
-        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut);
+        IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID,string name, int? date, string statut);
         Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID);

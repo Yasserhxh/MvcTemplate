@@ -191,7 +191,7 @@ namespace Repository.Repositories
         public IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID)
         {
             return _db.article_BLs.Where(p => p.ArticleBL_BonLivraisonID == bondeLivraisonID).Include(p=>p.bonDeLivraison)
-                .Include(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.MatierePremiere)
                 .Include(p=>p.Unite_Mesure).AsEnumerable();
         } 
         public IEnumerable<Article_BC> GetArticlesBCForBL(int bonCommandeID)
@@ -199,20 +199,20 @@ namespace Repository.Repositories
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID && p.ArticleBC_QteRest > 0).Include(p => p.bonDeCommande).Include(p => p.Unite_Mesure).AsEnumerable();
         }
 
-        public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut)
+        public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string name, int? date, string statut)
         {
             var query = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID);
-            if (statut == null && date == null && fournisseurID == null)
+            if (statut == null && name == null && date == null && fournisseurID == null)
                 return null;
-            if (pointStockID != null)
-                query = query.Where(p => p.BonDeCommande_PointStockID == pointStockID);
             if (fournisseurID != null)
                 query = query.Where(p => p.BonDeCommande_FournisseurID == fournisseurID);
             if (date != null)
                 query = query.Where(p => p.BonDeCommande_DateCreation.Year == date);
             if (!string.IsNullOrEmpty(statut))
                 query = query.Where(p => p.BonDeCommande_Statut == statut);
-            return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable().OrderByDescending(p => p.BonDeCommande_DateCreation);
+            if(!string.IsNullOrEmpty(name))
+                query = query.Where(p => p.BonDeCommande_Numero.Contains(name, StringComparison.OrdinalIgnoreCase));
+            return query.Include(p=>p.Fournisseur).AsEnumerable().OrderByDescending(p => p.BonDeCommande_DateCreation);
         }
 
         public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut)
@@ -329,7 +329,7 @@ namespace Repository.Repositories
             var bC = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID && p.BonDeCommande_ID == bonCommandeID)
                 .Include(p=>p.Fournisseur)
                 .Include(p=>p.Abonnement_Client)
-                .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere)
                 .Include(p=>p.listeArticles).ThenInclude(p=>p.Unite_Mesure)
                 .FirstOrDefault();
             return bC;
@@ -339,7 +339,7 @@ namespace Repository.Repositories
             var bC = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_AbonnementID == aboID && p.BonDeLivraison_ID == bondeLivraison)
                 .Include(p=>p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
                 .Include(p=>p.Abonnement_Client)
-                .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.listeArticles).ThenInclude(p=> p.MatierePremiere)
                 .Include(p=>p.listeArticles).ThenInclude(p=>p.Unite_Mesure)
                 .FirstOrDefault();
             return bC;

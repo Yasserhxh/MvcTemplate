@@ -31,7 +31,7 @@ namespace Repository.IRepositories
         IEnumerable<Perte_Matiere> getListPertes(int aboId, int? atelierID, string date, int? matiereId);
         IEnumerable<Perte_MatiereStock> getListPertesStock(int aboId, int? stockID, string date, int? matiereId);
 
-        MatierePremiere findFormulaireMatiereP(int formulaireMatierePId);
+        MatierePremiere findFormulaireMatiereP(int aboID, int formulaireMatierePId);
         Allergene findFormulaireAllergene(int formulaireAllergieId);
 
         Task<bool> updateFormulaireMatierePremiere(int id, MatierePremiere newMatiere);

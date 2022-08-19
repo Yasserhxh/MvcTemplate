@@ -20,8 +20,8 @@ namespace Domain.Entities
         [ForeignKey("Fournisseur")]
         public int BonDeCommande_FournisseurID { get; set; }   
         public string BonDeCommande_CreePar { get; set; }
-        [ForeignKey("Lieu_Stockage")]
-        public int BonDeCommande_PointStockID { get; set; }
+        //[ForeignKey("Lieu_Stockage")]
+        //public int BonDeCommande_PointStockID { get; set; }
         public string BonDeCommande_ValidéPar { get; set; }   
         public DateTime BonDeCommande_DateCreation { get; set; }   
         public DateTime? BonDeCommande_DateValidation { get; set; }
@@ -32,7 +32,7 @@ namespace Domain.Entities
         public decimal BonDeCommande_TotalTTC { get; set; }   
         public string BonDeCommande_Statut { get; set; }
         public Fournisseur Fournisseur { get; set; }
-        public Lieu_Stockage Lieu_Stockage { get; set; }
+       // public Lieu_Stockage Lieu_Stockage { get; set; }
         public ICollection<Article_BC> listeArticles { get; set; }
         public Abonnement_Client Abonnement_Client { get; set; }
     }
