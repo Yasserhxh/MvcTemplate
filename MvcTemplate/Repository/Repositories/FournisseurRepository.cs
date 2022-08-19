@@ -202,6 +202,8 @@ namespace Repository.Repositories
         public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, int? date, string statut)
         {
             var query = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID);
+            if (statut == null && date == null && fournisseurID == null)
+                return null;
             if (pointStockID != null)
                 query = query.Where(p => p.BonDeCommande_PointStockID == pointStockID);
             if (fournisseurID != null)
@@ -213,14 +215,18 @@ namespace Repository.Repositories
             return query.Include(p=>p.Fournisseur).Include(p=>p.Lieu_Stockage).AsEnumerable().OrderByDescending(p => p.BonDeCommande_DateCreation);
         }
 
-        public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut)
+        public IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut)
         {
             var query = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_AbonnementID == aboID);
+            if (bonCommandeID == null && statut == null && fournisseurID == null && date == "")
+                return null;
+            if (fournisseurID != null)
+                query = query.Where(p => p.Bon_De_Commande.BonDeCommande_FournisseurID == fournisseurID);
             if (bonCommandeID != null)
                 query = query.Where(p => p.BonDeLivraison_BCID == bonCommandeID);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.BonDeLivraison_DateLivraison).ToString("yyyy-MM-dd") == date);
-            if (statut  != null)
+            if (statut != null)
                 query = query.Where(p => p.BonDeLivraison_StatutID == statut);
             return query.Include(p => p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
                 .Include(p => p.Statut_BL).AsEnumerable().OrderByDescending(p => p.BonDeLivraison_DateLivraison);

@@ -42,7 +42,7 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-3 offset-md-1 mb-1">
+                    <div class="col-md-3 offset-md-2 mb-1">
                         <label for="role">Fournisseur</label>
                         <div>
                             <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
@@ -121,7 +121,7 @@
 
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_Numero)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Fournisseur.Founisseur_RaisonSocial)</td>
-                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.bonDeCommande.BonDeCommande_Numero)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.bonDeCommande.BonDeCommande_Numero)</td>
 @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
 *@                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalHT.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@item.Facture_MontantTVA.ToString("n2")</td>
@@ -159,7 +159,7 @@
 
             </section>
             <!-- Dashboard Ecommerce ends -->
-            <div class="container">
+@*            <div class="container">
                 @if (pager.TotalPages > 0)
                 {
                     <ul class="pagination justify-content-end">
@@ -190,7 +190,7 @@
                     </ul>
 
                 }
-            </div>
+            </div>*@
             <div class="breadcrumb-item text-sm-right ">
                 <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterFA"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter une facture</span></a>
             </div>

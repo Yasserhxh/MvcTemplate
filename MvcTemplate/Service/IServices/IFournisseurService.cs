@@ -23,7 +23,7 @@ namespace Service.IServices
         IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID);
         IEnumerable<ArticleBL_Model> GetArticlesBL(int bondeLivraisonID);
         IEnumerable<ArticleBC_Model> GetArticlesBCForBL(int bonCommandeID);
-        IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut);
+        IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);
         Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL);
         IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date);

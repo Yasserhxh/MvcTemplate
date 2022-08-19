@@ -23,7 +23,7 @@ namespace Repository.IRepositories
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
         IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID);
         IEnumerable<Article_BC> GetArticlesBCForBL(int bonCommandeID);
-        IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut);
+        IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
         Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);

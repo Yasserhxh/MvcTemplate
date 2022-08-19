@@ -42,7 +42,7 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-3 offset-md-1 mb-1">
+                    <div class="col-md-3 offset-md-2 mb-1">
                         <label for="role">Fournisseur</label>
                         <div>
                             <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
@@ -54,7 +54,7 @@
                         <div class="form-group">
                             <label for="Date">Date</label>
                             <div>
-                                <input type="text" class="form-control" name="datepicker" id="date" onchange="getBcFournisseur()" />
+                                <input type="text" class="form-control" name="datepicker" id="date" />
                             </div>
                         </div>
                     </div>
@@ -99,6 +99,13 @@
                                                 <div class="card">
                                                     <!-- datatable start -->
                                                     <div class="table">
+                                                         <div>
+                                                            @{ var a = @Model.FirstOrDefault(); }
+                                                            @if (a == null)
+                                                            {<h4 class="card-title">Veuillez selectionner un fournisseur et l'année de BC'</h4> }
+                                                            else
+                                                            {<h4> Liste des bons de commande de fournisseur: <b>"@Model.FirstOrDefault().Fournisseur.Founisseur_RaisonSocial"</b> </h4>}
+                                                        </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
                                                                 <tr>
@@ -109,6 +116,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total HT</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Montant TVA</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total TTC</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
 
                                                                 </tr>
@@ -126,6 +134,7 @@
 *@                                                                        <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalHT.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalTVA.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@item.BonDeCommande_TotalTTC.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.BonDeCommande_Statut</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
@@ -133,7 +142,7 @@
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-plus "></i>Ajouter un bon de livraison</a>
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBC" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-history "></i>Afficher la liste des articles</a>
-                                                                                    <a asp-action="GeneratePDf" asp-route-id="@item.BonDeCommande_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
+                                                                                    <a asp-action="GeneratePDfBC" asp-route-id="@item.BonDeCommande_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>

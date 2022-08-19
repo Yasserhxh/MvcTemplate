@@ -54,7 +54,8 @@
                         <label for="role">Etat des bons de commande</label>
                         <div>
                             <select class="custom-select" id="etatBC" data-search="true"  >
-                                <option value="Réceptionné" selected>Bons de commabde réceptionnés</option>
+                                <option value="" selected disabled>Sélectionnez un statut de bon de commande ...</option>
+                                <option value="Réceptionné">Bons de commabde réceptionnés</option>
                                 <option value="Non réceptionné">Bons de commande non réceptionnés</option>
                             </select>
                         </div>
@@ -79,7 +80,8 @@
                         <label for="role">Etat des bons de livraison</label>
                         <div>
                             <select class="custom-select" id="etatBL" data-search="true" >
-                                <option value=2 selected>Bons de livraison facturé</option>
+                                <option selected disabled>Sélectionnez un statut de bon de livraison ...</option>
+                                <option value=2>Bons de livraison facturé</option>
                                 <option value=1>Bons de livraison non facturé</option>
                             </select>
                         </div>
@@ -171,6 +173,7 @@
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeLivraison_ID"><i class="bx bx-plus "></i>Ajouter des factures</a>
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.BonDeLivraison_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
+                                                                                    <a asp-action="GeneratePDfBL" asp-route-id="@item.BonDeLivraison_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -284,8 +287,9 @@
  
     function displayDashboard() {
         var bonCommandeID = $("#bondecommande option:selected").val();
+        var fournisseurID = $("#fournisseur option:selected").val();
         var etat = $("#etatBL option:selected").val();
-        window.location.href = '/fournisseur/ListeBonDeLivraison?bonCommandeID=' + bonCommandeID + "&etatBL=" + etatBL ;
+        window.location.href = '/fournisseur/ListeBonDeLivraison?fournisseurID=' + fournisseurID + "&bonCommandeID=" + bonCommandeID+ "&etat=" + etat ;
     }
     var $j = jQuery.noConflict();
     $j("#date").datepicker({

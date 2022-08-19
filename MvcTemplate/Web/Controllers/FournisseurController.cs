@@ -152,13 +152,13 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/Fournisseur/BonDeCommandes/ListeBonDeCommande.cshtml", model);
         }
-        public IActionResult ListeBonDeLivraison(int? bonCommandeID, string date, int? etat, int pg = 1)
+        public IActionResult ListeBonDeLivraison(int? fournisseurID, int? bonCommandeID, string date, int? etat, int pg = 1)
         {
             if (date == null || date == "null" || date == "")
                 date = "";
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
-            var query = fournisseurService.GetBonDeLivraisons(bonCommandeID, Id, date, etat);
+            var query = fournisseurService.GetBonDeLivraisons(fournisseurID, bonCommandeID, Id, date, etat);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -212,7 +212,7 @@ namespace Web.Controllers
         public IEnumerable<BonDeLivraison_Model> GetBLForBC(int boncommande)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var model = fournisseurService.GetBonDeLivraisons(boncommande, Id, "",1);
+            var model = fournisseurService.GetBonDeLivraisons(null,boncommande, Id, "",1);
             return model;
         }
         public IActionResult GetArticlesBC(int Id)
