@@ -21,6 +21,7 @@ namespace Repository.IRepositories
         IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut);
         Task<int?> CreateBonDeCommande(BonDeCommande bonDeCommande);
         IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID);
+        IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID);
         IEnumerable<Article_BC> GetArticlesBCForBL(int bonCommandeID);
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);

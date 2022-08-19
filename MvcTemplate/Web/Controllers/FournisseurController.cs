@@ -221,6 +221,11 @@ namespace Web.Controllers
             var model = fournisseurService.GetArticlesBC(Id);
             return View("~/Views/Fournisseur/BonDeCommandes/ListeArticles.cshtml",model);
         }
+        public IActionResult GetArticlesBL(int Id)
+        {
+            var model = fournisseurService.GetArticlesBL(Id);
+            return View("~/Views/Fournisseur/BonDeLivraison/ListeArticles.cshtml", model);
+        }
         public IActionResult AjouterBL()
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -233,6 +238,14 @@ namespace Web.Controllers
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "", "Non réceptionné");
+            return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
+        }
+        [HttpPost]
+        public SelectList getBcFournisseurForArticle(int fournisseurID)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, "", "Réceptionné");
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]
@@ -311,7 +324,7 @@ namespace Web.Controllers
             var redirect = await fournisseurService.CreateFacture(factureModel, listeBL);
             return redirect;
         }
-        public Task<ActionResult> GeneratePDf(int? id)
+        public Task<ActionResult> GeneratePDfBC(int? id)
         {
             try
             {
@@ -348,7 +361,43 @@ namespace Web.Controllers
                 throw;
             }
         }
+        public Task<ActionResult> GeneratePDfBL(int? id)
+        {
+            try
+            {
+                var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
 
+                var bc = fournisseurService.FindFormulaireBonDeCommande(Id, (int)id);
+                //var tableau = this.declarationService.GetDeclaration((int)id);
+                /*var model = new ViewModelValidation
+                {
+                    cartographie = carto,
+                    tableauDeclaration = tableau
+                };*/
+                var check = bc.BonDeCommande_TotalTTC.ToString("G29").Split(",");
+                if (check.Count() > 1)
+                {
+                    var dh = check[0];
+                    var cent = check[1];
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
+                }
+                else
+                {
+                    var dh = check[0];
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
+                }
+
+                Controller controller = this;
+
+
+                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, bc, "Pdf", "Bon_de_Commande_" + bc.BonDeCommande_Numero);
+                return lFileResult;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 
     public static class BitmapExtension

@@ -21,6 +21,7 @@ namespace Service.IServices
         IEnumerable<BonDeCommande_Model> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut);
         Task<bool> CreateBonDeCommande(BonDeCommande_Model bonDeCommandeModel);
         IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID);
+        IEnumerable<ArticleBL_Model> GetArticlesBL(int bondeLivraisonID);
         IEnumerable<ArticleBC_Model> GetArticlesBCForBL(int bonCommandeID);
         IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);

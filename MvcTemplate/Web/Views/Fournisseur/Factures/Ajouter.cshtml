@@ -99,14 +99,13 @@
                                                             <div class="table-responsive">
                                                                 <table id="tableForme" class="table mb-0">
                                                                     <thead>
-                                                                        <tr>
+                                                                        <tr><th><input type="checkbox" class="largerCheckbox" id="chkAll" /></th>
                                                                             <th>N° BL</th>
                                                                             <th>Total HT</th>
                                                                             <th>Montant TVA </th>
                                                                             <th>Total TTC </th>
                                                                             <th>Date de livraison</th>
                                                                             <th>Statut</th>
-                                                                            <th>Action</th>
                                                                         </tr>
                                                                     </thead>
                                                                 </table>
@@ -168,7 +167,7 @@
         var data = { fournisseurID: parseInt($("#fournisseur option:selected").val()) };
         if ($("#fournisseur option:selected").val() != null) {
             $.ajax({
-                url: '@Url.Action("getBcFournisseur", "Fournisseur")',
+                url: '@Url.Action("getBcFournisseurForArticle", "Fournisseur")',
                 type: "POST",
                 cache: false,
                 async: true,
@@ -232,27 +231,29 @@
         if (table != null)
         {
             for (var i = 0; i < table.rows.length; i++) {
-                desi = table.rows[i].cells[0].innerHTML;
-                ht = table.rows[i].cells[1].innerHTML;
-                tva = table.rows[i].cells[2].innerHTML;
-                ttc = table.rows[i].cells[3].innerHTML;
-                id = table.rows[i].cells[6].innerHTML;
-                 
-                var BLS = {
-                    BonDeLivraison_ID: "",
-                    BonDeLivraison_Designation: "",
-                    BonDeLivraison_TotalHT: "",
-                    BonDeLivraison_TotalTVA: "",
-                    BonDeLivraison_TotalTTC:""
+                if (table.rows[i].cells[0].getElementsByTagName('input')[0].checked) {
+                    desi = table.rows[i].cells[1].innerHTML;
+                    ht = table.rows[i].cells[2].innerHTML;
+                    tva = table.rows[i].cells[3].innerHTML;
+                    ttc = table.rows[i].cells[4].innerHTML;
+                    id = table.rows[i].cells[7].innerHTML;
+
+                    var BLS = {
+                        BonDeLivraison_ID: "",
+                        BonDeLivraison_Designation: "",
+                        BonDeLivraison_TotalHT: "",
+                        BonDeLivraison_TotalTVA: "",
+                        BonDeLivraison_TotalTTC: ""
+                    }
+
+                    BLS.BonDeLivraison_ID = id;
+                    BLS.BonDeLivraison_Designation = desi;
+                    BLS.BonDeLivraison_TotalHT = parseFloat(ht).toFixed(2).replace(".", ",");
+                    BLS.BonDeLivraison_TotalTVA = parseFloat(tva).toFixed(2).replace(".", ",");
+                    BLS.BonDeLivraison_TotalTTC = parseFloat(ttc).toFixed(2).replace(".", ",");
+                    ListBL.push(BLS);
+
                 }
-
-                BLS.BonDeLivraison_ID = id;
-                BLS.BonDeLivraison_Designation = desi;
-                BLS.BonDeLivraison_TotalHT =  parseFloat(ht).toFixed(2).replace(".",",");
-                BLS.BonDeLivraison_TotalTVA =  parseFloat(tva).toFixed(2).replace(".",",");
-                BLS.BonDeLivraison_TotalTTC =  parseFloat(ttc).toFixed(2).replace(".",",");
-                ListBL.push(BLS);
-
             }
         }
         //FactureModel.listeBL = ListBL;
@@ -322,18 +323,16 @@
 
                     for (i = 0; i < data.length; i++)
                     {
-                        $("#tbodyCamions").append("<tr>" +
+                        $("#tbodyCamions").append("<tr>" +                        
+                        "<td class='border-b dark:border-dark-5'>  <input type='checkbox' class='largerCheckbox tblChk chk" + i + "' name='check'/></td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_Designation + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalHT + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalTVA + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].bonDeLivraison_TotalTTC + "</td>" +
                             "<td class='border-b dark:border-dark-5'>"+ data[i].bonDeLivraison_DateLivraison +"</td>" +
                             "<td class='border-b dark:border-dark-5'>"+ data[i].statut_BL.statutBL_Name +"</td>" +
-
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].bonDeLivraison_ID + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" +data[i].bonDeLivraison_StatutID  + "</td>" +
-                            "<td >" +"<button class='btn btn-outline-secondary btn-table round' onclick='articleDelete(this)'><i class='bx bx-trash-alt'></i>Supprimer</button>" +"</td>" +
-
                             "</tr>");
 
                     }
@@ -358,7 +357,19 @@
         console.log(qteLiv * pu);
         $(ctl).closest("tr").find("td:eq(5)").text(parseFloat(qteLiv * pu).toFixed(2));
        // $(ctl).parents("tr");
-       
-       
     }
+      $('#tableForme').on('change', '.tblChk', function() {
+        if ($('.tblChk:checked').length == $('.tblChk').length) {
+            $('#chkAll').prop('checked', true);
+        } else {
+            $('#chkAll').prop('checked', false);
+        }
+    });
+    $("#chkAll").change(function () {
+        if ($(this).prop('checked')) {
+          $('.tblChk').not(this).prop('checked', true);
+        } else {
+          $('.tblChk').not(this).prop('checked', false);
+        }
+      });
 </script>

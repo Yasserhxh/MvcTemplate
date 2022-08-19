@@ -1,0 +1,248 @@
+﻿@model IEnumerable<Domain.Models.ArticleBL_Model>
+@using Web.Helpers;
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = " Articles bon de livraison";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeBonDeLivraison">Liste des bons de livraison </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table">
+                                                        <div>
+                                                            @{ var a = @Model.FirstOrDefault(); }
+                                                            @if (a == null)
+                                                            {<h4 class="card-title">Aucun</h4> }
+                                                            else
+                                                            {<h4> Liste des articles du bon de livraison:  "@Model.FirstOrDefault().bonDeLivraison.BonDeLivraison_Designation"</h4>}
+                                                        </div>
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Designation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap ">Quantite </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unite de mesure </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix Unitaire (HT)</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix total (HT) </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr>
+
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBL_Designation)</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.ArticleBL_Quantie.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+@*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
+*@                                                                        <td class="border-b dark:border-dark-5">@item.ArticleBL_PU.ToString("n2") DH</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.ArticleBL_PrixTotal.ToString("n2") DH</td>
+                                                                        
+
+
+
+
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="breadcrumb-item text-sm-right ">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBC"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un bon de commande</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
+<script>
+
+
+   @if (TempData["Creation"] != null)
+        {
+            <text>CreationNotifications();</text>
+        }
+
+    @if (TempData["Modification"] != null)
+        {
+            <text>ModificationNotifications();</text>
+        }
+    function CreationNotifications() {
+        ShowNotification("Matiere enregistrée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+    function ModificationNotifications() {
+        ShowNotification("Matiere modifiée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+    }
+
+
+
+
+
+
+    function camionAjout() {
+        var desc = $("#fournisseur").val();
+        var prix = $("#matiere option:selected").val();
+
+        if ($("#tableCamions tbody").length == 0) {
+            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
+            document.getElementById('divTable').style.display = "block";
+            document.getElementById('envbutton').style.display = "block";
+        }
+
+        $("#tbodyCamions").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
+            "<td >" + desc + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text() + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
+            "</tr>");
+
+    }
+    function formCamionClear() {
+        $("#matiere").val("");
+    }
+
+    //delete
+    function CamionDelete(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
+    }
+        function CreatePrix() {
+        var ListIdUnite = new Array();
+        var table = document.getElementById("tbodyCamions");
+        for (var i = 0; i < table.rows.length; i++)
+        {
+            desc = table.rows[i].cells[0].innerHTML;
+            prix = table.rows[i].cells[3].innerHTML;
+
+            ListIdUnite.push(prix);
+        }
+
+
+        var data = {
+            idMatiere: parseInt($("#spanVal").text()),
+            listUnite: ListIdUnite,
+        }
+        console.log(data);
+         $.ajax({
+            url: '@Url.Action("AjouterUniteUtilisation", "MatierePremiere")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+             success: function (data) {
+                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                  setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeMatierePremiere", "MatierePremiere")';
+                        }, 500);
+            },
+             error: function () {
+                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+
+            }
+        });
+    }
+    function displayDashboard() {
+        var fournisseurID = $("#fournisseur").val();
+        var date = $("#date").val();
+        window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
+    }
+</script>

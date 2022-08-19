@@ -25,6 +25,7 @@ namespace Domain.Models
         public ICollection<ArticleBL_Model> listeArticles { get; set; }
         public FactureModel Facture { get; set; }
         public Statut_BLModel Statut_BL { get; set; }
+        public Abonnement_ClientModel Abonnement_Client { get; set; }
 
     }
 

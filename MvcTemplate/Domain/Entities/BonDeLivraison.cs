@@ -20,6 +20,7 @@ namespace Domain.Entities
         [ForeignKey("Bon_De_Commande")]
         public int BonDeLivraison_BCID { get; set; }
         public string BonDeLivraison_Designation { get; set; }
+        [ForeignKey("Abonnement_Client")]
         public int BonDeLivraison_AbonnementID { get; set; }
         [ForeignKey("Facture")]
         public int? BonDeLivraison_FactureID { get; set; }
@@ -34,6 +35,7 @@ namespace Domain.Entities
         public ICollection<Article_BL> listeArticles { get; set; }
         public Facture Facture { get; set; }
         public Statut_BL Statut_BL { get; set; }
+        public Abonnement_Client Abonnement_Client { get; set; }
 
     }
 }

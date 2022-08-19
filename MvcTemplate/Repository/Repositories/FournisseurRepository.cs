@@ -187,10 +187,16 @@ namespace Repository.Repositories
         public IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID)
         {
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
+        }  
+        public IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID)
+        {
+            return _db.article_BLs.Where(p => p.ArticleBL_BonLivraisonID == bondeLivraisonID).Include(p=>p.bonDeLivraison)
+                .Include(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.Unite_Mesure).AsEnumerable();
         } 
         public IEnumerable<Article_BC> GetArticlesBCForBL(int bonCommandeID)
         {
-            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID && p.ArticleBC_QteRest >0).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
+            return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID && p.ArticleBC_QteRest > 0).Include(p => p.bonDeCommande).Include(p => p.Unite_Mesure).AsEnumerable();
         }
 
         public IEnumerable<BonDeCommande> GetBonDeCommandes(int aboID, int? pointStockID, int? fournisseurID, string date, string statut)
@@ -316,6 +322,16 @@ namespace Repository.Repositories
         {
             var bC = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == aboID && p.BonDeCommande_ID == bonCommandeID)
                 .Include(p=>p.Fournisseur)
+                .Include(p=>p.Abonnement_Client)
+                .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.listeArticles).ThenInclude(p=>p.Unite_Mesure)
+                .FirstOrDefault();
+            return bC;
+        } 
+        public BonDeLivraison FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison)
+        {
+            var bC = _db.bonDeLivraisons.Where(p => p.BonDeLivraison_AbonnementID == aboID && p.BonDeLivraison_ID == bondeLivraison)
+                .Include(p=>p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
                 .Include(p=>p.Abonnement_Client)
                 .Include(p=>p.listeArticles).ThenInclude(p=>p.MatierePremiere_Stokage).ThenInclude(p=>p.Matiere_Premiere)
                 .Include(p=>p.listeArticles).ThenInclude(p=>p.Unite_Mesure)
