@@ -18,12 +18,12 @@ namespace Domain.Models
         public decimal Facture_TotalHT { get; set; }
         public decimal Facture_TotalTTC { get; set; }
         public int Facture_AbonnementID { get; set; }
-        public int Facture_PointStockID { get; set; }
+       // public int Facture_PointStockID { get; set; }
         public DateTime Facture_DateFacture { get; set; }
         public DateTime Facture_DateSaisie { get; set; }
         public BonDeCommande_Model bonDeCommande { get; set; }
         public FournisseurModel Fournisseur { get; set; }
      //   public List<BonDeLivraison_Model> listeBL { get; set; }
-        public Lieu_StockageModel Lieu_Stockage { get; set; }
+       // public Lieu_StockageModel Lieu_Stockage { get; set; }
     }
 }

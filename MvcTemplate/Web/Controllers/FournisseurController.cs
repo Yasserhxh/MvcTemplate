@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
 using Humanizer;
+using Domain.Entities;
 //using NHibernate.Cache;
 
 namespace Web.Controllers
@@ -30,13 +31,15 @@ namespace Web.Controllers
         private readonly IFournisseurService fournisseurService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IGestionMouvementService gestionMouvementService;
+        private readonly IZoneStockageService zoneStockageService;
         //private ICacheProvider _cacheProvider;
 
-        public FournisseurController(IFournisseurService fournisseurService, UserManager<ApplicationUser> userManager, IGestionMouvementService gestionMouvementService)
+        public FournisseurController(IFournisseurService fournisseurService, UserManager<ApplicationUser> userManager, IGestionMouvementService gestionMouvementService, IZoneStockageService zoneStockageService)
         {
             this.fournisseurService = fournisseurService;
             _userManager = userManager;
             this.gestionMouvementService = gestionMouvementService;
+            this.zoneStockageService = zoneStockageService;
         }
 
         public IActionResult Ajouter()
@@ -317,7 +320,7 @@ namespace Web.Controllers
             factureModel.Facture_MontantTVA = listeBL.Sum(p=>p.BonDeLivraison_TotalTVA);
             factureModel.Facture_TotalTTC = listeBL.Sum(p=>p.BonDeLivraison_TotalTTC);
             factureModel.Facture_TotalHT = listeBL.Sum(p=>p.BonDeLivraison_TotalHT);
-            factureModel.Facture_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            //factureModel.Facture_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.CreateFacture(factureModel, listeBL);
             return redirect;
         }
@@ -395,6 +398,29 @@ namespace Web.Controllers
                 throw;
             }
         }
+        public IActionResult getAllProds(int pg = 2)
+        {
+            var query = fournisseurService.getAllProds(pg);
+            var pager = new Pager(query.count, pg, 10);
+            ViewBag.Pager = pager;
+            return View(query.objList);
+        }
+        public IActionResult MatieresEnStock(int? matireID, string lotIntern, int pg = 1)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["lieu"] = new SelectList(zoneStockageService.getListLieuStockage(Id, 1), "LieuStockag_Id", "LieuStockag_Nom");
+            ViewData["unite"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
+            var query = fournisseurService.GetMatireStockAchat(Id, matireID, lotIntern);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View(model);
+        }
     }
 
     public static class BitmapExtension
@@ -408,4 +434,5 @@ namespace Web.Controllers
             }
         }
     }
+  
 }

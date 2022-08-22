@@ -219,11 +219,9 @@ namespace Repository.Repositories
         {
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
         }  
-        public IEnumerable<Stock_Achat> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern, string CurrentSort, int? page)
+        public IEnumerable<Stock_Achat> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern)
         {
-            int pageSize = 10;
-            int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            
             var query = _db.stock_Achats.Where(p => p.StockAchat_AbonnementID == aboID);
             if (matiereID != null)
                 query = query.Where(p => p.StockAchat_MatiereID == matiereID);
@@ -236,13 +234,19 @@ namespace Repository.Repositories
             int recSkip = (pg - 1) * pageSize;*/
             return query.Include(p=>p.MatierePremiere).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
-        public List<ProduitVendable> getAllProds(int startRow, int maxRow)
+        public paginationModel<ProduitVendable> getAllProds(int pg = 2)
         {
-           // var p = new DynamicParameters();
-           // p.Add("@a", 11);
-          //  p.Add("@c", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
-            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new { startRowIndex = startRow, maximumRows = maxRow }, commandType: CommandType.StoredProcedure);
-            return query.ToList();
+            int pageSize = 10;
+            if (pg < 1)
+                pg = 1;
+            int startRow = (pg -1) * pageSize;
+            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new { startRowIndex = startRow, maximumRows = pageSize }, commandType: CommandType.StoredProcedure).ToList();
+            var pagination = new paginationModel<ProduitVendable>
+            {
+                objList = query,
+                count = _db.produitVendables.Count()
+            };
+            return pagination;
         }  
         public IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID)
         {
@@ -291,11 +295,11 @@ namespace Repository.Repositories
         public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)
         {
             var query = _db.factures.Where(p => p.Facture_AbonnementID == aboID);
-            if (point != null)
-                query = query.Where(p => p.Facture_PointStockID == point);
+           // if (point != null)
+            //    query = query.Where(p => p.Facture_PointStockID == point);
             if (date != "")
                 query = query.Where(p => Convert.ToDateTime(p.Facture_DateFacture).ToString("yyyy-MM-dd") == date);
-            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).Include(p => p.Lieu_Stockage).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
+            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
         }
 
         public IEnumerable<Fonction> getListFonction()

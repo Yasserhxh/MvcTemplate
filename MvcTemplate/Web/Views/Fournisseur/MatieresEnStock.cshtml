@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Domain.Models.FactureModel>
+﻿@model IEnumerable<Domain.Models.StockAchat_Model>
 @using Web.Helpers;
 @{
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 @{
-    ViewData["Title"] = "Factures";
+    ViewData["Title"] = "Matieres en stock";
     Pager pager = new Pager();
     int pageNo = 0;
     if (ViewBag.Pager != null)
@@ -30,7 +30,7 @@
                                     <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <a asp-action="ListeFactures">Liste des Factures</a>
+                                    <a asp-action="MatieresEnStock">Liste des matières premières en stock</a>
                                 </li>
                             </ol>
                         </div>
@@ -101,43 +101,45 @@
                                                     <div class="table">
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
-                                                                <tr>
-
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Numero de facture </th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Fournisseur</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Bon de commande</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total HT</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Montant TVA</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total TTC</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de facture</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
+                                                                <tr><th><input type="checkbox" class="largerCheckbox" checked id="chkAll" /></th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière première</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité de mesure</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Lot fournisseur</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Lot intern</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Qté transfert</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Pt. STOCK</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
 
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="usertbody">
+                                                                @{var i = 0;}
                                                                 @foreach (var item in Model)
                                                                 {
                                                                     <tr>
-
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_Numero)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Fournisseur.Founisseur_RaisonSocial)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.bonDeCommande.BonDeCommande_Numero)</td>
-@*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
-*@                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalHT.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.Facture_MontantTVA.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalTTC.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_DateFacture)</td>
+                                                                        <td class='border-b dark:border-dark-5'> <input type="checkbox" checked class="largerCheckbox tblChk chk @i " name="check"/></td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere.MatierePremiere_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.StockAchat_QuantiteMatiere.ToString("G29")</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.StockAchat_LotFournisseur)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.StockAchat_LotIntern)</td>
+                                                                        <td class="border-b dark:border-dark-5"><input type="text"/></td>                                                                        
+                                                                        <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="@ViewBag.unite"><option value="" selected disabled>Sélectionnez une unite de mesure ...</option></select></td>
+                                                                        <td class="border-b dark:border-dark-5"><select class="custom-select" id="lieu" data-search="true" asp-items="@ViewBag.lieu"><option value="" selected disabled>Sélectionnez un lieu de stockage ...</option></select></td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="getAllProds"><i class="bx bx-plus "></i>get all prods test</a>
+                                                                                  <button class="dropdown-item btn-outline-success " ><i class="bx bx-check"></i>Livrer la matière première</button>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
-
+                                                                        @{i=i+1;}
                                                                     </tr>
+                                                                    
                                                                 }
                                                             </tbody>
                                                         </table>
@@ -190,9 +192,59 @@
 
                 }
             </div>*@
-            <div class="breadcrumb-item text-sm-right ">
-                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterFA"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter une facture</span></a>
+         @*   <div class="breadcrumb-item text-sm-right ">
+                <button class="btn btn-outline-success round mr-1 mb-1" id="disabled" asp-action="AjouterFA"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Affecter a un Pt. Stock</span></button>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog" id="matStocks">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel">Impossible de livrer les matières</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
             </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Liste des matières premières  en stock à réceptionner</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 mt-2" id="plan1">
+                                                <div class="table-responsive">
+                                                    <table id="plandiv1" class="table mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Matère première</th>
+                                                                <th>Quantité à livrer</th>
+                                                                <th>Unité de mesure </th>
+                                                                <th>Quantité en stock</th>
+                                                                <th>Unité de mesure</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>
@@ -378,4 +430,26 @@
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
     }
+       $('#usertbody').on('change', '.tblChk', function() {
+
+           if ($('.tblChk:checked').length == $('.tblChk').length) {
+            $('#chkAll').prop('checked', true);
+           } else {
+            $('#chkAll').prop('checked', false);
+           } 
+           
+    });
+
+
+    $("#chkAll").change(function () {
+        if ($(this).prop('checked')) {
+          $('.tblChk').not(this).prop('checked', true);
+          document.getElementById('disabled').disabled = false;
+
+        } else {
+          $('.tblChk').not(this).prop('checked', false);
+        document.getElementById('disabled').disabled = true;
+
+        }
+      });
 </script>

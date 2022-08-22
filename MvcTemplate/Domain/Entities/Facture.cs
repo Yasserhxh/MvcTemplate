@@ -22,8 +22,8 @@ namespace Domain.Entities
         [ForeignKey("bonDeCommande")]
         public int Facture_BonDeCommandeID { get; set; }
         public int Facture_AbonnementID { get; set; }
-        [ForeignKey("Lieu_Stockage")]
-        public int Facture_PointStockID { get; set; }
+        //[ForeignKey("Lieu_Stockage")]
+        //public int Facture_PointStockID { get; set; }
         public decimal Facture_MontantTVA { get; set; }
         public decimal Facture_TotalHT { get; set; }
         public decimal Facture_TotalTTC { get; set; }
@@ -31,7 +31,7 @@ namespace Domain.Entities
         public DateTime Facture_DateSaisie { get; set; }
         public BonDeCommande bonDeCommande { get; set; }
         public Fournisseur Fournisseur { get; set; }
-        public Lieu_Stockage Lieu_Stockage { get; set; }
+        //public Lieu_Stockage Lieu_Stockage { get; set; }
       //  public ICollection<BonDeLivraison> listeBL {get;set;}
     }
 }

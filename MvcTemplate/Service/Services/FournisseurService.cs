@@ -153,11 +153,10 @@ namespace Service.Services
             return mapper.Map<Fournisseur, FournisseurModel>(fournisseurRepository.findFormulaireFournisseur(formulaireFourisseurId));
         }
 
-        public List<ProduitVendable> getAllProds(int startRow, int maxRow)
+        public paginationModel<ProduitVendable> getAllProds(int pg)
         {
-            return fournisseurRepository.getAllProds(startRow, maxRow);
+            return fournisseurRepository.getAllProds(pg);
         }
-
         public IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID)
         {
             return mapper.Map<IEnumerable<Article_BC>, IEnumerable<ArticleBC_Model>>(fournisseurRepository.GetArticlesBC(bonCommandeID));
@@ -212,6 +211,11 @@ namespace Service.Services
         public IEnumerable<FournisseurMatiereModel> getListMatiereLink(int fournisseurId)
         {
             return mapper.Map<IEnumerable<FournisseurMatiere>, IEnumerable<FournisseurMatiereModel>>(fournisseurRepository.getListMatiereLink(fournisseurId));
+        }
+
+        public IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern)
+        {
+            return mapper.Map<IEnumerable<Stock_Achat>, IEnumerable<StockAchat_Model>>(fournisseurRepository.GetMatireStockAchat(aboID, matiereID, lotIntern));
         }
 
         /*  public IEnumerable<FournisseurModel> getListAllFournisseur()
