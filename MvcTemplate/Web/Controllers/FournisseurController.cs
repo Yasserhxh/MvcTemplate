@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
 using Humanizer;
+//using NHibernate.Cache;
 
 namespace Web.Controllers
 {
@@ -29,6 +30,7 @@ namespace Web.Controllers
         private readonly IFournisseurService fournisseurService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IGestionMouvementService gestionMouvementService;
+        //private ICacheProvider _cacheProvider;
 
         public FournisseurController(IFournisseurService fournisseurService, UserManager<ApplicationUser> userManager, IGestionMouvementService gestionMouvementService)
         {

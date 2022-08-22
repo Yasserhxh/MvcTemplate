@@ -42,7 +42,13 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-3 offset-md-2 mb-1">
+                    <div class="col-md-3 offset-md-1 mb-1">
+                        <label for="role">Numero de bon de commande</label>
+                        <div>
+                            <input type="text" class="form-control" name="name" id="name" onkeyup="checkdisable()"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-1">
                         <label for="role">Fournisseur</label>
                         <div>
                             <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
@@ -386,7 +392,8 @@
     function displayDashboard() {
         var fournisseurID = $("#fournisseur").val();
         var date = $("#date").val();
-        window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
+        var name = $("#name").val();
+        window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date+ "&name=" + name ;
     }
      var $j = jQuery.noConflict();
     $j("#date").datepicker({
@@ -395,4 +402,19 @@
     minViewMode: "years",
     autoclose:true //to close picker once year is selected
 });
+    function checkdisable()
+    {
+        if ($("#name").val() != "") {
+            document.getElementById('fournisseur').disabled = true;
+            document.getElementById('date').disabled = true;
+            $("#fournisseur").val("");
+            $("#date").val("");
+        } else {
+            document.getElementById('fournisseur').disabled = false;
+            document.getElementById('date').disabled = false;
+            $("#fournisseur").val("");
+            $("#date").val("");
+
+        }
+    }
 </script>

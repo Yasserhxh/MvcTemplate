@@ -117,6 +117,11 @@ namespace Web
             //services.AddPaging();
             //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
 
+            //Caching In-Memory
+            services.AddMemoryCache();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

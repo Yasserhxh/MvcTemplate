@@ -19,6 +19,7 @@ namespace Domain.Entities
         [ForeignKey("Unite_Mesure")]
         public int ArticleBL_UniteMesureID { get; set; }
         public decimal ArticleBL_Quantie { get; set; }
+        public decimal ArticleBL_QuantieRes { get; set; }
         public decimal ArticleBL_PU { get; set; }
         public decimal ArticleBL_PrixTotal { get; set; }
         [ForeignKey("bonDeLivraison")]
