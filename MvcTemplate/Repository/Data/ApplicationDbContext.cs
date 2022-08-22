@@ -122,6 +122,7 @@ namespace Repository.Data
         public DbSet<Article_BC> article_BCs { get; set; }
         public DbSet<Article_BL> article_BLs { get; set; }
         public DbSet<Facture> factures { get; set; }
+        public DbSet<Stock_Achat> stock_Achats { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

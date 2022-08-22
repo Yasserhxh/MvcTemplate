@@ -29,5 +29,6 @@ namespace Repository.IRepositories
         IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
         BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
+        List<ProduitVendable> getAllProds(int startRow, int maxRow);
     }
 }

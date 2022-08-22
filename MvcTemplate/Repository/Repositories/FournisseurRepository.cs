@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Helpers;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
@@ -8,6 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlTypes;
+using Microsoft.SqlServer.Server;
+using Dapper;
+
 namespace Repository.Repositories
 {
     public class FournisseurRepository : IFournisseurRepository
@@ -74,16 +80,41 @@ namespace Repository.Repositories
             foreach(var item in bonDeLivraison.listeArticles)
             {
                 item.ArticleBL_DateReception = bonDeLivraison.BonDeLivraison_DateLivraison;
+                int _min = 1000;
+                int _max = 9999;
+                Random _rdm = new Random();
+                item.ArticleBL_LotTemp = DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() + DateTime.UtcNow.Day.ToString() + "LOT" + _rdm.Next(_min, _max);
                 var articleBC = _db.article_BCs.Where(p => p.ArticleBC_BCID == bonDeLivraison.BonDeLivraison_BCID && p.ArticleBC_MatiereID == item.ArticleBL_MatiereID).FirstOrDefault();
                 articleBC.ArticleBC_QteRest -= item.ArticleBL_Quantie;
                 if (articleBC.ArticleBC_QteRest == 0)
                     i++;
-                _db.Entry(articleBC).State = EntityState.Modified;
+                var achat = _db.stock_Achats.Where(p => p.StockAchat_MatiereID == item.ArticleBL_MatiereID && p.StockAchat_LotIntern == item.ArticleBL_LotTemp).FirstOrDefault();
+                if (achat != null)
+                {
+                    achat.StockAchat_QuantiteMatiere += item.ArticleBL_Quantie;
+                    achat.StockAchat_QuantiteRestante += item.ArticleBL_Quantie;
+                  //_db.Entry(achat).State = EntityState.Modified;
+                }
+                else
+                {
+                    Stock_Achat stockAchat = new Stock_Achat()
+                    {
+                        StockAchat_MatiereID = item.ArticleBL_MatiereID,
+                        StockAchat_QuantiteMatiere = item.ArticleBL_Quantie,
+                        StockAchat_QuantiteRestante = item.ArticleBL_Quantie,
+                        StockAchat_LotFournisseur = item.ArticleBL_LotFournisseur,
+                        StockAchat_LotIntern = item.ArticleBL_LotTemp,
+                        StockAchat_AbonnementID = bonDeLivraison.BonDeLivraison_AbonnementID
+
+                    };
+                    await _db.stock_Achats.AddAsync(stockAchat);
+                }
+               // _db.Entry(articleBC).State = EntityState.Modified;
             }
             if (bc.listeArticles.Count() == i)
             { 
                 bc.BonDeCommande_Statut = "Réceptionné";
-                _db.Entry(bc).State = EntityState.Modified;
+                //_db.Entry(bc).State = EntityState.Modified;
             }
             bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.Now;
             bonDeLivraison.BonDeLivraison_StatutID = 1;
@@ -187,6 +218,31 @@ namespace Repository.Repositories
         public IEnumerable<Article_BC> GetArticlesBC(int bonCommandeID)
         {
             return _db.article_BCs.Where(p => p.ArticleBC_BCID == bonCommandeID).Include(p=>p.bonDeCommande).Include(p=>p.Unite_Mesure).AsEnumerable();
+        }  
+        public IEnumerable<Stock_Achat> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern, string CurrentSort, int? page)
+        {
+            int pageSize = 10;
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            var query = _db.stock_Achats.Where(p => p.StockAchat_AbonnementID == aboID);
+            if (matiereID != null)
+                query = query.Where(p => p.StockAchat_MatiereID == matiereID);
+            if (!string.IsNullOrEmpty(lotIntern))
+                query = query.Where(p => p.StockAchat_LotIntern.Contains(lotIntern));
+           /* if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;*/
+            return query.Include(p=>p.MatierePremiere).Include(p=>p.Unite_Mesure).AsEnumerable();
+        }
+        public List<ProduitVendable> getAllProds(int startRow, int maxRow)
+        {
+           // var p = new DynamicParameters();
+           // p.Add("@a", 11);
+          //  p.Add("@c", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new { startRowIndex = startRow, maximumRows = maxRow }, commandType: CommandType.StoredProcedure);
+            return query.ToList();
         }  
         public IEnumerable<Article_BL> GetArticlesBL(int bondeLivraisonID)
         {

@@ -24,13 +24,15 @@ namespace WebApi.Services
         private readonly IAuthentificationService authentificationService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthentificationRepository authentificationRepository;
+      //  private readonly IFournisseurService fournisseurService;
 
-        public AuthentificationController(IOptions<AppSettings> appSettings, IAuthentificationService authentificationService, UserManager<ApplicationUser> userManager, IAuthentificationRepository authentificationRepository)
+        public AuthentificationController(IOptions<AppSettings> appSettings, IAuthentificationService authentificationService, UserManager<ApplicationUser> userManager, IAuthentificationRepository authentificationRepository, IFournisseurService fournisseurService = null)
         {
             _appSettings = appSettings.Value;
             this.authentificationService = authentificationService;
             _userManager = userManager;
             this.authentificationRepository = authentificationRepository;
+          //  this.fournisseurService = fournisseurService;
         }
 
         // GET: api/authentification
@@ -99,5 +101,6 @@ namespace WebApi.Services
             }
             return Unauthorized();
         }
+     
     }
 }

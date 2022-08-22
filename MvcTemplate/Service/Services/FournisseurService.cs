@@ -153,6 +153,11 @@ namespace Service.Services
             return mapper.Map<Fournisseur, FournisseurModel>(fournisseurRepository.findFormulaireFournisseur(formulaireFourisseurId));
         }
 
+        public List<ProduitVendable> getAllProds(int startRow, int maxRow)
+        {
+            return fournisseurRepository.getAllProds(startRow, maxRow);
+        }
+
         public IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID)
         {
             return mapper.Map<IEnumerable<Article_BC>, IEnumerable<ArticleBC_Model>>(fournisseurRepository.GetArticlesBC(bonCommandeID));

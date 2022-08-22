@@ -29,6 +29,6 @@ namespace Service.IServices
         IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date);
         BonDeCommande_Model FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison_Model FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
-
+        List<ProduitVendable> getAllProds(int startRow, int maxRow);
     }
 }
