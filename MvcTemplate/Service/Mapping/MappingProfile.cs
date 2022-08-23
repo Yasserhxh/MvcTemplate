@@ -49,6 +49,7 @@ namespace Service.Mapping
             CreateMap<BonDeLivraison, BonDeLivraison_Model>().ForMember(b => b.BonDeLivraison_TTCWords, opt => opt.Ignore());
             CreateMap<BonDeCommande, BonDeCommande_Model>().ForMember(b => b.BonDeCommande_TTCWords, opt => opt.Ignore());
             CreateMap<Facture, FactureModel>();
+            CreateMap<Matiere_Transfert, MatiereTransfert_Model>();
 
 
 
@@ -91,8 +92,8 @@ namespace Service.Mapping
             CreateMap<MatStockView, matStockViewModel>();
             CreateMap<Reception_Stock, Reception_StockModel>();
             CreateMap<Approvisionnement_Matiere, Approvisionnement_MatiereModel>();
-
             CreateMap<FactureModel, Facture>();
+            CreateMap<MatiereTransfert_Model, Matiere_Transfert>();
 
         }
     }

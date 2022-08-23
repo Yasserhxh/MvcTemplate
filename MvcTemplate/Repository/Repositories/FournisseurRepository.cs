@@ -404,5 +404,47 @@ namespace Repository.Repositories
                 .FirstOrDefault();
             return bC;
         }
+
+        public async Task<int?> CreateOrdreTransfer(Transfert_Matiere transfert)
+        {
+            transfert.TransfertMat_DateCreation = DateTime.Now;
+            transfert.TransfertMat_Statut = "En attente";
+            await _db.transfert_Matieres.AddAsync(transfert);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return transfert.TransfertMat_ID;
+            else
+                return null;
+        }
+
+        public IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, int? stockID, string statut, string date)
+        {
+            var query = _db.transfert_Matieres.Where(p => p.TransfertMat_AbonnementID == aboId);
+            if (stockID == null && string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true)
+                return null;
+            if (stockID != null)
+                query = query.Where(p => p.TransfertMat_PointStockID == stockID);
+            if (!string.IsNullOrEmpty(statut))
+                query = query.Where(p => p.TransfertMat_Statut == statut);
+            if (!string.IsNullOrEmpty(date))
+                query = query.Where(p => Convert.ToDateTime(p.TransfertMat_DateCreation).ToString("yyyy-MM-dd") == date);
+            return query.Include(p => p.Lieu_Stockage)
+                .AsEnumerable().OrderByDescending(p => p.TransfertMat_DateCreation);
+        }
+
+        public IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID, string matiereID, string lot)
+        {
+            var query = _db.matiere_Transferts.Where(p => p.MatiereTrans_TransferID == transferID);
+            if (transferID == null && string.IsNullOrEmpty(lot) == true && string.IsNullOrEmpty(matiereID) == true)
+                return null;
+
+            if (!string.IsNullOrEmpty(matiereID))
+                query = query.Where(p => p.MatierePremiere.MatierePremiere_Libelle.Contains(matiereID) == true);
+
+            if (!string.IsNullOrEmpty(lot))
+                query = query.Where(p => p.MatiereTrans_LotNumber.Contains(lot) == true);
+         
+            return query.Include(p => p.MatierePremiere).Include(p=>p.Unite_Mesure).Include(p=>p.Transfert_Matiere).AsEnumerable();
+        }
     }
 }

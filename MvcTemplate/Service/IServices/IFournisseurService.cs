@@ -31,5 +31,8 @@ namespace Service.IServices
         BonDeLivraison_Model FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
         paginationModel<ProduitVendable> getAllProds(int pg);
         IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern);
+        Task<bool> CreateOrdreTransfer(TransfertMatiere_Model transfertModel);
+        IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId, int? stockID, string statut, string date);
+        IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, string matiereID, string lot);
     }
 }

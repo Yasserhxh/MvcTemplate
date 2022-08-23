@@ -48,6 +48,7 @@ namespace Repository.Mapping
             CreateMap<Facture, FactureModel>();
             CreateMap<BonDeLivraison, BonDeLivraison_Model>().ForMember(b => b.BonDeLivraison_TTCWords, opt => opt.Ignore());
             CreateMap<Stock_Achat, StockAchat_Model>().ForMember(b => b.unite_Utilisation, opt => opt.Ignore());
+            CreateMap<Matiere_Transfert, MatiereTransfert_Model>();
 
             // Models to Entities mapping
             CreateMap<Abonnement_ClientModel, Abonnement_Client>();
@@ -94,6 +95,7 @@ namespace Repository.Mapping
             CreateMap<Approvisionnement_MatiereModel, Approvisionnement_Matiere>();
             CreateMap<FactureModel, Facture>();
             CreateMap<StockAchat_Model, Stock_Achat>();
+            CreateMap<MatiereTransfert_Model, Matiere_Transfert>();
 
         }
     }

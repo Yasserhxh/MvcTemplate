@@ -128,6 +128,26 @@ namespace Service.Services
             }
         }
 
+        public async Task<bool> CreateOrdreTransfer(TransfertMatiere_Model transfertModel)
+        {
+            using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    Transfert_Matiere transfert = mapper.Map<TransfertMatiere_Model, Transfert_Matiere>(transfertModel);
+                    var idtransfert = await fournisseurRepository.CreateOrdreTransfer(transfert);
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public Task<bool> deleteFournisseur(int ID, int code)
         {
             return this.fournisseurRepository.deleteFournisseur(ID, code);
@@ -184,6 +204,16 @@ namespace Service.Services
         public IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date)
         {
             return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, point, date));
+        }
+
+        public IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, string matiereID, string lot)
+        {
+            return mapper.Map<IEnumerable<Matiere_Transfert>, IEnumerable<MatiereTransfert_Model>>(fournisseurRepository.GetListeMatiereParOrdre(transferID, matiereID, lot));
+        }
+
+        public IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId, int? stockID, string statut, string date)
+        {
+            return mapper.Map<IEnumerable<Transfert_Matiere>, IEnumerable<TransfertMatiere_Model>>(fournisseurRepository.GetListeOrdreTransfert(aboId, stockID, statut, date));
         }
 
         public IEnumerable<VilleModel> getListeVille()
