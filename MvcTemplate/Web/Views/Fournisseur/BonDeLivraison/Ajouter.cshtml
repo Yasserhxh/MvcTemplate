@@ -99,7 +99,7 @@
                                                             <div class="table-responsive">
                                                                 <table id="tableForme" class="table mb-0">
                                                                     <thead>
-                                                                        <tr><th><input type="checkbox" class="largerCheckbox" id="chkAll" /></th>
+                                                                        <tr><th><input type="checkbox" checked class="largerCheckbox" id="chkAll" /></th>
                                                                             <th>Designation</th>
                                                                             <th>Quantité commandée</th>
                                                                             <th>Quantité réceptionnée</th>
@@ -386,7 +386,7 @@
                     {
                         var res = data[i].articleBC_Quantite - parseFloat(data[i].articleBC_QteRest);
                         $("#tbodyCamions").append("<tr>" +                            
-                        "<td class='border-b dark:border-dark-5'>  <input type='checkbox' class='largerCheckbox tblChk chk" + i + "' name='check'/></td>" +
+                        "<td class='border-b dark:border-dark-5'>  <input type='checkbox' checked class='largerCheckbox tblChk chk" + i + "' name='check'/></td>" +
                             "<td class='border-b dark:border-dark-5' >" + data[i].articleBC_Designation + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].articleBC_Quantite + "</td>" +
                             "<td class='border-b dark:border-dark-5'>" + res + "</td>" +

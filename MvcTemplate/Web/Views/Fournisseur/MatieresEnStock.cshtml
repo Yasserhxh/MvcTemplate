@@ -13,7 +13,18 @@
         pageNo = pager.CurrentPage;
     }
 }
-
+<style>
+    .my-custom-scrollbar 
+    {
+        position: relative;
+        height: 500px;
+        overflow: auto;
+    }
+    .table-wrapper-scroll-y 
+    {
+        display: block;
+    }
+</style>
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -98,8 +109,8 @@
                                             <section id="table-success">
                                                 <div class="card">
                                                     <!-- datatable start -->
-                                                    <div class="table">
-                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                                        <table id="table-Cartographie-Deposees" class="table table-bordered table-striped mb-0">
                                                             <thead>
                                                                 <tr><th><input type="checkbox" class="largerCheckbox" checked id="chkAll" /></th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière première</th>
@@ -115,18 +126,22 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="usertbody">
-                                                                @{var i = 0;}
+                                                                @{
+                                                                    var i = 0;
+                                                                }
                                                                 @foreach (var item in Model)
                                                                 {
                                                                     <tr>
                                                                         <td class='border-b dark:border-dark-5'> <input type="checkbox" checked class="largerCheckbox tblChk chk @i " name="check"/></td>
+                                                                        <td class="border-b dark:border-dark-5" style="display:none;">@Html.DisplayFor(modelItem => item.StockAchat_MatiereID)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere.MatierePremiere_Libelle)</td>
                                                                         <td class="border-b dark:border-dark-5">@item.StockAchat_QuantiteMatiere.ToString("G29")</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.StockAchat_LotFournisseur)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.StockAchat_LotIntern)</td>
-                                                                        <td class="border-b dark:border-dark-5"><input type="text"/></td>                                                                        
-                                                                        <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="@ViewBag.unite"><option value="" selected disabled>Sélectionnez une unite de mesure ...</option></select></td>
+                                                                        <td class="border-b dark:border-dark-5"><input type="text"/></td>
+                                                                        @{var id = "unite"+i.ToString();}
+                                                                        <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="(SelectList)ViewData[id]"><option value="" selected disabled>Sélectionnez une unite de mesure ...</option></select></td>
                                                                         <td class="border-b dark:border-dark-5"><select class="custom-select" id="lieu" data-search="true" asp-items="@ViewBag.lieu"><option value="" selected disabled>Sélectionnez un lieu de stockage ...</option></select></td>
                                                                         <td>
                                                                             <div class="dropdown">
@@ -256,133 +271,7 @@
 <script src="~/js/sweetalert.min.js"></script>
 <script src="~/js/sweetalert2.min.js"></script>
 <script>
-
-   @if (TempData["Creation"] != null)
-        {
-            <text>CreationNotifications();</text>
-        }
-
-    @if (TempData["Modification"] != null)
-        {
-            <text>ModificationNotifications();</text>
-        }
-    function CreationNotifications() {
-        ShowNotification("Matiere enregistrée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-    }
-
-    function ModificationNotifications() {
-        ShowNotification("Matiere modifiée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-    }
-
-
-    function deleteMatiere(id) {
-        swal({
-            title: "Êtes-vous sûr?",
-            text: "la matière première sera supprimée",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Oui",
-            cancelButtonText: "Annuler",
-            closeOnConfirm: false,
-            closeOnCancel: true
-        },
-            function (isConfirm) {
-                if (isConfirm) {
-
-                    var data = {
-                        id: id,
-                    };
-                    $.ajax({
-                    url: '@Url.Action("DeleteMatierePremiere", "MatierePremiere")',
-                        type: "POST",
-                        cache: false,
-                        async: true,
-                        data: data,
-                        success: function (data) {
-                            if (data == true) {
-                                swal("Spprimé!", " La matière première a été supprimée", "success");
-                                setTimeout(
-                                    function () {
-                                        window.location.reload();
-                                    }, 2000);
-                            } else {
-                                swal("Non Spprimé!", "Impossible de supprimer cette matière, car elle est utilisée dans une ou plusieurs fiches techniques", "error");
-                            }
-                        },
-                        error: function () {
-                            swal("Non Spprimé!", "La matière première n'a pas été supprimée", "error");
-                        }
-                        });
-                }
-            }
-        );
-    }
-     function refresh() {
-        setTimeout(
-            function () {
-                window.location.href = '@Url.Action("ListeMatierePremiere", "MatierePremiere")';
-            }, 500);
-        }
-    function fct(Id) {
-        $("#tableCamions").children().remove();
-
-        var data = { Id: Id }
-            $("#mbody").append("<span style='display:none' id='spanVal'> " + Id + " </span>");
-             $.ajax({
-            url: '@Url.Action("getMatiere", "MatierePremiere")',
-            type: "POST",
-            cache: false,
-            async: true,
-            data: data,
-            success: function (data) {
-                $("#fournisseur").val(data);
-            },
-             error: function () {
-                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
-
-            }
-        });
-        }
-    function camionAdd() {
-
-        if (
-            $("#fournisseur").val() != null && $("#fournisseur").val() != '' &&
-            $("#matiere").val() != null && $("#matiere").val() != ''
-
-        ) {
-            camionAjout();
-            formCamionClear();
-        }
-    }
-
-
-
-
-    function camionAjout() {
-        var desc = $("#fournisseur").val();
-        var prix = $("#matiere option:selected").val();
-
-        if ($("#tableCamions tbody").length == 0) {
-            $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
-            document.getElementById('divTable').style.display = "block";
-            document.getElementById('envbutton').style.display = "block";
-        }
-
-        $("#tbodyCamions").append("<tr>" +
-            "<td class='border-b dark:border-dark-5' style='display:none;'>" + $("#spanVal").val() + "</td>" +
-            "<td >" + desc + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + $("#matiere option:selected").text() + "</td>" +
-            "<td class='border-b dark:border-dark-5'style='text-align: center;display:none;'>" + prix + "</td>" +
-            "<td class='text-right'>" +
-            '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
-            "</tr>");
-
-    }
-    function formCamionClear() {
-        $("#matiere").val("");
-    }
-
-    //delete
+   //delete
     function CamionDelete(ctl) {
         $(ctl).parents("tr").remove();
         if ($("#tableCamions tbody tr").length == 0) {
@@ -391,11 +280,16 @@
     }
         function CreatePrix() {
         var ListIdUnite = new Array();
-        var table = document.getElementById("tbodyCamions");
+        var table = document.getElementById("usertbody");
+
         for (var i = 0; i < table.rows.length; i++)
         {
-            desc = table.rows[i].cells[0].innerHTML;
-            prix = table.rows[i].cells[3].innerHTML;
+            matdesi = table.rows[i].cells[2].innerHTML;
+            matID = table.rows[i].cells[1].innerHTML;
+            lotInt = table.rows[i].cells[6].innerHTML;
+            qteTrans = table.rows[i].cells[7].innerHTML;
+            uniteId = table.rows[i].cells[8].innerHTML;
+            lieuID = table.rows[i].cells[9].innerHTML;
 
             ListIdUnite.push(prix);
         }

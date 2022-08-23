@@ -93,7 +93,7 @@ namespace Repository.Repositories
                 {
                     achat.StockAchat_QuantiteMatiere += item.ArticleBL_Quantie;
                     achat.StockAchat_QuantiteRestante += item.ArticleBL_Quantie;
-                  //_db.Entry(achat).State = EntityState.Modified;
+                  _db.Entry(achat).State = EntityState.Modified;
                 }
                 else
                 {
@@ -104,17 +104,17 @@ namespace Repository.Repositories
                         StockAchat_QuantiteRestante = item.ArticleBL_Quantie,
                         StockAchat_LotFournisseur = item.ArticleBL_LotFournisseur,
                         StockAchat_LotIntern = item.ArticleBL_LotTemp,
-                        StockAchat_AbonnementID = bonDeLivraison.BonDeLivraison_AbonnementID
-
+                        StockAchat_AbonnementID = bonDeLivraison.BonDeLivraison_AbonnementID,
+                        StockAchat_UniteMesureID = item.ArticleBL_UniteMesureID
                     };
                     await _db.stock_Achats.AddAsync(stockAchat);
                 }
-               // _db.Entry(articleBC).State = EntityState.Modified;
+                _db.Entry(articleBC).State = EntityState.Modified;
             }
             if (bc.listeArticles.Count() == i)
             { 
                 bc.BonDeCommande_Statut = "Réceptionné";
-                //_db.Entry(bc).State = EntityState.Modified;
+                _db.Entry(bc).State = EntityState.Modified;
             }
             bonDeLivraison.BonDeLivraison_DateSaisie = DateTime.Now;
             bonDeLivraison.BonDeLivraison_StatutID = 1;
@@ -232,7 +232,7 @@ namespace Repository.Repositories
             int recsCount = query.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;*/
-            return query.Include(p=>p.MatierePremiere).Include(p=>p.Unite_Mesure).AsEnumerable();
+            return query.Include(p=>p.MatierePremiere).ThenInclude(p=>p.unites_Utilisation).ThenInclude(p=>p.Unite_Mesure).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
         public paginationModel<ProduitVendable> getAllProds(int pg = 2)
         {

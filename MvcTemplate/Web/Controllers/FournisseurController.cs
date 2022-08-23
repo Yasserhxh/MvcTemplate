@@ -409,7 +409,6 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["lieu"] = new SelectList(zoneStockageService.getListLieuStockage(Id, 1), "LieuStockag_Id", "LieuStockag_Nom");
-            ViewData["unite"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
             var query = fournisseurService.GetMatireStockAchat(Id, matireID, lotIntern);
             const int pageSize = 15;
             if (pg < 1)
@@ -419,6 +418,12 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            int i = 0;
+            foreach(var item in model)
+            {
+                ViewData["unite"+ i] = new SelectList(item.MatierePremiere.unites_Utilisation, "Unite_Mesure.UniteMesure_Id", "Unite_Mesure.UniteMesure_Libelle");
+                i++;
+            }
             return View(model);
         }
     }

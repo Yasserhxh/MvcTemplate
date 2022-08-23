@@ -6,6 +6,10 @@ namespace Domain.Models
 {
     public class StockAchat_Model
     {
+        public StockAchat_Model()
+        {
+            unite_Utilisation = new List<Unite_MesureModel>();
+        }
         public int StockAchat_ID { get; set; }
         public int StockAchat_MatiereID { get; set; }
         public int StockAchat_UniteMesureID { get; set; }
@@ -16,5 +20,6 @@ namespace Domain.Models
         public int StockAchat_AbonnementID { get; set; }
         public MatierePremiereModel MatierePremiere { get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }
+        public List<Unite_MesureModel> unite_Utilisation { get; set; }
     }
 }
