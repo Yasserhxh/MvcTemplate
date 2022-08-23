@@ -19,9 +19,12 @@ namespace Domain.Entities
         public int MatiereTrans_UniteID { get; set; }
         public string MatiereTrans_LotNumber { get; set; }
         [ForeignKey("Transfert_Matiere")]
-        public int MatiereTrans_TransferID { get; set; }
+        public int MatiereTrans_TransferID { get; set; } 
+        [ForeignKey("Lieu_Stockage")]
+        public int MatiereTrans_StockID { get; set; }
         public MatierePremiere MatierePremiere { get; set; }
         public Unite_Mesure Unite_Mesure { get; set; }
         public Transfert_Matiere Transfert_Matiere { get; set; }
+        public Lieu_Stockage Lieu_Stockage { get; set; }
     }
 }

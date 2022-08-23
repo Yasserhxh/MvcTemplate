@@ -232,7 +232,7 @@ namespace Repository.Repositories
             int recsCount = query.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;*/
-            return query.Include(p=>p.MatierePremiere).ThenInclude(p=>p.unites_Utilisation).ThenInclude(p=>p.Unite_Mesure).Include(p=>p.Unite_Mesure).AsEnumerable();
+            return query.Include(p=>p.MatierePremiere).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
         public paginationModel<ProduitVendable> getAllProds(int pg = 2)
         {
@@ -417,25 +417,22 @@ namespace Repository.Repositories
                 return null;
         }
 
-        public IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, int? stockID, string statut, string date)
+        public IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, string date)
         {
             var query = _db.transfert_Matieres.Where(p => p.TransfertMat_AbonnementID == aboId);
-            if (stockID == null && string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true)
+            if ( string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true)
                 return null;
-            if (stockID != null)
-                query = query.Where(p => p.TransfertMat_PointStockID == stockID);
             if (!string.IsNullOrEmpty(statut))
                 query = query.Where(p => p.TransfertMat_Statut == statut);
             if (!string.IsNullOrEmpty(date))
                 query = query.Where(p => Convert.ToDateTime(p.TransfertMat_DateCreation).ToString("yyyy-MM-dd") == date);
-            return query.Include(p => p.Lieu_Stockage)
-                .AsEnumerable().OrderByDescending(p => p.TransfertMat_DateCreation);
+            return query.AsEnumerable().OrderByDescending(p => p.TransfertMat_DateCreation);
         }
 
-        public IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID, string matiereID, string lot)
+        public IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID,int? stockID, string matiereID, string lot)
         {
             var query = _db.matiere_Transferts.Where(p => p.MatiereTrans_TransferID == transferID);
-            if (transferID == null && string.IsNullOrEmpty(lot) == true && string.IsNullOrEmpty(matiereID) == true)
+            if (transferID == null && stockID == null && string.IsNullOrEmpty(lot) == true && string.IsNullOrEmpty(matiereID) == true)
                 return null;
 
             if (!string.IsNullOrEmpty(matiereID))
@@ -443,8 +440,13 @@ namespace Repository.Repositories
 
             if (!string.IsNullOrEmpty(lot))
                 query = query.Where(p => p.MatiereTrans_LotNumber.Contains(lot) == true);
-         
-            return query.Include(p => p.MatierePremiere).Include(p=>p.Unite_Mesure).Include(p=>p.Transfert_Matiere).AsEnumerable();
+            if (stockID != null)
+                query = query.Where(p => p.MatiereTrans_StockID == stockID);
+            return query.Include(p => p.MatierePremiere).Include(p=>p.Lieu_Stockage).Include(p=>p.Unite_Mesure).Include(p=>p.Transfert_Matiere).AsEnumerable();
+        }
+        public IEnumerable<Unite_Mesure> findFormulaireUnite(int unite)
+        {
+            return _db.unite_Mesures.Where(p => p.UniteMesure_Id == unite).AsEnumerable();
         }
     }
 }

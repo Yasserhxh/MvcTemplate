@@ -12,8 +12,10 @@ namespace Domain.Models
         public int MatiereTrans_UniteID { get; set; }
         public string MatiereTrans_LotNumber { get; set; }
         public int MatiereTrans_TransferID { get; set; }
+        public int MatiereTrans_StockID { get; set; }
         public MatierePremiereModel MatierePremiere { get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }
         public TransfertMatiere_Model Transfert_Matiere { get; set; }
+        public Lieu_StockageModel Lieu_Stockage { get; set; }
     }
 }

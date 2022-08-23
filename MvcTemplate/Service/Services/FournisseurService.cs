@@ -206,14 +206,14 @@ namespace Service.Services
             return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, point, date));
         }
 
-        public IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, string matiereID, string lot)
+        public IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot)
         {
-            return mapper.Map<IEnumerable<Matiere_Transfert>, IEnumerable<MatiereTransfert_Model>>(fournisseurRepository.GetListeMatiereParOrdre(transferID, matiereID, lot));
+            return mapper.Map<IEnumerable<Matiere_Transfert>, IEnumerable<MatiereTransfert_Model>>(fournisseurRepository.GetListeMatiereParOrdre(transferID, stockID, matiereID, lot));
         }
 
-        public IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId, int? stockID, string statut, string date)
+        public IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId,  string statut, string date)
         {
-            return mapper.Map<IEnumerable<Transfert_Matiere>, IEnumerable<TransfertMatiere_Model>>(fournisseurRepository.GetListeOrdreTransfert(aboId, stockID, statut, date));
+            return mapper.Map<IEnumerable<Transfert_Matiere>, IEnumerable<TransfertMatiere_Model>>(fournisseurRepository.GetListeOrdreTransfert(aboId,  statut, date));
         }
 
         public IEnumerable<VilleModel> getListeVille()
@@ -245,7 +245,12 @@ namespace Service.Services
 
         public IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern)
         {
-              return mapper.Map<IEnumerable<Stock_Achat>, IEnumerable<StockAchat_Model>>(fournisseurRepository.GetMatireStockAchat(aboID, matiereID, lotIntern));
+            var res = mapper.Map<IEnumerable<Stock_Achat>, IEnumerable<StockAchat_Model>>(fournisseurRepository.GetMatireStockAchat(aboID, matiereID, lotIntern));
+            foreach(var item in res)
+            {
+                item.unite_Utilisation = (List<Unite_MesureModel>)mapper.Map<IEnumerable<Unite_Mesure>, IEnumerable<Unite_MesureModel>>(fournisseurRepository.findFormulaireUnite(item.MatierePremiere.MatierePremiere_AchatUniteMesureId));
+            }
+            return res;
         }
 
         /*  public IEnumerable<FournisseurModel> getListAllFournisseur()

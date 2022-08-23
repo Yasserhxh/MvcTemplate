@@ -421,10 +421,38 @@ namespace Web.Controllers
             int i = 0;
             foreach(var item in model)
             {
-                ViewData["unite"+ i] = new SelectList(item.MatierePremiere.unites_Utilisation, "Unite_Mesure.UniteMesure_Id", "Unite_Mesure.UniteMesure_Libelle");
+                ViewData["unite"+ i] = new SelectList(item.unite_Utilisation, "UniteMesure_Id", "UniteMesure_Libelle");
                 i++;
             }
-            return View(model);
+            return View("~/Views/Fournisseur/AlimentationStock/MatieresEnStock.cshtml", model);
+        }
+        [HttpPost]
+        public async Task<bool> AjouterOrdreT(TransfertMatiere_Model TransfertMat_Model)
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            TransfertMat_Model.TransfertMat_Numero = DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString() + DateTime.UtcNow.Day.ToString() + "ORDRE" + _rdm.Next(_min, _max);
+            TransfertMat_Model.TransfertMat_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            TransfertMat_Model.TransfertMat_CreePar = HttpContext.User.Identity.Name;
+            //bonDeCommande_Model.BonDeCommande_PointStockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var redirect = await fournisseurService.CreateOrdreTransfer(TransfertMat_Model);
+            return redirect;
+        }
+        public IActionResult ListeDesTransfer(string statut, string date, int pg = 1)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var query = fournisseurService.GetListeOrdreTransfert(Id, statut, date);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            ViewBag.Pager = pager;
+          
+            return View("~/Views/Fournisseur/AlimentationStock/ListeDesTransfer.cshtml", model);
         }
     }
 
