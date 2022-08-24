@@ -33,6 +33,6 @@ namespace Service.IServices
         IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern);
         Task<bool> CreateOrdreTransfer(TransfertMatiere_Model transfertModel);
         IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date);
-        IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot);
+        IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot, string statut, string date);
     }
 }

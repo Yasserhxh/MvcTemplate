@@ -18,6 +18,9 @@ namespace Domain.Entities
         [ForeignKey("Unite_Mesure")]
         public int MatiereTrans_UniteID { get; set; }
         public string MatiereTrans_LotNumber { get; set; }
+        public string MatiereTrans_Statut { get; set; }
+        public string MatiereTrans_ValidePar { get; set; }
+        public DateTime? MatiereTrans_DateValidation { get; set; }
         [ForeignKey("Transfert_Matiere")]
         public int MatiereTrans_TransferID { get; set; } 
         [ForeignKey("Lieu_Stockage")]

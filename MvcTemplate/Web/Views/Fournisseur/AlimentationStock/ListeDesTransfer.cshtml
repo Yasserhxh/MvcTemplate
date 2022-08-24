@@ -41,53 +41,28 @@
         <div class="content-body">
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
-                <div class="form-row">
-                    <div class="col-md-2 offset-md-1 mb-1">
-                        <label for="role">Fournisseur</label>
+                <div class="form-row">                   
+                    <div class="col-md-3  offset-3">
+                        <label for="role">Statut de l'ordre</label>
                         <div>
-                            <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
-                                <option value="" selected disabled>Sélectionnez un fournisseur ...</option>
+                            <select class="custom-select" id="statut" data-search="true"  >
+                                <option value="" selected disabled>Sélectionnez un statut...</option>
+                                <option value="En attente">En attente</option>
+                                <option value="Validé">Validé</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2 ">
-                        <label for="role">Etat des bons de commande</label>
-                        <div>
-                            <select class="custom-select" id="etatBC" data-search="true"  >
-                                <option value="" selected disabled>Sélectionnez un statut de bon de commande ...</option>
-                                <option value="Réceptionné">Bons de commabde réceptionnés</option>
-                                <option value="Non réceptionné">Bons de commande non réceptionnés</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-1">
+                    <div class="col-md-3 mb-1">
                         <div class="form-group">
-                            <label for="Date">Anné du bon de comande</label>
+                            <label for="Date">Date d'ordre</label>
                             <div>
-                                <input type="text" class="form-control" name="datepicker" id="date" onchange="getBcFournisseur()" />
+                                <input type="date" class="form-control" name="datepicker" id="date" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 mb-1">
-                        <label for="role">Bon de commande</label>
-                        <div>
-                            <select class="custom-select" id="bondecommande" data-search="true" >
-                                <option value="" selected disabled>Sélectionnez un bon de commande ...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-1">
-                        <label for="role">Etat des bons de livraison</label>
-                        <div>
-                            <select class="custom-select" id="etatBL" data-search="true" >
-                                <option selected disabled>Sélectionnez un statut de bon de livraison ...</option>
-                                <option value=2>Bons de livraison facturé</option>
-                                <option value=1>Bons de livraison non facturé</option>
-                            </select>
-                        </div>
-                    </div>
+                  
                     
-                    <div class=" text-md-right">
+                    <div class="text-md-right">
                         <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
                     </div>
                 </div>
@@ -143,8 +118,6 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Creé par</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de création</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut </th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Validé par</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de validation</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
 
                                                                 </tr>
@@ -157,16 +130,12 @@
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.TransfertMat_CreePar)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.TransfertMat_DateCreation)</td>
                                                                         <td class="border-b dark:border-dark-5 ">@Html.DisplayFor(modelItem => item.TransfertMat_Statut)</td>
-                                                                        <td class="border-b dark:border-dark-5 ">@Html.DisplayFor(modelItem => item.TransfertMat_ValidePar)</td>
-                                                                        <td class="border-b dark:border-dark-5 ">@Html.DisplayFor(modelItem => item.TransfertMat_DateValidation)</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.TransfertMat_ID"><i class="bx bx-plus "></i>Ajouter des factures</a>
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.TransfertMat_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
-                                                                                    <a asp-action="GeneratePDfBL" asp-route-id="@item.TransfertMat_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="ListeDesMatieres" asp-route-id="@item.TransfertMat_ID"><i class="bx bx-list "></i>Liste des matières premières</a>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -235,8 +204,6 @@
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 
 <script>
 
@@ -279,16 +246,9 @@
 
  
     function displayDashboard() {
-        var bonCommandeID = $("#bondecommande option:selected").val();
-        var fournisseurID = $("#fournisseur option:selected").val();
-        var etat = $("#etatBL option:selected").val();
-        window.location.href = '/fournisseur/ListeBonDeLivraison?fournisseurID=' + fournisseurID + "&bonCommandeID=" + bonCommandeID+ "&etat=" + etat ;
+        var statut = $("#statut option:selected").val();
+        var date = $("#date").val();
+        window.location.href = '/fournisseur/ListeDesTransfer?statut=' + statut + "&date=" + date;
     }
-    var $j = jQuery.noConflict();
-    $j("#date").datepicker({
-    format: "yyyy",
-    viewMode: "years", 
-    minViewMode: "years",
-    autoclose:true //to close picker once year is selected
-});
+   
 </script>

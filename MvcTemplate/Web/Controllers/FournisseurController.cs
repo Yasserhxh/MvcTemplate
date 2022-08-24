@@ -25,7 +25,7 @@ using System.Globalization;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Client, Gerant_des_achats")]
+    [Authorize(Roles = "Client, Gerant_des_achats, Gerant_de_stock")]
 
     public class FournisseurController : Controller
     {
@@ -455,6 +455,25 @@ namespace Web.Controllers
             ViewBag.Pager = pager;
           
             return View("~/Views/Fournisseur/AlimentationStock/ListeDesTransfer.cshtml", model);
+        }
+        public IActionResult ListeDesMatieres(int? id, string matiereID, string lot, string date, string statut, int pg = 1)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            int? pd = null;
+            if(User.IsInRole("Gerant_de_stock"))
+                pd = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetListeMatiereParOrdre(id, pd, matiereID, lot, statut, date);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            ViewBag.Pager = pager;
+            ViewData["zone"] = new SelectList(zoneStockageService.getListZoneStockage(Id), "ZoneStockage_Id", "ZoneStockage_Designation");
+
+            return View("~/Views/Fournisseur/AlimentationStock/ListeDesMatieres.cshtml", model);
         }
     }
 

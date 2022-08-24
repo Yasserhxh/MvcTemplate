@@ -63,13 +63,13 @@
                                                 <div class="col-12">
                                                     <h6 class="py-50"></h6>
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Libellé</label>
                                                         <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matière" onchange="changeLib()" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Code Article</label>
                                                         <input type="text" id="codeAr" asp-for="MatierePremiere_CodeArticle" class="form-control" placeholder="Entrez le code de la matière" required>
@@ -103,12 +103,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label for="Quantite_FT">Quantité d'achat</label>
-                                                        <input type="number" min="0" step=".01" id="QteTotal" asp-for="MatierePremiere_Quantite_FT" class="form-control" required />
-                                                    </div>
-                                                </div>
+                                                
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="FormeStockage">Forme de stockage</label>
@@ -134,12 +129,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-2">
-                                                    <div class="form-group">
-                                                        <label for="">Quantité utilisée</label>
-                                                        <input type="number" id="QteUsed" min="0" step=".01" onchange="onchangeQte()" class="form-control" required />
-                                                    </div>
-                                                </div>
+                                                
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="d-block" for="EstAllergene">Matière allergène:</label>
@@ -164,7 +154,7 @@
                                                         <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une allergène</small></a>
                                                     </div>
                                                 </div> 
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="tva">Coût TVA</label>
                                                         <select class="custom-select" id="tvaID" data-search="true" asp-for="MatierePremiere_CoutTVAID" asp-items="@ViewBag.tva" required>

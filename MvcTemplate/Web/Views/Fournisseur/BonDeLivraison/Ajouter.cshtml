@@ -393,7 +393,7 @@
                             "<td class='border-b dark:border-dark-5'>  <input type='text' id='qteLiv' value='" + parseFloat(data[i].articleBC_QteRest) + "'onchange='keyUp(this)'/></td>" +
                             "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
-                            "<td class='border-b dark:border-dark-5' id='totLiv'>"+ data[i].articleBC_Total +"</td>" +
+                            "<td class='border-b dark:border-dark-5' id='totLiv'>" + parseFloat(data[i].articleBC_PU) * parseFloat(data[i].articleBC_QteRest) + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='dateProd'>  <input type='date'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='dlc'>  <input type='date'/></td>" +

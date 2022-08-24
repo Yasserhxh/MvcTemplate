@@ -451,10 +451,10 @@ namespace Repository.Repositories
             return query.AsEnumerable().OrderByDescending(p => p.TransfertMat_DateCreation);
         }
 
-        public IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID,int? stockID, string matiereID, string lot)
+        public IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID,int? stockID, string matiereID, string lot, string statut, string date)
         {
             var query = _db.matiere_Transferts.Where(p => p.MatiereTrans_TransferID == transferID);
-            if (transferID == null && stockID == null && string.IsNullOrEmpty(lot) == true && string.IsNullOrEmpty(matiereID) == true)
+            if (transferID == null && stockID == null && string.IsNullOrEmpty(lot) == true && string.IsNullOrEmpty(matiereID) == true && string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true)
                 return null;
 
             if (!string.IsNullOrEmpty(matiereID))

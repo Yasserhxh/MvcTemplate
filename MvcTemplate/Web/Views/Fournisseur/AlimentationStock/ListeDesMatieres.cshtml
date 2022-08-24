@@ -1,0 +1,369 @@
+﻿@model IEnumerable<Domain.Models.MatiereTransfert_Model>
+@using Web.Helpers;
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Matieres d'ordre de transfert";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeDesTransfer">Liste des ordres de transfert </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table">
+                                                        <div>
+                                                            @{
+                                                                var a = @Model.FirstOrDefault();
+                                                            }
+                                                            @if (a == null)
+                                                            {
+                                                                <h4 class="card-title">Aucune matiere à recéptionner </h4>
+                                                            }
+                                                            else
+                                                            {
+                                                                <h4> Liste des matieres à tranferer / réceptionner. </h4>
+                                                            }
+                                                        </div>
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière première</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité de mesure</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">N° Lot </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
+                                                                    @if (User.IsInRole("Gerant_des_achats"))
+                                                                    {
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Validé par</th>
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de validation</th>
+                                                                    }
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Action</th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere.MatierePremiere_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@item.MatiereTrans_Quantite.ToString("G29")</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_LotNumber)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_Statut)</td>
+                                                                        @if(User.IsInRole("Gerant_des_achats"))
+                                                                        {
+                                                                             <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_ValidePar)</td>
+                                                                             <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_DateValidation)</td>
+                                                                        }
+                                                                       
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <button class="dropdown-item btn-outline-success" onclick='Valider(@item.MatiereTrans_ID,"@item.MatierePremiere.MatierePremiere_Libelle",@item.MatiereTrans_Quantite.ToString("G29"),@item.MatiereTrans_TransferID)' ><i class="bx bx-check"></i>Valider la recéption</button>
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="container">
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="1" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="@pge" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.TotalPages)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+            <div class="breadcrumb-item text-sm-right ">
+                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="MatieresEnStock"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un  ordre de transfert</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Extrait du bon de sortie</h4>
+                <button class="close"  onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Livrer les matières premières à livrer</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12" id="plan">
+                                                <div class="card mb-1" id="plandiv">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" id="envbutton" onclick="Livrer()">
+                        <i class="bx bx-send"></i>
+                        Valider
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    function getBcFournisseur() {
+        var data = {
+            fournisseurID: parseInt($("#fournisseur option:selected").val()),
+            date: $("#date").val(),
+            etat: $("#etatBC").val(),
+
+        };
+        if ($("#fournisseur option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getBcFournisseur", "Fournisseur")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#bondecommande option").length > 1) {
+                        $.each($("#bondecommande option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#bondecommande").append("<option value='' selected disabled>Sélectionnez un bon de commande ...</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#bondecommande").append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+
+
+
+
+    function displayDashboard() {
+        var bonCommandeID = $("#bondecommande option:selected").val();
+        var fournisseurID = $("#fournisseur option:selected").val();
+        var etat = $("#etatBL option:selected").val();
+        window.location.href = '/fournisseur/ListeBonDeLivraison?fournisseurID=' + fournisseurID + "&bonCommandeID=" + bonCommandeID + "&etat=" + etat;
+    }
+    function refresh() {
+
+        window.location.reload();
+    } 
+    function Livrer() {
+        var matID = $("#matID").val();
+        var qte = $("#qte").val();
+        var zone = $("#zone option:selected").val();
+        var section = $("#section option:selected").val();
+        var trnasfertID = $("#trnasfertID").val();
+        
+        var ReceptionAchatModel = {
+            matiereID = parseInt(matID),
+            Quantite = parseFloat(qte).toFixed(2).replace(".",","),
+            ZoneID = parseInt(zone),
+            SectionID = parseInt(section),
+            TransferID = parseInt(trnasfertID)
+        };
+        console.log(ReceptionAchatModel);
+    } 
+    function getSection() {
+
+          var data = { zoneId: parseInt($("#zone option:selected").val()) };
+        if ($("#zone option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("sectionList", "ProduitVendable")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#section option").length > 1) {
+                        $.each($("#section option"), function (i, item) {
+                            item.remove();
+                        });
+                    }
+                    $.each(data, function (i, item) {
+                        $("#section").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+            }
+    }
+
+    function Valider(matID, matLib, qte, transfertID) {
+        $('#myModal').modal('show');
+
+        $("#plandiv").append("<div class='form-row'>"
+        + "<div class= 'col-md-3 mb-1' >"
+        + "<label for='date'>Matière première</label>"
+        + "<div><input type='text' disabled id='matID 'style ='display:none;' value='" + matID + "' class='form-control'/></div>"
+        + "<div><input type='text' disabled id='trnasfertID' style ='display:none;' value='" + transfertID + "' class='form-control'/></div>"
+        + "<div><input type='text' disabled id='matprem' value='" + matLib + "' class='form-control'/></div></div>"
+        + "<div class= 'col-md-3 mb-1' >"
+        + "<label for='date'>Quantité livrée</label>"
+        + "<div><input type='number' disabled id='qte' value='" + qte + "' class='form-control'/></div></div>"
+        + "<div class= 'col-md-3 mb-1' >"
+        + "<label for='date'>Zone de stockage</label>"
+        + "<div>"
+        + `<select id="zone" data-search="true" class="custom-select" onclick="getSection()">
+        @foreach (var item in ViewBag.zone)
+        {
+            @:<option value="@item.Value" style="text-align:center;">@item.Text</option>
+        }
+        </select> `+ "</div></div>"
+        
+        + "<div class= 'col-md-3 mb-1' >"
+        + "<label for='date'>Section de stockage</label>"
+        + "<div>"
+        + `<select id="section" data-search="true" class="custom-select" >
+        
+        </select> `+ "</div></div> </div>");
+    }
+
+</script>
