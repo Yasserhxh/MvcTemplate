@@ -427,6 +427,10 @@ namespace Repository.Repositories
         {
             return _db.fournisseurs.Where(f => f.Founisseur_AbonnementId == Id).Where(f => f.Founisseur_IsActive == 1).AsEnumerable();
         }
+        public IEnumerable<Taux_TVA> getListCoutTVA()
+        {
+            return _db.taux_TVAs.AsEnumerable();
+        }
 
         public async Task<int?> CreateMatiereFamile(MatiereFamille matiereFamille)
         {

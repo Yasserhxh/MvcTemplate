@@ -412,16 +412,34 @@ namespace Repository.Repositories
             await _db.transfert_Matieres.AddAsync(transfert);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
-                return transfert.TransfertMat_ID;
+                return await checkeMatieres(transfert);
             else
                 return null;
         }
-
-        public IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, string date)
+        public async Task<int?> checkeMatieres(Transfert_Matiere transfer)
+        {
+            foreach(var item in transfer.listeMatiere)
+            {
+                var matiere = _db.stock_Achats.Where(p => p.StockAchat_MatiereID == item.MatiereTrans_MatiereID && p.StockAchat_LotIntern == item.MatiereTrans_LotNumber && p.StockAchat_AbonnementID == p.StockAchat_AbonnementID).FirstOrDefault();
+                matiere.StockAchat_QuantiteMatiere -= item.MatiereTrans_Quantite;
+                if (matiere.StockAchat_QuantiteMatiere <= 0)
+                    _db.stock_Achats.Remove(matiere);
+                else
+                    _db.Entry(matiere).State = EntityState.Modified;
+            }
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return transfer.TransfertMat_ID;
+            else
+                return null;
+        }
+        public IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date)
         {
             var query = _db.transfert_Matieres.Where(p => p.TransfertMat_AbonnementID == aboId);
-            if ( string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true)
+            if ( string.IsNullOrEmpty(statut) == true && string.IsNullOrEmpty(date) == true && stockID == null)
                 return null;
+            if (stockID!=null)
+                query = query.Where(p => p.listeMatiere.Any(x=>x.MatiereTrans_StockID == stockID)==true);
             if (!string.IsNullOrEmpty(statut))
                 query = query.Where(p => p.TransfertMat_Statut == statut);
             if (!string.IsNullOrEmpty(date))

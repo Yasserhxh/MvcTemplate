@@ -48,5 +48,6 @@ namespace Repository.IRepositories
         Task<int?> CreateApprov(Approvisionnement_Matiere approv);
         IEnumerable<Approvisionnement_Matiere> getListApprov(int aboId, int? stockID, string date, string etat, int? pointPord);
         Task<bool> ValiderApprovisionnement(int ApprovisionnementId, string valideId, int pdvId);
+        IEnumerable<Taux_TVA> getListCoutTVA();
     }
 }

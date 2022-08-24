@@ -42,7 +42,7 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-3 offset-md-2 mb-1">
+                    <div class="col-md-2 offset-md-1 mb-1">
                         <label for="role">Fournisseur</label>
                         <div>
                             <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
@@ -50,14 +50,43 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-1">
+                    <div class="col-md-2 ">
+                        <label for="role">Etat des bons de commande</label>
+                        <div>
+                            <select class="custom-select" id="etatBC" data-search="true"  >
+                                <option value="" selected disabled>Sélectionnez un statut de bon de commande ...</option>
+                                <option value="Réceptionné">Bons de commabde réceptionnés</option>
+                                <option value="Non réceptionné">Bons de commande non réceptionnés</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-1">
                         <div class="form-group">
-                            <label for="Date">Date</label>
+                            <label for="Date">Anné du bon de comande</label>
                             <div>
-                                <input type="date" id="date" class="form-control" />
+                                <input type="text" class="form-control" name="datepicker" id="date" onchange="getBcFournisseur()" />
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2 mb-1">
+                        <label for="role">Bon de commande</label>
+                        <div>
+                            <select class="custom-select" id="bondecommande" data-search="true" >
+                                <option value="" selected disabled>Sélectionnez un bon de commande ...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-1">
+                        <label for="role">Etat des bons de livraison</label>
+                        <div>
+                            <select class="custom-select" id="etatBL" data-search="true" >
+                                <option selected disabled>Sélectionnez un statut de bon de livraison ...</option>
+                                <option value=2>Bons de livraison facturé</option>
+                                <option value=1>Bons de livraison non facturé</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <div class=" text-md-right">
                         <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
                     </div>

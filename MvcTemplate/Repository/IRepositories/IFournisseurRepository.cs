@@ -32,7 +32,7 @@ namespace Repository.IRepositories
         paginationModel<ProduitVendable> getAllProds(int pg);
         IEnumerable<Stock_Achat> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern);
         Task<int?> CreateOrdreTransfer(Transfert_Matiere transfert);
-        IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, string date);
+        IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date);
         IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot);
         IEnumerable<Unite_Mesure> findFormulaireUnite(int unite);
     }

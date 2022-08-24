@@ -8,9 +8,11 @@ namespace Domain.Models
       
         public int MatierePremiere_Id { get; set; }
         public string MatierePremiere_Libelle { get; set; }
+        public string MatierePremiere_CodeArticle { get; set; }
         public int MatierePremiere_AchatUniteMesureId { get; set; }
         public decimal MatierePremiere_Quantite_FT { get; set; }
         public int MatierePremiere_UniteMesureId_FT { get; set; }
+        public int? MatierePremiere_CoutTVAID { get; set; }
         public decimal MatierePremiere_PourcentrageTolerancePerte { get; set; }
         public decimal MatierePremiere_PrixMoyenAchat { get; set; }
         public int? MatierePremiere_FormeStockageId { get; set; }
@@ -30,6 +32,7 @@ namespace Domain.Models
         public ICollection<FournisseurMatiereModel> FournisseurLink { get; set; }
         public ICollection<Unite_MesureMatiereModel> unites_Utilisation { get; set; }
         public Unite_MesureModel Unite_Mesure { get; set; }
+        public Taux_TVAModel Taux_TVA { get; set; }
 
     }
 }

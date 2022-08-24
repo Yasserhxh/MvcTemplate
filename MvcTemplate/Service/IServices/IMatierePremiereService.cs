@@ -49,6 +49,6 @@ namespace Service.IServices
         Task<bool> CreateApprov(Approvisionnement_MatiereModel approvModel);
         IEnumerable<Approvisionnement_MatiereModel> getListApprov(int aboId, int? stockID, string date, string etat, int? pointPord);
         Task<bool> ValiderApprovisionnement(int ApprovisionnementId, string valideId, int pdvId);
-
+        IEnumerable<Taux_TVAModel> getListCoutTVA();
     }
 }

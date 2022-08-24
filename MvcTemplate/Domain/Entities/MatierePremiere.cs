@@ -15,9 +15,13 @@ namespace Domain.Entities
         public int MatierePremiere_Id { get; set; }
         [Column(TypeName = "nvarchar(150)")]
         public string MatierePremiere_Libelle { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string MatierePremiere_CodeArticle { get; set; }
 
         [ForeignKey("Unite_Mesure")]
         public int MatierePremiere_AchatUniteMesureId { get; set; }
+        [ForeignKey("Taux_TVA")]
+        public int? MatierePremiere_CoutTVAID { get; set; }
 
         [Column(TypeName = "decimal(6,2)")]
         public decimal MatierePremiere_Quantite_FT { get; set; }
@@ -58,5 +62,6 @@ namespace Domain.Entities
         public ICollection<FournisseurMatiere> FournisseurLink { get; set; }
         public MatiereFamille Matiere_Famille { get; set; }
         public Unite_Mesure Unite_Mesure { get; set; }
+        public Taux_TVA Taux_TVA { get; set; }
     }
 }

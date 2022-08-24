@@ -9,6 +9,7 @@ namespace Domain.Models
         public int TauxTVA_Id { get; set; }
         public decimal TauxTVA_Pourcentage { get; set; }
         public int TauxTVA_AbonnementId { get; set; }
+        public string TauxTVA_pourcentageString { get; set; }
         public DateTime TauxTVA_DateCreation { get; set; }
     }
 }

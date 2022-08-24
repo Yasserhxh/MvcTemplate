@@ -361,5 +361,15 @@ namespace Service.Services
         {
             return matierePremiereRepository.ValiderApprovisionnement(ApprovisionnementId, valideId, pdvId);
         }
+
+        public IEnumerable<Taux_TVAModel> getListCoutTVA()
+        {
+            var res = mapper.Map<IEnumerable<Taux_TVA>, IEnumerable<Taux_TVAModel>>(matierePremiereRepository.getListCoutTVA());
+            foreach( var item in res)
+            {
+                item.TauxTVA_pourcentageString = item.TauxTVA_Pourcentage.ToString("G29") + "" + "%";
+            }
+            return res;
+        }
     }
 }

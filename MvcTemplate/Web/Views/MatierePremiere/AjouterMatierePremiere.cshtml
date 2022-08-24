@@ -63,10 +63,16 @@
                                                 <div class="col-12">
                                                     <h6 class="py-50"></h6>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-2">
                                                     <div class="form-group">
                                                         <label>Libellé</label>
                                                         <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matière" onchange="changeLib()" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <label>Code Article</label>
+                                                        <input type="text" id="codeAr" asp-for="MatierePremiere_CodeArticle" class="form-control" placeholder="Entrez le code de la matière" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
@@ -149,13 +155,21 @@
                                                            
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label for="Allergene">Nom d'allergène</label>
                                                         <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="MatierePremiere_AllergeneId" asp-items="@ViewBag.MatierePremiere_AllergeneId" disabled="disabled">
                                                             <option value="" selected disabled>Sélectionnez une allergene...</option>
                                                         </select>
                                                         <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une allergène</small></a>
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="tva">Coût TVA</label>
+                                                        <select class="custom-select" id="tvaID" data-search="true" asp-for="MatierePremiere_CoutTVAID" asp-items="@ViewBag.tva" required>
+                                                            <option value="" selected disabled>Sélectionnez un coût TVA...</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -426,6 +440,7 @@
         console.log(ListeUnite);
         var matiereModel = {
             MatierePremiere_Libelle: $('#libelle').val(),
+            MatierePremiere_CodeArticle: $('#codeAr').val(),
             MatierePremiere_FournisseurID: $('#fournisseur option:selected').val(),
             MatierePremiere_AchatUniteMesureId: $('#uniteAchat option:selected').val(),
             MatierePremiere_Quantite_FT: parseFloat($('#QteTotal').val()).toFixed(2).replace(".",","),
@@ -434,6 +449,7 @@
             MatierePremiere_FormeStockageId: $('#forme option:selected').val(),
             MatierePremiere_EstAllergene: alerg,
             MatierePremiere_AllergeneId: $('#inputGroupSelected02 option:selected').val(),
+            MatierePremiere_CoutTVAID: $('#tvaID option:selected').val(),
             MatierePremiere_FamilleID: $('#childID option:selected').val(),
         }
         console.log(matiereModel);

@@ -211,9 +211,9 @@ namespace Service.Services
             return mapper.Map<IEnumerable<Matiere_Transfert>, IEnumerable<MatiereTransfert_Model>>(fournisseurRepository.GetListeMatiereParOrdre(transferID, stockID, matiereID, lot));
         }
 
-        public IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId,  string statut, string date)
+        public IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId,  string statut, int? stockID, string date)
         {
-            return mapper.Map<IEnumerable<Transfert_Matiere>, IEnumerable<TransfertMatiere_Model>>(fournisseurRepository.GetListeOrdreTransfert(aboId,  statut, date));
+            return mapper.Map<IEnumerable<Transfert_Matiere>, IEnumerable<TransfertMatiere_Model>>(fournisseurRepository.GetListeOrdreTransfert(aboId,  statut, stockID, date));
         }
 
         public IEnumerable<VilleModel> getListeVille()

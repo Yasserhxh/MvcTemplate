@@ -20,6 +20,7 @@ using Web.Helpers;
 using Web.Tools;
 using Humanizer;
 using Domain.Entities;
+using System.Globalization;
 //using NHibernate.Cache;
 
 namespace Web.Controllers
@@ -189,6 +190,7 @@ namespace Web.Controllers
             int recSkip = (pg - 1) * pageSize;
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
+            ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
             return View("~/Views/Fournisseur/Factures/ListeDesFactures.cshtml", model);
         }
         public IActionResult AjouterBC()
@@ -379,12 +381,12 @@ namespace Web.Controllers
                 {
                     var dh = check[0];
                     var cent = check[1];
-                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
+                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh), new CultureInfo("fr")).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent), new CultureInfo("fr")).Titleize() + " " + "Dirhams";
                 }
                 else
                 {
                     var dh = check[0];
-                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
+                    bc.BonDeLivraison_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh), new CultureInfo("fr")).Titleize() + " " + "Dirhams";
                 }
 
                 Controller controller = this;
@@ -442,7 +444,10 @@ namespace Web.Controllers
         public IActionResult ListeDesTransfer(string statut, string date, int pg = 1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var query = fournisseurService.GetListeOrdreTransfert(Id, statut, date);
+            int? pd = null;
+            if(User.IsInRole("Gerant_de_stock"))
+                pd = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetListeOrdreTransfert(Id, statut, pd, date);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;

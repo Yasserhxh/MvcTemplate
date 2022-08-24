@@ -80,7 +80,7 @@ namespace Repository.Mapping
             CreateMap<ProduitPretConsomer, ProduitPretConsomerModel>();
             CreateMap<ModePaiement ,ModePaiementModel> ();
             CreateMap<PointPorduction_Famille ,PointPorduction_Famille> ();
-            CreateMap<Taux_TVA ,Taux_TVAModel> ();
+            CreateMap<Taux_TVA ,Taux_TVAModel> ().ForMember(b => b.TauxTVA_pourcentageString, opt => opt.Ignore()); ;
             CreateMap<Tva ,TvaModel> ();
             CreateMap<Paiement_Abonnement ,PaiementAbonnementModel> ();
             CreateMap<Echange_Produits ,Echange_ProduitsModel> ();

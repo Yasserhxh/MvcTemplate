@@ -45,10 +45,8 @@ namespace Web.Controllers
             ViewData["MatierePremiere_UniteMesureId_FT"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
             ViewData["MatierePremiere_FormeStockageId"] = new SelectList(matierePremiereService.getListFormeStockage(abo), "FormStockage_Id", "FormStockage_Libelle");
             ViewData["MatierePremiere_AllergeneId"] = new SelectList(matierePremiereService.getListAllergene(abo), "Allergene_Id", "Allergene_Libelle");
-            //ViewData["Fournisseur"] = new SelectList(matierePremiereService.getListFournisseur(abo), "Founisseur_Id", "Founisseur_RaisonSocial");
+            ViewData["tva"] = new SelectList(matierePremiereService.getListCoutTVA(), "TauxTVA_Id", "TauxTVA_pourcentageString");
             ViewData["FamilleParent"] = new SelectList(matierePremiereService.getListMatiereFamilleParent(abo), "MatiereFamilleParent_ID", "MatiereFamilleParent_Libelle");
-
-
             return View();
         }
         [HttpPost]
