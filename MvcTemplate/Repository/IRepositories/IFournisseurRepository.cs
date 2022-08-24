@@ -26,7 +26,7 @@ namespace Repository.IRepositories
         IEnumerable<BonDeLivraison> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison bonDeLivraison);
         Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL);
-        IEnumerable<Facture> GetFactures(int aboID, int? point, string date);
+        IEnumerable<Facture> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date);
         BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
         paginationModel<ProduitVendable> getAllProds(int pg);

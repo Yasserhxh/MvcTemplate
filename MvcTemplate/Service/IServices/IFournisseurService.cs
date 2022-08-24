@@ -26,7 +26,7 @@ namespace Service.IServices
         IEnumerable<BonDeLivraison_Model> GetBonDeLivraisons(int? fournisseurID, int? bonCommandeID, int aboID, string date, int? statut);
         Task<List<Article_BL>> CreateBonDeLivraison(BonDeLivraison_Model bonDeLivraisonModel);
         Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL);
-        IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date);
+        IEnumerable<FactureModel> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date);
         BonDeCommande_Model FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison_Model FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
         paginationModel<ProduitVendable> getAllProds(int pg);

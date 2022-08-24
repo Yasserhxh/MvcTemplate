@@ -201,9 +201,9 @@ namespace Service.Services
             return mapper.Map<IEnumerable<BonDeLivraison>, IEnumerable<BonDeLivraison_Model>>(fournisseurRepository.GetBonDeLivraisons(fournisseurID, bonCommandeID, aboID, date, statut));
         }
 
-        public IEnumerable<FactureModel> GetFactures(int aboID, int? point, string date)
+        public IEnumerable<FactureModel> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date)
         {
-            return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, point, date));
+            return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, bondeCommande, numeroFac, date));
         }
 
         public IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot)

@@ -292,13 +292,17 @@ namespace Repository.Repositories
                 .Include(p => p.Statut_BL).AsEnumerable().OrderByDescending(p => p.BonDeLivraison_DateLivraison);
         }
 
-        public IEnumerable<Facture> GetFactures(int aboID, int? point, string date)
+        public IEnumerable<Facture> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date)
         {
+            if (bondeCommande == null && date == null && string.IsNullOrEmpty(numeroFac) == true)
+                return null;
             var query = _db.factures.Where(p => p.Facture_AbonnementID == aboID);
-           // if (point != null)
-            //    query = query.Where(p => p.Facture_PointStockID == point);
-            if (date != "")
-                query = query.Where(p => Convert.ToDateTime(p.Facture_DateFacture).ToString("yyyy-MM-dd") == date);
+            if (bondeCommande != null)
+               query = query.Where(p => p.Facture_BonDeCommandeID == bondeCommande);
+            if (date != null)
+                query = query.Where(p => p.Facture_DateFacture.Year == date);
+            if (!string.IsNullOrEmpty(numeroFac))
+                query = query.Where(p => p.Facture_Numero.Contains(numeroFac, StringComparison.OrdinalIgnoreCase));
             return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
         }
 

@@ -175,13 +175,10 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/Fournisseur/BonDeLivraison/ListeBonDeLivraison.cshtml", model);
         }   
-        public IActionResult ListeFactures( string date, int pg = 1)
+        public IActionResult ListeFactures(string nomFac, int? bcID, int? date, int pg = 1)
         {
-            if (date == null || date == "null" || date == "")
-                date = "";
-            var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var query = fournisseurService.GetFactures(Id, point, date);
+            var query = fournisseurService.GetFactures(Id, bcID, nomFac, date);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
