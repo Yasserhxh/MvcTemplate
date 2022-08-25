@@ -12,6 +12,7 @@ namespace Domain.Models
         }*/
         public int Facture_ID { get; set; }
         public string Facture_Numero { get; set; }
+        public string Facture_Etat { get; set; }
         public int Facture_FournisseurID { get; set; }
         public int Facture_BonDeCommandeID { get; set; }
         public decimal Facture_MontantTVA { get; set; }

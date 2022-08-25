@@ -188,6 +188,8 @@ namespace Web.Controllers
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             ViewData["fournisseur"] = new SelectList(gestionMouvementService.getListFournisseur(Id), "Founisseur_Id", "Founisseur_RaisonSocial");
+            ViewData["zone"] = new SelectList(zoneStockageService.getListZoneStockage(Id), "ZoneStockage_Id", "ZoneStockage_Designation");
+
             return View("~/Views/Fournisseur/Factures/ListeDesFactures.cshtml", model);
         }
         public IActionResult AjouterBC()
@@ -483,6 +485,15 @@ namespace Web.Controllers
             receptionAchatModel.userID = _userManager.GetUserName(HttpContext.User);
             receptionAchatModel.StockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var redirect = await fournisseurService.ReceptionMatiereAchats(receptionAchatModel);
+            return redirect;
+        }
+        
+        [HttpPost]
+        public async Task<bool?> PaiementFacture(PayementFacture_Model payementFacture_Model)
+        {
+            payementFacture_Model.PayementFacture_CreePar = _userManager.GetUserName(HttpContext.User);
+            payementFacture_Model.PayementFacture_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var redirect = await fournisseurService.CreatePayementFacture(payementFacture_Model);
             return redirect;
         }
 

@@ -167,7 +167,7 @@
         var data = { fournisseurID: parseInt($("#fournisseur option:selected").val()) };
         if ($("#fournisseur option:selected").val() != null) {
             $.ajax({
-                url: '@Url.Action("getBcFournisseurForArticle", "Fournisseur")',
+                url: '@Url.Action("getBcFournisseur", "Fournisseur")',
                 type: "POST",
                 cache: false,
                 async: true,

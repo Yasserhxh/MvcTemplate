@@ -148,6 +148,26 @@ namespace Service.Services
             }
         }
 
+        public async Task<bool> CreatePayementFacture(PayementFacture_Model payementFacture_Model)
+        {
+            using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    Payement_Facture payementFacture = mapper.Map<PayementFacture_Model, Payement_Facture>(payementFacture_Model);
+                    var IdpayementFacture = await fournisseurRepository.CreatePayementFacture(payementFacture);
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public Task<bool> deleteFournisseur(int ID, int code)
         {
             return this.fournisseurRepository.deleteFournisseur(ID, code);

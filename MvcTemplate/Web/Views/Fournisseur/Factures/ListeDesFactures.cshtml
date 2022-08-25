@@ -134,6 +134,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total HT</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Montant TVA</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Total TTC</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Etat de facture</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de facture</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
 
@@ -151,14 +152,18 @@
 *@                                                                        <td class="border-b dark:border-dark-5">@item.Facture_TotalHT.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@item.Facture_MontantTVA.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@item.Facture_TotalTTC.ToString("n2")</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_Etat)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Facture_DateFacture)</td>
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
-                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="getAllProds"><i class="bx bx-plus "></i>get all prods test</a>
-                                                                                </div>
+                                                                                @if(item.Facture_Etat !="Payée"){
+                                                                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                        <button class="dropdown-item btn-outline-success" onclick='payer(@item.Facture_ID,"@item.Facture_Numero",@item.Facture_TotalTTC)'><i class="bx bx-check"></i>Payer la facture</button>
+                                                                                    </div>      
+                                                                                }
+                                                                             
                                                                             </div>
                                                                         </td>
 
@@ -221,6 +226,49 @@
         </div>
     </div>
 </div>
+<div class="modal" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Paiement de la facture</h4>
+                <button class="close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title"> Détails de paiement</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12" id="plan">
+                                                <div class="card mb-1" id="plandiv">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" id="envbutton" onclick="Valider()">
+                        <i class="bx bx-send"></i>
+                        Payer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- END: Content-->
 <div class="sidenav-overlay"></div>
@@ -274,5 +322,73 @@
         var bcID = $("#bondecommande").val();
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeFactures?bcID=' + bcID + "&date=" + date ;
+    }
+
+    function payer(factureID,libelle,total) {
+        $('#myModal').modal('show');
+        $("#plandiv").append("<div class='form-row'>"
+        + "<div class= 'col-md-4 mb-1' >"
+        + "<label for='date'>Numéro de facture </label>"
+            + "<div><input type='text' disabled id='facId'style ='display:none;' value='" + factureID + "' class='form-control'/></div>"
+        + "<div><input type='text' disabled id='numFac' value='" + libelle + "' class='form-control'/></div></div>"
+        + "<div class= 'col-md-4 mb-1' >"
+        + "<label for='date'>Montant total</label>"
+            + "<div><input type='number' disabled id='mttot' value='" + total + "' class='form-control'/></div></div>"        
+            + "<div class= 'col-md-4 mb-1' >"
+        + "<label for='date'>Montant à payer</label>"
+            + "<div><input type='number'  id='mtPay' value='" + total + "' class='form-control'/></div></div>" 
+            + "<div class= 'col-md-4 mb-1' >"
+        + "<label for='date'>Date de paiement</label>"
+            + "<div><input type='date'  id='dateFac'class='form-control'/></div></div>"
+             +"<div class= 'col-md-4 mb-1' >"
+            + "<label for='date'>Mode de réglement</label>"
+            + "<div>"
+            + `<select id="type" data-search="true" class="custom-select"><option value="Chèque" selected  style="text-align:center;">Chèque</option><option value="Lettre de change"   style="text-align:center;">Lettre de change</option><option value="Virement" selected  style="text-align:center;">Virement</option><option value="Espèce" selected  style="text-align:center;">Espèce</option>
+            </select> `+ "</div></div>"
+            + "<div class= 'col-md-4 mb-1' >"
+            + "<label for='date'>Référence d'opération</label>"
+            + "<div><input type='text'  id='comment'class='form-control'/></div></div>"
+            + "</div>");
+    }
+    function Valider() {
+        var factureID = $("#facId").val();
+        var total = $("#mtPay").val();
+        var dateFac = $("#dateFac").val();
+        var type = $("#type option:selected").val();
+        var comment = $("#comment").val();
+
+        var payementFacture_Model = {
+            PayementFacture_FactureID: parseInt(factureID),
+            PayementFacture_Montant: parseFloat(total).toFixed(2).replace(".", ","),
+            PayementFacture_Methode:type,
+            PayementFacture_Informations: comment,
+            PayementFacture_DatePayement: dateFac,
+        };
+        console.log(payementFacture_Model);
+        $.ajax({
+            url: '@Url.Action("PaiementFacture", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: payementFacture_Model,
+            success: function (data) {
+                if (data == true) {
+                    ShowNotification("Facture payée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+                }
+            },
+            error: function () {
+                alert("non ajoute");
+            }
+        });
     }
 </script>

@@ -17,6 +17,7 @@ namespace Domain.Entities
         [Key]
         public int Facture_ID { get; set; }
         public string Facture_Numero { get; set; }
+        public string Facture_Etat { get; set; }
         [ForeignKey("Fournisseur")]
         public int Facture_FournisseurID { get; set; }
         [ForeignKey("bonDeCommande")]

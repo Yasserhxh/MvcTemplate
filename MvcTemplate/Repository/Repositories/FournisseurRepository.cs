@@ -132,6 +132,7 @@ namespace Repository.Repositories
         public async Task<int?> CreateFacture(Facture facture, List<BonDeLivraison_Model> listeBL)
         {
             facture.Facture_DateSaisie = DateTime.Now;
+            facture.Facture_Etat = "Non payée";
             await _db.factures.AddAsync(facture);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)
@@ -524,6 +525,24 @@ namespace Repository.Repositories
             else
                 return null;
             
+        }
+
+        public async Task<int?> CreatePayementFacture(Payement_Facture payement_Facture)
+        {
+            var facture = _db.factures.Where(p => p.Facture_ID == payement_Facture.PayementFacture_FactureID).FirstOrDefault();
+            if (facture != null)
+            {
+                facture.Facture_Etat = "Payée";
+                payement_Facture.PayementFacture_DateSaisie = DateTime.Now;
+                var confirm = await unitOfWork.Complete();
+                if (confirm > 0)
+                    return payement_Facture.PayementFacture_ID;
+                else
+                    return null;
+            }
+            else
+                return null;
+          
         }
     }
 }

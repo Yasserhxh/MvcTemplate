@@ -124,7 +124,7 @@ table {
             <tr>
                 <th>Code article</th>
                 <th>Désignation</th>
-                <th>lot intern</th>
+                <th>Lot Interne</th>
                 <th>Qté.</th>
                 <th>Unité</th>
                 <th>P.U HT</th>
@@ -139,8 +139,8 @@ table {
                     <tr>
                 
                         <td class="text-center">@item.ArticleBL_MatiereID</td>
-                        <td>@item.MatierePremiere.MatierePremiere_Libelle</td>
-                        <td>@item.ArticleBL_LotTemp</td>
+                        <td> &nbsp; @item.MatierePremiere.MatierePremiere_Libelle</td>
+                        <td> &nbsp; @item.ArticleBL_LotTemp</td>
                         <td class="text-center">@item.ArticleBL_Quantie.ToString("G29")</td>
                         <td class="text-center">@item.Unite_Mesure.UniteMesure_Libelle</td>
                         <td class="text-right">@item.ArticleBL_PU</td>
@@ -157,17 +157,17 @@ table {
 
             <tr>
                 
-                <td class="text-right Fb" colspan="7"> Total HT : &nbsp;&nbsp;</td>
+                <td class="text-right Fb" colspan="8"> Total HT : &nbsp;&nbsp;</td>
                 <td class="text-right">@Model.BonDeLivraison_TotalHT.ToString("n2")</td>
                     </tr>
             <tr>
                 
-                <td class="text-right Fb" colspan="7"> Total TVA : &nbsp;&nbsp;</td>
+                <td class="text-right Fb" colspan="8"> Total TVA : &nbsp;&nbsp;</td>
                 <td class="text-right">@Model.BonDeLivraison_TotalTVA.ToString("n2")</td>
                     </tr>
             <tr>
                 
-                <td class="text-right Fb" colspan="7"> Total TTC : &nbsp;&nbsp;</td>
+                <td class="text-right Fb" colspan="8"> Total TTC : &nbsp;&nbsp;</td>
                 <td class="text-right"> @Model.BonDeLivraison_TotalTTC.ToString("n2")</td>
                     </tr>
         </tbody>

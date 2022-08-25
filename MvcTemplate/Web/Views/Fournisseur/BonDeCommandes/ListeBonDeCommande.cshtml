@@ -43,7 +43,7 @@
             <section id="dashboard-ecommerce">
                 <div class="form-row">
                     <div class="col-md-3 offset-md-1 mb-1">
-                        <label for="role">Numero de bon de commande</label>
+                        <label for="role">Numéro de bon de commande</label>
                         <div>
                             <input type="text" class="form-control" name="name" id="name" onkeyup="checkdisable()"/>
                         </div>
@@ -110,7 +110,7 @@
                                                             @if (a == null)
                                                             {<h4 class="card-title">Veuillez selectionner un fournisseur et l'année de BC'</h4> }
                                                             else
-                                                            {<h4> Liste des bons de commande de fournisseur: <b>"@Model.FirstOrDefault().Fournisseur.Founisseur_RaisonSocial"</b> </h4>}
+                                                            {<h4> Liste des bons de commande </h4>}
                                                         </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
@@ -146,7 +146,7 @@
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-plus "></i>Réceptionner les matière première</a>
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="AjouterBL" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-plus "></i>Réceptionner les matières premières</a>
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBC" asp-route-id="@item.BonDeCommande_ID"><i class="bx bx-history "></i>Afficher la liste des articles</a>
                                                                                     <a asp-action="GeneratePDfBC" asp-route-id="@item.BonDeCommande_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
                                                                                 </div>

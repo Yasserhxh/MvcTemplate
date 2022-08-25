@@ -108,7 +108,7 @@
                                                                             <th>PU (HT)</th>
                                                                             <th>Total (HT)</th>
                                                                             <th>Temperature °C</th>
-                                                                            <th>Lot fournisseur</th>
+                                                                            <th>Lot Frs</th>
                                                                             <th>Date de production </th>
                                                                             <th>Date limite de consommation </th>
                                                                         </tr>
@@ -406,6 +406,7 @@
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_MatiereID + "</td>" +
+                            "<td class='border-b dark:border-dark-5' style='display:none;' id='qteRest'>" + parseFloat(data[i].articleBC_QteRest) + "</td>" +
 
                             "</tr>");
 
@@ -436,10 +437,15 @@
     function keyUp(ctl){
 
         var qteLiv = parseFloat($(ctl).closest("tr").find("#qteLiv").val());
-        var pu = parseFloat($(ctl).closest("tr").find("td:eq(4)").text());
+        var pu = parseFloat($(ctl).closest("tr").find("#pu").text());
+        var qteRest = parseFloat($(ctl).closest("tr").find("#qteRest").text());
 
-        console.log(qteLiv * pu);
-        $(ctl).closest("tr").find("td:eq(5)").text(parseFloat(qteLiv * pu).toFixed(2));
+        if(qteLiv > qteRest){
+            parseFloat($(ctl).closest("tr").find("#qteLiv").val(qteRest))
+        }else{
+            $(ctl).closest("tr").find("td:eq(7)").text(parseFloat(parseFloat(qteLiv * pu).toFixed(2)));
+
+        }
        // $(ctl).parents("tr");
        
        

@@ -98,6 +98,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité de mesure</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">N° Lot </th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Pt Stockage </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
                                                                     @if (User.IsInRole("Gerant_des_achats"))
                                                                     {
@@ -117,6 +118,7 @@
                                                                         <td class="border-b dark:border-dark-5">@item.MatiereTrans_Quantite.ToString("G29")</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_LotNumber)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Lieu_Stockage.LieuStockag_Nom)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_Statut)</td>
                                                                         @if(User.IsInRole("Gerant_des_achats"))
                                                                         {
@@ -201,7 +203,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#c19d56">
-                <h4 class="modal-title white" id="myModalLabel33">Extrait du bon de sortie</h4>
+                <h4 class="modal-title white" id="myModalLabel33">Recéption et affectation de marchandises</h4>
                 <button class="close"  onclick="refresh()">
                     <i class="bx bx-x"></i>
                 </button>
@@ -213,7 +215,7 @@
                         <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Livrer les matières premières à livrer</h4>
+                                    <h4 class="card-title">Affectation des marchandises</h4>
                                 </div>
                                 <div class="card-content collapse show">
                                     <div class="card-body">
