@@ -273,7 +273,8 @@ namespace Web.Controllers
                     LOT_FOURNISSEUR = item.ArticleBL_LotFournisseur.ToUpper(),
                     DATE_RECEP = item.bonDeLivraison.BonDeLivraison_DateLivraison.ToString(),
                     DATE_P = item.ArticleBL_DateProduction.Value.ToShortDateString(),
-                    DLC = item.ArticleBL_DateLimiteConso.Value.ToShortDateString()
+                    DLC = item.ArticleBL_DateLimiteConso.Value.ToShortDateString(),
+                    TEMPERATURE = item.ArticleBL_Teemperature +" "+ "°C"
                 };
                
 
@@ -341,12 +342,12 @@ namespace Web.Controllers
                 {
                     var dh = check[0];
                     var cent = check[1];
-                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent)).Titleize() + " " + "Dirhams";
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh), new CultureInfo("fr")).Titleize() + " " + "VIRGULE" + " " + NumberToWordsExtension.ToWords(Convert.ToInt32(cent), new CultureInfo("fr")).Titleize() + " " + "Dirhams";
                 }
                 else
                 {
                     var dh = check[0];
-                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh)).Titleize() + " " + "Dirhams";
+                    bc.BonDeCommande_TTCWords = NumberToWordsExtension.ToWords(Convert.ToInt32(dh), new CultureInfo("fr")).Titleize() + " " + "Dirhams";
                 }
 
                 Controller controller = this;

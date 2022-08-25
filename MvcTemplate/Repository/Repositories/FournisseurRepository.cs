@@ -105,7 +105,10 @@ namespace Repository.Repositories
                         StockAchat_LotFournisseur = item.ArticleBL_LotFournisseur,
                         StockAchat_LotIntern = item.ArticleBL_LotTemp,
                         StockAchat_AbonnementID = bonDeLivraison.BonDeLivraison_AbonnementID,
-                        StockAchat_UniteMesureID = item.ArticleBL_UniteMesureID
+                        StockAchat_UniteMesureID = item.ArticleBL_UniteMesureID,
+                        StockAchat_DateLimiteConso = item.ArticleBL_DateLimiteConso,
+                        StockAchat_Temperature = item.ArticleBL_Teemperature
+
                     };
                     await _db.stock_Achats.AddAsync(stockAchat);
                 }
@@ -240,7 +243,13 @@ namespace Repository.Repositories
             if (pg < 1)
                 pg = 1;
             int startRow = (pg -1) * pageSize;
-            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new { startRowIndex = startRow, maximumRows = pageSize }, commandType: CommandType.StoredProcedure).ToList();
+            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new
+            {
+                startRowIndex = startRow,
+                maximumRows = pageSize,
+                aboID = 1,
+                sousCateg = ""
+            }, commandType: CommandType.StoredProcedure).ToList();
             var pagination = new paginationModel<ProduitVendable>
             {
                 objList = query,

@@ -112,7 +112,10 @@
                                                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
                                                         <table id="table-Cartographie-Deposees" class="table table-bordered table-striped mb-0">
                                                             <thead>
-                                                                <tr><th><input type="checkbox" class="largerCheckbox" checked id="chkAll" /></th>
+                                                                <tr>
+                                                                    @if (Model.Any())
+                                                                    {<th><input type="checkbox" class="largerCheckbox" checked id="chkAll" /></th>}
+                                                                    else{ <th><input type="checkbox" class="largerCheckbox" id="chkAll" /></th>}
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière première</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité de mesure</th>
@@ -121,6 +124,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Qté transfert</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Pt. STOCK</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">DLC</th>
 @*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
 *@
                                                                 </tr>
@@ -132,6 +136,7 @@
                                                                 @foreach (var item in Model)
                                                                 {
                                                                     <tr>
+
                                                                         <td class='border-b dark:border-dark-5'> <input type="checkbox" checked class="largerCheckbox tblChk chk @i " name="check"/></td>
                                                                         <td class="border-b dark:border-dark-5" style="display:none;">@Html.DisplayFor(modelItem => item.StockAchat_MatiereID)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere.MatierePremiere_Libelle)</td>
@@ -143,7 +148,9 @@
                                                                         @{var id = "unite"+i.ToString();}
                                                                         <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="(SelectList)ViewData[id]"></select></td>
                                                                         <td class="border-b dark:border-dark-5"><select class="custom-select" id="lieu" data-search="true" asp-items="@ViewBag.lieu"></select></td>
-                                                                       @* <td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.StockAchat_DateLimiteConso)</td>
+
+                                                                        @* <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
@@ -279,7 +286,6 @@
         }
     }
     function CreateOrdre() {
-        document.getElementById('disabled').disabled = true;
         var ListMatiere = new Array();
         var table = document.getElementById("usertbody");
         var matdesi = "";
@@ -294,25 +300,32 @@
             //Fiche_Forme: ListFormes,
             //FicheTech_ProduitBase = new Array(),
         }
-        if (table != null) {
-            for (var i = 0; i < table.rows.length; i++) {
-                matdesi = table.rows[i].cells[2].innerHTML;
-                matID = table.rows[i].cells[1].innerHTML;
-                lotInt = table.rows[i].cells[6].innerHTML;
-                qteTrans = table.rows[i].cells[7].getElementsByTagName('input')[0].value;
-                uniteId = table.rows[i].cells[8].getElementsByTagName("select")[0].value;
-                lieuID = table.rows[i].cells[9].getElementsByTagName("select")[0].value;
+        if (table.rows.length > 0 ) 
+        {
+            document.getElementById('disabled').disabled = true;
+
+            for (var i = 0; i < table.rows.length; i++) 
+            {
+                if (table.rows[i].cells[0].getElementsByTagName('input')[0].checked) 
+                {
+                    matdesi = table.rows[i].cells[2].innerHTML;
+                    matID = table.rows[i].cells[1].innerHTML;
+                    lotInt = table.rows[i].cells[6].innerHTML;
+                    qteTrans = table.rows[i].cells[7].getElementsByTagName('input')[0].value;
+                    uniteId = table.rows[i].cells[8].getElementsByTagName("select")[0].value;
+                    lieuID = table.rows[i].cells[9].getElementsByTagName("select")[0].value;
                 
-                var matiere = {
-                    MatiereTrans_MatiereID: parseInt(matID),
-                    MatiereTrans_UniteID: parseInt(uniteId),
-                    MatiereTrans_Quantite: parseFloat(qteTrans).toFixed(2).replace(".",","),
-                    MatiereTrans_LotNumber: lotInt,
-                    MatiereTrans_StockID: parseInt(lieuID),
-                    MatiereTrans_Statut : "En attente"
+                    var matiere = {
+                        MatiereTrans_MatiereID: parseInt(matID),
+                        MatiereTrans_UniteID: parseInt(uniteId),
+                        MatiereTrans_Quantite: parseFloat(qteTrans).toFixed(2).replace(".",","),
+                        MatiereTrans_LotNumber: lotInt,
+                        MatiereTrans_StockID: parseInt(lieuID),
+                        MatiereTrans_Statut : "En attente"
                   
+                    }
+                    ListMatiere.push(matiere);
                 }
-                ListMatiere.push(matiere);
             }
             
             TransfertMatModel.listeMatiere = ListMatiere;
@@ -321,25 +334,25 @@
             var data = {
                 TransfertMat_Model : TransfertMatModel
             }
-        console.log(data);
-         $.ajax({
-            url: '@Url.Action("AjouterOrdreT", "Fournisseur")',
-            type: "POST",
-            cache: false,
-            async: true,
-            data: data,
-             success: function (data) {
-                 ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-                  setTimeout(
-                        function () {
-                            window.location.reload();
-                        }, 500);
-            },
-             error: function () {
-                 ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
-
-            }
-        });
+            console.log(data);
+             $.ajax({
+                url: '@Url.Action("AjouterOrdreT", "Fournisseur")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                 success: function (data) {
+                     ShowNotification("Succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                      setTimeout(
+                            function () {
+                                window.location.reload();
+                            }, 500);
+                 },
+                 error: function () 
+                 {
+                     ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                 }
+            });
         }
 
 
@@ -363,13 +376,18 @@
 
     $("#chkAll").change(function () {
         if ($(this).prop('checked')) {
+            //document.getElementById('disabled').disabled = false;
+
           $('.tblChk').not(this).prop('checked', true);
-          document.getElementById('disabled').disabled = false;
-
         } else {
-          $('.tblChk').not(this).prop('checked', false);
-        document.getElementById('disabled').disabled = true;
-
+            //document.getElementById('disabled').disabled = true;
+            $('.tblChk').not(this).prop('checked', false);
         }
       });
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
 </script>

@@ -10,6 +10,7 @@ namespace Domain.Models
         public string ArticleBL_Designation { get; set; }
         public string ArticleBL_LotFournisseur { get; set; }
         public string ArticleBL_LotTemp { get; set; }
+        public string ArticleBL_Teemperature { get; set; }
         public int ArticleBL_MatiereID { get; set; }
         public decimal ArticleBL_Quantie { get; set; }
         public decimal ArticleBL_QuantieRes { get; set; }

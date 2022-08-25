@@ -372,4 +372,7 @@
           $('.tblChk').not(this).prop('checked', false);
         }
       });
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('date').value = now.toISOString().slice(0, 16);
 </script>

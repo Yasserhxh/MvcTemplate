@@ -124,6 +124,7 @@ table {
             <tr>
                 <th>Code article</th>
                 <th>Désignation</th>
+                <th>lot intern</th>
                 <th>Qté.</th>
                 <th>Unité</th>
                 <th>P.U HT</th>
@@ -139,6 +140,7 @@ table {
                 
                         <td class="text-center">@item.ArticleBL_MatiereID</td>
                         <td>@item.MatierePremiere.MatierePremiere_Libelle</td>
+                        <td>@item.ArticleBL_LotTemp</td>
                         <td class="text-center">@item.ArticleBL_Quantie.ToString("G29")</td>
                         <td class="text-center">@item.Unite_Mesure.UniteMesure_Libelle</td>
                         <td class="text-right">@item.ArticleBL_PU</td>
@@ -175,9 +177,6 @@ table {
         <footer class="text-right">
             <h3 class="signature">Signature</h3>
         </footer>  
-        <br />
-        <br />
-        <br />
         <br />
         <footer style="padding-top: 150px;">
             <hr>

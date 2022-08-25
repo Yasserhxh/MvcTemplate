@@ -14,6 +14,7 @@ namespace Web.Helpers
         public string DATE_RECEP { get; set; }
         public string DATE_P { get; set; }
         public string DLC { get; set; }
+        public string TEMPERATURE { get; set; }
         //public List<Article_BL> listeArticles { get; set; }
 
     }

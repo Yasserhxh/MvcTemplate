@@ -107,6 +107,7 @@
                                                                             <th>Unité de mesure </th>
                                                                             <th>PU (HT)</th>
                                                                             <th>Total (HT)</th>
+                                                                            <th>Temperature °C</th>
                                                                             <th>Lot fournisseur</th>
                                                                             <th>Date de production </th>
                                                                             <th>Date limite de consommation </th>
@@ -267,44 +268,48 @@
         }
         if (table != null)
         {
-            for (var i = 0; i < table.rows.length; i++) {
+            for (var i = 0; i < table.rows.length; i++) 
+            {
                 if (table.rows[i].cells[0].getElementsByTagName('input')[0].checked) 
+                
                 {
-                matiere = table.rows[i].cells[13].innerHTML;
-                quantite = table.rows[i].cells[4].getElementsByTagName('input')[0].value;
-                unite = table.rows[i].cells[12].innerHTML;
-                prixU = table.rows[i].cells[6].innerHTML;
-                prixtot = table.rows[i].cells[7].innerHTML;
-                desi = table.rows[i].cells[1].innerHTML;
-                lotF = table.rows[i].cells[8].getElementsByTagName('input')[0].value;
-                dateProd = table.rows[i].cells[9].getElementsByTagName('input')[0].value;
-                dlc = table.rows[i].cells[10].getElementsByTagName('input')[0].value;
+                    matiere = table.rows[i].cells[14].innerHTML;
+                    quantite = table.rows[i].cells[4].getElementsByTagName('input')[0].value;
+                    unite = table.rows[i].cells[13].innerHTML;
+                    prixU = table.rows[i].cells[6].innerHTML;
+                    prixtot = table.rows[i].cells[7].innerHTML;
+                    desi = table.rows[i].cells[1].innerHTML;
+                    lotF = table.rows[i].cells[9].getElementsByTagName('input')[0].value;
+                    dateProd = table.rows[i].cells[10].getElementsByTagName('input')[0].value;
+                    dlc = table.rows[i].cells[11].getElementsByTagName('input')[0].value;
+                    temp = table.rows[i].cells[8].getElementsByTagName('input')[0].value;
                  
-                var article = {
-                    ArticleBL_MatiereID: "",
-                    ArticleBL_UniteMesureID: "",
-                    ArticleBL_Quantie: "",
-                    ArticleBL_PU: "",
-                    ArticleBL_PrixTotal:"",
-                    ArticleBL_Designation:"",
-                    ArticleBL_LotFournisseur:"",
-                    ArticleBL_DateProduction:"",
-                    ArticleBL_DateLimiteConso:""
+                    var article = {
+                        ArticleBL_MatiereID: "",
+                        ArticleBL_UniteMesureID: "",
+                        ArticleBL_Quantie: "",
+                        ArticleBL_PU: "",
+                        ArticleBL_PrixTotal:"",
+                        ArticleBL_Designation:"",
+                        ArticleBL_LotFournisseur:"",
+                        ArticleBL_DateProduction:"",
+                        ArticleBL_DateLimiteConso:"",
+                        ArticleBL_Teemperature:""
+                    }
+
+                    article.ArticleBL_MatiereID = matiere;
+                    article.ArticleBL_UniteMesureID = unite;
+                    article.ArticleBL_Designation =  desi;
+                    article.ArticleBL_LotFournisseur =  lotF;
+                    article.ArticleBL_Quantie =  parseFloat(quantite).toFixed(2).replace(".",",");
+                    article.ArticleBL_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
+                    article.ArticleBL_PrixTotal =  parseFloat(prixtot).toFixed(2).replace(".",",");
+                    article.ArticleBL_DateProduction =  dateProd;
+                    article.ArticleBL_DateLimiteConso =  dlc;
+                    article.ArticleBL_Teemperature = temp;
+                    ListArticles.push(article);
                 }
-
-                article.ArticleBL_MatiereID = matiere;
-                article.ArticleBL_UniteMesureID = unite;
-                article.ArticleBL_Designation =  desi;
-                article.ArticleBL_LotFournisseur =  lotF;
-                article.ArticleBL_Quantie =  parseFloat(quantite).toFixed(2).replace(".",",");
-                article.ArticleBL_PU =  parseFloat(prixU).toFixed(2).replace(".",",");
-                article.ArticleBL_PrixTotal =  parseFloat(prixtot).toFixed(2).replace(".",",");
-                article.ArticleBL_DateProduction =  dateProd;
-                article.ArticleBL_DateLimiteConso =  dlc;
-                ListArticles.push(article);
-
             }
-        }
         BonDeLivraison_Model.listeArticles = ListArticles;
 
 
@@ -394,6 +399,7 @@
                             "<td class='border-b dark:border-dark-5'>" + data[i].unite_Mesure.uniteMesure_Libelle + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='pu'>" + data[i].articleBC_PU + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='totLiv'>" + parseFloat(data[i].articleBC_PU) * parseFloat(data[i].articleBC_QteRest) + "</td>" +
+                            "<td class='border-b dark:border-dark-5' id='temp'>  <input type='text'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='dateProd'>  <input type='date'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='dlc'>  <input type='date'/></td>" +
@@ -417,6 +423,15 @@
 
     function SousP() {
         donee = result();
+    } 
+    function refresh() 
+    {
+        ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+        setTimeout(
+            function () {
+        window.location.reload();
+            }, 2000);
+
     }
     function keyUp(ctl){
 
@@ -443,4 +458,7 @@
           $('.tblChk').not(this).prop('checked', false);
         }
       });
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('date').value = now.toISOString().slice(0, 16);
 </script>

@@ -13,6 +13,7 @@ namespace Domain.Entities
         public int ArticleBL_ID { get; set; }
         public string ArticleBL_Designation { get; set; }
         public string ArticleBL_LotFournisseur { get; set; }
+        public string ArticleBL_Teemperature { get; set; }
         public string ArticleBL_LotTemp { get; set; }
         [ForeignKey("MatierePremiere")]
         public int ArticleBL_MatiereID { get; set; }

@@ -91,6 +91,8 @@
                                                                 <tr>
 
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Designation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Temperature °C</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Lot intern</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap ">Quantite </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unite de mesure </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Prix Unitaire (HT)</th>
@@ -104,6 +106,8 @@
                                                                     <tr>
 
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBL_Designation)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBL_Teemperature)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBL_LotTemp)</td>
                                                                         <td class="border-b dark:border-dark-5">@item.ArticleBL_Quantie.ToString("n2")</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
 @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
