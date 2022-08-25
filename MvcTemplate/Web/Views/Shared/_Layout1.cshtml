@@ -387,6 +387,9 @@
                                     </li>
                                     <li>
                                         <a asp-controller="Fournisseur" asp-action="MatieresEnStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Affectation des matieres premieres</span></a>
+                                    </li> 
+                                    <li>
+                                        <a asp-controller="Fournisseur" asp-action="ListeDesTransfer"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des ordres de transfert</span></a>
                                     </li>
 
                                 </ul>
@@ -501,9 +504,12 @@
                                     <li>
                                         <a asp-controller="MatierePremiere" asp-action="ListeMatierePremiere"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Affectation des matières premières aux zones</span></a>
                                     </li>
-                                    <li>
+                                    @*<li>
                                         <a asp-controller="ProduitVendable" asp-action="Receptionfournisseur"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des matières premières</span></a>
-                                    </li>
+                                    </li>*@
+                            <li>
+                                <a asp-controller="Fournisseur" asp-action="ListeDesTransfer"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Réception des matières premières</span></a>
+                            </li>
                                     <li>
                                         <a asp-controller="ProduitVendable" asp-action="AlimentationStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Alimentation intra-stock</span></a>
                                     </li>

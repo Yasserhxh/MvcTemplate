@@ -250,5 +250,10 @@
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeDesTransfer?statut=' + statut + "&date=" + date;
     }
-   
+    Date.prototype.toDateInputValue = (function () {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0, 10);
+    });
+    document.getElementById('date').value = new Date().toDateInputValue();
 </script>
