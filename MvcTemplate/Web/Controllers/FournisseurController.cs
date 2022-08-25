@@ -475,6 +475,19 @@ namespace Web.Controllers
 
             return View("~/Views/Fournisseur/AlimentationStock/ListeDesMatieres.cshtml", model);
         }
+
+        [HttpPost]
+        public async Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel)
+        {
+            receptionAchatModel.userID = _userManager.GetUserName(HttpContext.User);
+            receptionAchatModel.StockID = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var redirect = await fournisseurService.ReceptionMatiereAchats(receptionAchatModel);
+            return redirect;
+        }
+
+
+
+
     }
 
     public static class BitmapExtension

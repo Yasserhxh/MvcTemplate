@@ -35,5 +35,6 @@ namespace Repository.IRepositories
         IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date);
         IEnumerable<Matiere_Transfert> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot, string statut, string date);
         IEnumerable<Unite_Mesure> findFormulaireUnite(int unite);
+        Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel);
     }
 }

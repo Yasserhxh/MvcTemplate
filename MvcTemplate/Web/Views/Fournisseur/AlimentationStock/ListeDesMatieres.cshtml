@@ -128,10 +128,13 @@
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
-                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <button class="dropdown-item btn-outline-success" onclick='Valider(@item.MatiereTrans_ID,"@item.MatierePremiere.MatierePremiere_Libelle",@item.MatiereTrans_Quantite.ToString("G29"),@item.MatiereTrans_TransferID)' ><i class="bx bx-check"></i>Valider la recéption</button>
-                                                                                    
-                                                                                </div>
+                                                                                @if (item.MatiereTrans_Statut != "Validée")
+                                                                                {
+                                                                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <button class="dropdown-item btn-outline-success" onclick='Valider(@item.MatiereTrans_ID,@item.MatiereTrans_MatiereID,"@item.MatierePremiere.MatierePremiere_Libelle",@item.MatiereTrans_Quantite.ToString("G29"),@item.MatiereTrans_TransferID)'><i class="bx bx-check"></i>Valider la recéption</button>
+                                                                                    </div>
+                                                                                }
+                                                                                
                                                                             </div>
                                                                         </td>
 
@@ -291,22 +294,7 @@
 
         window.location.reload();
     } 
-    function Livrer() {
-        var matID = $("#matID").val();
-        var qte = $("#qte").val();
-        var zone = $("#zone option:selected").val();
-        var section = $("#section option:selected").val();
-        var trnasfertID = $("#trnasfertID").val();
-        
-        var ReceptionAchatModel = {
-            matiereID = parseInt(matID),
-            Quantite = parseFloat(qte).toFixed(2).replace(".",","),
-            ZoneID = parseInt(zone),
-            SectionID = parseInt(section),
-            TransferID = parseInt(trnasfertID)
-        };
-        console.log(ReceptionAchatModel);
-    } 
+   
     function getSection() {
 
           var data = { zoneId: parseInt($("#zone option:selected").val()) };
@@ -336,13 +324,13 @@
             }
     }
 
-    function Valider(matID, matLib, qte, transfertID) {
+    function Valider(matransID ,matID, matLib, qte, transfertID) {
         $('#myModal').modal('show');
-
         $("#plandiv").append("<div class='form-row'>"
         + "<div class= 'col-md-3 mb-1' >"
         + "<label for='date'>Matière première</label>"
-        + "<div><input type='text' disabled id='matID 'style ='display:none;' value='" + matID + "' class='form-control'/></div>"
+            + "<div><input type='text' disabled id='matransID'style ='display:none;' value='" + matransID + "' class='form-control'/></div>"
+        + "<div><input type='text' disabled id='matID'style ='display:none;' value='" + matID + "' class='form-control'/></div>"
         + "<div><input type='text' disabled id='trnasfertID' style ='display:none;' value='" + transfertID + "' class='form-control'/></div>"
         + "<div><input type='text' disabled id='matprem' value='" + matLib + "' class='form-control'/></div></div>"
         + "<div class= 'col-md-3 mb-1' >"
@@ -351,7 +339,7 @@
         + "<div class= 'col-md-3 mb-1' >"
         + "<label for='date'>Zone de stockage</label>"
         + "<div>"
-        + `<select id="zone" data-search="true" class="custom-select" onclick="getSection()">
+        + `<select id="zone" data-search="true" class="custom-select" onclick="getSection()"><option value="" selected disabled style="text-align:center;">Selectionnez une zone de stockage</option>
         @foreach (var item in ViewBag.zone)
         {
             @:<option value="@item.Value" style="text-align:center;">@item.Text</option>
@@ -365,5 +353,53 @@
         
         </select> `+ "</div></div> </div>");
     }
+    function Livrer() {
+        var matTrans = $("#matransID").val();
+        var matID = $("#matID").val();
+        var qte = $("#qte").val();
+        var zone = $("#zone option:selected").val();
+        var section = $("#section option:selected").val();
+        var trnasfertID = $("#trnasfertID").val();
 
+        var receptionAchatModel = {
+            MatTransID: parseInt(matTrans),
+            matiereID : parseInt(matID),
+            Quantite : parseFloat(qte).toFixed(2).replace(".", ","),
+            ZoneID : parseInt(zone),
+            SectionID : parseInt(section),
+            TransferID :parseInt(trnasfertID)
+        };
+        console.log(receptionAchatModel);
+        $.ajax({
+            url: '@Url.Action("ReceptionMatiereAchats", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: receptionAchatModel,
+            success: function (data) {
+                if (data == true) {
+                    ShowNotification("Matière recéptionnée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+                } else if (data == null) {
+                    ShowNotification("Veuillez premierement affecter la matière à une zone de stockage!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 2000);
+                }else{
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 500);
+                }
+            },
+            error: function () {
+                alert("non ajoute");
+            }
+        });
+    }
 </script>

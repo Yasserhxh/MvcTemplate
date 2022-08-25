@@ -253,6 +253,12 @@ namespace Service.Services
             return res;
         }
 
+        public async Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel)
+        {
+            return await fournisseurRepository.ReceptionMatiereAchats(receptionAchatModel);
+        }
+
+
         /*  public IEnumerable<FournisseurModel> getListAllFournisseur()
  {
      return mapper.Map<IEnumerable<Fournisseur>, IEnumerable<FournisseurModel>>(this.fournisseurRepository.getListAllFournisseur());

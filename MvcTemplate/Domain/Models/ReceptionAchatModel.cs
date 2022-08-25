@@ -12,5 +12,7 @@ namespace Domain.Models
         public int SectionID { get; set; }
         public int TransferID { get; set; }
         public string userID { get; set; }
+        public int StockID { get; set; }
+        public int MatTransID { get; set; }
     }
 }

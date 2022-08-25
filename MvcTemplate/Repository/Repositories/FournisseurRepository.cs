@@ -470,5 +470,51 @@ namespace Repository.Repositories
         {
             return _db.unite_Mesures.Where(p => p.UniteMesure_Id == unite).AsEnumerable();
         }
+        public async Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel)
+        {
+            var matTrans = _db.matiere_Transferts.Where(p => p.MatiereTrans_ID == receptionAchatModel.MatTransID).FirstOrDefault();
+            matTrans.MatiereTrans_Statut = "Validée";
+            matTrans.MatiereTrans_ValidePar = receptionAchatModel.userID;
+            matTrans.MatiereTrans_DateValidation = DateTime.Now;
+            var stockage = _db.matierePremiereStockages.Where(m => m.MatierePremiereStokage_MatierePremiereId == receptionAchatModel.matiereID && m.MatierePremiereStokage_SectionStockageId == receptionAchatModel.SectionID).FirstOrDefault();
+            if (stockage != null)
+            {
+                var k = _db.mouvements.Where(m => m.MouvementStock_MatierePremiereStokageId == stockage.MatierePremiereStokage_SectionStockageId).AsEnumerable();
+                foreach (var item in k)
+                {
+                    item.MouvementStock_IsActive = 0;
+                    _db.Entry(item).State = EntityState.Modified;
+
+                }
+                stockage.MatierePremiereStokage_QuantiteActuelle += receptionAchatModel.Quantite;
+
+                _db.Entry(matTrans).State = EntityState.Modified;
+                _db.Entry(stockage).State = EntityState.Modified;
+
+                var mouvement = new MouvementStock()
+                {
+                    MouvementStock_MatierePremiereStokageId = stockage.MatierePremiereStokage_Id,
+                    MouvementStock_AbonnementId = stockage.MatierePremiereStokage_AbonnementId,
+                    MouvementStock_Quantite = receptionAchatModel.Quantite,
+                    MouvementStock_IsActive = 1,
+                    MouvementStock_MouvementTypeId = 3,
+                    MouvementStock_UniteMesureId = matTrans.MatiereTrans_UniteID,
+                    MouvementStock_Date = DateTime.Now,
+                    MouvementStock_DateCreation = DateTime.Now,
+                    MouvementStock_DateReception = DateTime.Now,
+                    MouvementStock_DateSaisie = DateTime.Now,
+                    MouvementStock_MatiereQuantiteActuelle = stockage.MatierePremiereStokage_QuantiteActuelle
+                };
+                await _db.mouvements.AddAsync(mouvement);
+                var confirm = await unitOfWork.Complete();
+                if (confirm > 0)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return null;
+            
+        }
     }
 }
