@@ -37,6 +37,6 @@ namespace Repository.IRepositories
         IEnumerable<Unite_Mesure> findFormulaireUnite(int unite);
         Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel);
         Task<int?> CreatePayementFacture(Payement_Facture payement_Facture);
-
+        IEnumerable<Section_Stockage> getListSections(int matiereID);
     }
 }

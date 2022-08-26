@@ -263,6 +263,11 @@ namespace Service.Services
             return mapper.Map<IEnumerable<FournisseurMatiere>, IEnumerable<FournisseurMatiereModel>>(fournisseurRepository.getListMatiereLink(fournisseurId));
         }
 
+        public IEnumerable<Section_StockageModel> getListSections(int matiereID)
+        {
+            return mapper.Map<IEnumerable<Section_Stockage>, IEnumerable<Section_StockageModel>>(fournisseurRepository.getListSections(matiereID));
+        }
+
         public IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern)
         {
             var res = mapper.Map<IEnumerable<Stock_Achat>, IEnumerable<StockAchat_Model>>(fournisseurRepository.GetMatireStockAchat(aboID, matiereID, lotIntern));

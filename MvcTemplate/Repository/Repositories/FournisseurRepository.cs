@@ -544,5 +544,13 @@ namespace Repository.Repositories
                 return null;
           
         }
+        public IEnumerable<Section_Stockage> getListSections(int matiereID)
+        {
+            var matStock =  _db.matierePremiereStockages.Where(p=>p.MatierePremiereStokage_MatierePremiereId == matiereID)
+                .Include(p=>p.Section_Stockage).ThenInclude(p=>p.Zone_Stockage)
+                .AsEnumerable().Select(p=>p.Section_Stockage);
+            return matStock;
+
+        }
     }
 }

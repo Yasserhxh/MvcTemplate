@@ -119,6 +119,9 @@
                                                             <label for="UniteMesure">Prix / Unité (HT)</label>
                                                             <input type="text" id="prix" class="form-control" required />
                                                         </div>
+                                                        <div class="col-md-2 mb-1" style="display:none;">
+                                                            <input type="text" style="display:none;" id="tva" class="form-control" required />
+                                                        </div>
                                                       @*  <div class="col-md-2 mb-1">
                                                             <label for="total">Total</label>
                                                             <input type="text" id="total" disabled class="form-control" required />
@@ -138,7 +141,9 @@
                                                                             <th>Quantité</th>
                                                                             <th>Unité</th>
                                                                             <th>Prix / unité (HT)</th>
-                                                                            <th>Prix total (HT)</th>
+                                                                            <th>Total HT</th>
+                                                                            <th>Taux TVA %</th>
+                                                                            <th>Total TTC</th>
                                                                             <th>Action</th>
                                                                          
                                                                         </tr>
@@ -240,6 +245,22 @@
                 error: function () {
                 }
             });
+        } 
+        var data2 = { id: parseInt($("#matiere option:selected").val()) };
+        if ($("#matiere option:selected").val() != null) {
+            $.ajax({
+                url: '@Url.Action("getMatiereTVA", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data2,
+                success: function (data) {
+                    $("#tva").val(data);
+                },
+                error: function () {
+                }
+            });
+
         }
     }
        function articleAdd() {
@@ -325,29 +346,44 @@ function articleAjout() {
             }
         }
         quantiteval = parseFloat(quantiteval) + parseFloat(quantite);
+        let HT = parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2));
+        var coutTva = parseFloat($("#tva").val());
+        var mtTVA = (HT *coutTva) / 100;
+        var TTC = HT + mtTVA;
         $("#tbodyCamions").append("<tr>" +
             "<td class='border-b dark:border-dark-5' style='display:none;'>" + fournisseurval + "</td>" +
             "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereval + "</td>" +
             "<td class='border-b dark:border-dark-5' style='display:none;'>" + uniteval + "</td>" +
             "<td class='border-b dark:border-dark-5 text-sm-left'>" + $("#matiere option:selected").text() + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat(quantiteval).toFixed(2) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + new Intl.NumberFormat().format(quantiteval)+ "</td>" +
             "<td class='border-b dark:border-dark-5'>" + unitetxt + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#prix").val()).toFixed(2).toString("n2") + "</td>" +
-            "<td class='border-b dark:border-dark-5'>" + (parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()).toFixed(2)).toFixed(2)).toString("n2")  + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + new Intl.NumberFormat().format(parseFloat($("#prix").val())) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + new Intl.NumberFormat().format(parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()))) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + parseFloat($("#tva").val()) + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + new Intl.NumberFormat().format(parseFloat(TTC)) + "</td>" +
+
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + parseFloat(quantiteval) + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + parseFloat(parseFloat($("#prix").val())) + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + parseFloat(parseFloat(parseFloat(quantiteval).toFixed(2) * parseFloat($("#prix").val()))) + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + parseFloat(TTC) + "</td>" +
             "<td >" +
             '<button class="btn btn-outline-secondary btn-table round" onclick="articleDelete(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
             "</tr>");
             
             
    
-    var res = 0;
+    var totHT = 0;
+    var totTTC = 0;
     for (var i = 0; i <table.rows.length; i++)
     {
-        var prixht = parseFloat($("#prixHT").val()).toFixed(2) ;
-        var prixtable = parseFloat(table.rows[i].cells[7].innerHTML).toFixed(2);
-        res += parseFloat(prixtable);
-        $("#prixHT").val(res);
-        $("#prixTTC").val(parseFloat($("#prixHT").val()) * parseFloat("1.2"));
+        var prixht = parseFloat($("#prixHT").val()) ;
+        var prixtable = parseFloat(table.rows[i].cells[12].innerHTML);
+        var prixTTC = parseFloat(table.rows[i].cells[13].innerHTML);
+        console.log(prixTTC)
+        totHT += parseFloat(prixtable);
+        totTTC += parseFloat(prixTTC);
+        $("#prixHT").val(totHT);
+        $("#prixTTC").val(totTTC);
         $("#prixTVA").val(parseFloat($("#prixTTC").val()) - parseFloat($("#prixHT").val()));
 
     }

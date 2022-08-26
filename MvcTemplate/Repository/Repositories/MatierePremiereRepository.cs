@@ -70,7 +70,9 @@ namespace Repository.Repositories
 
         public MatierePremiere findFormulaireMatiereP(int aboID, int formulaireMatierePId)
         {
-            return _db.matierePremieres.Where(e => e.MatierePremiere_Id == formulaireMatierePId && e.MatierePremiere_AbonnementId == aboID && e.MatierePremiere_IsActive == 1).FirstOrDefault();
+            return _db.matierePremieres.Where(e => e.MatierePremiere_Id == formulaireMatierePId && e.MatierePremiere_AbonnementId == aboID && e.MatierePremiere_IsActive == 1)
+                .Include(p=>p.Taux_TVA)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Allergene> getListAllergene(int Id)

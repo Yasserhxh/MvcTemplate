@@ -36,7 +36,7 @@ namespace Service.IServices
         IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot, string statut, string date);
         Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel);
         Task<bool> CreatePayementFacture(PayementFacture_Model payementFacture_Model);
-
+        IEnumerable<Section_StockageModel> getListSections(int matiereID);
 
     }
 }

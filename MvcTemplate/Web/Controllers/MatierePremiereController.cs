@@ -213,6 +213,13 @@ namespace Web.Controllers
             return matiere.MatierePremiere_Libelle;
         }
         [HttpPost]
+        public decimal getMatiereTVA(int id)
+        {
+            var aboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var matiere = this.matierePremiereService.findFormulaireMatiereP(aboId,id);
+            return matiere.Taux_TVA.TauxTVA_Pourcentage;
+        }
+        [HttpPost]
 
         public async Task<IActionResult> ModificationAllergie(int id, AllergeneModel allergieModel)
         {

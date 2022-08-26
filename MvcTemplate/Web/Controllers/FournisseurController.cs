@@ -21,6 +21,7 @@ using Web.Tools;
 using Humanizer;
 using Domain.Entities;
 using System.Globalization;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 //using NHibernate.Cache;
 
 namespace Web.Controllers
@@ -496,9 +497,16 @@ namespace Web.Controllers
             var redirect = await fournisseurService.CreatePayementFacture(payementFacture_Model);
             return redirect;
         }
-
-
-
+        [HttpPost]
+        public SelectList getListSections(int matiereID)
+        {
+            var res = fournisseurService.getListSections(matiereID);
+            foreach(var item in res)
+            {
+                item.Section_Designation = item.Zone_Stockage.ZoneStockage_Designation + " / " + item.Section_Designation; 
+            }
+            return new SelectList(res, "Section_Id", "Section_Designation");
+        }
 
     }
 

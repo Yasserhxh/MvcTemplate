@@ -327,33 +327,50 @@
     }
 
     function Valider(matransID ,matID, matLib, qte, transfertID) {
-        $('#myModal').modal('show');
-        $("#plandiv").append("<div class='form-row'>"
-        + "<div class= 'col-md-3 mb-1' >"
-        + "<label for='date'>Matière première</label>"
-            + "<div><input type='text' disabled id='matransID'style ='display:none;' value='" + matransID + "' class='form-control'/></div>"
-        + "<div><input type='text' disabled id='matID'style ='display:none;' value='" + matID + "' class='form-control'/></div>"
-        + "<div><input type='text' disabled id='trnasfertID' style ='display:none;' value='" + transfertID + "' class='form-control'/></div>"
-        + "<div><input type='text' disabled id='matprem' value='" + matLib + "' class='form-control'/></div></div>"
-        + "<div class= 'col-md-3 mb-1' >"
-        + "<label for='date'>Quantité livrée</label>"
-        + "<div><input type='number' disabled id='qte' value='" + qte + "' class='form-control'/></div></div>"
-        + "<div class= 'col-md-3 mb-1' >"
-        + "<label for='date'>Zone de stockage</label>"
-        + "<div>"
-        + `<select id="zone" data-search="true" class="custom-select" onclick="getSection()"><option value="" selected disabled style="text-align:center;">Selectionnez une zone de stockage</option>
-        @foreach (var item in ViewBag.zone)
+        var data = { matiereID: matID };
+        if (matID != null) 
         {
-            @:<option value="@item.Value" style="text-align:center;">@item.Text</option>
+            $.ajax({
+                url: '@Url.Action("getListSections", "Fournisseur")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                    $('#myModal').modal('show');
+                    $("#plandiv").append("<div class='form-row'>"
+                        + "<div class= 'col-md-3 mb-1' >"
+                        + "<label for='date'>Matière première</label>"
+                        + "<div><input type='text' disabled id='matransID'style ='display:none;' value='" + matransID + "' class='form-control'/></div>"
+                        + "<div><input type='text' disabled id='matID'style ='display:none;' value='" + matID + "' class='form-control'/></div>"
+                        + "<div><input type='text' disabled id='trnasfertID' style ='display:none;' value='" + transfertID + "' class='form-control'/></div>"
+                        + "<div><input type='text' disabled id='matprem' value='" + matLib + "' class='form-control'/></div></div>"
+                        + "<div class= 'col-md-3 mb-1' >"
+                        + "<label for='date'>Quantité livrée</label>"
+                        + "<div><input type='number' disabled id='qte' value='" + qte + "' class='form-control'/></div></div>"
+ /*                       + "<div class= 'col-md-3 mb-1' >"
+                        + "<label for='date'>Zone de stockage</label>"
+                        + "<div>"
+                        + `<select id="zone" data-search="true" class="custom-select" onclick="getSection()"><option value="" selected disabled style="text-align:center;">Selectionnez une zone de stockage</option> </select> `
+                        + "</div> </div>"*/
+
+                        + "<div class= 'col-md-6 mb-1'>"
+                        + "<label for='date'>Section de stockage</label>"
+                        + "<div>"
+                        + `<select id="section" data-search="true" class="custom-select"></select> `+ "</div></div> </div>");
+                        $.each(data, function (i, item) {
+                        $("#section").append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
         }
-        </select> `+ "</div></div>"
-        
-        + "<div class= 'col-md-3 mb-1' >"
-        + "<label for='date'>Section de stockage</label>"
-        + "<div>"
-        + `<select id="section" data-search="true" class="custom-select" >
-        
-        </select> `+ "</div></div> </div>");
+
     }
     function Livrer() {
         var matTrans = $("#matransID").val();

@@ -166,6 +166,8 @@
     {
         var data = { fournisseurID: parseInt($("#fournisseur option:selected").val()) };
         if ($("#fournisseur option:selected").val() != null) {
+            document.getElementById('fieldset').style.display = "none";
+            $('#chkAll').prop('checked',true)
             $.ajax({
                 url: '@Url.Action("getBcFournisseur", "Fournisseur")',
                 type: "POST",
@@ -342,6 +344,8 @@
                 }
             });
         }
+        document.getElementById('fournisseur').disabled = true;
+
         return obj;
     }
 
@@ -361,14 +365,20 @@
       $('#tableForme').on('change', '.tblChk', function() {
         if ($('.tblChk:checked').length == $('.tblChk').length) {
             $('#chkAll').prop('checked', true);
+            document.getElementById('fournisseur').disabled = true;
+
         } else {
             $('#chkAll').prop('checked', false);
+            document.getElementById('fournisseur').disabled = false;
         }
     });
     $("#chkAll").change(function () {
         if ($(this).prop('checked')) {
           $('.tblChk').not(this).prop('checked', true);
+            document.getElementById('fournisseur').disabled = true;
+
         } else {
+            document.getElementById('fournisseur').disabled = false;
           $('.tblChk').not(this).prop('checked', false);
         }
       });

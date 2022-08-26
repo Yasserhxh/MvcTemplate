@@ -106,7 +106,11 @@
 
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBC_Designation)</td>
                                                                         <td class="border-b dark:border-dark-5">@item.ArticleBC_Quantite.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.ArticleBC_QteRest.ToString("n2")</td>
+                                                                        @if(item.ArticleBC_QteRest >0){
+                                                                            <td class="border-b dark:border-dark-5" style="color:red;">@item.ArticleBC_QteRest.ToString("n2")</td>
+                                                                        }else{
+                                                                            <td class="border-b dark:border-dark-5">@item.ArticleBC_QteRest.ToString("n2")</td>
+                                                                        }
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
 @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
 *@                                                                        <td class="border-b dark:border-dark-5">@item.ArticleBC_PU.ToString("n2") DH</td>
