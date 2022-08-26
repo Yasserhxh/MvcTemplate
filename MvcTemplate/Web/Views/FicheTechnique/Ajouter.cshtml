@@ -80,7 +80,7 @@
                                                             </div>
                                                         </div> 
                                                         <div class="col-md-3 mb-1">
-                                                            <label for="validationTooltip01">Coût de la main d'oeuvre </label>
+                                                            <label for="validationTooltip01">Coût de la main d'oeuvre</label>
                                                             <div>
                                                                 <input type="text" id="main" asp-for="FicheTechniqueBridge_CoutMainOeuvre" class="form-control" />
                                                             </div>
@@ -599,8 +599,8 @@
         document.getElementById('disabled').disabled = true;
         var ProduitId = $("#produit option:selected").val() ;
         var Libelle = $("#libelle").val() ;
-        var embalage = $("#embalage").val() ;
-        var main = $("#main").val();
+        var embalage = parseFloat($("#embalage").val()).toFixed(2).replace(".",",") ;
+        var main = parseFloat($("#main").val()).toFixed(2).replace(".",",");
         var ListMatieres = new Array();
         var ListFormes = new Array();
         var ListProds = new Array();

@@ -16,8 +16,8 @@ namespace Domain.Models
         public decimal FicheTechniqueBridge_CoutDeRevient { get; set; }
         public bool FicheTechniqueBridge_InUse { get; set; }
         public int FicheTechniqueBridge_AbonnementID { get; set; }
-        public decimal FicheTechniqueBridge_CoutEmbalage { get; set; }
-        public decimal FicheTechniqueBridge_CoutMainOeuvre { get; set; }
+        public decimal? FicheTechniqueBridge_CoutEmbalage { get; set; }
+        public decimal? FicheTechniqueBridge_CoutMainOeuvre { get; set; }
         public int FicheTechniqueBridge_IsActive { get; set; }
         public DateTime FicheTechniqueBridge_DateCreation { get; set; }
         public ProduitVendableModel Produit_Vendable { get; set; }
