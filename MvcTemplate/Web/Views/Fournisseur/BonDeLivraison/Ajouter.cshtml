@@ -183,6 +183,8 @@
 
 <script src="~/js/toastr.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/sweetalert.min.js"></script>
+<script src="~/js/sweetalert2.min.js"></script>
 <script>
     function getBcFournisseur()
     {
@@ -400,8 +402,8 @@
                             "<td class='border-b dark:border-dark-5' id='totLiv'>" + parseFloat(data[i].articleBC_PU) * parseFloat(data[i].articleBC_QteRest) + "</td>" +
                             "<td class='border-b dark:border-dark-5' id='temp'>  <input type='text'/></td>" +
                             "<td class='border-b dark:border-dark-5' id='lot'>  <input type='text'/></td>" +
-                            "<td class='border-b dark:border-dark-5' id='dateProd'>  <input type='date'/></td>" +
-                            "<td class='border-b dark:border-dark-5' id='dlc'>  <input type='date'/></td>" +
+                            "<td class='border-b dark:border-dark-5' id='dateProd'>  <input type='date'  name='dateProd' id='dateProd1' /></td>" +
+                            "<td class='border-b dark:border-dark-5' id='dlc'>  <input type='date' name='dlc' id='dlc1' onchange='getDateDiff(this)'/> </td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_ID + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_UniteMesure + "</td>" +
                             "<td class='border-b dark:border-dark-5'style='display:none;'>" + data[i].articleBC_MatiereID + "</td>" +
@@ -466,4 +468,30 @@
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     document.getElementById('date').value = now.toISOString().slice(0, 16);
+
+    function getDateDiff(ctl) {
+        var dlc = new Date($(ctl).closest("tr").find("#dlc1").val());
+        var dateProd = new Date($(ctl).closest("tr").find("#dateProd1").val());
+        // To calculate the time difference of two dates
+        var Difference_In_Time = dlc.getTime() - dateProd.getTime();
+
+        // To calculate the no. of days between two dates
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+
+        if(Difference_In_Days <= 0)
+        {
+            swal({
+                title: "Attention",
+                text: "La date de limite de consommation est inferieur à date de production",
+                type: "warning",
+                //showCancelButton: true,
+                confirmButtonText: "Oui",
+                cancelButtonText: "Annuler",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            });
+            $(ctl).closest("tr").find("#dlc1").val("");
+
+        }
+    }
 </script>

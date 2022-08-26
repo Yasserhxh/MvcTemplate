@@ -59,18 +59,30 @@
                                                 <!-- form start -->
                                                 <form class="needs-validation" novalidate>
                                                     <div class="form-row">
-                                                        <div class="col-md-5 mb-1">
+                                                        <div class="col-md-3 mb-1">
                                                             <label for="validationTooltip01">Libellé</label>
                                                             <div>
                                                                 <input type="text" id="libelle" asp-for="FicheTechniqueBridge_Libelle" class="form-control" />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-5 mb-2">
+                                                        <div class="col-md-3 mb-2">
                                                             <label for="validationTooltip01">Produit maison</label>
                                                             <div>
                                                                 <select class="custom-select" id="produit" data-search="true" asp-for="FicheTechniqueBridge_ProduitVendableID" asp-items="@ViewBag.FicheTechnique_ProduitVendableId" onchange="familleList()" required>
                                                                     <option value="" selected disabled>Sélectionnez un produit ...</option>
                                                                 </select>
+                                                            </div>
+                                                        </div>
+                                                         <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Coût d'emballage</label>
+                                                            <div>
+                                                                <input type="text" id="embalage" asp-for="FicheTechniqueBridge_CoutEmbalage" class="form-control" />
+                                                            </div>
+                                                        </div> 
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="validationTooltip01">Coût de la main d'oeuvre </label>
+                                                            <div>
+                                                                <input type="text" id="main" asp-for="FicheTechniqueBridge_CoutMainOeuvre" class="form-control" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -587,6 +599,8 @@
         document.getElementById('disabled').disabled = true;
         var ProduitId = $("#produit option:selected").val() ;
         var Libelle = $("#libelle").val() ;
+        var embalage = $("#embalage").val() ;
+        var main = $("#main").val();
         var ListMatieres = new Array();
         var ListFormes = new Array();
         var ListProds = new Array();
@@ -607,6 +621,8 @@
         var fichebridge = {
             FicheTechniqueBridge_ProduitVendableID: ProduitId,
             FicheTechniqueBridge_Libelle: Libelle,
+            FicheTechniqueBridge_CoutEmbalage: embalage,
+            FicheTechniqueBridge_CoutMainOeuvre: main
             //FicheTechniqueBridge_CoutDeRevient: parseFloat(sum),
             //Produit_FicheTechnique: ListMatieres,
             //Fiche_Forme: ListFormes,

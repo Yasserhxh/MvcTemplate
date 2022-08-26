@@ -26,7 +26,8 @@ namespace Domain.Entities
         public bool FicheTechniqueBridge_InUse { get; set; }
         [Column(TypeName = "int")]
         public int FicheTechniqueBridge_AbonnementID { get; set; }
-
+        public decimal FicheTechniqueBridge_CoutEmbalage { get; set; }
+        public decimal FicheTechniqueBridge_CoutMainOeuvre { get; set; }
 
         [Column(TypeName = "int")]
         public int FicheTechniqueBridge_IsActive { get; set; }
