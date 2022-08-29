@@ -16,6 +16,7 @@ namespace Domain.Models
         public string StockAchat_LotIntern { get; set; }
         public string StockAchat_LotFournisseur { get; set; }
         public DateTime? StockAchat_DateLimiteConso { get; set; }
+        public DateTime? StockAchat_DateReception { get; set; }
         public string StockAchat_Temperature { get; set; }
         public decimal StockAchat_QuantiteMatiere { get; set; }
         public decimal StockAchat_QuantiteRestante { get; set; }

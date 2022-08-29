@@ -38,5 +38,6 @@ namespace Repository.IRepositories
         Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel);
         Task<int?> CreatePayementFacture(Payement_Facture payement_Facture);
         IEnumerable<Section_Stockage> getListSections(int matiereID);
+        IEnumerable<BonDeLivraison> getlistFactureDetails(int factureID, int aboID);
     }
 }

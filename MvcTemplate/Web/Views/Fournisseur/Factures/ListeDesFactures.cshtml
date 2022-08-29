@@ -157,14 +157,15 @@
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
-                                                                                </span>
+                                                                                </span>                                                                                   
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                 @if(item.Facture_Etat !="Payée"){
-                                                                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                         <button class="dropdown-item btn-outline-success" onclick='payer(@item.Facture_ID,"@item.Facture_Numero",@item.Facture_TotalTTC)'><i class="bx bx-check"></i>Payer la facture</button>
-                                                                                    </div>      
+                                                                                        
                                                                                 }
-                                                                             
-                                                                            </div>
+                                                                                <a class="dropdown-item btn-outline-info" asp-action="getlistFactureDetails" asp-route-id="@item.Facture_ID"><i class="bx bx-list-ol"></i>Liste des BL</a>
+                                                                                    </div>
+                                                                                </div>
                                                                         </td>
 
                                                                     </tr>
@@ -226,7 +227,7 @@
         </div>
     </div>
 </div>
-<div class="modal" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+<div class="modal show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#c19d56">
@@ -323,6 +324,9 @@
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeFactures?bcID=' + bcID + "&date=" + date ;
     }
+    function refresh() {
+        window.location.reload();
+    }
 
     function payer(factureID,libelle,total) {
         $('#myModal').modal('show');
@@ -333,7 +337,7 @@
         + "<div><input type='text' disabled id='numFac' value='" + libelle + "' class='form-control'/></div></div>"
         + "<div class= 'col-md-4 mb-1' >"
         + "<label for='date'>Montant total</label>"
-            + "<div><input type='number' disabled id='mttot' value='" + total + "' class='form-control'/></div></div>"        
+            + "<div><input type='number' disabled id='mttot' value='" +  total + "' class='form-control'/></div></div>"        
             + "<div class= 'col-md-4 mb-1' >"
         + "<label for='date'>Montant à payer</label>"
             + "<div><input type='number'  id='mtPay' value='" + total + "' class='form-control'/></div></div>" 

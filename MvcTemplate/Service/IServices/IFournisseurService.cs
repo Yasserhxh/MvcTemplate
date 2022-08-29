@@ -37,6 +37,6 @@ namespace Service.IServices
         Task<bool?> ReceptionMatiereAchats(ReceptionAchatModel receptionAchatModel);
         Task<bool> CreatePayementFacture(PayementFacture_Model payementFacture_Model);
         IEnumerable<Section_StockageModel> getListSections(int matiereID);
-
+        IEnumerable<BonDeLivraison_Model> getlistFactureDetails(int factureID, int aboID);
     }
 }

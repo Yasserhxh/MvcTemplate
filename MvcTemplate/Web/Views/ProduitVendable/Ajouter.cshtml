@@ -241,15 +241,13 @@
                 </button>
             </div>
             <form class="form">
-                <div class="modal-body"style="height:auto;" id="mbody">
+                <div class="modal-body" id="mbody">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
+                                <div class="form-group col-sm-12">
                                         <label for="AllergeneLabel">Nom de famille</label>
                                         <input type="text" id="familleParent1" class="form-control" required />
-                                    </div>
                                 </div>
 
                             </div>
@@ -269,7 +267,7 @@
 </div>
 
 <div class="modal fade show" id="sousfamilleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#6c3c36">
                 <h4 class="modal-title white" id="myModalLabel33">Ajouter une sous-famille de produit</h4>
@@ -278,11 +276,11 @@
                 </button>
             </div>
             <form class="form">
-                <div class="modal-body" style="height:auto;" id="mbody">
+@*                <div class="modal-body" style="height:auto;" id="mbody">
                     <div class="row">
                             <div class="form-row">
                                 <div>
-                                    <div class="form-group">
+                                <div class="form-group col-md-12">
                                         <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
                                         <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
                                             <option value="" selected>Sélectionnez une famille de produit ...</option>
@@ -293,13 +291,50 @@
                             </div>
                             <div class="form-row">
                                 <div>
-                                    <div class="form-group">
+                                <div class="form-group col-md-12">
                                         <label for="AllergeneLabel">Nom du sous famille</label>
                                         <input type="text" id="sousFamille" class="form-control" required />
                                     </div>
                                 </div>
 
                             </div>
+                    </div>
+                </div>
+
+*@
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title"> Détails de sous-famille</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12" id="plan">
+                                                <div class="card mb-1" id="plandiv">
+                                                    <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
+                                                                <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
+                                                                    <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="AllergeneLabel">Nom du sous famille</label>
+                                                                <input type="text" id="sousFamille" class="form-control" required />
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

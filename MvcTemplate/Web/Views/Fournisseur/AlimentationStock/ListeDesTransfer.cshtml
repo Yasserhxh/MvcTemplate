@@ -42,7 +42,15 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">                   
-                    <div class="col-md-3  offset-3">
+                    <div class="col-md-3  offset-1">
+                        <label for="role">Point de stockage</label>
+                        <div>
+                            <select class="custom-select" id="lieu" asp-items="@ViewBag.lieu" data-search="true">
+                                <option value="" selected disabled>Sélectionnez un point de stockage...</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="col-md-3">
                         <label for="role">Statut de l'ordre</label>
                         <div>
                             <select class="custom-select" id="statut" data-search="true"  >
@@ -108,7 +116,7 @@
                                                             @if (a == null)
                                                             {<h4 class="card-title">Veuillez selectionner une date </h4> }
                                                             else
-                                                            {<h4> Liste des ordres de transfert du : <b>"@Model.FirstOrDefault().TransfertMat_DateCreation.Date"</b> </h4>}
+                                                            {<h4> Liste des ordres de transfert</h4>}
                                                         </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
@@ -129,7 +137,12 @@
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.TransfertMat_Numero)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.TransfertMat_CreePar)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.TransfertMat_DateCreation)</td>
-                                                                        <td class="border-b dark:border-dark-5 ">@Html.DisplayFor(modelItem => item.TransfertMat_Statut)</td>
+                                                                        @if(item.TransfertMat_Statut == "Validée"){
+                                                                            <td class="text-bold-600 pr-0"><a class="btn btn-outline-success btn-table round" href="#0"><i class="bx bx-check"></i>Validée </a></td>
+                                                                        } 
+                                                                        @if(item.TransfertMat_Statut != "Validée"){
+                                                                        <td class="text-bold-600 pr-0"><a class="btn btn-outline-warning btn-table round" href="#0"><i class="bx bx-check"></i>En attente</a></td>
+                                                                        }
                                                                         <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
@@ -251,7 +264,8 @@
     function displayDashboard() {
         var statut = $("#statut option:selected").val();
         var date = $("#date").val();
-        window.location.href = '/fournisseur/ListeDesTransfer?statut=' + statut + "&date=" + date;
+        var point = $("#lieu").val();
+        window.location.href = '/fournisseur/ListeDesTransfer?statut=' + statut + "&date=" + date + "&point=" + point;
     }
     Date.prototype.toDateInputValue = (function () {
         var local = new Date(this);

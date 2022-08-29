@@ -124,6 +124,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Qté à transferer</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Unité </th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Pt. STOCK</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date Recep</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">DLC</th>
 @*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
 *@
@@ -148,6 +149,7 @@
                                                                         @{var id = "unite"+i.ToString();}
                                                                         <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="(SelectList)ViewData[id]"></select></td>
                                                                         <td class="border-b dark:border-dark-5"><select class="custom-select" id="lieu" data-search="true" asp-items="@ViewBag.lieu"></select></td>
+                                                                        <td class="border-b dark:border-dark-5">@item.StockAchat_DateReception.Value.ToShortDateString()</td>
                                                                         @if ((DateTime.Now - item.StockAchat_DateLimiteConso.Value).TotalDays <= 10)
                                                                         {
                                                                             <td class="border-b dark:border-dark-5" style="color:red;">@item.StockAchat_DateLimiteConso.Value.ToShortDateString()</td>

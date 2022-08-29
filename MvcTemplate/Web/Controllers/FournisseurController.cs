@@ -442,13 +442,13 @@ namespace Web.Controllers
             var redirect = await fournisseurService.CreateOrdreTransfer(TransfertMat_Model);
             return redirect;
         }
-        public IActionResult ListeDesTransfer(string statut, string date, int pg = 1)
+        public IActionResult ListeDesTransfer(string statut, string date, int? point, int pg = 1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            int? pd = null;
-            if(User.IsInRole("Gerant_de_stock"))
-                pd = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetListeOrdreTransfert(Id, statut, pd, date);
+            ViewData["lieu"] = new SelectList(zoneStockageService.getListLieuStockage(Id, 1), "LieuStockag_Id", "LieuStockag_Nom");
+            if (User.IsInRole("Gerant_de_stock"))
+                point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var query = fournisseurService.GetListeOrdreTransfert(Id, statut, point, date);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -506,6 +506,12 @@ namespace Web.Controllers
                 item.Section_Designation = item.Zone_Stockage.ZoneStockage_Designation + " / " + item.Section_Designation; 
             }
             return new SelectList(res, "Section_Id", "Section_Designation");
+        }
+        public IActionResult getlistFactureDetails(int id)
+        {         
+            var aboID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var model = fournisseurService.getlistFactureDetails(id, aboID);
+            return View("~/Views/Fournisseur/Factures/DetailsFacture.cshtml", model);
         }
 
     }

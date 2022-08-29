@@ -107,7 +107,8 @@ namespace Repository.Repositories
                         StockAchat_AbonnementID = bonDeLivraison.BonDeLivraison_AbonnementID,
                         StockAchat_UniteMesureID = item.ArticleBL_UniteMesureID,
                         StockAchat_DateLimiteConso = item.ArticleBL_DateLimiteConso,
-                        StockAchat_Temperature = item.ArticleBL_Teemperature
+                        StockAchat_Temperature = item.ArticleBL_Teemperature,
+                        StockAchat_DateReception = item.ArticleBL_DateReception
 
                     };
                     await _db.stock_Achats.AddAsync(stockAchat);
@@ -486,6 +487,13 @@ namespace Repository.Repositories
             matTrans.MatiereTrans_Statut = "Validée";
             matTrans.MatiereTrans_ValidePar = receptionAchatModel.userID;
             matTrans.MatiereTrans_DateValidation = DateTime.Now;
+            var ordreTrans = _db.transfert_Matieres.Where(p => p.TransfertMat_ID == receptionAchatModel.TransferID).Include(p => p.listeMatiere).FirstOrDefault();
+            if (ordreTrans.listeMatiere.Where(p => p.MatiereTrans_Statut == "Validée").Count() == ordreTrans.listeMatiere.Count())
+            {
+                ordreTrans.TransfertMat_Statut = "Validé";
+                _db.Entry(ordreTrans).State = EntityState.Modified;
+
+            }
             var stockage = _db.matierePremiereStockages.Where(m => m.MatierePremiereStokage_MatierePremiereId == receptionAchatModel.matiereID && m.MatierePremiereStokage_SectionStockageId == receptionAchatModel.SectionID).FirstOrDefault();
             if (stockage != null)
             {
@@ -551,6 +559,12 @@ namespace Repository.Repositories
                 .AsEnumerable().Select(p=>p.Section_Stockage);
             return matStock;
 
+        }
+        public IEnumerable<BonDeLivraison> getlistFactureDetails(int factureID, int aboID)
+        {
+            return _db.bonDeLivraisons.Where(p => p.BonDeLivraison_FactureID == factureID && p.BonDeLivraison_AbonnementID == aboID)
+                .Include(p=>p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
+                .Include(p=>p.Statut_BL).AsEnumerable();
         }
     }
 }

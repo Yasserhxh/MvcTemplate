@@ -5,13 +5,6 @@
 }
 @{
     ViewData["Title"] = " Bon de livraison";
-    Pager pager = new Pager();
-    int pageNo = 0;
-    if (ViewBag.Pager != null)
-    {
-        pager = ViewBag.Pager;
-        pageNo = pager.CurrentPage;
-    }
 }
 
 <div class="app-content content">
@@ -41,56 +34,6 @@
         <div class="content-body">
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
-                <div class="form-row">
-                    <div class="col-md-2 offset-md-1 mb-1">
-                        <label for="role">Fournisseur</label>
-                        <div>
-                            <select class="custom-select" id="fournisseur" data-search="true" asp-items="@ViewBag.fournisseur">
-                                <option value="" selected disabled>Sélectionnez un fournisseur ...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2 ">
-                        <label for="role">Etat des bons de commande</label>
-                        <div>
-                            <select class="custom-select" id="etatBC" data-search="true"  >
-                                <option value="" selected disabled>Sélectionnez un statut de bon de commande ...</option>
-                                <option value="Réceptionné">Bons de commande réceptionnés</option>
-                                <option value="Non réceptionné">Bons de commande non réceptionnés</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-1">
-                        <div class="form-group">
-                            <label for="Date">Année du bon de comande</label>
-                            <div>
-                                <input type="text" class="form-control" name="datepicker" id="date" onchange="getBcFournisseur()" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-1">
-                        <label for="role">Bon de commande</label>
-                        <div>
-                            <select class="custom-select" id="bondecommande" data-search="true" >
-                                <option value="" selected disabled>Sélectionnez un bon de commande ...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2 mb-1">
-                        <label for="role">Etat des bons de livraison</label>
-                        <div>
-                            <select class="custom-select" id="etatBL" data-search="true" >
-                                <option selected disabled>Sélectionnez un statut de bon de livraison ...</option>
-                                <option value=2>Bons de livraison facturé</option>
-                                <option value=1>Bons de livraison non facturé</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class=" text-md-right">
-                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
-                    </div>
-                </div>
                 <div class="row">
                     <!-- Greetings Content Starts -->
                     <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
@@ -129,11 +72,17 @@
                                                     <!-- datatable start -->
                                                     <div class="table">
                                                          <div>
-                                                            @{ var a = @Model.FirstOrDefault(); }
+                                                            @{
+                                                                var a = @Model.FirstOrDefault();
+                                                            }
                                                             @if (a == null)
-                                                            {<h4 class="card-title">Veuillez selectionner un bon de commande</h4> }
+                                                            {
+                                                                <h4 class="card-title">Veuillez selectionner un bon de commande</h4>
+                                                            }
                                                             else
-                                                            {<h4> Liste des bons de livraison</h4>}
+                                                            {
+                                                                <h4> Liste des bons de livraison</h4>
+                                                            }
                                                         </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
@@ -154,30 +103,32 @@
                                                             <tbody id="usertbody">
                                                                 @foreach (var item in Model)
                                                                 {
-                                                                    <tr>
-                                                                        @{ var qte = decimal.Parse(item.BonDeLivraison_TotalHT.ToString()).ToString("G29");}
+                                                                        <tr>
+                                                                        @{
+                                                                            var qte = decimal.Parse(item.BonDeLivraison_TotalHT.ToString()).ToString("G29");
+                                                                        }
 
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeLivraison_Designation)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Bon_De_Commande.Fournisseur.Founisseur_RaisonSocial)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Bon_De_Commande.BonDeCommande_Numero)</td>
-                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.BonDeLivraison_DateLivraison)</td>
-@*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
+                                                                            <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.BonDeLivraison_Designation)</td>
+                                                                            <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Bon_De_Commande.Fournisseur.Founisseur_RaisonSocial)</td>
+                                                                            <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Bon_De_Commande.BonDeCommande_Numero)</td>
+                                                                            <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.BonDeLivraison_DateLivraison)</td>
+                                                                        @*                                                                        <td class="border-b dark:border-dark-5">@qte</td>
 *@                                                                        <td class="border-b dark:border-dark-5">@item.BonDeLivraison_TotalHT.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.BonDeLivraison_TotalTVA.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.BonDeLivraison_TotalTTC.ToString("n2")</td>
-                                                                        <td class="border-b dark:border-dark-5">@item.Statut_BL.StatutBL_Name</td>
-                                                                        <td>
-                                                                            <div class="dropdown">
-                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
-                                                                                </span>
-                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.BonDeLivraison_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
-                                                                                    <a asp-action="GeneratePDfBL" asp-route-id="@item.BonDeLivraison_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
+                                                                            <td class="border-b dark:border-dark-5">@item.BonDeLivraison_TotalTVA.ToString("n2")</td>
+                                                                            <td class="border-b dark:border-dark-5">@item.BonDeLivraison_TotalTTC.ToString("n2")</td>
+                                                                            <td class="border-b dark:border-dark-5">@item.Statut_BL.StatutBL_Name</td>
+                                                                            <td>
+                                                                                <div class="dropdown">
+                                                                                    <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                    </span>
+                                                                                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                        <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.BonDeLivraison_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
+                                                                                        <a asp-action="GeneratePDfBL" asp-route-id="@item.BonDeLivraison_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
+                                                                            </td>
 
-                                                                    </tr>
+                                                                        </tr>
                                                                 }
                                                             </tbody>
                                                         </table>
@@ -198,41 +149,6 @@
 
             </section>
             <!-- Dashboard Ecommerce ends -->
-            <div class="container">
-                @if (pager.TotalPages > 0)
-                {
-                    <ul class="pagination justify-content-end">
-                        @if (pager.CurrentPage > 1)
-                        {
-                            <li class="page-item">
-                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="1" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-left"></i></a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]" ><i class="bx bx-chevron-left"></i></a>
-                            </li>
-                        }
-                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
-                        {
-                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
-                                <a class="page-link"  asp-action="ListeBonDeLivraison" asp-route-pg="@pge" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]">@pge</a>
-                            </li>
-                        }
-                        @if (pager.CurrentPage < pager.TotalPages)
-                        {
-                            <li class="page-item">
-                                <a class="page-link"  asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]" ><i class="bx bx-chevron-right"></i></a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link"  asp-action="ListeBonDeLivraison" asp-route-pg="@(pager.TotalPages)" asp-route-fournisseurID="@Context.Request.Query["bonCommandeID"]" asp-route-date="@Context.Request.Query["date"]"><i class="bx bx-chevrons-right"></i></a>
-                            </li>
-                        }
-                    </ul>
-
-                }
-            </div>
-            <div class="breadcrumb-item text-sm-right ">
-                <a class="btn btn-outline-success round mr-1 mb-1" asp-action="AjouterBL"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Réceptionner des matière première</span></a>
-            </div>
         </div>
     </div>
 </div>
@@ -283,7 +199,7 @@
 
 
 
- 
+
     function displayDashboard() {
         var bonCommandeID = $("#bondecommande option:selected").val();
         var fournisseurID = $("#fournisseur option:selected").val();

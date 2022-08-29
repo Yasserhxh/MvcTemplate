@@ -119,7 +119,11 @@
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_LotNumber)</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Lieu_Stockage.LieuStockag_Nom)</td>
-                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_Statut)</td>
+                                                                        @if(item.MatiereTrans_Statut == "Validée"){
+                                                                        <td class="text-bold-600 pr-0"><a class="btn btn-outline-success btn-table round" href="#0"><i class="bx bx-check"></i>Validée </a></td>
+                                                                        }else{
+                                                                        <td class="text-bold-600 pr-0"><a class="btn btn-outline-warning btn-table round" href="#0"><i class="bx bx-check"></i>En attente</a></td>
+                                                                        }
                                                                         @if(User.IsInRole("Gerant_des_achats"))
                                                                         {
                                                                              <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_ValidePar)</td>

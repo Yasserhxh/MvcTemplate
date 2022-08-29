@@ -241,6 +241,11 @@ namespace Service.Services
             return mapper.Map<IEnumerable<Ville>, IEnumerable<VilleModel>>(fournisseurRepository.getListVilles());
         }
 
+        public IEnumerable<BonDeLivraison_Model> getlistFactureDetails(int factureID, int aboID)
+        {
+            return mapper.Map<IEnumerable<BonDeLivraison>, IEnumerable<BonDeLivraison_Model>>(fournisseurRepository.getlistFactureDetails(factureID, aboID));
+        }
+
         public IEnumerable<FonctionModel> getListFonction()
         {
             return mapper.Map<IEnumerable<Fonction>, IEnumerable<FonctionModel>>(fournisseurRepository.getListFonction());
