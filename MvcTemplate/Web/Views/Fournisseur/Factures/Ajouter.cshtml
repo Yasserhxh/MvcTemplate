@@ -169,7 +169,7 @@
             document.getElementById('fieldset').style.display = "none";
             $('#chkAll').prop('checked',true)
             $.ajax({
-                url: '@Url.Action("getBcFournisseur", "Fournisseur")',
+                url: '@Url.Action("getBcFournisseurForArticle", "Fournisseur")',
                 type: "POST",
                 cache: false,
                 async: true,

@@ -253,7 +253,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var point = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
-            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, null, "Réceptionné");
+            var query = fournisseurService.GetBonDeCommandes(Id, point, fournisseurID, null, null, "");
             return new SelectList(query, "BonDeCommande_ID", "BonDeCommande_Numero");
         }
         [HttpPost]

@@ -6,13 +6,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Rewrite.Internal;
+using Newtonsoft.Json;
 using Repository.IRepositories;
+using Repository.UnitOfWork;
 using Service.IServices;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Web.Helpers;
 
@@ -32,12 +39,15 @@ namespace Web.Controllers
         private readonly IHostingEnvironment _environment;
         private readonly IFamilleProduitService familleProduitService;
         private readonly IVenteProduitsService venteProduitsService;
-
+        private readonly IUnitOfWork _unitOfWork;
+        private static readonly string key = "b1529618774e40c09cf10149dcaca84c";
+        private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com";
+        private static readonly string location = "westeurope";
 
         public ProduitVendableController(IProduitVendableService produitVendableService, IAuthentificationRepository authentificationRepository, UserManager<ApplicationUser> userManager,
             IZoneStockageService zoneStockageService, IProduitFicheTechniqueService produitFicheTechniqueService, IMatierePremiereService matierePremiereService,
             IGestionMouvementService gestionMouvementService, IHostingEnvironment IHostingEnvironment, IPointVenteService pointVenteService, IFamilleProduitService familleProduitService,
-            IVenteProduitsService venteProduitsService)
+            IVenteProduitsService venteProduitsService, IUnitOfWork unitOfWork = null)
         {
             this.gestionMouvementService = gestionMouvementService;
             this.authentificationRepository = authentificationRepository;
@@ -50,7 +60,7 @@ namespace Web.Controllers
             _environment = IHostingEnvironment;
             this.familleProduitService = familleProduitService;
             this.venteProduitsService = venteProduitsService;
-
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -111,7 +121,32 @@ namespace Web.Controllers
 
             }
             produitModel.ProduitVendable_AbonnementId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            foreach(var item in produitModel.Composants)
+            string route = "/translate?api-version=3.0&from=fr&to=en&to=ar";
+            string textToTranslate = produitModel.Composants.ElementAt(0).ProduitComposant_ComposantName;
+            object[] body = new object[] { new { Text = textToTranslate } };
+            var requestBody = JsonConvert.SerializeObject(body);
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage())
+            {
+                // Build the request.
+                request.Method = HttpMethod.Post;
+                request.RequestUri = new Uri(endpoint + route);
+                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                request.Headers.Add("Ocp-Apim-Subscription-Key", key);
+                request.Headers.Add("Ocp-Apim-Subscription-Region", location);
+                string pattern = "text: (.*), to: en }";
+                string pattern2 = ",{\"text\": (.*),\"to\":\"ar\"} ";
+                //string pattern3 = "[{\"translations\":[{\"text\":\"Energy\",\"to\":\"en\"},{\"text\":\"طاقة\",\"to\":\"ar\"}]}]";
+
+                // Send the request and get response.
+                HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
+                // Read response as a string.
+                string result =  response.Content.ReadAsStringAsync().Result;
+                List<Object> businessunits = JsonConvert.DeserializeObject<List<Object>>(result);
+                Match match = Regex.Match(businessunits.FirstOrDefault().ToString(), pattern);
+                Console.WriteLine(result);
+            }
+            foreach (var item in produitModel.Composants)
             {
                 item.ProduitComposant_AbonnementID = (int)produitModel.ProduitVendable_AbonnementId;
                // item.ProduitComposant_ComposantNameAR = ;
