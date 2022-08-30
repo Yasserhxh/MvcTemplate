@@ -121,15 +121,7 @@ namespace WebApi
             }
             app.UseCors("AllowCors");
 
-            app.Use(async (context, next) =>
-            {
-                var path = context.Request.Path.Value;
-                if (path.Length > 1 && path.IndexOf('/', 1) < 0)
-                {
-
-                }
-
-            }); 
+           
 
 
 

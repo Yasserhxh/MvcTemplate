@@ -121,7 +121,7 @@ namespace Web.Controllers
 
             }
             produitModel.ProduitVendable_AbonnementId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            string route = "/translate?api-version=3.0&from=fr&to=en&to=ar";
+           /* string route = "/translate?api-version=3.0&from=fr&to=en&to=ar";
             string textToTranslate = produitModel.Composants.ElementAt(0).ProduitComposant_ComposantName;
             object[] body = new object[] { new { Text = textToTranslate } };
             var requestBody = JsonConvert.SerializeObject(body);
@@ -145,7 +145,7 @@ namespace Web.Controllers
                 List<Object> businessunits = JsonConvert.DeserializeObject<List<Object>>(result);
                 Match match = Regex.Match(businessunits.FirstOrDefault().ToString(), pattern);
                 Console.WriteLine(result);
-            }
+            }*/
             foreach (var item in produitModel.Composants)
             {
                 item.ProduitComposant_AbonnementID = (int)produitModel.ProduitVendable_AbonnementId;

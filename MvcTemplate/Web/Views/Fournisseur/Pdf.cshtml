@@ -60,15 +60,18 @@ table {
 </head>
 <body>
 <div style=" width:95%; margin:  auto; flex: 1 0 auto;">
-    <table class="entet">
+        <table class="entet">
       <tbody>
                 <tr>
                     @*src="~/@User.FindFirst("logo").Value.ToString()"*@
-                    <td class="text-left" width="35%"><img src="~/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" alt="" width="160" /></td>
+                    
+                    <td class="text-left" width="35%">
+                        @* <img src="~/@User.FindFirst("logo").Value.ToString()" />*@<img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" width="160" />
+                    </td>
           <td>
               <table>
-                  <p class="entetp">@Model.Abonnement_Client.Abonnement_NomClient</p>
-
+                            <p class="entetp">@Model.Abonnement_Client.Abonnement_NomClient @User.FindFirst("logo").Value.ToString()</p>
+                            
         <tr>
           <td class="entetitle">Adresse</td>
           <td class="text-left">@Model.Abonnement_Client.Abonnement_Adresse</td>

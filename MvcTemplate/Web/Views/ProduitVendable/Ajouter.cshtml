@@ -53,8 +53,20 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="Designation">Désignation</label>
+                                                <label for="Designation">Désignation (FR)</label>
                                                 <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" onchange="changeLib()" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Designation">Désignation (AR)</label>
+                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" required />
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Designation">Désignation (EN)</label>
+                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control"  required />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -63,6 +75,16 @@
                                                 <input type="text" asp-for="ProduitVendable_Description" class="form-control" />
                                             </div>
                                         </div>
+                                    
+
+
+                                    </div>
+
+                                    @* <div class="row">
+
+
+            </div> *@
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <div class="form-group">
@@ -82,15 +104,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-                                    </div>
-
-                                    @* <div class="row">
-
-
-            </div> *@
-                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="SousFamille">Sous-famille</label>
@@ -132,14 +145,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-
-                                    @*<div class="row">
-
-            </div>*@
-                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Unite_FT">Unité de vente</label>
@@ -148,6 +153,24 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="Delai">Délai de consommation (par jour)</label>
+                                                <div>
+                                                    <input type="number" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    @*<div class="row">
+
+            </div>*@
+                                    <div class="row">
+                                        
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="condi">Conditionnement</label>
@@ -159,16 +182,16 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="spec">Spécification en KG</label>
+                                                <label for="spec">Spécification</label>
                                                 <div>
                                                     <input id="spec" type="number" min="0" step=".01" asp-for="ProduitVendable_Specification" class="form-control" disabled required />
 
                                                 </div>
                                             </div>
                                         </div>  
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="StockMin">Stock minimun</label>
                                                 <div>
@@ -177,7 +200,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Stock Max">Stock maximum</label>
                                                 <input id="stockmax" type="number" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
@@ -186,22 +209,14 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="Delai">Délai de consommation (par jour)</label>
-                                                <div>
-                                                    <input type="number" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
+                                       
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="CodeBarre">Code à barre</label>
                                                 <input type="text" maxlength="30" asp-for="ProduitVendable_CodeBarre" class="form-control" required />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Photo de produit</label>
                                                 <div class="custom-file">
@@ -222,7 +237,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th style="background: #4c216b;">Produit Maison</th>
-                                                            <th style="background: #4c216b;">Composant</th>
+                                                            <th style="background: #4c216b;">Composant (FR)</th>
+                                                            <th style="background: #4c216b;">Composant (AR)</th>
                                                             <th style="background: #4c216b;">Valeur</th>
                                                         </tr>
                                                     </thead> 
@@ -248,12 +264,21 @@
                                                             <td>
                                                                 <input type="text" maxlength="30" id="produitM1"  disabled class="form-control" required />
                                                             </td>
+                                                           
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30"   value="Graisses" class="form-control" required />
+                                                                <input type="text" maxlength="30" value="Graisses" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
                                                                 <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="Graisses" class="form-control" required />
+                                                               
+                                                            </td>
+                                                             <td style="display:none;">
+                                                                <input type="text" maxlength="30"   value="الدهون" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="الدهون" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>

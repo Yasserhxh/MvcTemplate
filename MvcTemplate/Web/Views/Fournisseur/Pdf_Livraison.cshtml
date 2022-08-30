@@ -63,7 +63,12 @@ table {
     <table class="entet">
       <tbody>
         <tr>
-          <td class="text-left" width="35%"><img src="~/@User.FindFirst("logo").Value.ToString()" alt="" width="160"/></td>
+          <td class="text-left" width="35%">
+             @* <img src="~/@User.FindFirst("logo").Value.ToString()" alt="" width="160"/>*@
+              @* <img src="~/@User.FindFirst("logo").Value.ToString()" />*@
+              <img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" width="160" />
+
+              </td>
           <td><table>
               <p class="entetp">@Model.Abonnement_Client.Abonnement_NomClient</p>
 
