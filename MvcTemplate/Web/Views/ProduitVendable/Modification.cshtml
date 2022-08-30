@@ -47,9 +47,15 @@
                                         <!-- Step 1 end-->
                                         <!-- body content of step 1 -->
                                         <fieldset id="steps-uid-1-p-0" role="tabpanel" aria-labelledby="steps-uid-1-h-0" class="body current" aria-hidden="false" style="border:2px solid #fff">
-                                            <div class="row">
+                                       @*     <div class="row">
                                                 <div class="col-12">
                                                     <h6 class="py-50"></h6>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label>Libellé</label>
+                                                        <input type="text" id="libelle" asp-for="ProduitVendable_Designation" class="form-control" placeholder="Entrez le nom de la matiere" required>
+                                                    </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
@@ -125,7 +131,155 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>*@
+
+                                            <div class="form-body">
+                                                <h4 class="form-section">
+                                                    <i class="icon-user"></i>
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="Designation">Désignation </label>
+                                                            <input type="text" asp-for="ProduitVendable_Designation" class="form-control" required />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="Description">Description</label>
+                                                            <input type="text" asp-for="ProduitVendable_Description" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <div class="form-group">
+                                                                <label for="FamilleProduit">Code de produit</label>
+                                                                <input type="text" asp-for="ProduitVendable_CodeProduit" class="form-control" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="FamilleProduit">Famille de produit</label>
+                                                            <div>
+                                                                <select class="custom-select" id="inputGroupSelected" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="familleList()" required>
+                                                                    <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                                </select>
+                                                                <a href="#" data-target="#familleModal" data-toggle="modal"><small>Ajouter une famille de produit</small></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                @* <div class="row">
+
+
+                                                </div> *@
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="SousFamille">Sous-famille</label>
+                                                            <div>
+                                                                <select class="custom-select" asp-for="ProduitVendable_FamilleProduitId" id="sousfamille1" data-search="true" required>
+                                                                    <option value="" selected>Sélectionnez une sous-famille...</option>
+                                                                </select>
+                                                                <a href="#" data-target="#sousfamilleModal" data-toggle="modal"><small>Ajouter une sous famille</small></a>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="FormedeStockage"> Forme de conservation</label>
+                                                            <div>
+                                                                <select class="custom-select" id="inputGroupSelected01" data-search="true" asp-for="ProduitVendable_FormStockageId" asp-items="@ViewBag.ProduitVendable_FormStockageId">
+                                                                    <option value="" selected>Sélectionnez une forme de conservation ...</option>
+                                                                </select>
+                                                                <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une forme de conservation</small></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="tempConserv">Température de conservation</label>
+                                                            <input type="text" asp-for="ProduitVendable_TempConservation" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="AvecPlanification">Type de production</label>
+                                                            <div>
+                                                                <select class="custom-select" id="typeProd" data-search="true" asp-for="ProduitVendable_PlanificationFlag" required>
+                                                                    <option value="" disabled>Sélectionnez un type de production...</option>
+                                                                    <option value="1">Avec planification</option>
+                                                                    <option value="0">Sans planification</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                @*<div class="row">
+
+                                                </div>*@
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="Unite_FT">Unité de vente</label>
+                                                            <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitVendable_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
+                                                                <option value="" selected>Sélectionnez une unite de mesure ...</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="StockMin">Stock minimun</label>
+                                                            <div>
+                                                                <input id="stockmin" type="number" min="0" @*value="0"*@ step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="Stock Max">Stock maximum</label>
+                                                            <input id="stockmax" type="number" @*min="0" value="0"*@ step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="Delai">Délai de consommation (par jour)</label>
+                                                            <div>
+                                                                <input type="number" min="0" @*value="0" max="10"*@ asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="CodeBarre">Code à barre</label>
+                                                            <input type="text" maxlength="30" asp-for="ProduitVendable_CodeBarre" class="form-control" required />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Photo de produit</label>
+                                                            <div class="custom-file">
+                                                                <input type="file" name="files" class="custom-file-input" id="fileinput" required>
+                                                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <hr>
 
                                         </fieldset>

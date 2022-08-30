@@ -168,9 +168,11 @@ namespace Web.Controllers
                 return NotFound();
             }
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            ViewData["ProduitVendable_FamilleProduitId"] = new SelectList(produitVendableService.getListFamilleProduit(Id), "FamilleProduit_Id", "FamilleProduit_Libelle");
             var formes = produitVendableService.getListFormeSotckage(Id);
             ViewData["Form"] = new SelectList(formes, "FormeStockage_Id", "FormeStockage_Libelle");
+            ViewData["ProduitVendable_FamilleProduitId"] = new SelectList(produitVendableService.getListFamilleProduit(Id), "FamilleProduit_Id", "FamilleProduit_Libelle");
+            ViewData["ProduitVendable_FormStockageId"] = new SelectList(produitVendableService.getListFormeSotckage(Id), "FormStockage_Id", "FormStockage_Libelle");
+            ViewData["ProduitVendable_UniteMesureId"] = new SelectList(produitVendableService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
             return View(donnee);
         }
         [HttpPost]

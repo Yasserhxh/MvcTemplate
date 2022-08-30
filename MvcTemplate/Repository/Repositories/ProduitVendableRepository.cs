@@ -302,14 +302,17 @@ namespace Repository.Repositories
             {
                 produit.ProduitVendable_FamilleProduitId = newProduit.ProduitVendable_FamilleProduitId;
                 produit.ProduitVendable_Designation = newProduit.ProduitVendable_Designation;
-                //produit.ProduitVendable_FamilleProduitId = newProduit.ProduitVendable_FamilleProduitId;
-                //produit.ProduitVendable_FormStockageId = newProduit.ProduitVendable_FormStockageId;
-                //produit.ProduitVendable_UniteMesureId = newProduit.ProduitVendable_UniteMesureId;
+                produit.ProduitVendable_Description = newProduit.ProduitVendable_Description;
+                produit.ProduitVendable_FamilleProduitId = newProduit.ProduitVendable_FamilleProduitId;
+                produit.ProduitVendable_FormStockageId = newProduit.ProduitVendable_FormStockageId;
+                produit.ProduitVendable_UniteMesureId = newProduit.ProduitVendable_UniteMesureId;
                 produit.ProduitVendable_StockMaximum = newProduit.ProduitVendable_StockMaximum;
                 produit.ProduitVendable_StockMinimum = newProduit.ProduitVendable_StockMinimum;
                 produit.ProduitVendable_DelaiConsommation = newProduit.ProduitVendable_DelaiConsommation;
                 produit.ProduitVendable_CodeBarre = newProduit.ProduitVendable_CodeBarre;
                 produit.ProduitVendable_GrandePhoto = newProduit.ProduitVendable_GrandePhoto;
+                produit.ProduitVendable_CodeProduit = newProduit.ProduitVendable_CodeProduit;
+                produit.ProduitVendable_TempConservation = newProduit.ProduitVendable_TempConservation;
                 //produit.ProduitVendable_PetitePhoto = newProduit.ProduitVendable_PetitePhoto;
                 produit.ProduitVendable_IsActive = 1;
                 //produit.Produit_CoutDeRevient = 0;
