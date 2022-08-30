@@ -53,8 +53,8 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label for="Designation">Désignation </label>
-                                                <input type="text" asp-for="ProduitVendable_Designation" class="form-control" required />
+                                                <label for="Designation">Désignation</label>
+                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" onchange="changeLib()" required />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -140,27 +140,47 @@
 
             </div>*@
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Unite_FT">Unité de vente</label>
                                                 <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitVendable_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
-                                                    <option value="" selected>Sélectionnez une unite de mesure ...</option>
+                                                    <option value="" selected disabled>Sélectionnez une unite de mesure ...</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="condi">Conditionnement</label>
+                                                <select class="custom-select" id="condi" data-search="true" asp-for="ProduitVendable_Conditionnement" onchange="disa()" required>
+                                                    <option value="" selected disabled>Sélectionnez un conditionnement...</option>
+                                                    <option value="Plateau">Plateau</option>
+                                                    <option value="Assiette">Assiette</option>
+                                                    <option value="Boite">Boîte</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label for="spec">Spécification en KG</label>
+                                                <div>
+                                                    <input id="spec" type="number" min="0" step=".01" asp-for="ProduitVendable_Specification" class="form-control" disabled required />
+
+                                                </div>
+                                            </div>
+                                        </div>  
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="StockMin">Stock minimun</label>
                                                 <div>
-                                                    <input id="stockmin" type="number" min="0" @*value="0"*@ step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+                                                    <input id="stockmin" type="number" min="0" step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
 
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <label for="Stock Max">Stock maximum</label>
-                                                <input id="stockmax" type="number" @*min="0" value="0"*@ step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
+                                                <input id="stockmax" type="number" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +190,7 @@
                                             <div class="form-group">
                                                 <label for="Delai">Délai de consommation (par jour)</label>
                                                 <div>
-                                                    <input type="number" min="0" @*value="0" max="10"*@ asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+                                                    <input type="number" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
 
                                                 </div>
                                             </div>
@@ -192,39 +212,110 @@
                                         </div>
                                     </div>
                                 </div>
-@*                                <fieldset>
-                                    <legend>Destails des formes de produit</legend>
-                                    <div class="form-row">
-                                        <div class="col-md-5 mb-1">
-                                            <label for="QuantiteMatiere">Produit maison</label>
-                                            <input id="matiereP" type="text" disabled class="form-control" />
-
-                                        </div>
-                                        <div class="col-md-5 mb-1">
-                                            <label for="validationTooltip01">Nom de la forme</label>
-                                            <input id="forme" type="text" class="form-control" />
-                                        </div>
-                                        <div class=" text-md-right">
-                                            <a class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="uniteAdd()">Ajouter à la liste</a>
-                                        </div>
-                                    </div>
+                                <hr>
+                                <fieldset style="border: 2px solid #fdda4161; display:none;" id="table">
+                                    <legend style="background: #4c216b;">Liste des éléments</legend>
                                     <div class="row">
                                         <div class="col-12 mt-2">
                                             <div class="table-responsive">
-                                                <table id="tableCamions" class="table mb-0">
+                                                <table id="tableCamions" class="table table-bordered table-striped mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Produit maison</th>
-                                                            <th class="text-sm-left">Forme</th>
-                                                            <th></th>
+                                                            <th style="background: #4c216b;">Produit Maison</th>
+                                                            <th style="background: #4c216b;">Composant</th>
+                                                            <th style="background: #4c216b;">Valeur</th>
                                                         </tr>
-                                                    </thead>
+                                                    </thead> 
+                                                    <tbody>
+                                                        <tr>
+                                                           
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM" disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantName" value="Energie" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" value="Energie" disabled class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM1"  disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30"   value="Graisses" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="Graisses" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM2"  disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30"  disabled value="Glucide" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM3" disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
+                                                               
+                                                            </td> 
+                                                            <td>
+                                                                <input type="text" maxlength="30"  disabled value="Protéines" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM4" disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="Sel" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        
+                                                       
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
-*@
                                 <div class="form-actions text-right">
                                     <button type="submit" name="theButton" class="btn btn-success">
                                         <i class="icon-note"></i> Enregistrer
@@ -520,5 +611,25 @@
             });
         }
     }
+
+    function disa() {
+
+        if ($("#condi option:selected").val() !=""){
+            document.getElementById('spec').disabled = false;
+        }
+    }
+    function changeLib() {
+
+        var desi = $("#desi").val();
+        $("#produitM").val(desi);
+        $("#produitM1").val(desi);
+        $("#produitM2").val(desi);
+        $("#produitM3").val(desi);
+        $("#produitM4").val(desi);
+       // $("#matiereP1").val(lib);
+        document.getElementById('table').style.display = "block";
+
+    }
+
 </script>
 

@@ -227,7 +227,7 @@
 
                                                 </div>*@
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label for="Unite_FT">Unité de vente</label>
                                                             <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitVendable_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
@@ -235,19 +235,39 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <label for="StockMin">Stock minimun</label>
+                                                            <label for="condi">Conditionnement</label>
+                                                            <select class="custom-select" id="condi" data-search="true" asp-for="ProduitVendable_Conditionnement" onchange="disa()" required>
+                                                                <option value="" selected disabled>Sélectionnez un conditionnement...</option>
+                                                                <option value="Plateau">Plateau</option>
+                                                                <option value="Vitrine">Vitrine</option>
+                                                                <option value="Boite">Boîte</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label for="spec">Spécification en KG</label>
                                                             <div>
-                                                                <input id="stockmin" type="number" min="0" @*value="0"*@ step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+                                                                <input id="spec" type="text" min="0" step=".01" asp-for="ProduitVendable_Specification" class="form-control" disabled required />
 
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label for="StockMin">Stock minimun</label>
+                                                            <div>
+                                                                <input id="stockmin" type="text" min="0" step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label for="Stock Max">Stock maximum</label>
-                                                            <input id="stockmax" type="number" @*min="0" value="0"*@ step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
+                                                            <input id="stockmax" type="text" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -257,7 +277,7 @@
                                                         <div class="form-group">
                                                             <label for="Delai">Délai de consommation (par jour)</label>
                                                             <div>
-                                                                <input type="number" min="0" @*value="0" max="10"*@ asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+                                                                <input type="text" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
 
                                                             </div>
                                                         </div>
@@ -309,7 +329,7 @@
 <script>
     window.onload = function() {
         familleList();
-        fct1();
+     //   fct1();
    /*     onchangeevent();*/
         /*onchangeQte();*/
     };
@@ -343,14 +363,6 @@
         }
     }
 
-    function fct1() {
-        if (document.getElementById('customColorRadio3').checked) {
-            document.getElementById('inputGroupSelected02').disabled = true;
-        } else if (document.getElementById('customColorRadio4').checked) {
-            document.getElementById('inputGroupSelected02').disabled = false;
-
-        }
-    }
     function onchangeevent() {
         var val = (parseFloat($("#TolePerte").val()) * parseFloat($("#QteTotal").val())) / 100;
         var reste = parseFloat($("#QteTotal").val()) - val;
@@ -375,5 +387,12 @@
         }
         $('#TolePerte').val(parseFloat(pourcentage).toFixed(2));
     }
+    function disa() {
+
+        if ($("#condi option:selected").val() != "") {
+            document.getElementById('spec').disabled = false;
+        }
+    }
+
 </script>
 

@@ -313,6 +313,8 @@ namespace Repository.Repositories
                 produit.ProduitVendable_GrandePhoto = newProduit.ProduitVendable_GrandePhoto;
                 produit.ProduitVendable_CodeProduit = newProduit.ProduitVendable_CodeProduit;
                 produit.ProduitVendable_TempConservation = newProduit.ProduitVendable_TempConservation;
+                produit.ProduitVendable_Conditionnement = newProduit.ProduitVendable_Conditionnement;
+                produit.ProduitVendable_Specification = newProduit.ProduitVendable_Specification;
                 //produit.ProduitVendable_PetitePhoto = newProduit.ProduitVendable_PetitePhoto;
                 produit.ProduitVendable_IsActive = 1;
                 //produit.Produit_CoutDeRevient = 0;

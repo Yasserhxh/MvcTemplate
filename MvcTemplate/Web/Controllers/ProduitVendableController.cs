@@ -111,7 +111,12 @@ namespace Web.Controllers
 
             }
             produitModel.ProduitVendable_AbonnementId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-
+            foreach(var item in produitModel.Composants)
+            {
+                item.ProduitComposant_AbonnementID = (int)produitModel.ProduitVendable_AbonnementId;
+               // item.ProduitComposant_ComposantNameAR = ;
+                item.ProduitComposant_isActive = 1;
+            }
             var redirect = await produitVendableService.CreateProduitVendable(produitModel);
             if (redirect)
             {

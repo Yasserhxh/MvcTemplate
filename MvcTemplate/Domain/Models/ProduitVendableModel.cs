@@ -8,12 +8,15 @@ namespace Domain.Models
         public ProduitVendableModel()
         {
             formes = new List<Forme_ProduitModel>();
+            Composants = new List<ProduitComposants_Model>(); 
         }
         public int ProduitVendable_Id { get; set; }
         public int? ProduitVendable_FamilleProduitId { get; set; }
         public string ProduitVendable_Designation { get; set; }
         public string ProduitVendable_TempConservation { get; set; }
+        public string ProduitVendable_Conditionnement { get; set; }
         public string ProduitVendable_CodeProduit { get; set; }
+        public string ProduitVendable_Specification { get; set; }
         public string ProduitVendable_Description { get; set; }
         public int? ProduitVendable_FormStockageId { get; set; }
         public int? ProduitVendable_UniteMesureId { get; set; }
@@ -36,6 +39,6 @@ namespace Domain.Models
         public SousFamilleModel Sous_Famille { get; set; }
         public Forme_StockageModel Forme_Stockage { get; set; }
         public Taux_TVAModel Taux_TVA { get; set; }
-
+        public List<ProduitComposants_Model> Composants { get; set; } 
     }
 }

@@ -13,6 +13,7 @@ namespace Domain.Entities
         public ProduitVendable()
         {
             formes = new Collection<Forme_Produit>();
+            Composants = new Collection<Produit_Composants>();
         }
         [Key]
         public int ProduitVendable_Id { get; set; }
@@ -21,7 +22,11 @@ namespace Domain.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_Designation { get; set; }
         [Column(TypeName = "nvarchar(150)")]
-        public string ProduitVendable_TempConservation { get; set; }
+        public string ProduitVendable_TempConservation { get; set; } 
+        [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_Conditionnement { get; set; } 
+        [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_Specification { get; set; }
         [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_CodeProduit { get; set; }
         [Column(TypeName = "nvarchar(150)")]
@@ -64,6 +69,7 @@ namespace Domain.Entities
         public SousFamille Sous_Famille { get; set; }
         public Forme_Stockage Forme_Stockage { get; set; }
         public Taux_TVA Taux_TVA { get; set; }
+        public ICollection<Produit_Composants> Composants { get; set; }
 
 
     }
