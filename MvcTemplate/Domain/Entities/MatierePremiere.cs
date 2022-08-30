@@ -17,6 +17,8 @@ namespace Domain.Entities
         public string MatierePremiere_Libelle { get; set; }
         [Column(TypeName = "nvarchar(150)")]
         public string MatierePremiere_CodeArticle { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string MatierePremiere_Composants { get; set; }
 
         [ForeignKey("Unite_Mesure")]
         public int MatierePremiere_AchatUniteMesureId { get; set; }
@@ -41,8 +43,8 @@ namespace Domain.Entities
         [Column(TypeName = "int")]
         public int MatierePremiere_EstAllergene { get; set; }
 
-        [ForeignKey("Allergene")]
-        public int? MatierePremiere_AllergeneId { get; set; }
+        //[ForeignKey("Allergene")]
+        //public int? MatierePremiere_AllergeneId { get; set; }
         public int MatierePremiere_IsActive { get; set; }
         [Column(TypeName = "int")]
         public int MatierePremiere_AbonnementId { get; set; }
@@ -57,11 +59,13 @@ namespace Domain.Entities
 
         public bool EnStock { get; set; }
         public Forme_Stockage Forme_Stockage { get; set; }
-        public Allergene Allergene { get; set; }
+        //public Allergene Allergene { get; set; }
         //public ProduitFicheTechnique ProduitFicheTechnique { get; set; }
         public ICollection<FournisseurMatiere> FournisseurLink { get; set; }
         public MatiereFamille Matiere_Famille { get; set; }
         public Unite_Mesure Unite_Mesure { get; set; }
         public Taux_TVA Taux_TVA { get; set; }
+        public ICollection<MatPrem_Allergene> listAllergene { get; set; }
+
     }
 }

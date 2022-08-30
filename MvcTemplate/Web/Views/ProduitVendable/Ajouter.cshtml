@@ -51,19 +51,27 @@
                                         <i class="icon-user"></i>
                                     </h4>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Designation">Désignation </label>
                                                 <input type="text" asp-for="ProduitVendable_Designation" class="form-control" required />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Description">Description</label>
                                                 <input type="text" asp-for="ProduitVendable_Description" class="form-control" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label for="FamilleProduit">Code de produit</label>
+                                                    <input type="text" asp-for="ProduitVendable_CodeProduit" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="FamilleProduit">Famille de produit</label>
                                                 <div>
@@ -83,7 +91,7 @@
 
             </div> *@
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="SousFamille">Sous-famille</label>
                                                 <div>
@@ -95,7 +103,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="FormedeStockage"> Forme de conservation</label>
                                                 <div>
@@ -106,7 +114,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="tempConserv">Température de conservation</label>
+                                                <input type="text" asp-for="ProduitVendable_TempConservation" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="AvecPlanification">Type de production</label>
                                                 <div>

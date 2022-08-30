@@ -51,12 +51,13 @@ namespace Web.Controllers
         }
         [HttpPost]
 
-        public async Task<bool> AjouterMatierePremiere(MatierePremiereModel matiereModel, List<int> ListeUnite)
+        public async Task<bool> AjouterMatierePremiere(MatierePremiereModel matiereModel, List<int> ListeUnite, List<int> ListeAllergene)
         {
+
             // GET CURRENT USER_ID and query it's abo_ID 
             var abo = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             matiereModel.MatierePremiere_AbonnementId = abo;
-            var redirect = await matierePremiereService.CreateMatierePremiere(matiereModel,ListeUnite);
+            var redirect = await matierePremiereService.CreateMatierePremiere(matiereModel,ListeUnite, ListeAllergene);
             return redirect;
             
 
@@ -211,6 +212,15 @@ namespace Web.Controllers
             var aboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var matiere = this.matierePremiereService.findFormulaireMatiereP(aboId,id);
             return matiere.MatierePremiere_Libelle;
+        } 
+        [HttpPost]
+        public string getAllergie(int id)
+        {
+            var donnee = matierePremiereService.findFormulaireAllergie(id);
+            if (donnee != null)
+                return donnee.Allergene_LibelleAR;
+            else
+                return String.Empty;
         }
         [HttpPost]
         public decimal getMatiereTVA(int id)
@@ -346,7 +356,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<bool> AjouterUniteUtilisation(int idMatiere, List<int> listUnite)
         {
-            var redirect = await matierePremiereService.AjouterUnites(idMatiere,listUnite);
+            var redirect = await matierePremiereService.AjouterUnites(idMatiere,listUnite, null);
             return redirect;
         } 
         [HttpPost]

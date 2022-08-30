@@ -20,7 +20,11 @@ namespace Domain.Entities
         public int ProduitVendable_FamilleProduitId { get; set; }
         [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_Designation { get; set; }
-        [Column(TypeName = "nvarchar(1000)")]
+        [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_TempConservation { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_CodeProduit { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_Description { get; set; }
         [ForeignKey("Forme_Stockage")]
         public int? ProduitVendable_FormStockageId { get; set; }

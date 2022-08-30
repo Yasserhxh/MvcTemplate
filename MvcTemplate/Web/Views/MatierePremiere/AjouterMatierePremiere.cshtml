@@ -145,7 +145,7 @@
                                                            
                                                     </div>
                                                 </div>
-                                                <div class="col-md-2">
+                                                @*<div class="col-md-2">
                                                     <div class="form-group">
                                                         <label for="Allergene">Nom d'allergène</label>
                                                         <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="MatierePremiere_AllergeneId" asp-items="@ViewBag.MatierePremiere_AllergeneId" disabled="disabled">
@@ -153,8 +153,8 @@
                                                         </select>
                                                         <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une allergène</small></a>
                                                     </div>
-                                                </div> 
-                                                <div class="col-md-4">
+                                                </div> *@
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label for="tva">Taux TVA</label>
                                                         <select class="custom-select" id="tvaID" data-search="true" asp-for="MatierePremiere_CoutTVAID" asp-items="@ViewBag.tva" required>
@@ -162,12 +162,19 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="compo">Composants de la matière</label>
+                                                        <input type="text" id="compo"  class="form-control" required>
+
+                                                    </div>
+                                                </div>
 
 
                                             </div>
                                             <hr>
-                                            <fieldset>
-                                                <legend>Liste des unités d'utilisations</legend>
+                                            <fieldset style="border: 2px solid #fdda4161;">
+                                                <legend style="background: #4c216b;">Liste des unités d'utilisations</legend>
                                                 <div class="form-row">
                                                     <div class="col-md-4 mb-1">
                                                         <label for="QuantiteMatiere">Matière Première</label>
@@ -187,13 +194,54 @@
 
                                                 <div class="row">
                                                     <div class="col-12 mt-2">
-                                                        <div class="table-responsive">
-                                                            <table id="tableCamions" class="table mb-0">
-                                                                <thead>
+                                                        <div class="table-responsive" >
+                                                            <table id="tableCamions" class="table mb-0" >
+                                                                <thead >
                                                                     <tr>
-                                                                        <th>Matière première</th>
-                                                                        <th>Unité d'utilisation</th>
-                                                                        <th></th>
+                                                                        <th style="background: #4c216b;">Matière première</th>
+                                                                        <th style="background: #4c216b;">Unité d'utilisation</th>
+                                                                        <th style="background: #4c216b;"></th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <hr>
+                                            <fieldset style="border: 2px solid #fdda4161; display:none;" id="fieldset" >
+                                                <legend style="background: #4c216b;">Liste des allergènes</legend>
+                                                <div class="form-row">
+                                                    <div class="col-md-3 mb-1">
+                                                        <label for="QuantiteMatiere">Matière Première</label>
+                                                        <input id="matiereP1" type="text" disabled class="form-control"/>
+
+                                                    </div>
+                                                    <div class="col-md-3 mb-1">
+                                                        <label for="validationTooltip01">Allergène (FR)</label>
+                                                        <select class="custom-select" id="allergeneID" data-search="true" asp-items="@ViewBag.MatierePremiere_AllergeneId" onchange="getAllergene()">
+                                                            <option value="" selected disabled>Choisir une allergène...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 mb-1">
+                                                        <label for="validationTooltip01">Allergène (AR)</label>
+                                                        <input id="allerAR" type="text" disabled class="form-control" />
+                                                    </div>
+                                                    <div class=" text-md-right">
+                                                        <a class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="uniteAdd2()">Ajouter à la liste</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-12 mt-2">
+                                                        <div class="table-responsive" >
+                                                            <table id="tableCamions1" class="table mb-0" >
+                                                                <thead >
+                                                                    <tr>
+                                                                        <th style="background: #4c216b;">Matière première</th>
+                                                                        <th style="background: #4c216b;">Allergène (FR)</th>
+                                                                        <th style="background: #4c216b;">Allergène (AR)</th>
+                                                                        <th style="background: #4c216b;"></th>
                                                                     </tr>
                                                                 </thead>
                                                             </table>
@@ -374,15 +422,27 @@
             camionAjout();
             formCamionClear();
         }
+    } 
+    function uniteAdd2() {
+
+        if ($("#matiereP1").val() != null && $("#matiereP1").val() != '' &&
+            $("#allergeneID").val() != null && $("#allergeneID").val() != ''
+
+        ) {
+            camionAjout2();
+            formCamionClear2();
+        }
     }
 
     
     function fct1()
     {
         if (document.getElementById('customColorRadio3').checked) {
-            document.getElementById('inputGroupSelected02').disabled = true;
+
+            document.getElementById('fieldset').style.display = "none";
+
         } else if (document.getElementById('customColorRadio4').checked) {
-            document.getElementById('inputGroupSelected02').disabled = false;
+            document.getElementById('fieldset').style.display = "block";
 
         }
     }
@@ -419,12 +479,22 @@
 
         }
         var tableForme = document.getElementById("tbodyForme");
+        var tableForme1 = document.getElementById("tbodyForme1");
         var ListeUnite = new Array();
-        for (var i = 0; i < tableForme.rows.length; i++)
+        var ListeAllergene = new Array();
+        for (var i = 0; i < tableForme.rows.length; i++) 
         {
-            matiere = tableForme.rows[i].cells[0].innerHTML;
-            unite = tableForme.rows[i].cells[2].innerHTML;
-            ListeUnite.push(unite);
+           matiere = tableForme.rows[i].cells[0].innerHTML;
+           unite = tableForme.rows[i].cells[2].innerHTML;
+           ListeUnite.push(unite);
+        }
+        
+        
+        for (var i = 0; i < tableForme1.rows.length; i++)
+        {
+            matiere = tableForme1.rows[i].cells[0].innerHTML;
+            allergene = tableForme1.rows[i].cells[2].innerHTML;
+            ListeAllergene.push(unite);
 
         }
         console.log(ListeUnite);
@@ -445,9 +515,10 @@
         console.log(matiereModel);
         var data = {
             matiereModel: matiereModel,
-            ListeUnite: ListeUnite
+            ListeUnite: ListeUnite,
+            ListeAllergene: ListeAllergene
         };
-                $.ajax({
+        $.ajax({
             url: '@Url.Action("AjouterMatierePremiere", "MatierePremiere")',
             type: "POST",
             cache: false,
@@ -650,6 +721,32 @@
     function formCamionClear() {
         $("#uniteUti").val("");
     }
+    function camionAjout2() {
+        console.log("12")
+        var matiereTxt = $("#matiereP1").text();
+        var matiereVal = $("#matiereP1").val();
+
+        var allergenetxt = $("#allergeneID option:selected").text();
+        var allergeneIDval = $("#allergeneID option:selected").val();
+
+        if ($("#tableCamions1 tbody").length == 0) {
+            $("#tableCamions1").append("<tbody id='tbodyForme1'></tbody>");
+            //document.getElementById('divTable').style.display = "block";
+        }
+        $("#tbodyForme1").append("<tr>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5 text-sm-left'>" + matiereVal + "</td>" +
+            "<td class='border-b dark:border-dark-5' style='display:none;'>" + allergeneIDval + "</td>" +
+            "<td class='border-b dark:border-dark-5'>" + allergenetxt + "</td>" +
+            "<td class='text-right'>" +
+            '<button class="btn btn-outline-secondary btn-table round" onclick="CamionDelete1(this)"><i class="bx bx-trash-alt"></i>Supprimer</button>' +
+            "</tr>");
+    }
+
+
+    function formCamionClear2() {
+        $("#uniteUti").val("");
+    }
 
     //delete
     function CamionDelete(ctl) {
@@ -657,9 +754,32 @@
         if ($("#tableCamions tbody tr").length == 0) {
             document.getElementById('divTable').style.display = "none";
         }
+    } 
+    //delete
+    function CamionDelete1(ctl) {
+        $(ctl).parents("tr").remove();
+        if ($("#tableCamions1 tbody tr").length == 0) {
+            document.getElementById('divTable').style.display = "none";
+        }
     }
     function changeLib() {
         var lib = $("#libelle").val();
         $("#matiereP").val(lib);
-    }
+        $("#matiereP1").val(lib);
+    } 
+    function getAllergene() 
+    {
+        var id = $("#allergeneID option:selected").val();
+            $.ajax({
+            url: '@Url.Action("getAllergie", "MatierePremiere")',
+                 type: "POST",
+                 cache: false,
+                 async: true,
+                 data: id,
+                 success: function (data) {
+                     $("#allerAR").val(data);
+                 },
+                 error: function () {alert("non ajoute");}
+            });
+        }
 </script>

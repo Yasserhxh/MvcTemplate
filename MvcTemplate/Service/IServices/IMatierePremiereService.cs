@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,12 +7,12 @@ namespace Service.IServices
 {
     public interface IMatierePremiereService
     {
-        Task<bool> CreateMatierePremiere(MatierePremiereModel matiereModel,List<int> ListeUnite);
+        Task<bool> CreateMatierePremiere(MatierePremiereModel matiereModel,List<int> ListeUnite, List<int> ListeAllergene);
         Task<bool> CreateMatiereFamille(MatiereFamilleModel matiereFamilleModel);
         Task<bool> CreateMatiereFamilleParent(MatiereFamille_ParentModel matiereFamille_ParentModel);
         Task<bool> CreateAllergene(AllergeneModel allergeneModel);
         Task<bool> StockerMatiere(int Id, MatierePremiereStockageModel matiereStockerModel);
-        Task<bool> AjouterUnites(int idMatiere, List<int> listUnite);
+        Task<bool> AjouterUnites(int idMatiere, List<int> listUnite, List<int> ListeAllergene);
         Task<bool> DeclarationPerte(Perte_MatiereModel perte_MatiereModel);
         Task<bool> DeclarationPerteStock(Perte_MatiereStockModel perte_MatiereStockModel);
 
@@ -50,5 +51,7 @@ namespace Service.IServices
         IEnumerable<Approvisionnement_MatiereModel> getListApprov(int aboId, int? stockID, string date, string etat, int? pointPord);
         Task<bool> ValiderApprovisionnement(int ApprovisionnementId, string valideId, int pdvId);
         IEnumerable<Taux_TVAModel> getListCoutTVA();
+        List<AllergeneModel> getListAllergeneMatiere(int matPrem, int aboId);
+
     }
 }

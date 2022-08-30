@@ -4,6 +4,8 @@
     {
         public int Abonnement_Id { get; set; }
         public string Abonnement_NomClient { get; set; }
+        public string Abonnement_NomClientAR { get; set; }
+        public string Abonnement_ONSSAAuthorisation { get; set; }
         public string Abonnement_RegistreCommercial { get; set; }
         public string Abonnement_IdentifiantFiscal { get; set; }
         public string Abonnement_ICE { get; set; }

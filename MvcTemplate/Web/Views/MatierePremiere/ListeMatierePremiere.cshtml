@@ -42,15 +42,15 @@
             <!-- Dashboard Ecommerce Starts -->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-3 offset-md-1 mb-1">
+                   @* <div class="col-md-3 offset-md-1 mb-1">
                         <label for="role">Allergène</label>
                         <div>
                             <select class="custom-select" id="allergene" data-search="true" asp-items="@ViewBag.MatierePremiere_AllergeneId">
                                 <option value="" selected disabled>Sélectionnez une allergène ...</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-3 mb-1">
+                    </div>*@
+                    <div class="col-md-4 offset-md-2 mb-1">
                         <div class="form-group">
                             <label for="Statut">Forme de stockage</label>
                             <div>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-1">
+                    <div class="col-md-4 mb-1">
                         <div class="form-group">
                             <label for="Name">Libellé</label>
                             <div>
@@ -114,11 +114,13 @@
                                                                 <tr>
 
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Libellé</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité d'Achat</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Unité d'Achat</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Code article</th>
+@*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité d'Achat</th>
+*@                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Unité d'Achat</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Allergène</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Type d'allergie</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Forme de Stockage</th>
+@*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Type d'allergie</th>
+*@                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Forme de Stockage</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Coût TVA %</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Prix Moyen d'achat</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
 
@@ -129,8 +131,9 @@
                                                                 {
                                                                     <tr>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere_Libelle)</td>
-                                                                        @{ var qte = decimal.Parse(item.MatierePremiere_Quantite_FT.ToString()).ToString("G29");}
-                                                                        <td class="border-b dark:border-dark-5">@qte</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatierePremiere_CodeArticle)</td>
+                                                                        @*@{ var qte = decimal.Parse(item.MatierePremiere_Quantite_FT.ToString()).ToString("G29");}
+                                                                        <td class="border-b dark:border-dark-5">@qte</td>*@
                                                                         <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
                                                                         @if (item.MatierePremiere_EstAllergene == 1)
                                                                         {
@@ -140,8 +143,9 @@
                                                                         {
                                                                             <td class="border-b dark:border-dark-5 text-sm-left">Non</td>
                                                                         }
-                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Allergene.Allergene_Libelle)</td>
-                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Stockage.FormStockage_Libelle)</td>
+@*                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Allergene.Allergene_Libelle)</td>
+*@                                                                        <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Stockage.FormStockage_Libelle)</td>
+                                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Taux_TVA.TauxTVA_Pourcentage)</td>
                                                                         <td class="border-b dark:border-dark-5 text-sm-right">@item.MatierePremiere_PrixMoyenAchat DH</td>
 
 

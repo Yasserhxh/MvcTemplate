@@ -9,6 +9,10 @@ namespace Domain.Entities
         [Key]
         public int Abonnement_Id { get; set; }
         [Column(TypeName = "nvarchar(150)")]
+        public string Abonnement_NomClientAR { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string Abonnement_ONSSAAuthorisation { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
         public string Abonnement_NomClient { get; set; }
         [Column(TypeName = "nvarchar(30)")]
         public string Abonnement_RegistreCommercial { get; set; }

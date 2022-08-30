@@ -23,14 +23,14 @@ namespace Repository.Repositories
             _db = db;
         }
 
-        public async Task<int?> CreateMatiere(MatierePremiere matierePremiere, List<int> ListeUnite)
+        public async Task<int?> CreateMatiere(MatierePremiere matierePremiere, List<int> ListeUnite, List<int> ListeAllergene)
         {
             matierePremiere.MatierePremiere_IsActive = 1;
             matierePremiere.MatierePremiere_DateCreation = DateTime.Now;
             // matierePremiere.MatierePremiere_QuantiteActuelle = matierePremiere.MatierePremiere_Quantite_FT;
             await _db.matierePremieres.AddAsync(matierePremiere);
             await unitOfWork.Complete();
-            var confirm = await AjouterUnites(matierePremiere.MatierePremiere_Id, ListeUnite);
+            var confirm = await AjouterUnites(matierePremiere.MatierePremiere_Id, ListeUnite, ListeAllergene);
             if (confirm > 0)
                 return matierePremiere.MatierePremiere_Id;
             else
@@ -87,9 +87,9 @@ namespace Repository.Repositories
             {
                 if (formeId != null)
                 {
-                    m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1 && a.MatierePremiere_AllergeneId==allergene && a.MatierePremiere_FormeStockageId==formeId)
+                    m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1  && a.MatierePremiere_FormeStockageId==formeId)
                                     .Where(a => a.MatierePremiere_AbonnementId == Id)
-                                    .Include(e => e.Allergene)
+                                    .Include(e => e.Taux_TVA)
                                     .Include(e => e.Forme_Stockage)
                                     .Include(e => e.Unite_Mesure)
                                     .Include(e => e.Matiere_Famille).ThenInclude(e => e.MatiereFamille_Parent)
@@ -97,9 +97,9 @@ namespace Repository.Repositories
                 }
                 else
                 {
-                    m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1 && a.MatierePremiere_AllergeneId==allergene)
+                    m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1 )
                                     .Where(a => a.MatierePremiere_AbonnementId == Id)
-                                    .Include(e => e.Allergene)
+                                    .Include(e => e.Taux_TVA)
                                     .Include(e => e.Forme_Stockage)
                                     .Include(e => e.Unite_Mesure)
                                     .Include(e => e.Matiere_Famille).ThenInclude(e => e.MatiereFamille_Parent)
@@ -112,7 +112,7 @@ namespace Repository.Repositories
                 {
                     m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1 && a.MatierePremiere_FormeStockageId==formeId)
                                     .Where(a => a.MatierePremiere_AbonnementId == Id)
-                                    .Include(e => e.Allergene)
+                                    .Include(e => e.Taux_TVA)
                                     .Include(e => e.Forme_Stockage)
                                     .Include(e => e.Unite_Mesure)
                                     .Include(e => e.Matiere_Famille).ThenInclude(e => e.MatiereFamille_Parent)
@@ -122,7 +122,7 @@ namespace Repository.Repositories
                 {
                     m = _db.matierePremieres.Where(a => a.MatierePremiere_IsActive == 1)
                                     .Where(a => a.MatierePremiere_AbonnementId == Id)
-                                    .Include(e => e.Allergene)
+                                    .Include(e => e.Taux_TVA)
                                     .Include(e => e.Forme_Stockage)
                                     .Include(e => e.Unite_Mesure)
                                     .Include(e => e.Matiere_Famille).ThenInclude(e => e.MatiereFamille_Parent)
@@ -154,7 +154,7 @@ namespace Repository.Repositories
                 }
                 matiere.MatierePremiere_FormeStockageId = newMatiere.MatierePremiere_FormeStockageId;
                 matiere.MatierePremiere_EstAllergene = newMatiere.MatierePremiere_EstAllergene;
-                matiere.MatierePremiere_AllergeneId = newMatiere.MatierePremiere_AllergeneId;
+                //matiere.MatierePremiere_AllergeneId = newMatiere.MatierePremiere_AllergeneId;
                 matiere.MatierePremiere_IsActive = 1;
                 _db.Entry(matiere).State = EntityState.Modified;
                 var confirm = await unitOfWork.Complete();
@@ -468,7 +468,7 @@ namespace Repository.Repositories
             return _db.matireFamille_Parents.Where(m => m.MatiereFamilleParent_AbonnementID == Id).AsEnumerable();
         }
 
-        public async Task<int?> AjouterUnites(int idMatiere, List<int> listUnite)
+        public async Task<int?> AjouterUnites(int idMatiere, List<int> listUnite, List<int> ListeAllergene)
         {
             try
             {
@@ -486,6 +486,18 @@ namespace Repository.Repositories
                         IsActive = 1,
                     };
                     await _db.unite_MesureMatieres.AddAsync(uniteMatiere);
+                }
+                foreach (var id in ListeAllergene)
+                {
+                    Allergene allergene = _db.allergenes.Where(u => u.Allergene_AbonnementId == id).FirstOrDefault();
+                    var matPrem_Allergene = new MatPrem_Allergene
+                    {
+                        MatierePremiere = matiere,
+                        Allgerene = allergene,
+                        AbonnementID = matiere.MatierePremiere_AbonnementId,
+                        IsActive = 1,
+                    };
+                    await _db.matPrem_Allergenes.AddAsync(matPrem_Allergene);
                 }
                 var confirm = await unitOfWork.Complete();
                 if (confirm > 0)
@@ -704,5 +716,14 @@ namespace Repository.Repositories
                 }
             }
         }
+
+        public List<Allergene> getListAllergeneMatiere(int matPrem, int aboId)
+        {
+            var res = _db.matPrem_Allergenes.Where(p => p.MatiereID == matPrem && p.AbonnementID == aboId && p.IsActive == 1)
+                .Select(p=>p.Allgerene).ToList();
+            return res;
+
+        } 
+       
     }
 }

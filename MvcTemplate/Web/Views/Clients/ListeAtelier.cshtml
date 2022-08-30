@@ -22,7 +22,7 @@
                                     <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <a asp-action="ListeAtelier">Liste des points de production</a>
+                                    <a asp-action="ListeAtelier">Liste des ateliers de production</a>
                                 </li>
                             </ol>
                         </div>
@@ -91,7 +91,7 @@
                                                             <thead>
                                                                 <tr>
 
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Point de production</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Atelier de production</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Adresse</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Responsable</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap ">Téléphone</th>
@@ -142,7 +142,7 @@
             </section>
             <!-- Dashboard Ecommerce ends -->
             <div class="breadcrumb-item text-sm-right">
-                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un point de production</span></a>
+                <a class="btn btn-outline-success round mr-1 mb-1" data-target="#myModal" data-toggle="modal"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un atelier de production</span></a>
             </div>
         </div>
     </div>
@@ -165,7 +165,7 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="PointVente_Nom">Point de production</label>
+                                        <label for="PointVente_Nom">Atelier de production</label>
                                         <input type="text" id="nom" class="form-control" required />
                                     </div>
                                 </div>
@@ -330,7 +330,7 @@
                  success: function (data) {
                 if (data == true)
                 {
-                    ShowNotification("Point de production ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    ShowNotification("Atelier de production ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                     setTimeout(
                         function ()
                         {

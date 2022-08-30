@@ -6,12 +6,12 @@ namespace Repository.IRepositories
 {
     public interface IMatierePremiereRepository
     {
-        Task<int?> CreateMatiere(MatierePremiere matierePremiere,List<int> ListeUnite);
+        Task<int?> CreateMatiere(MatierePremiere matierePremiere, List<int> ListeUnite, List<int> ListeAllergene);
         Task<int?> CreateMatiereFamile(MatiereFamille matiereFamille);
         Task<int?> CreateMatiereFamilleParent(MatireFamille_Parent matireFamille_Parent);
         Task<int?> CreateAllergene(Allergene allergene);
         Task<int?> StockerMatiere(int Id, MatierePremiereStockage matierePremiereStockage);
-        Task<int?> AjouterUnites(int idMatiere, List<int> listUnite);
+        Task<int?> AjouterUnites(int idMatiere, List<int> listUnite, List<int> ListeAllergene);
         Task<int?> DeclarationPerte(Perte_Matiere perte_Matiere);
         Task<int?> DeclarationPerteStock(Perte_MatiereStock perte_MatiereStock);
 
@@ -49,5 +49,6 @@ namespace Repository.IRepositories
         IEnumerable<Approvisionnement_Matiere> getListApprov(int aboId, int? stockID, string date, string etat, int? pointPord);
         Task<bool> ValiderApprovisionnement(int ApprovisionnementId, string valideId, int pdvId);
         IEnumerable<Taux_TVA> getListCoutTVA();
+        List<Allergene> getListAllergeneMatiere(int matPrem, int aboId);
     }
 }

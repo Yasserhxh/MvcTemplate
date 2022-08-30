@@ -116,9 +116,11 @@
 
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Photo</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Désignation</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Code de produit</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Unité de vente</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Type de production </th>
-                                                                    <th class="text-sm-left">Forme de conservation</th>
+                                                                    <th class="">Forme de conservation</th>
+                                                                    <th class="">temperature de conservation</th>
                                                                     <th>Actions</th>
                                                                 </tr>
                                                             </thead>
@@ -134,6 +136,7 @@
                                                                                  asp-append-version="true" />
                                                                         </td>
                                                                         <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.ProduitVendable_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.ProduitVendable_CodeProduit)</td>
                                                                         <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Unite_Mesure.UniteMesure_Libelle)</td>
                                                                         @if (item.ProduitVendable_PlanificationFlag == 1)
                                                                         {
@@ -143,7 +146,8 @@
                                                                         {
                                                                             <td class="text-bold-600 pr-0 text-sm-left">Sans planification</td>
                                                                         }
-                                                                        <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Stockage.FormStockage_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Forme_Stockage.FormStockage_Libelle)</td>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.ProduitVendable_TempConservation)</td>
 
                                                                         <td>
                                                                             <div class="dropdown">

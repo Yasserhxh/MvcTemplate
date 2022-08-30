@@ -275,7 +275,7 @@ namespace Web.Controllers
                     LOT_INTERN = item.ArticleBL_LotTemp,
                     LOT_FOURNISSEUR = item.ArticleBL_LotFournisseur.ToUpper(),
                     DATE_RECEP = item.bonDeLivraison.BonDeLivraison_DateLivraison.ToString(),
-                    DATE_P = item.ArticleBL_DateProduction.Value.ToShortDateString(),
+                    //DATE_P = item.ArticleBL_DateProduction.Value.ToShortDateString(),
                     DLC = item.ArticleBL_DateLimiteConso.Value.ToShortDateString(),
                     TEMPERATURE = item.ArticleBL_Teemperature +" "+ "°C"
                 };

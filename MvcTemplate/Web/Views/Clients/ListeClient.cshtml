@@ -71,9 +71,11 @@
                                                             <thead>
                                                                 <tr>
 
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Nom Client</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Nom Client (FR)</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Nom Client (AR)</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">E-mail</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">ICE</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">N° auth. ONSSA</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Telephone</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Actions</th>
 
@@ -84,8 +86,10 @@
                                                                 {
                                                     <tr>
                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_NomClient)</td>
+                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_NomClientAR)</td>
                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_ContactEmail)</td>
                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_ICE)</td>
+                                                        <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_ONSSAAuthorisation)</td>
                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.Abonnement_ContactTelephone)</td>
 
 
@@ -123,7 +127,7 @@
 
             </section>
             <!-- Dashboard Ecommerce ends -->
-            <div class="breadcrumb-item ">
+            <div class="breadcrumb-item text-sm-right ">
                 <a class="btn btn-outline-success round mr-1 mb-1" asp-action="Ajouter" asp-controller="Clients"><i class="bx bx-user-plus"></i><span class="align-middle ml-25">Ajouter un client </span></a>
             </div>
         </div>

@@ -117,6 +117,7 @@
                                                                 <tr>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Libellé</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Produit Maison</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Date de Création</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Active</th>
                                                                     @*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Coût de Revient</th>
                                                                     *@
@@ -129,6 +130,7 @@
                                                                     <tr>
                                                                         <td class="text-bold-600 pr-0" id="libelle">@Html.DisplayFor(modelItem => item.FicheTechniqueBridge_Libelle)</td>
                                                                         <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Produit_Vendable.ProduitVendable_Designation)</td>
+                                                                        <td class="text-bold-600 pr-0 text-sm-left">@item.FicheTechniqueBridge_DateCreation.ToString("dd/MM/yyyy hh:mm:ss")</td>
                                                                         <td class="text-bold-600 pr-0 text-sm-left check-tb">@Html.DisplayFor(modelItem => item.FicheTechniqueBridge_InUse)</td>
                                                                         @*                                                                        <td class="text-bold-600 pr-0 text-sm-right">@Html.DisplayFor(modelItem => item.FicheTechniqueBridge_CoutDeRevient) DH</td>
                                                                         *@

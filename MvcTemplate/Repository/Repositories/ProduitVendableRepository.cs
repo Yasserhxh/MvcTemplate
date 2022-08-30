@@ -1166,8 +1166,8 @@ namespace Repository.Repositories
 
         public async Task<int?> Planifier(PlanificationJournee plan)
         {
-            plan.PlanificationJournee_DateCreation = DateTime.UtcNow;
-            plan.Planification_GeneratedID = "Planification de:" + " " + DateTime.UtcNow.ToString();
+            plan.PlanificationJournee_DateCreation = DateTime.Now;
+            plan.Planification_GeneratedID = "Planification de:" + " " + DateTime.Now.ToString();
             plan.PlanificationJournee_SeenByStock = false;
             await _db.planificationJournees.AddAsync(plan);
             var confirm = await unitOfWork.Complete();

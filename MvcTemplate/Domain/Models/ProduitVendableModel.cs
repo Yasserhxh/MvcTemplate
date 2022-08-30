@@ -12,6 +12,8 @@ namespace Domain.Models
         public int ProduitVendable_Id { get; set; }
         public int? ProduitVendable_FamilleProduitId { get; set; }
         public string ProduitVendable_Designation { get; set; }
+        public string ProduitVendable_TempConservation { get; set; }
+        public string ProduitVendable_CodeProduit { get; set; }
         public string ProduitVendable_Description { get; set; }
         public int? ProduitVendable_FormStockageId { get; set; }
         public int? ProduitVendable_UniteMesureId { get; set; }

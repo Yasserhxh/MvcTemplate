@@ -88,7 +88,7 @@
                                                             }
                                                             else
                                                             {
-                                                                <h4> Liste des matieres à tranferer / réceptionner. </h4>
+                                                                <h4> Liste des matieres à transferer / réceptionner. </h4>
                                                             }
                                                         </div>
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
@@ -102,10 +102,13 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Statut</th>
                                                                     @if (User.IsInRole("Gerant_des_achats"))
                                                                     {
-                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Validé par</th>
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Recéptionnée par</th>
                                                                         <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de validation</th>
+                                                                    }     
+                                                                    @if(User.IsInRole("Gerant_de_stock"))
+                                                                    {
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Action</th>
                                                                     }
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Action</th>
 
 
                                                                 </tr>
@@ -130,20 +133,20 @@
                                                                              <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.MatiereTrans_DateValidation)</td>
                                                                         }
                                                                        
-                                                                        <td>
+                                                                       @if (item.MatiereTrans_Statut != "Validée" && User.IsInRole("Gerant_de_stock"))
+                                                                                { <td>
                                                                             <div class="dropdown">
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
-                                                                                @if (item.MatiereTrans_Statut != "Validée" && User.IsInRole("Gerant_de_stock"))
-                                                                                {
+                                                                                
                                                                                     <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                     <button class="dropdown-item btn-outline-success" onclick='Valider(@item.MatiereTrans_ID,@item.MatiereTrans_MatiereID,"@item.MatierePremiere.MatierePremiere_Libelle",@item.MatiereTrans_Quantite.ToString("G29"),@item.MatiereTrans_TransferID)'><i class="bx bx-check"></i>Valider la recéption</button>
                                                                                     </div>
-                                                                                }
+                                                                               
                                                                                 
                                                                             </div>
                                                                         </td>
-
+                                                                        }
                                                                     </tr>
                                                                 }
                                                             </tbody>

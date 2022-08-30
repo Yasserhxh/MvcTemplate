@@ -126,6 +126,7 @@ namespace Repository.Data
         public DbSet<Transfert_Matiere> transfert_Matieres { get; set; }
         public DbSet<Matiere_Transfert> matiere_Transferts { get; set; }
         public DbSet<Payement_Facture> payement_Factures { get; set; }
+        public DbSet<MatPrem_Allergene> matPrem_Allergenes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

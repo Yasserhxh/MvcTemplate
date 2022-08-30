@@ -64,7 +64,7 @@ namespace Repository.Repositories
         {
             bonDeCommande.BonDeCommande_DateCreation = DateTime.Now;
             var count = _db.bonDeCommandes.Where(p => p.BonDeCommande_AbonnementID == bonDeCommande.BonDeCommande_AbonnementID && p.BonDeCommande_DateCreation.Year == DateTime.Now.Year).Count() +1;
-            bonDeCommande.BonDeCommande_Numero = "BC-" + DateTime.UtcNow.Year.ToString() + "/" + DateTime.UtcNow.Month.ToString()+ "-" + count;
+            bonDeCommande.BonDeCommande_Numero = "BC-" + DateTime.Now.Year.ToString() + "/" + DateTime.Now.Month.ToString()+ "-" + count;
             await _db.bonDeCommandes.AddAsync(bonDeCommande);
             var confirm = await unitOfWork.Complete();
             if (confirm > 0)

@@ -47,7 +47,7 @@ namespace Service.Services
             }
         }
 
-        public async Task<bool> CreateMatierePremiere(MatierePremiereModel matiereModel,List<int> ListeUnite)
+        public async Task<bool> CreateMatierePremiere(MatierePremiereModel matiereModel,List<int> ListeUnite, List<int> ListeAllergene)
         {
             using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
             {
@@ -55,7 +55,7 @@ namespace Service.Services
                 {
                     // Créer matiere.
                     MatierePremiere matiere = mapper.Map<MatierePremiereModel, MatierePremiere>(matiereModel);
-                    var idMatierePremiere = await this.matierePremiereRepository.CreateMatiere(matiere, ListeUnite);
+                    var idMatierePremiere = await this.matierePremiereRepository.CreateMatiere(matiere, ListeUnite, ListeAllergene);
 
                     transaction.Commit();
                     return true;
@@ -241,13 +241,13 @@ namespace Service.Services
             return mapper.Map<IEnumerable<MatireFamille_Parent>, IEnumerable<MatiereFamille_ParentModel>>(matierePremiereRepository.getListMatiereFamilleParent(Id));
         }
 
-        public async Task<bool> AjouterUnites(int idMatiere, List<int> listUnite)
+        public async Task<bool> AjouterUnites(int idMatiere, List<int> listUnite, List<int> ListeAllergene)   
         {
             using (IDbContextTransaction transaction = this.unitOfWork.BeginTransaction())
             {
                 try
                 {
-                    var idEntreprise = await matierePremiereRepository.AjouterUnites(idMatiere, listUnite);
+                    var idEntreprise = await matierePremiereRepository.AjouterUnites(idMatiere, listUnite, ListeAllergene);
                     transaction.Commit();
                     return true;
                 }
@@ -370,6 +370,11 @@ namespace Service.Services
                 item.TauxTVA_pourcentageString = item.TauxTVA_Pourcentage.ToString("G29") + "" + "%";
             }
             return res;
+        }
+
+        public List<AllergeneModel> getListAllergeneMatiere(int matPrem, int aboId)
+        {
+            return mapper.Map<List<Allergene>, List<AllergeneModel>>(matierePremiereRepository.getListAllergeneMatiere(matPrem, aboId));
         }
     }
 }

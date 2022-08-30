@@ -48,8 +48,14 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group">
-                                                    <label>Nom client</label>
+                                                    <label>Nom client (FR)</label>
                                                     <input type="text" id="nomClient" asp-for="Abonnement_NomClient" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label>Nom client (AR)</label>
+                                                    <input type="text" id="nomClientAr" asp-for="Abonnement_NomClientAR" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">
@@ -72,44 +78,48 @@
 
                                                 </div>
                                             </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group">
+                                                    <label for="onssa"> N° d'autorisation ONSSA</label>
+                                                    <input type="text"  asp-for="Abonnement_ONSSAAuthorisation" class="form-control" required>
 
-                                        </div>
-                                        <div class="row">
+                                                </div>
+                                            </div>
 
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="NomPrenom">Contact nom et prenom</label>
                                                     <input type="text" id="nom" asp-for="Abonnement_ContactNomPrenom" class="form-control" required />
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="E-mail">E-mail</label>
                                                     <input type="email" asp-for="Abonnement_ContactEmail" class="form-control" required />
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <div class="form-group">
                                                     <label for="">Numéro téléphone</label>
                                                     <input type="number" id="tel" maxlength="10" asp-for="Abonnement_ContactTelephone" class="form-control" required />
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="UserName">Login</label>
                                                     <input type="text" id="login" asp-for="UserName" class="form-control" required />
 
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label for="Password">Mot de passe</label>
                                                     <input type="password" id="password" asp-for="Password" class="form-control" required />
 
                                                 </div>
                                             </div>
-                                            <div class="form-group mb-2">
+                                            <div class="form-group col-sm-3">
                                                 <label>Logo </label>
                                                 <div class="custom-file">
                                                     <input type="file" name="files" class="custom-file-input" id="fileinput" required>
@@ -123,13 +133,15 @@
                                     </fieldset>
                                     <!-- body content of step 1 end-->
                                 </div>
-                                <div class="form-actions">
-                                    <a asp-action="ListeClient" class="btn btn-danger">
-                                        Annuler
-                                    </a>
+                                
+                                <div class="form-action  text-sm-right">
                                     <button class="btn btn-success" name="theButton" type="submit">
                                         <i class="icon-note"></i> Enregistrer
                                     </button>
+                                    <a asp-action="ListeClient" class="btn btn-danger">
+                                        Annuler
+                                    </a>
+                                    
                                 </div>
                             </form>
                         </div>

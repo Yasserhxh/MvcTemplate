@@ -162,7 +162,7 @@
     </div>
 </div>
 
-<div class="modal  show" id="BaseModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+<div class="modal" id="BaseModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#c19d56">
@@ -492,6 +492,26 @@
             });
             $(ctl).closest("tr").find("#dlc1").val("");
 
+        }
+    }
+    let modal = document.querySelector('#BaseModal');
+    window.addEventListener('click', outsideClick);
+
+    function outsideClick(e) {
+        if (e.target === modal) {
+            console.log(modal)
+            modal.classList.add('fade-out')
+            ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('fade-out');
+                window.location.reload();
+            }, 1500)
+
+            if (modal.classList.contains('fade-in')) {
+                modal.classList.remove('fade-in');
+            }
         }
     }
 </script>
