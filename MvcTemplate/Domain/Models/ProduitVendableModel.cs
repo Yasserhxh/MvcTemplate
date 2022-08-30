@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
@@ -13,6 +15,8 @@ namespace Domain.Models
         public int ProduitVendable_Id { get; set; }
         public int? ProduitVendable_FamilleProduitId { get; set; }
         public string ProduitVendable_Designation { get; set; }
+        public string ProduitVendable_DesignationAR { get; set; }
+        public string ProduitVendable_DesignationEN { get; set; }
         public string ProduitVendable_TempConservation { get; set; }
         public string ProduitVendable_Conditionnement { get; set; }
         public string ProduitVendable_CodeProduit { get; set; }

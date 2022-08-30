@@ -16,6 +16,10 @@ namespace Domain.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string MatierePremiere_Libelle { get; set; }
         [Column(TypeName = "nvarchar(150)")]
+        public string MatierePremiere_LibelleAR { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string MatierePremiere_LibelleEN { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
         public string MatierePremiere_CodeArticle { get; set; }
         [Column(TypeName = "nvarchar(150)")]
         public string MatierePremiere_Composants { get; set; }

@@ -63,19 +63,31 @@
                                                 <div class="col-12">
                                                     <h6 class="py-50"></h6>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
-                                                        <label>Libellé</label>
+                                                        <label>Libellé (FR)</label>
                                                         <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matière" onchange="changeLib()" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Libellé (AR)</label>
+                                                        <input type="text" id="libelleAR" asp-for="MatierePremiere_LibelleAR" class="form-control" onchange="testAR()" placeholder="Entrez le nom de la matière (AR)" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Libellé (EN)</label>
+                                                        <input type="text" id="libelleEN" asp-for="MatierePremiere_LibelleEN" class="form-control" placeholder="Entrez le nom de la matière (EN)" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Code Article</label>
                                                         <input type="text" id="codeAr" asp-for="MatierePremiere_CodeArticle" class="form-control" placeholder="Entrez le code de la matière" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Catégorie de matière première</label>
                                                         <select class="custom-select" id="parentID" data-search="true" asp-items="@ViewBag.FamilleParent" onchange="familleList()" required>
@@ -85,7 +97,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label>Sous-catégorie de matière première</label>
                                                         <select class="custom-select" id="childID" data-search="true" asp-for="MatierePremiere_FamilleID" required>
@@ -95,7 +107,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="AchatUniteMesure">Unité d'achat</label>
                                                         <select class="custom-select" id="uniteAchat" data-search="true" asp-for="MatierePremiere_AchatUniteMesureId" asp-items="@ViewBag.MatierePremiere_UniteMesureId_FT" required>
@@ -104,7 +116,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-3">
                                                     <div class="form-group">
                                                         <label for="FormeStockage">Forme de stockage</label>
                                                         <select class="custom-select" id="forme" data-search="true" asp-for="MatierePremiere_FormeStockageId" asp-items="@ViewBag.MatierePremiere_FormeStockageId">
@@ -500,6 +512,8 @@
         console.log(ListeUnite);
         var matiereModel = {
             MatierePremiere_Libelle: $('#libelle').val(),
+            MatierePremiere_LibelleAR: $('#libelleAR').val(),
+            MatierePremiere_LibelleEN: $('#libelleEN').val(),
             MatierePremiere_CodeArticle: $('#codeAr').val(),
             MatierePremiere_FournisseurID: $('#fournisseur option:selected').val(),
             MatierePremiere_AchatUniteMesureId: $('#uniteAchat option:selected').val(),
@@ -782,4 +796,14 @@
                  error: function () {alert("non ajoute");}
             });
         }
+    var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+    function testAR() {
+        var filterFn = isArabic.test.bind(isArabic);
+        var newValue = $("#libelleAR").val().split().filter(filterFn).join('');
+        console.log(newValue)
+
+
+        if ($("#libelleAR").val() != newValue)
+            $("#libelleAR").val(newValue);
+    }
 </script>

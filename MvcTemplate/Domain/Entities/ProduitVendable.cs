@@ -22,6 +22,10 @@ namespace Domain.Entities
         [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_Designation { get; set; }
         [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_DesignationAR { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
+        public string ProduitVendable_DesignationEN { get; set; }
+        [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_TempConservation { get; set; } 
         [Column(TypeName = "nvarchar(150)")]
         public string ProduitVendable_Conditionnement { get; set; } 

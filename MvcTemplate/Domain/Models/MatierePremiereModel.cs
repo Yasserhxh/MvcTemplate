@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
@@ -9,6 +11,8 @@ namespace Domain.Models
       
         public int MatierePremiere_Id { get; set; }
         public string MatierePremiere_Libelle { get; set; }
+        public string MatierePremiere_LibelleAR { get; set; }
+        public string MatierePremiere_LibelleEN { get; set; }
         public string MatierePremiere_CodeArticle { get; set; }
         public string MatierePremiere_Composants { get; set; }
         public int MatierePremiere_AchatUniteMesureId { get; set; }

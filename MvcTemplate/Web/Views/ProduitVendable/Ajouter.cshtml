@@ -60,13 +60,13 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Designation">Désignation (AR)</label>
-                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" required />
+                                                <input type="text" asp-for="ProduitVendable_DesignationAR" id="txtArabic2" onchange="testAR()" class="form-control" required />
                                             </div>
                                         </div> 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="Designation">Désignation (EN)</label>
-                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control"  required />
+                                                <input type="text" asp-for="ProduitVendable_DesignationEN" id="desiEn" class="form-control"  required />
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -256,6 +256,14 @@
                                                                 <input type="text" maxlength="30" value="Energie" disabled class="form-control" required />
                                                                
                                                             </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantNameAR" value="القيمة الطاقية" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" value="القيمة الطاقية" disabled class="form-control" required />
+                                                               
+                                                            </td>
                                                             <td>
                                                                 <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
                                                             </td>
@@ -270,7 +278,7 @@
                                                                
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="Graisses" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantNameAR" disabled value="Graisses" class="form-control" required />
                                                                
                                                             </td>
                                                              <td style="display:none;">
@@ -289,6 +297,8 @@
                                                             <td>
                                                                 <input type="text" maxlength="30" id="produitM2"  disabled class="form-control" required />
                                                             </td>
+                                                         
+                                                           
                                                             <td style="display:none;">
                                                                 <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
                                                                
@@ -296,6 +306,14 @@
                                                             <td>
                                                                 <input type="text" maxlength="30"  disabled value="Glucide" class="form-control" required />
                                                                
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantNameAR" value="كربوهيدرات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="كربوهيدرات" class="form-control" required />
+
                                                             </td>
                                                             <td>
                                                                 <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
@@ -305,6 +323,8 @@
                                                             <td>
                                                                 <input type="text" maxlength="30" id="produitM3" disabled class="form-control" required />
                                                             </td>
+                                                          
+                                                            
                                                             <td style="display:none;">
                                                                 <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
                                                                
@@ -312,6 +332,14 @@
                                                             <td>
                                                                 <input type="text" maxlength="30"  disabled value="Protéines" class="form-control" required />
                                                                
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantNameAR" value="البروتينات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="البروتينات" class="form-control" required />
+
                                                             </td>
                                                             <td>
                                                                 <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
@@ -321,6 +349,7 @@
                                                             <td>
                                                                 <input type="text" maxlength="30" id="produitM4" disabled class="form-control" required />
                                                             </td>
+                                                           
                                                             <td style="display:none;">
                                                                 <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
                                                                
@@ -328,6 +357,14 @@
                                                             <td>
                                                                 <input type="text" maxlength="30" disabled value="Sel" class="form-control" required />
                                                                
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantNameAR" value="ملح" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="ملح" class="form-control" required />
+
                                                             </td>
                                                             <td>
                                                                 <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
@@ -483,6 +520,7 @@
 
 <script src="~/js/sweetalert.min.js"></script>
 <script src="~/js/sweetalert2.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 
 
@@ -655,6 +693,17 @@
         document.getElementById('table').style.display = "block";
 
     }
+    var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+     function testAR(){
+        var filterFn = isArabic.test.bind(isArabic);
+        var newValue = $("#txtArabic2").val().split().filter(filterFn).join('');
+        console.log(newValue)
+
+
+        if ($("#txtArabic2").val() != newValue)
+            $("#txtArabic2").val(newValue);
+     }
+   
 
 </script>
 
