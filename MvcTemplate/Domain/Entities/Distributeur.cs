@@ -12,6 +12,7 @@ namespace Domain.Entities
         [Key]
         public int Distributeur_ID { get; set; }
         public string Distributeur_RaisonSocial { get; set; }
+        public string Distributeur_RaisonSocialAR { get; set; }
         public int Distributeur_ICE { get; set; }
         public int Distributeur_IF { get; set; }
         public string Distributeur_Adresse { get; set; }

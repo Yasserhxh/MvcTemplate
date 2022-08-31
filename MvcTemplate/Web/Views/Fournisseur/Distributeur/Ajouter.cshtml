@@ -59,27 +59,31 @@
                                                 <!-- form start -->
                                                 <form class="needs-validation">
                                                     <div class="form-row">
-                                                        <div class="col-md-2 mb-1">
-                                                            <label for="RiasonSocial">Raison sociale</label>
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="RiasonSocial">Raison sociale (FR)</label>
                                                             <input type="text" id="rs" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-3 mb-1">
+                                                            <label for="RiasonSocial">Raison sociale (AR)</label>
+                                                            <input type="text" id="rsA"  onchange="testAR()" class="form-control" required />
+                                                        </div>
+                                                        <div class="col-md-3 mb-1">
                                                             <label for="ICE">ICE </label>
                                                             <input type="number" id="ICE" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-3 mb-1">
                                                             <label for="IF">Identifiant fiscal</label>
                                                             <input type="number" id="IF" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-4 mb-1">
                                                             <label for="Adresse"> Adresse</label>
                                                             <input type="text" id="adresse" class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-4 mb-1">
                                                             <label for="contact">Contact d'usine</label>
                                                             <input type="text" id="nomcontact"  class="form-control" required />
                                                         </div>
-                                                        <div class="col-md-2 mb-1">
+                                                        <div class="col-md-4 mb-1">
                                                             <label for="noTel">Téléphone</label>
                                                             <input type="tel" id="noTel" maxlength="10"  class="form-control" required />
                                                         </div>
@@ -122,6 +126,7 @@
     function AjoutTrpMoral() {
         document.getElementById('disabled').disabled = true;
         var FournisseurRS = $("#rs").val();
+        var FournisseurRSAR = $("#rsA").val();
         var ICE = $("#ICE").val();
         var Adresse = $("#adresse").val();
         var IF = $("#IF").val();
@@ -132,6 +137,7 @@
 
         var Distributeur = {
             Distributeur_RaisonSocial: FournisseurRS,
+            Distributeur_RaisonSocialAR: FournisseurRSAR,
             Distributeur_ICE: parseInt(ICE),
             Distributeur_IF: parseInt(IF),
             Distributeur_Adresse: Adresse,
@@ -169,5 +175,16 @@
                 alert("non ajoute");
             }
         });
+    }
+    var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+    var isArabic2 = /^[\u0621-\u064A\u0660-\u0669 ]+$/;
+    function testAR() {
+        var filterFn = isArabic2.test.bind(isArabic2);
+        var newValue = $("#libelleAR").val().split().filter(filterFn);
+        console.log(newValue)
+
+
+        if ($("#libelleAR").val() != newValue)
+            $("#libelleAR").val(newValue);
     }
 </script>

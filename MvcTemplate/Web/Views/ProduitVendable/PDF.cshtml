@@ -69,7 +69,7 @@
 </head>
 <body>
     <div style=" width:95%; margin: 50px auto">
-        <table class="entet">
+@*        <table class="entet">
             <tbody>
                 <tr>
                     <td rowspan="2" class="text-left" width="10%"><img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" alt="" width="100" /></td>
@@ -79,8 +79,7 @@
                 <tr>
                     <td style="font-size: 22px" class="text-left" width="35%">Atelier Marocain de Gourmandises</td>
                     <td>Version <br> @Model.fichetechnique.FicheTechniqueBridge_DateCreation.ToString("dd/MM/yyyy")</td>
-@*                    <td>Maj <br> 06-09-2019</td>
-*@                </tr>
+          </tr>
             </tbody>
         </table>
 
@@ -104,7 +103,38 @@
                         </td>
                 </tr>
             </tbody>
+        </table>*@
+        <table class="entet">
+            <tbody>
+                <tr>
+                    <td rowspan="2" class="text-left" width="10%"><img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" alt="" width="100" /></td>
+                    <td style="font-size: 22px">Fiche technique produit</td>
+                    <td colspan="2">REF :</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 22px" class="text-left" width="35%">Atelier Marocain de Gourmandises</td>
+                    <td>Version <br> @Model.fichetechnique.FicheTechniqueBridge_DateCreation.ToString("dd/MM/yyyy")</td>
+                  @*  <td>Maj <br> 06-09-2019</td>*@
+                </tr>
+            </tbody>
         </table>
+
+        <table class="entet" style="margin: 20px 0">
+            <tbody>
+                <tr>
+                    <td style="width: 30%"><img src="@Model.fichetechnique.Produit_Vendable.ProduitVendable_GrandePhoto" alt="" width="250" /></td>
+                    <td style="padding: 6px 0; line-height: 25px; font-size: 22px">@Model.fichetechnique.Produit_Vendable.ProduitVendable_Designation.ToUpper() <br> 
+                        (Pour  @foreach (var item in Model.fichetechnique.Fiche_Forme)
+                        {
+                            @(item.FicheForme_Quantite.ToString("G29") + " " + item.Forme_Produit.FormeProduit_Libelle + "  ") <br />
+                        })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
 
         <h4>Liste d'ingrédients :</h4>
         <table class="titable">
