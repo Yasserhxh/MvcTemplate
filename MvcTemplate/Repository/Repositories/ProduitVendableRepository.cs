@@ -534,7 +534,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -544,7 +544,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                     else
@@ -557,7 +557,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -567,7 +567,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                 }
@@ -583,7 +583,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -593,7 +593,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                     else
@@ -606,7 +606,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -615,7 +615,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                 }
@@ -634,7 +634,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -644,7 +644,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                     else
@@ -657,7 +657,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -667,7 +667,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                 }
@@ -683,7 +683,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -693,7 +693,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                     }
                     else
@@ -706,7 +706,7 @@ namespace Repository.Repositories
                                 .Include(e => e.BonDe_Sortie)
                                 .Include(p => p.Atelier)
                                 .Include(p => p.Lieu_Stockage)
-                                .AsEnumerable();
+                                .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                         }
                         else
                         {
@@ -750,7 +750,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                     else
                     {
@@ -760,7 +760,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                 }
                 else
@@ -773,7 +773,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                     else
                     {
@@ -783,7 +783,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                 }
             }
@@ -799,7 +799,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                     else
                     {
@@ -809,7 +809,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                 }
                 else
@@ -822,7 +822,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                     else
                     {
@@ -831,7 +831,7 @@ namespace Repository.Repositories
                             .Include(e => e.BonDe_Sortie)
                             .Include(p => p.Atelier)
                             .Include(p => p.Lieu_Stockage)
-                            .AsEnumerable();
+                            .AsEnumerable().OrderByDescending(p => p.PlanificationJournee_Date);
                     }
                 }
             }
@@ -3926,19 +3926,19 @@ namespace Repository.Repositories
         {
             var query = _db.planificationJourneeBases.Where(p => p.PlanificationJourneeBase_AbonnementID == Id);
             if (atelierId != null)
-                query.Where(p => p.PlanificationJourneeBase_AtelierID == atelierId);
+                query = query.Where(p => p.PlanificationJourneeBase_AtelierID == atelierId);
             if (lieu != null)
-                query.Where(p => p.PlanificationJourneeBase_LieuStockageID == lieu);
+                query = query.Where(p => p.PlanificationJourneeBase_LieuStockageID == lieu);
             if (etat != "")
-                query.Where(p => p.PlanificationJourneeBase_Etat == etat);
+                query = query.Where(p => p.PlanificationJourneeBase_Etat == etat);
             if (date != "")
             {
                 DateTime newDate = Convert.ToDateTime(date);
-                query.Where(p => p.PlanificationJourneeBase_DateCreation.Date == newDate.Date);
+                query = query.Where(p => p.PlanificationJourneeBase_DateCreation.Date == newDate.Date);
             }
             return query.Include(p => p.Lieu_Stockage)
                 .Include(p=>p.BonDe_Sortie).ThenInclude(p=>p.Bon_Details)
-                .Include(p => p.Atelier)
+                .Include(p => p.Atelier).OrderByDescending(p => p.PlanificationJourneeBase_ID)
                 .AsEnumerable();
         }
 

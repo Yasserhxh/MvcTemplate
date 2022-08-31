@@ -154,7 +154,7 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
 
-            return View(familleProduitService.getListSousFamilles(Id));
+            return View(familleProduitService.getListSousFamilles(null,Id));
         }
 
         public IActionResult Modification(int? id)

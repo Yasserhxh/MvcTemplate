@@ -128,13 +128,13 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="usertbody">
-                                                                @foreach (var item in Model.Item1.OrderByDescending(p => p.PlanificationJournee_Date))
+                                                                @foreach (var item in Model.Item1)
                                                                 {
 
                                                                 <tr>
                                                                   
                                                                     <td class="text-bold-600 pr-0 ">@(item.Planification_GeneratedID == null ?"Planification de: "+ " " + item.PlanificationJournee_Date.ToString() : item.Planification_GeneratedID)</td>
-                                                                    <td class="text-bold-600 pr-0 ">@item.PlanificationJournee_Date.ToString("dd/MM/YYYY hh:mm:ss")</td>
+                                                                    <td class="text-bold-600 pr-0 ">@item.PlanificationJournee_Date.ToString("dd/MM/yyyy hh:mm:ss")</td>
                                                                     <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Lieu_Stockage.LieuStockag_Nom)</td>
                                                                     @*
                                                                         <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.PlanificationJournee_CoutDeRevient)</td>

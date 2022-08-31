@@ -100,9 +100,13 @@ namespace Repository.Repositories
                 return null;
         }
 
-        public IEnumerable<SousFamille> getListSousFamilles(int Id)
+        public IEnumerable<SousFamille> getListSousFamilles(int? Id, int aboID)
         {
+            var query = _db.sousFamilles.Where(s => s.SousFamille_AbonnementID == aboID);
+            if (Id != null)
+                query.Where(s => s.SousFamille_ParentID == Id);
             return _db.sousFamilles.Where(s => s.SousFamille_ParentID == Id).Include(s => s.Famille_Produit).AsEnumerable();
-        }
+        } 
+        
     }
 }

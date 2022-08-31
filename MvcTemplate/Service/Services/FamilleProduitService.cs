@@ -98,9 +98,9 @@ namespace Service.Services
             }
         }
 
-        public IEnumerable<SousFamilleModel> getListSousFamilles(int Id)
+        public IEnumerable<SousFamilleModel> getListSousFamilles(int? Id, int aboID)
         {
-            return mapper.Map<IEnumerable<SousFamille>, IEnumerable<SousFamilleModel>>(familleProduitRepository.getListSousFamilles(Id));
+            return mapper.Map<IEnumerable<SousFamille>, IEnumerable<SousFamilleModel>>(familleProduitRepository.getListSousFamilles(Id, aboID));
         }
 
         public IEnumerable<FamilleProduitModel> getListFamillesByPdv(int Id, int pdv)

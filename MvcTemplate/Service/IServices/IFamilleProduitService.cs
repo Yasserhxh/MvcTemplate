@@ -9,7 +9,7 @@ namespace Service.IServices
         Task<bool> CreateFamille(FamilleProduitModel familleProduitModel);
         Task<bool> CreatSousFamille(SousFamilleModel sousFamilleModel);
         IEnumerable<FamilleProduitModel> getListFamilles(int Id);
-        IEnumerable<SousFamilleModel> getListSousFamilles(int Id);
+        IEnumerable<SousFamilleModel> getListSousFamilles(int? Id, int aboID);
         FamilleProduitModel findFormulaireFamille(int formulairefamilleProduitId);
         Task<bool> updateFormulaireFamille(int id, FamilleProduitModel newfamilleProduitModel);
         Task<bool> deleteFormulaireFamille(int ID);

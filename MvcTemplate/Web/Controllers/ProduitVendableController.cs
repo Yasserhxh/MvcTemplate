@@ -176,7 +176,9 @@ namespace Web.Controllers
         [HttpPost]
         public SelectList familleList(int familleParent)
         {
-            SelectList sousfamilleList = new SelectList(familleProduitService.getListSousFamilles(familleParent), "SousFamille_ID", "SousFamille_Libelle");
+            var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+
+            SelectList sousfamilleList = new SelectList(familleProduitService.getListSousFamilles(familleParent, aboid), "SousFamille_ID", "SousFamille_Libelle");
             return sousfamilleList;
         }
         [Authorize(Roles = "Client")]
@@ -216,6 +218,7 @@ namespace Web.Controllers
             var formes = produitVendableService.getListFormeSotckage(Id);
             ViewData["Form"] = new SelectList(formes, "FormeStockage_Id", "FormeStockage_Libelle");
             ViewData["ProduitVendable_FamilleProduitId"] = new SelectList(produitVendableService.getListFamilleProduit(Id), "FamilleProduit_Id", "FamilleProduit_Libelle");
+            //ViewData["sous"] = new SelectList(familleProduitService.getListSousFamilles(null,Id), "SousFamille_ID", "SousFamille_Libelle");
             ViewData["ProduitVendable_FormStockageId"] = new SelectList(produitVendableService.getListFormeSotckage(Id), "FormStockage_Id", "FormStockage_Libelle");
             ViewData["ProduitVendable_UniteMesureId"] = new SelectList(produitVendableService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
             return View(donnee);
