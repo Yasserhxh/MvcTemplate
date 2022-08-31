@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@model Domain.Models.PDF_FicheTechnique
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <style>
     body {
         font-family: 'Trebuchet MS', sans-serif;
@@ -68,22 +72,22 @@
         <table class="entet">
             <tbody>
                 <tr>
-                    <td rowspan="2" class="text-left" width="10%"><img src="logo.png" alt="" width="100" /></td>
+                    <td rowspan="2" class="text-left" width="10%"><img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" alt="" width="100" /></td>
                     <td style="font-size: 22px">Fiche technique produit</td>
                     <td colspan="2">REF :</td>
                 </tr>
                 <tr>
                     <td style="font-size: 22px" class="text-left" width="35%">Atelier marocain de gourmandises</td>
-                    <td>Version <br> 20-08-2019</td>
-                    <td>Maj <br> 06-09-2019</td>
-                </tr>
+                    <td>Version <br> @Model.fichetechnique.FicheTechniqueBridge_DateCreation.ToString("dd/MM/yyyy")</td>
+@*                    <td>Maj <br> 06-09-2019</td>
+*@                </tr>
             </tbody>
         </table>
 
         <table class="entetimg">
             <tbody>
                 <tr>
-                    <td><img src="images.jpg" alt="" width="150" /></td>
+                    <td><img src="@Model.fichetechnique.Produit_Vendable.ProduitVendable_GrandePhoto" alt="" width="150" /></td>
                 </tr>
             </tbody>
         </table>
@@ -91,7 +95,13 @@
         <table class="entet">
             <tbody>
                 <tr>
-                    <td style="padding: 6px 0; line-height: 25px; font-size: 22px">AMERICAN BROWNIE <br> (Pour 10 Piéces)</td>
+                    <td style="padding: 6px 0; line-height: 25px; font-size: 22px">
+                        @Model.fichetechnique.Produit_Vendable.ProduitVendable_Designation.ToUpper() Pour:  <br>
+                        @foreach (var item in Model.fichetechnique.Fiche_Forme)
+                        {
+                            @(item.FicheForme_Quantite.ToString("G29")+ " " + item.Forme_Produit.FormeProduit_Libelle) <br />
+                        }
+                        </td>
                 </tr>
             </tbody>
         </table>
@@ -107,129 +117,46 @@
                 </tr>
             </thead>
             <tbody>
-
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-
-
-
+                @foreach (var item in Model.fichetechnique.Produit_FicheTechnique)
+                {
+                    <tr>
+                        <td>&nbsp; @item.Matiere_Premiere.MatierePremiere_CodeArticle</td>
+                        <td>&nbsp; @item.Matiere_Premiere.MatierePremiere_Libelle</td>
+                        <td>&nbsp; @item.FicheTechnique_QuantiteMatiere.ToString("G29")</td>
+                        <td>&nbsp; @item.Unite_Mesure.UniteMesure_Libelle</td>
+                    </tr>
+                }
             </tbody>
         </table>
 
-        <h5>Ganache chocolat tigré</h5>
-        <table class="titable">
-            <thead>
-                <tr>
-                    <th width="15%"></th>
-                    <th width="55%">Designation</th>
-                    <th width="15%">Quantite</th>
-                    <th width="15%">Condtionnement</th>
-                </tr>
-            </thead>
-            <tbody>
+        @foreach (var item in Model.fichetechniqueBase)
+        {
+            <h5>@item.ProduitBase.ProduitBase_Designation</h5>
+            <table class="titable">
+                <thead>
+                    <tr>
+                        <th width="15%"></th>
+                        <th width="55%">Designation</th>
+                        <th width="15%">Quantite</th>
+                        <th width="15%">Condtionnement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var item2 in item.ProduitBase_FicheTechnique){
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp; @item2.Matiere_Premiere.MatierePremiere_Libelle</td>
+                            <td>&nbsp; @item2.ProduitBaseFicheTechnique_QuantiteMatiere.ToString("G29")</td>
+                            <td>&nbsp; @item2.Unite_Mesure.UniteMesure_Libelle</td>
+                        </tr>
+                    }
 
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+                </tbody>
+            </table>
+        }
 
 
-
-
-            </tbody>
-        </table>
-
-        <h5>Glacage noir FS</h5>
+@*        <h5>Glacage noir FS</h5>
         <table class="titable">
             <thead>
                 <tr>
@@ -282,7 +209,7 @@
 
 
             </tbody>
-        </table>
+        </table>*@
     </div>
 </body>
 </html>

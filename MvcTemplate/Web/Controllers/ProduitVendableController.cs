@@ -3238,9 +3238,22 @@ namespace Web.Controllers
         {
             try
             {
+                var aboID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+                var ficheBaseListe = new List<FicheTehcniqueProduitBaseModel>();
                 var produit = produitVendableService.GetFicheTech((int)id);
+                foreach(var item in produit.FicheTech_ProduitBase)
+                {
+                    var fichebase = produitFicheTechniqueService.FindFicheTechniqueBaseBYPordBase(item.ProduitBase.ProduitBase_ID, aboID);
+                    ficheBaseListe.Add(fichebase);
+                }
+                var model = new PDF_FicheTechnique()
+                {
+                    fichetechnique = produit,
+                    fichetechniqueBase = ficheBaseListe
+                };
+
                 Controller controller = this;
-                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, produit, "PDF", "Fiche_technique_" + produit.Produit_Vendable.ProduitVendable_Designation);
+                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, model, "PDF", "Fiche_technique_" + produit.Produit_Vendable.ProduitVendable_Designation);
                 return lFileResult;
             }
             catch (Exception ex)

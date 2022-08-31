@@ -1451,8 +1451,8 @@ namespace Repository.Repositories
                 .Include(p=>p.Produit_Vendable)
                 .Include(p => p.Produit_FicheTechnique).ThenInclude(p => p.Matiere_Premiere)
                 .Include(p => p.Produit_FicheTechnique).ThenInclude(u => u.Unite_Mesure)
-                .Include(p=>p.FicheTech_ProduitBase)
-                .Include(p => p.Fiche_Forme)
+                .Include(p=>p.FicheTech_ProduitBase).ThenInclude(p=>p.ProduitBase)
+                .Include(p => p.Fiche_Forme).ThenInclude(p=>p.Forme_Produit)
                 .FirstOrDefault();
             return fiche;
         }

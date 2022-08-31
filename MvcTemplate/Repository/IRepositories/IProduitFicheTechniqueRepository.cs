@@ -29,5 +29,6 @@ namespace Repository.IRepositories
         Task<bool> SetInUse(int id);
         Task<bool> SetInUseBase(int id);
         decimal CalculerPrix(int prodId, int uniteID, decimal qte);
+        FicheTechniqueProduitBase FindFicheTechniqueBaseBYPordBase(int Id, int AboId);
     }
 }

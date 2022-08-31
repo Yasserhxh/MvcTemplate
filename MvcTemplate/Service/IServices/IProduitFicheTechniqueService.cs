@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,6 +29,6 @@ namespace Service.IServices
         IEnumerable<FicheTehcniqueProduitBaseModel> findFormulaireFicheBase(int formulaireFicheBaseId, int aboId);
         Task<bool> SetInUseBase(int id);
         decimal CalculerPrix(int prodId, int uniteID, decimal qte);
-
+        FicheTehcniqueProduitBaseModel FindFicheTechniqueBaseBYPordBase(int Id, int AboId);
     }
 }

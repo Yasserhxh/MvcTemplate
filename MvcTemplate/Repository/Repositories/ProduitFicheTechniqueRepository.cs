@@ -339,6 +339,13 @@ namespace Repository.Repositories
                 .Include(p=>p.FicheTechniqueProduitBase)
                 .Include(p=>p.Matiere_Premiere).Include(p=>p.Unite_Mesure)
                 .AsEnumerable();
+        } 
+        public FicheTechniqueProduitBase FindFicheTechniqueBaseBYPordBase(int Id, int AboId)
+        {
+            return _db.ficheTechniqueProduitBases.Where(p => p.FicheTechniqueProduitBase_ProduitBaseID == Id && p.FicheTechniqueProduitBase_AbonnementID == AboId && p.FicheTechniqueProduitBase_InUse == true)
+                .Include(p=>p.ProduitBase_FicheTechnique).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.ProduitBase_FicheTechnique).ThenInclude(p=>p.Unite_Mesure)
+                .FirstOrDefault();
         }
         public async Task<bool> SetInUseBase(int id)
         {

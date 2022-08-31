@@ -222,5 +222,10 @@ namespace Service.Services
         {
             return produitFicheTechniqueRepository.CalculerPrix(prodId, uniteID, qte);
         }
+
+        public FicheTehcniqueProduitBaseModel FindFicheTechniqueBaseBYPordBase(int Id, int AboId)
+        {
+            return mapper.Map<FicheTechniqueProduitBase, FicheTehcniqueProduitBaseModel>(produitFicheTechniqueRepository.FindFicheTechniqueBaseBYPordBase(Id, AboId));
+        }
     }
 }
