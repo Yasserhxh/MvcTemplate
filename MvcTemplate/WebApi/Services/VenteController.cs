@@ -707,6 +707,7 @@ namespace WebApi.Services
             var all = new List<ImageApiModel>();
             var Id = authentificationRepository.Geturser(userId).Abonnement_ID;
             var pdvId = authentificationRepository.Geturser(userId).Position_Vente.PositionVente_PointVenteId;
+            var aboID = authentificationRepository.Geturser(userId).Abonnement_ID;
             var stocks = pointVenteService.getStockPointVente((int)Id, pdvId);
             var stock = stocks.GroupBy(p => new { key = p.PointVenteStock_ProduitID, photo = p.Produit_Vendable.ProduitVendable_GrandePhoto });
             foreach(var s in stock)
@@ -742,7 +743,7 @@ namespace WebApi.Services
             var familles = familleProduitService.getListFamillesByPdv((int)Id, pdvId);
             foreach (var fam in familles)
             {
-                var sousFamilles = familleProduitService.getListSousFamilles(fam.FamilleProduit_Id);
+                var sousFamilles = familleProduitService.getListSousFamilles(fam.FamilleProduit_Id, (int)aboID);
                 foreach(var sousFam in sousFamilles)
                 {
                     var ImageS = new ImageApiModel()

@@ -98,8 +98,10 @@
                                     <li class="nav-item d-none d-lg-block">
                                         <a class="nav-link nav-cms-logo" href="#0" data-toggle="tooltip" data-placement="top" title=" Trepho ">
                                             <!--<img class="cmslight d-none" width="60" src="assets/images/logo/CMS.svg"/><img class="cmsdark" width="60" src="assets/images/logo/CMS-dark.svg"/>-->
-                                            @if (User.IsInRole("Client") == true || User.IsInRole("Gerant_des_achats") == true)
+                                            @if (User.IsInRole("Client") == true)
                                             {<span>Trepho / Admin</span> }
+                                            else if(User.IsInRole("Gerant_des_achats") == true)
+                                            {<span> Trepho / Achat</span>}
                                             else
                                             {<span> Trepho / @Context.Session.GetString("point")</span>}
                                         </a>

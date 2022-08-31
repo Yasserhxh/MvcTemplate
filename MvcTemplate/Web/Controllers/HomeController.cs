@@ -53,7 +53,9 @@ namespace Web.Controllers
             if(User.IsInRole("Administrateur") == true)
                 return RedirectToAction("Utilisateurs", "Authentification");
             if (User.IsInRole("Chef_Patissier") == true)
-                return RedirectToAction("ListeDesPlans", "ProduitVendable");
+                return RedirectToAction("ListeDesPlans", "ProduitVendable"); 
+            if (User.IsInRole("Gerant_des_achats") == true)
+                return RedirectToAction("ListeBonDeCommande", "Fournisseur");
             if (User.IsInRole("Position_Vente") == true)
             {
                 var id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);

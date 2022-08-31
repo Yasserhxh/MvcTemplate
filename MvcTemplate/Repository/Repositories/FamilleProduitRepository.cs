@@ -73,6 +73,7 @@ namespace Repository.Repositories
             if (famille != null)
             {
                 famille.FamilleProduit_Libelle = newFamile.FamilleProduit_Libelle;
+                famille.FamilleProduit_Image = newFamile.FamilleProduit_Image;
                 //famille.FamilleProduit_DateCreation = newFamile.FamilleProduit_DateCreation;
                 //famille.FamilleProduit_ParentId = newFamile.FamilleProduit_ParentId;
                 famille.FamilleProduit_IsActive = 1;
