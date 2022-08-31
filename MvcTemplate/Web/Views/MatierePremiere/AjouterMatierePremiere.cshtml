@@ -324,7 +324,7 @@
 </div>
 
 <div class="modal fade show" id="myModal2" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#c19d56">
                 <h4 class="modal-title white" id="myModalLabel33">Ajouter une sous-famille </h4>
@@ -335,6 +335,23 @@
             <form class="form">
                 <div class="modal-body text-center" id="mbody" style="height:auto;">
                     <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label for="AllergeneLabel">Famille parent</label>
+                                    <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.FamilleParent">
+                                        <option value="" selected>Sélectionnez un parent ...</option>
+                                    </select>
+                                </div>
+                                 <div class="col-md-6">
+                                        <label for="AllergeneLabel">Nom du sous famille</label>
+                                    <input type="text" id="sousFamille" class="form-control" required />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+@*                    <div class="row">
                         <div class="form-row">
                             <div>
                                 <div class="form-group">
@@ -355,7 +372,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div>*@
 
                 </div>
                 <div class="modal-footer">
@@ -383,11 +400,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="AllergeneLabel">Nom de famille</label>
-                                        <input type="text" id="familleParent1" class="form-control" required />
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="AllergeneLabel">Nom de famille</label>
+                                    <input type="text" id="familleParent1" class="form-control" required />
                                 </div>
 
                             </div>
@@ -797,9 +812,10 @@
             });
         }
     var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+    var isArabic2 = /^[\u0621-\u064A\u0660-\u0669 ]+$/;
     function testAR() {
-        var filterFn = isArabic.test.bind(isArabic);
-        var newValue = $("#libelleAR").val().split().filter(filterFn).join('');
+        var filterFn = isArabic2.test.bind(isArabic2);
+        var newValue = $("#libelleAR").val().split().filter(filterFn);
         console.log(newValue)
 
 

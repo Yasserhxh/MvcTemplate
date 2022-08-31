@@ -3234,13 +3234,14 @@ namespace Web.Controllers
             var res = await produitVendableService.RetourStockPlan(ID);
             return res;
         }
-        public Task<ActionResult> GeneratePDf(int? id)
+        [HttpPost]
+        public Task<ActionResult> GeneratePDf(int id)
         {
             try
-            {
+             {
                 var aboID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 var ficheBaseListe = new List<FicheTehcniqueProduitBaseModel>();
-                var produit = produitVendableService.GetFicheTech((int)id);
+                var produit = produitVendableService.GetFicheTech(id);
                 foreach(var item in produit.FicheTech_ProduitBase)
                 {
                     var fichebase = produitFicheTechniqueService.FindFicheTechniqueBaseBYPordBase(item.ProduitBase.ProduitBase_ID, aboID);

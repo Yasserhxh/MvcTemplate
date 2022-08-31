@@ -10,8 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>Trepho / @{@User.Identity.Name.ToUpper()}  </title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="apple-touch-icon" href="~/assets/images/favicon/apple-touch-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="~/assets/images/favicon/logo-alexsys.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon/logo-alexsys.svg">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!-- BEGIN: Vendor CSS-->
@@ -26,6 +26,7 @@
 
 
     <!-- BEGIN: Theme CSS-->
+
     <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap/bootstrap-extended.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/colors.min.css">
@@ -53,7 +54,7 @@
 <!-- END: Head-->
 <!-- BEGIN: Body-->
 <body class="vertical-layout vertical-menu-modern 2-columns  cart-manager-application navbar-static footer-static  semi-dark-layout  menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns" onload="GetPlanifications()">
-    <div class="modal fade" id="loadMe" tabindex="-1" aria-labelledby="loadMeLabel" style="padding-right: 17px;" aria-modal="true" role="dialog">
+@*    <div class="modal fade" id="loadMe" tabindex="-1" aria-labelledby="loadMeLabel" style="padding-right: 17px;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-body text-center">
@@ -64,7 +65,19 @@
                         </div>
                     </div>
                 </div>
+            </div>*@
+    <div class="modal_mask" id="loaderAC" style="display:none;">
+        <div class="modal_panel_mask">
+            <div class="loader">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="txt">Veuillez patienter...</div>
             </div>
+        </div>
+    </div>
             <div style="display:none;" id="s"> @Context.Session.GetString("mysession")</div>
             @if (User.IsInRole("Gerant_de_stock"))
             {<div style="display:none;" id="role">1</div>}

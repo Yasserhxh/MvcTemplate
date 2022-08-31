@@ -694,9 +694,10 @@
 
     }
     var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+    var isArabic2 = /^[\u0621-\u064A\u0660-\u0669 ]+$/;
      function testAR(){
-        var filterFn = isArabic.test.bind(isArabic);
-        var newValue = $("#txtArabic2").val().split().filter(filterFn).join('');
+        var filterFn = isArabic2.test.bind(isArabic2);
+        var newValue = $("#txtArabic2").val().split().filter(filterFn);
         console.log(newValue)
 
 
