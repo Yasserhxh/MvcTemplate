@@ -566,5 +566,30 @@ namespace Repository.Repositories
                 .Include(p=>p.Bon_De_Commande).ThenInclude(p=>p.Fournisseur)
                 .Include(p=>p.Statut_BL).AsEnumerable();
         }
+
+        public async Task<int?> CreateDistributeur(Distributeur distributeur)
+        {
+            distributeur.Distributeur_IsActive = 1;
+            distributeur.Distributeur_DateCreation = DateTime.Now;
+            distributeur.Distributeur_DateSaisie = DateTime.Now;
+            await _db.distributeurs.AddAsync(distributeur);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return distributeur.Distributeur_ID;
+            else
+                return null;
+        }
+
+        public async Task<List<Distributeur>> getListDistributeur(int Id, int? statut, string rc)
+        {
+            var query = _db.distributeurs.Where(p => p.Distributeur_AbonnementID == Id);
+            if (statut == null && string.IsNullOrEmpty(rc) == true)
+                return null;
+            if (!string.IsNullOrEmpty(rc))
+                query = query.Where(p => p.Distributeur_RaisonSocial.Contains(rc) == true);
+            if (statut != null)
+                query = query.Where(p => p.Distributeur_IsActive == statut);
+            return await query.ToListAsync();
+        }
     }
 }

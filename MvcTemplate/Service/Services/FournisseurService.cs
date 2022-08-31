@@ -87,6 +87,25 @@ namespace Service.Services
             }
         }
 
+        public async Task<bool> CreateDistributeur(DistributeurModel distributeurModel)
+        {
+            using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    Distributeur distributeur = mapper.Map<DistributeurModel, Distributeur>(distributeurModel);
+                    var id = await fournisseurRepository.CreateDistributeur(distributeur);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
         public async Task<bool> CreateFacture(FactureModel factureModel, List<BonDeLivraison_Model> listeBL)
         {
             using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
@@ -224,6 +243,11 @@ namespace Service.Services
         public IEnumerable<FactureModel> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date)
         {
             return mapper.Map<IEnumerable<Facture>, IEnumerable<FactureModel>>(fournisseurRepository.GetFactures(aboID, bondeCommande, numeroFac, date));
+        }
+
+        public async Task<List<DistributeurModel>> getListDistributeur(int Id, int? statut, string rc)
+        {
+            return mapper.Map<List<Distributeur>, List<DistributeurModel>>( await fournisseurRepository.getListDistributeur(Id, statut, rc));
         }
 
         public IEnumerable<MatiereTransfert_Model> GetListeMatiereParOrdre(int? transferID, int? stockID, string matiereID, string lot, string statut, string date)

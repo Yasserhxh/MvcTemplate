@@ -22,6 +22,7 @@ using Humanizer;
 using Domain.Entities;
 using System.Globalization;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 //using NHibernate.Cache;
 
 namespace Web.Controllers
@@ -513,6 +514,42 @@ namespace Web.Controllers
             var model = fournisseurService.getlistFactureDetails(id, aboID);
             return View("~/Views/Fournisseur/Factures/DetailsFacture.cshtml", model);
         }
+
+        public IActionResult AjouterDistributeur()
+        {
+            // ViewData["Fonction"] = new SelectList(fournisseurService.getListFonction(), "Fonction_ID", "Fonction_Libelle");
+            // ViewData["Ville"] = new SelectList(fournisseurService.getListeVille(), "Ville_ID", "Ville_Libelle");
+            return View("~/Views/Fournisseur/Distributeur/Ajouter.cshtml");
+        }
+        [HttpPost]
+        public async Task<bool> AjouterDistributeur(DistributeurModel distributeurModel)
+        {
+            distributeurModel.Distributeur_AbonnementID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var redirect = await fournisseurService.CreateDistributeur(distributeurModel);
+            return redirect;
+        }
+        public async Task<IActionResult> ListeDistributeur(int? statut, string rc, int pg = 1)
+        {
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var query = await fournisseurService.getListDistributeur(Id, statut, rc);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View("~/Views/Fournisseur/Distributeur/ListeDistributeur.cshtml", model);
+        }
+
+        [HttpPost]
+        public async Task<bool> DeleteDstributeur(int id, int code)
+        {
+            var result = await fournisseurService.deleteFournisseur(id, code);
+            return result;
+        }
+
 
     }
 

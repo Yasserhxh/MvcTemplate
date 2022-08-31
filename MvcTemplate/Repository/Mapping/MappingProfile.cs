@@ -50,6 +50,7 @@ namespace Repository.Mapping
             CreateMap<Stock_Achat, StockAchat_Model>().ForMember(b => b.unite_Utilisation, opt => opt.Ignore());
             CreateMap<Matiere_Transfert, MatiereTransfert_Model>();
             CreateMap<Payement_Facture, PayementFacture_Model>();
+            CreateMap<Distributeur, DistributeurModel>();
 
             // Models to Entities mapping
             CreateMap<Abonnement_ClientModel, Abonnement_Client>();
@@ -98,6 +99,7 @@ namespace Repository.Mapping
             CreateMap<StockAchat_Model, Stock_Achat>();
             CreateMap<MatiereTransfert_Model, Matiere_Transfert>();
             CreateMap<PayementFacture_Model, Payement_Facture>();
+            CreateMap<DistributeurModel, Distributeur>();
 
         }
     }

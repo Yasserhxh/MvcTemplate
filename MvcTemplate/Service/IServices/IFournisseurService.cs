@@ -38,5 +38,7 @@ namespace Service.IServices
         Task<bool> CreatePayementFacture(PayementFacture_Model payementFacture_Model);
         IEnumerable<Section_StockageModel> getListSections(int matiereID);
         IEnumerable<BonDeLivraison_Model> getlistFactureDetails(int factureID, int aboID);
+        Task<bool> CreateDistributeur(DistributeurModel distributeurModel);
+        Task<List<DistributeurModel>> getListDistributeur(int Id, int? statut, string rc);
     }
 }

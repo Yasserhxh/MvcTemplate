@@ -39,5 +39,7 @@ namespace Repository.IRepositories
         Task<int?> CreatePayementFacture(Payement_Facture payement_Facture);
         IEnumerable<Section_Stockage> getListSections(int matiereID);
         IEnumerable<BonDeLivraison> getlistFactureDetails(int factureID, int aboID);
+        Task<int?> CreateDistributeur(Distributeur distributeur);
+        Task<List<Distributeur>> getListDistributeur(int Id, int? statut, string rc);
     }
 }
