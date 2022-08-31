@@ -41,5 +41,6 @@ namespace Repository.IRepositories
         IEnumerable<BonDeLivraison> getlistFactureDetails(int factureID, int aboID);
         Task<int?> CreateDistributeur(Distributeur distributeur);
         Task<List<Distributeur>> getListDistributeur(int Id, int? statut, string rc);
+        Task<bool> deleteDistributeur(int ID, int code);
     }
 }

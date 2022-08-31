@@ -64,6 +64,7 @@ namespace Repository.IRepositories
         IEnumerable<Atelier> getListAteliers(int aboId);
 
         ProduitVendable findFormulaireProduit(int formulaireProduitId);
+        ProduitVendable findFormulaireProduitPDF(int formulaireProduitId);
         Forme_Produit findFormulaireFormeProduit(int formulaireProduitId);
         PlanificationdeProduction findFormulairePlans(int formulaireProduitId);
         ProduitPackage findFormulaireProduitPackage(int formulaireProduitId);

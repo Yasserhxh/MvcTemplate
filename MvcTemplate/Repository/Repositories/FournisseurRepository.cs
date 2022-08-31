@@ -591,5 +591,28 @@ namespace Repository.Repositories
                 query = query.Where(p => p.Distributeur_IsActive == statut);
             return await query.ToListAsync();
         }
+
+        public async Task<bool> deleteDistributeur(int ID, int code)
+        {
+            Distributeur distributeur = _db.distributeurs.Where(e => e.Distributeur_ID == ID).FirstOrDefault();
+            if (distributeur != null)
+            {
+                if (code == 0)
+                {
+                    distributeur.Distributeur_IsActive = 0;
+                }
+                else
+                {
+                    distributeur.Distributeur_IsActive = 1;
+                }
+                _db.Entry(distributeur).State = EntityState.Modified;
+                var confirm = await unitOfWork.Complete();
+                if (confirm > 0)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
     }
 }

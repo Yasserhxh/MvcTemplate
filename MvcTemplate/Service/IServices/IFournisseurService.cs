@@ -40,5 +40,7 @@ namespace Service.IServices
         IEnumerable<BonDeLivraison_Model> getlistFactureDetails(int factureID, int aboID);
         Task<bool> CreateDistributeur(DistributeurModel distributeurModel);
         Task<List<DistributeurModel>> getListDistributeur(int Id, int? statut, string rc);
+        Task<bool> deleteDistributeur(int ID, int code);
+
     }
 }

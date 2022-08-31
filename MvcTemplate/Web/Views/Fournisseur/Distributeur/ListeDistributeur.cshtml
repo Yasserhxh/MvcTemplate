@@ -210,7 +210,7 @@
             code: code
         };
         $.ajax({
-            url: '@Url.Action("DeleteFournisseur", "Fournisseur")',
+            url: '@Url.Action("DeleteDistributeur", "Fournisseur")',
             type: "POST",
             cache: false,
             async: true,
@@ -218,14 +218,14 @@
             success: function (data) {
                 if (data == true) {
                     if (code == 0) {
-                        ShowNotification("Fournisseur désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        ShowNotification("Distributeur désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                     }
                     else {
-                        ShowNotification("Fournisseur activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        ShowNotification("Distributeur activé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
                     }
                     setTimeout(
                         function () {
-                                window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+                                window.location.reload();
                             if ($("#usertbody tr").length == 0) {
                                 document.getElementById('usertable').style.display = "none";
                                 }
@@ -234,7 +234,7 @@
                         ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {
-                                   window.location.href = '@Url.Action("ListeFournisseur", "Fournisseur")';
+                                   window.location.reload();
                                 }, 1500);
                     }
                 },

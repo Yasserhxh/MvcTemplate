@@ -544,9 +544,9 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> DeleteDstributeur(int id, int code)
+        public async Task<bool> DeleteDistributeur(int id, int code)
         {
-            var result = await fournisseurService.deleteFournisseur(id, code);
+            var result = await fournisseurService.deleteDistributeur(id, code);
             return result;
         }
 

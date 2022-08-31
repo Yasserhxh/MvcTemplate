@@ -150,7 +150,7 @@
                                                                         <td class="border-b dark:border-dark-5"> <select class="custom-select" id="unite" data-search="true" asp-items="(SelectList)ViewData[id]"></select></td>
                                                                         <td class="border-b dark:border-dark-5"><select class="custom-select" id="lieu" data-search="true" asp-items="@ViewBag.lieu"></select></td>
                                                                         <td class="border-b dark:border-dark-5">@item.StockAchat_DateReception.Value.ToShortDateString()</td>
-                                                                        @if ((DateTime.Now - item.StockAchat_DateLimiteConso.Value).TotalDays <= 10)
+                                                                        @if ((item.StockAchat_DateLimiteConso.Value - DateTime.Now).TotalDays <= 10)
                                                                         {
                                                                             <td class="border-b dark:border-dark-5" style="color:red;">@item.StockAchat_DateLimiteConso.Value.ToShortDateString()</td>
                                                                         }else

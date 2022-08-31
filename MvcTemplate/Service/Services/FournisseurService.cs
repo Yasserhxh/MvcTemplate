@@ -187,6 +187,11 @@ namespace Service.Services
             }
         }
 
+        public Task<bool> deleteDistributeur(int ID, int code)
+        {
+            return this.fournisseurRepository.deleteDistributeur(ID, code);
+        }
+
         public Task<bool> deleteFournisseur(int ID, int code)
         {
             return this.fournisseurRepository.deleteFournisseur(ID, code);

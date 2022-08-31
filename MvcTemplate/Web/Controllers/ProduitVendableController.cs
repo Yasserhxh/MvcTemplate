@@ -1,5 +1,6 @@
 ﻿using Domain.Authentication;
 using Domain.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,8 +12,11 @@ using Newtonsoft.Json;
 using Repository.IRepositories;
 using Repository.UnitOfWork;
 using Service.IServices;
+using Service.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,6 +26,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Web.Helpers;
+using Web.Tools;
 
 namespace Web.Controllers
 {
@@ -3229,6 +3234,23 @@ namespace Web.Controllers
             var res = await produitVendableService.RetourStockPlan(ID);
             return res;
         }
+        public Task<ActionResult> GeneratePDf(int? id)
+        {
+            try
+            {
+                var produit = produitVendableService.GetFicheTech((int)id);
+                Controller controller = this;
+                Task<ActionResult> lFileResult = ConvertHTmlToPdf.ConvertCurrentPageToPdf(controller, produit, "PDF", "Fiche_technique_" + produit.Produit_Vendable.ProduitVendable_Designation);
+                return lFileResult;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
     }
+   
+
+
 }

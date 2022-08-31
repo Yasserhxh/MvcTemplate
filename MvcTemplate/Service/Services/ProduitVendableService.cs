@@ -77,6 +77,10 @@ namespace Service.Services
         {
             return mapper.Map<ProduitVendable, ProduitVendableModel>(this.produitVendableRepository.findFormulaireProduit(formulaireProduitId));
         }
+        public ProduitVendableModel findFormulaireProduitVendablePDF(int formulaireProduitId)
+        {
+            return mapper.Map<ProduitVendable, ProduitVendableModel>(this.produitVendableRepository.findFormulaireProduitPDF(formulaireProduitId));
+        }
 
         public IEnumerable<Section_StockageModel> getListeSectionStockage()
         {

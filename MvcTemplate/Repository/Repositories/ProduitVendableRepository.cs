@@ -99,6 +99,12 @@ namespace Repository.Repositories
             return _db.produitVendables.Where(e => e.ProduitVendable_Id == formulaireProduitId)
                 .Include(p=>p.Unite_Mesure)
                 .FirstOrDefault();
+        } 
+        public ProduitVendable findFormulaireProduitPDF(int formulaireProduitId)
+        {
+            return _db.produitVendables.Where(e => e.ProduitVendable_Id == formulaireProduitId)
+                .Include(p=>p.Unite_Mesure)
+                .FirstOrDefault();
         }
 
         public IEnumerable<FamilleProduit> getListFamilleProduit(int Id)
@@ -1439,6 +1445,7 @@ namespace Repository.Repositories
         public FicheTechniqueBridge GetFicheTech(int Id)
         {
             var fiche = _db.ficheTechniqueBridges
+               // .Where(f => f.FicheTechniqueBridge_AbonnementID == Id)
                 .Where(f => f.FicheTechniqueBridge_ProduitVendableID == Id)
                 .Where(f => f.FicheTechniqueBridge_InUse == true)
                 .Include(p=>p.Produit_Vendable)

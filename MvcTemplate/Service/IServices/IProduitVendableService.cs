@@ -60,6 +60,7 @@ namespace Service.IServices
         IEnumerable<ProduitConsomableStokageModel> getListProduitVendableStockerByProduit(int? Id,int produitId);
         IEnumerable<PdV_ProduitsPretModel> getListProduitsStockesPdv(int Id,int formeId);
         ProduitVendableModel findFormulaireProduitVendable(int formulaireProduitId);
+        ProduitVendableModel findFormulaireProduitVendablePDF(int formulaireProduitId);
         Forme_ProduitModel findFormulaireFormeProduit(int formulaireProduitId);
         PlanificationdeProductionModel findFormulairePlans(int formulaireProduitId);
         ProduitPackageModel findFormulaireProduitPackage(int formulaireProduitId);
