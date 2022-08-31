@@ -109,7 +109,7 @@
                 <tr>
                     <td rowspan="2" class="text-left" width="10%"><img src="https://trephodev.azurewebsites.net/images/logoUser/1894619d-d519-4e38-8ddd-93a3374c30d3.png" alt="" width="100" /></td>
                     <td style="font-size: 22px">Fiche technique produit</td>
-                    <td colspan="2">REF :</td>
+                    <td colspan="2">Date de création :</td>
                 </tr>
                 <tr>
                     <td style="font-size: 22px" class="text-left" width="35%">Atelier Marocain de Gourmandises</td>
@@ -122,11 +122,14 @@
         <table class="entet" style="margin: 20px 0">
             <tbody>
                 <tr>
-                    <td style="width: 30%"><img src="@Model.fichetechnique.Produit_Vendable.ProduitVendable_GrandePhoto" alt="" width="250" /></td>
-                    <td style="padding: 6px 0; line-height: 25px; font-size: 22px">@Model.fichetechnique.Produit_Vendable.ProduitVendable_Designation.ToUpper() <br> 
+                    @{
+                        var str = "https://trephodev.azurewebsites.net/" + Model.fichetechnique.Produit_Vendable.ProduitVendable_GrandePhoto;
+                    }
+                    <td style="width: 30%"><img src="@str" alt="" width="250" /></td>
+                    <td  style="padding: 6px 0; line-height: 40px; font-size: 30px">@Model.fichetechnique.Produit_Vendable.ProduitVendable_Designation.ToUpper() <br> 
                         (Pour  @foreach (var item in Model.fichetechnique.Fiche_Forme)
                         {
-                            @(item.FicheForme_Quantite.ToString("G29") + " " + item.Forme_Produit.FormeProduit_Libelle + "  ") <br />
+                            @(item.FicheForme_Quantite.ToString("G29") + " " + item.Forme_Produit.FormeProduit_Libelle + "  ")
                         })
                     </td>
                 </tr>
@@ -152,8 +155,8 @@
                     <tr>
                         <td>&nbsp; @item.Matiere_Premiere.MatierePremiere_CodeArticle</td>
                         <td>&nbsp; @item.Matiere_Premiere.MatierePremiere_Libelle</td>
-                        <td>&nbsp; @item.FicheTechnique_QuantiteMatiere.ToString("G29")</td>
-                        <td>&nbsp; @item.Unite_Mesure.UniteMesure_Libelle</td>
+                        <td class="text-right"> @item.FicheTechnique_QuantiteMatiere.ToString("G29") &nbsp;</td>
+                        <td class="text-center"> @item.Unite_Mesure.UniteMesure_Libelle &nbsp;</td>
                     </tr>
                 }
             </tbody>
@@ -176,8 +179,8 @@
                         <tr>
                             <td>&nbsp;</td>
                             <td>&nbsp; @item2.Matiere_Premiere.MatierePremiere_Libelle</td>
-                            <td>&nbsp; @item2.ProduitBaseFicheTechnique_QuantiteMatiere.ToString("G29")</td>
-                            <td>&nbsp; @item2.Unite_Mesure.UniteMesure_Libelle</td>
+                            <td class="text-right">&nbsp; @item2.ProduitBaseFicheTechnique_QuantiteMatiere.ToString("G29") &nbsp;</td>
+                            <td class="text-center">&nbsp; @item2.Unite_Mesure.UniteMesure_Libelle &nbsp;</td>
                         </tr>
                     }
 

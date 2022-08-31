@@ -516,14 +516,14 @@
            ListeUnite.push(unite);
         }
         
-        
-        for (var i = 0; i < tableForme1.rows.length; i++)
-        {
-            matiere = tableForme1.rows[i].cells[0].innerHTML;
-            allergene = tableForme1.rows[i].cells[2].innerHTML;
-            ListeAllergene.push(unite);
-
+        if (tableForme1 != null){
+            for (var i = 0; i < tableForme1.rows.length; i++) {
+                matiere = tableForme1.rows[i].cells[0].innerHTML;
+                allergene = tableForme1.rows[i].cells[2].innerHTML;
+                ListeAllergene.push(unite);
+            }
         }
+
         console.log(ListeUnite);
         var matiereModel = {
             MatierePremiere_Libelle: $('#libelle').val(),
@@ -798,13 +798,14 @@
     } 
     function getAllergene() 
     {
-        var id = $("#allergeneID option:selected").val();
+        var allerID = $("#allergeneID option:selected").val();
+        var data = {id: allerID};
             $.ajax({
             url: '@Url.Action("getAllergie", "MatierePremiere")',
                  type: "POST",
                  cache: false,
                  async: true,
-                 data: id,
+            data: data,
                  success: function (data) {
                      $("#allerAR").val(data);
                  },
