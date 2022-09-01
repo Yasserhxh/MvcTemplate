@@ -13,7 +13,199 @@
         pageNo = pager.CurrentPage;
     }
 }
+<div class="modal_mask" id="loaderAC" style="display:none;">
+    <div class="modal_panel_mask">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="txt">Veuillez patienter...</div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal_panel_mask {
+        background: #441c61;
+        border: 1px solid #441c61;
+        width: 310px;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 24px 48px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        padding: 16px;
+        opacity: 0;
+        margin-top: 48px;
+        transition: all 0.3s ease-out;
+    }
 
+
+
+
+
+    .modal_panel_mask {
+        opacity: 1;
+        margin-top: 0;
+        transition: all 0.3s ease-out 0.1s;
+    }
+
+
+
+
+
+    .modal_mask {
+        background: rgba(0,0,0,0.0);
+        background-size: 400% 400%;
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        z-index: 1000;
+        transition: background 0.4s ease-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease-out;
+    }
+
+
+
+
+
+    .modal_mask {
+        background: rgba(0,0,0,0.5);
+        transition: background 0.4s ease-out;
+    }
+
+    .loader {
+        margin: auto;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 300px;
+        width: 300px;
+    }
+
+        .loader .txt {
+            text-align: center;
+            font-family: 'El Messiri', sans-serif;
+            position: relative;
+            top: 75%;
+            color: #fff
+        }
+
+        .loader .dot {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 52.5%;
+            left: 150px;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border-radius: 5rem;
+            transition: all 0.15s ease-in-out;
+        }
+
+            .loader .dot:nth-child(1) {
+                left: 80px;
+                animation: waveUp 2s, smallExtend 2s;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+            }
+
+            .loader .dot:nth-child(2) {
+                left: 115px;
+                animation: waveUp 2s, largeExtend 2s;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-delay: 0.15s;
+            }
+
+            .loader .dot:nth-child(3) {
+                animation: waveUp 2s, smallExtend 2s;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-delay: 0.3s;
+            }
+
+            .loader .dot:nth-child(4) {
+                left: 185px;
+                animation: waveUp 2s, largeExtend 2s;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-delay: 0.45s;
+            }
+
+            .loader .dot:nth-child(5) {
+                left: 220px;
+                animation: waveUp 2s, smallExtend 2s;
+                animation-timing-function: ease-in-out;
+                animation-iteration-count: infinite;
+                animation-delay: 0.6s;
+            }
+
+    @@keyframes waveUp {
+        0%,
+        15% {
+            top: 50%;
+        }
+
+        45%,
+        65% {
+            top: 42.5%;
+        }
+
+        85%,
+        100% {
+            top: 50%;
+        }
+    }
+
+    @@keyframes smallExtend {
+        0%,
+        8% {
+            background-color: #F8F8F8;
+            height: 20px;
+        }
+
+        14%,
+        34% {
+            background-color: #F8F8F8;
+            height: 47.5px;
+        }
+
+        46%,
+        100% {
+            background-color: #F8F8F8;
+            height: 20px;
+        }
+    }
+
+    @@keyframes largeExtend {
+        0%,
+        8% {
+            background-color: #F8F8F8;
+            height: 20px;
+        }
+
+        14%,
+        34% {
+            background-color: #F8F8F8;
+            height: 82.5px;
+        }
+
+        46%,
+        100% {
+            background-color: #F8F8F8;
+            height: 20px;
+        }
+    }
+</style>
 <div class="app-content content">
     <div class="content-overlay"></div>
     <div class="content-wrapper">
@@ -172,8 +364,9 @@
                                                                                 </span>
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                     <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.BonDeLivraison_ID"><i class="bx bx-history "></i>Afficher liste des articles</a>
-                                                                                    <a asp-action="GeneratePDfBL" asp-route-id="@item.BonDeLivraison_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
-                                                                                </div>
+                                                                                    <button onclick="download(@item.BonDeLivraison_ID)" class="dropdown-item btn-outline-success"><i class="bx bx-download"></i>Génerer PDF</button>
+@*                                                                                    <a asp-action="GeneratePDfBL" asp-route-id="@item.BonDeLivraison_ID" class="dropdown-item btn-outline-secondary"><i class="bx bx-down-arrow"></i>Génerer PDF</a>
+*@                                                                                </div>
                                                                             </div>
                                                                         </td>
 
@@ -297,4 +490,27 @@
     minViewMode: "years",
     autoclose:true //to close picker once year is selected
 });
+    function download(Bl) {
+        window.scrollTo({ top: 0 });
+
+        $('#loaderAC').css("display", "flex");
+        var uri = '@Url.Action("GeneratePDfBL", "Fournisseur")/' + Bl;
+        fetch(uri, { method: 'POST' })
+            .then(resp => resp.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `Bon_De_Livraison`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                $('#loaderAC').css("display", "none");
+                //location.reload()
+            })
+            .catch(() => {
+            });
+
+    }
 </script>
