@@ -261,6 +261,157 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
+                                             <hr>
+                                <fieldset style="border: 2px solid #fdda4161; display:none;" id="table">
+                                    <legend style="background: #4c216b;">Liste des éléments</legend>
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <div class="table-responsive">
+                                                <table id="tableCamions" class="table table-bordered table-striped mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="background: #4c216b;">Produit Maison</th>
+                                                            <th style="background: #4c216b;">Composant (FR)</th>
+                                                            <th style="background: #4c216b;">Composant (AR)</th>
+                                                            <th style="background: #4c216b;">Valeur</th>
+                                                        </tr>
+                                                    </thead> 
+                                                    <tbody>
+                                                        <tr>
+                                                           
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM" disabled class="form-control" required />
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantName" value="Energie" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" value="Energie" disabled class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantNameAR" value="القيمة الطاقية" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" value="القيمة الطاقية" disabled class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM1"  disabled class="form-control" required />
+                                                            </td>
+                                                           
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" value="Graisses" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantNameAR" disabled value="Graisses" class="form-control" required />
+                                                               
+                                                            </td>
+                                                             <td style="display:none;">
+                                                                <input type="text" maxlength="30"   value="الدهون" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="الدهون" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM2"  disabled class="form-control" required />
+                                                            </td>
+                                                         
+                                                           
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30"  disabled value="Glucide" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantNameAR" value="كربوهيدرات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="كربوهيدرات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM3" disabled class="form-control" required />
+                                                            </td>
+                                                          
+                                                            
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
+                                                               
+                                                            </td> 
+                                                            <td>
+                                                                <input type="text" maxlength="30"  disabled value="Protéines" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantNameAR" value="البروتينات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="البروتينات" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" maxlength="30" id="produitM4" disabled class="form-control" required />
+                                                            </td>
+                                                           
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="Sel" class="form-control" required />
+                                                               
+                                                            </td>
+                                                            <td style="display:none;">
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantNameAR" value="ملح" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" disabled value="ملح" class="form-control" required />
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
+                                                            </td>
+                                                        </tr> 
+                                                        
+                                                       
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
                                         </fieldset>
                                         <!-- body content of step 1 end-->
                                     </div>

@@ -37,7 +37,7 @@ namespace Web.Controllers
             this.pointVenteService = pointVenteService;
             _userManager = userManager;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Gerant_des_achats")]
 
         public IActionResult AjouterMatierePremiere()
         {
@@ -70,7 +70,7 @@ namespace Web.Controllers
             return sousfamilleList;
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Gerant_des_achats")]
         public IActionResult AjouterAllergene()
         {
             return View();
@@ -86,7 +86,7 @@ namespace Web.Controllers
             return redirect;
         }
 
-        [Authorize(Roles = "Client,Gerant_de_stock")]
+        [Authorize(Roles = "Client,Gerant_de_stock, Gerant_des_achats")]
         public IActionResult ListeMatierePremiere(int? allergene,int? forme, string name, int pg=1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -107,7 +107,7 @@ namespace Web.Controllers
             {
                 return View("~/Views/MatierePremiere/ListeMatierePremiereGerant.cshtml", model);
             }
-            if (User.IsInRole("Client"))
+            if (User.IsInRole("Client") || User.IsInRole("Gerant_des_achats"))
             {
                 ViewData["Unite"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
                 return View(model);
@@ -119,7 +119,7 @@ namespace Web.Controllers
 
 
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Gerant_des_achats")]
         public IActionResult ListeAllergie()
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -155,7 +155,7 @@ namespace Web.Controllers
         }
 
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Gerant_des_achats")]
         public IActionResult ModificationMatierePremiere(int? id)
         {
             var abo = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -191,7 +191,7 @@ namespace Web.Controllers
         }
 
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Gerant_des_achats")]
         public IActionResult ModificationAllergie(int? id)
         {
             if (id == null)

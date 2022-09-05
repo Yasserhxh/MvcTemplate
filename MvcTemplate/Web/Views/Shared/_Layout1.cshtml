@@ -394,6 +394,34 @@
                               <li class=" nav-item">
                                 <a href="#"><i class="bx bx-dollar"></i><span class="menu-title">Gestion des achats </span></a>
                                 <ul class="menu-content">
+
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des réferentiels</span></a>
+
+                                <ul class="menu-content">
+                            <li>
+                                <a asp-controller="MatierePremiere" asp-action="ListeMatierePremiere"><i class="bx bx-right-arrow-alt"></i><span class="menu-item"></span>Gestion des matières premières</a>
+                            </li>
+                               
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des fournisseurs</span></a>
+
+                                <ul class="menu-content">
+
+                                    <li>
+                                        <a asp-controller="Fournisseur" asp-action="ListeFournisseur"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fournisseurs des matières premières</span></a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeFournisseurProduits"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fournisseurs des produits prêts à consommer</span></a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class=" nav-item">
+                                <a asp-controller="Fournisseur" asp-action="ListeDistributeur"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des distributeurs</span></a>
+                            </li>
+                             </ul>
+                            </li>
                                     <li>
                                         <a asp-controller="Fournisseur" asp-action="ListeBonDeCommande"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Gestion des bons de commande</span></a>
                                     </li>
