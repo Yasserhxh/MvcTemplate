@@ -9,8 +9,11 @@ namespace Domain.Entities
     [Table("Matiere_Premiere")]
     public class MatierePremiere
     {
-     
-      
+        public MatierePremiere()
+        {
+            Composants = new Collection<Matiere_Composants>();
+        }
+
         [Key]
         public int MatierePremiere_Id { get; set; }
         [Column(TypeName = "nvarchar(150)")]
@@ -70,6 +73,7 @@ namespace Domain.Entities
         public Unite_Mesure Unite_Mesure { get; set; }
         public Taux_TVA Taux_TVA { get; set; }
         public ICollection<MatPrem_Allergene> listAllergene { get; set; }
+        public ICollection<Matiere_Composants> Composants { get; set; }
 
     }
 }

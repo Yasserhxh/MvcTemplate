@@ -27,6 +27,11 @@ namespace Repository.Repositories
         {
             matierePremiere.MatierePremiere_IsActive = 1;
             matierePremiere.MatierePremiere_DateCreation = DateTime.Now;
+            foreach(var item in matierePremiere.Composants)
+            {
+                item.MatiereComposants_AbonnementID = matierePremiere.MatierePremiere_AbonnementId;
+                item.MatiereComposants_IsActive = 1;
+            }
             // matierePremiere.MatierePremiere_QuantiteActuelle = matierePremiere.MatierePremiere_Quantite_FT;
             await _db.matierePremieres.AddAsync(matierePremiere);
             await unitOfWork.Complete();

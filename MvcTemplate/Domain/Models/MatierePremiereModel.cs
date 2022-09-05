@@ -8,7 +8,10 @@ namespace Domain.Models
 {
     public class MatierePremiereModel
     {
-      
+        public MatierePremiereModel()
+        {
+            Composants = new List<MatiereComposants_Model>();
+        }
         public int MatierePremiere_Id { get; set; }
         public string MatierePremiere_Libelle { get; set; }
         public string MatierePremiere_LibelleAR { get; set; }
@@ -40,6 +43,7 @@ namespace Domain.Models
         public Unite_MesureModel Unite_Mesure { get; set; }
         public Taux_TVAModel Taux_TVA { get; set; }
         public ICollection<MatPremAllergene_Model> listAllergene { get; set; }
+        public List<MatiereComposants_Model> Composants { get; set; }
 
 
     }

@@ -267,7 +267,7 @@
                                     <div class="row">
                                         <div class="col-12 mt-2">
                                             <div class="table-responsive">
-                                                <table id="tableCamions" class="table table-bordered table-striped mb-0">
+                                                <table id="tableNu" class="table table-bordered table-striped mb-0">
                                                     <thead>
                                                         <tr>
                                                             <th style="background: #4c216b;">Produit Maison</th>
@@ -275,15 +275,15 @@
                                                             <th style="background: #4c216b;">Composant (AR)</th>
                                                             <th style="background: #4c216b;">Valeur</th>
                                                         </tr>
-                                                    </thead> 
-                                                    <tbody>
+                                                    </thead>
+                                                    <tbody id="tableNutri">
                                                         <tr>
                                                            
                                                             <td>
                                                                 <input type="text" maxlength="30" id="produitM" disabled class="form-control" required />
                                                             </td>
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantName" value="Energie" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].MatiereComposants_Name" value="Energie" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
@@ -291,7 +291,7 @@
                                                                
                                                             </td>
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantNameAR" value="القيمة الطاقية" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].MatiereComposants_NameAR" value="القيمة الطاقية" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
@@ -299,7 +299,7 @@
                                                                
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[0].MatiereComposants_Valeur" class="form-control" required />
                                                             </td>
                                                         </tr> 
                                                         <tr>
@@ -308,23 +308,22 @@
                                                             </td>
                                                            
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" value="Graisses" class="form-control" required />
-                                                               
+                                                                <input type="text" maxlength="30" value="Graisses" class="form-control" asp-for="Composants[1].MatiereComposants_Name" required />
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantNameAR" disabled value="Graisses" class="form-control" required />
+                                                                <input type="text" maxlength="30"  disabled value="Graisses" class="form-control" required />
                                                                
                                                             </td>
                                                              <td style="display:none;">
-                                                                <input type="text" maxlength="30"   value="الدهون" class="form-control" required />
+                                                                <input type="text" maxlength="30"  asp-for="Composants[1].MatiereComposants_NameAR" value="الدهون" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="الدهون" class="form-control" required />
+                                                                <input type="text" maxlength="30" disabled value="الدهون" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_Valeur" class="form-control" required />
+                                                                <input type="text" maxlength="30"   asp-for="Composants[1].MatiereComposants_Valeur" class="form-control" required />
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -334,7 +333,7 @@
                                                          
                                                            
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].MatiereComposants_Name"  value="Glucide" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
@@ -342,7 +341,7 @@
                                                                
                                                             </td>
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantNameAR" value="كربوهيدرات" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].MatiereComposants_NameAR" value="كربوهيدرات" class="form-control" required />
 
                                                             </td>
                                                             <td>
@@ -350,7 +349,7 @@
 
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[2].MatiereComposants_Valeur" class="form-control" required />
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -360,7 +359,7 @@
                                                           
                                                             
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].MatiereComposants_Name"  value="Protéines" class="form-control" required />
                                                                
                                                             </td> 
                                                             <td>
@@ -368,7 +367,7 @@
                                                                
                                                             </td>
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantNameAR" value="البروتينات" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].MatiereComposants_NameAR" value="البروتينات" class="form-control" required />
 
                                                             </td>
                                                             <td>
@@ -376,7 +375,7 @@
 
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[3].MatiereComposants_Valeur" class="form-control" required />
                                                             </td>
                                                         </tr> 
                                                         <tr>
@@ -385,7 +384,7 @@
                                                             </td>
                                                            
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].MatiereComposants_Name"  value="Sel" class="form-control" required />
                                                                
                                                             </td>
                                                             <td>
@@ -393,7 +392,7 @@
                                                                
                                                             </td>
                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantNameAR" value="ملح" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].MatiereComposants_NameAR" value="ملح" class="form-control" required />
 
                                                             </td>
                                                             <td>
@@ -401,7 +400,7 @@
 
                                                             </td>
                                                             <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
+                                                                <input type="text" maxlength="30" asp-for="Composants[4].MatiereComposants_Valeur" class="form-control" required />
                                                             </td>
                                                         </tr> 
                                                         
@@ -658,8 +657,10 @@
         }
         var tableForme = document.getElementById("tbodyForme");
         var tableForme1 = document.getElementById("tbodyForme1");
+        var tableNut = document.getElementById("tableNutri");
         var ListeUnite = new Array();
         var ListeAllergene = new Array();
+        var ListeValeur = new Array();
         for (var i = 0; i < tableForme.rows.length; i++) 
         {
            matiere = tableForme.rows[i].cells[0].innerHTML;
@@ -671,7 +672,26 @@
             for (var i = 0; i < tableForme1.rows.length; i++) {
                 matiere = tableForme1.rows[i].cells[0].innerHTML;
                 allergene = tableForme1.rows[i].cells[2].innerHTML;
-                ListeAllergene.push(unite);
+                ListeAllergene.push(allergene);
+            }
+        } 
+        for (var i = 0; i < tableForme.rows.length; i++) 
+        {
+           matiere = tableForme.rows[i].cells[0].innerHTML;
+           unite = tableForme.rows[i].cells[2].innerHTML;
+           ListeUnite.push(unite);
+        }
+        
+
+
+        if (tableNut != null){
+            for (var i = 0; i < tableNut.rows.length; i++) {
+                valeur = {
+                    MatiereComposants_Name: tableNut.rows[i].cells[2].getElementsByTagName('input')[0].value,
+                    MatiereComposants_NameAR: tableNut.rows[i].cells[4].getElementsByTagName('input')[0].value,
+                    MatiereComposants_Valeur: tableNut.rows[i].cells[5].getElementsByTagName('input')[0].value,
+                };
+                ListeValeur.push(valeur);
             }
         }
 
@@ -691,6 +711,7 @@
             MatierePremiere_AllergeneId: $('#inputGroupSelected02 option:selected').val(),
             MatierePremiere_CoutTVAID: $('#tvaID option:selected').val(),
             MatierePremiere_FamilleID: $('#childID option:selected').val(),
+            Composants: ListeValeur
         }
         console.log(matiereModel);
         var data = {
@@ -946,6 +967,13 @@
         var lib = $("#libelle").val();
         $("#matiereP").val(lib);
         $("#matiereP1").val(lib);
+        $("#produitM").val(lib);
+        $("#produitM1").val(lib);
+        $("#produitM2").val(lib);
+        $("#produitM3").val(lib);
+        $("#produitM4").val(lib);
+        document.getElementById('table').style.display = "block";
+
     } 
     function getAllergene() 
     {

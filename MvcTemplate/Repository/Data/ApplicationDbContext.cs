@@ -129,6 +129,7 @@ namespace Repository.Data
         public DbSet<MatPrem_Allergene> matPrem_Allergenes { get; set; }
         public DbSet<Produit_Composants> produit_Composants { get; set; }
         public DbSet<Distributeur> distributeurs { get; set; }
+        public DbSet<Matiere_Composants> matiere_Composants { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
