@@ -10,7 +10,10 @@ namespace Domain.Entities
     [Table("Facture")]
     public class Facture
     {
-
+        public Facture()
+        {
+            listePaiement = new Collection<Payement_Facture>();
+        }
         [Key]
         public int Facture_ID { get; set; }
         public string Facture_Numero { get; set; }
@@ -29,7 +32,8 @@ namespace Domain.Entities
         public DateTime Facture_DateSaisie { get; set; }
         public BonDeCommande bonDeCommande { get; set; }
         public Fournisseur Fournisseur { get; set; }
+
         //public Lieu_Stockage Lieu_Stockage { get; set; }
-        //public ICollection<BonDeLivraison> listeBL {get;set;}
+        public ICollection<Payement_Facture> listePaiement {get;set;}
     }
 }

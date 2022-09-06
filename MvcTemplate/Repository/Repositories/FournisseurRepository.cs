@@ -314,7 +314,7 @@ namespace Repository.Repositories
                 query = query.Where(p => p.Facture_DateFacture.Year == date);
             if (!string.IsNullOrEmpty(numeroFac))
                 query = query.Where(p => p.Facture_Numero.Contains(numeroFac, StringComparison.OrdinalIgnoreCase));
-            return query.Include(p => p.Fournisseur).Include(p => p.bonDeCommande).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
+            return query.Include(p => p.Fournisseur).Include(p=>p.listePaiement).Include(p => p.bonDeCommande).AsEnumerable().OrderByDescending(p => p.Facture_DateSaisie);
         }
 
         public IEnumerable<Fonction> getListFonction()
@@ -537,20 +537,40 @@ namespace Repository.Repositories
 
         public async Task<int?> CreatePayementFacture(Payement_Facture payement_Facture)
         {
-            var facture = _db.factures.Where(p => p.Facture_ID == payement_Facture.PayementFacture_FactureID).FirstOrDefault();
+            var facture = _db.factures.Where(p => p.Facture_ID == payement_Facture.PayementFacture_FactureID).Include(p => p.listePaiement).FirstOrDefault();
             if (facture != null)
             {
-                facture.Facture_Etat = "Payée";
                 payement_Facture.PayementFacture_DateSaisie = DateTime.Now;
+                await _db.payement_Factures.AddAsync(payement_Facture);
                 var confirm = await unitOfWork.Complete();
                 if (confirm > 0)
-                    return payement_Facture.PayementFacture_ID;
+                    return await UpdateFacture(facture);
                 else
                     return null;
             }
             else
                 return null;
-          
+        }
+        public async Task<int?> UpdateFacture(Facture facture)
+        {
+            var sum = facture.listePaiement.Sum(p => p.PayementFacture_Montant);
+            if (sum == facture.Facture_TotalTTC)
+                facture.Facture_Etat = "Payée";
+            else
+                facture.Facture_Etat = "Partiellement payée";
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return facture.Facture_ID;
+            else
+                return null;
+        }
+        public async Task<List<Payement_Facture>> getListPayementFacture(int factureID, int aboID)
+        {
+            var paiements = await _db.payement_Factures.Where(p=>p.PayementFacture_FactureID == factureID && p.PayementFacture_AbonnementID == aboID)
+                .OrderByDescending(p=>p.PayementFacture_DatePayement)
+                .Include(p=>p.Facture)
+                .ToListAsync();
+            return paiements;
         }
         public IEnumerable<Section_Stockage> getListSections(int matiereID)
         {

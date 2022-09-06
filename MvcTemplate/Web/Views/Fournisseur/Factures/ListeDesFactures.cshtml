@@ -160,7 +160,7 @@
                                                                                 </span>                                                                                   
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
                                                                                 @if(item.Facture_Etat !="Payée"){
-                                                                                        <button class="dropdown-item btn-outline-success" onclick='payer(@item.Facture_ID,"@item.Facture_Numero",@item.Facture_TotalTTC)'><i class="bx bx-check"></i>Payer la facture</button>
+                                                                                        <button class="dropdown-item btn-outline-success" onclick='payer(@item.Facture_ID,"@item.Facture_Numero","@item.Facture_TotalTTC", "@item.listePaiement.Sum(p=>p.PayementFacture_Montant)")'><i class="bx bx-check"></i>Payer la facture</button>
                                                                                         
                                                                                 }
                                                                                 <a class="dropdown-item btn-outline-info" asp-action="getlistFactureDetails" asp-route-id="@item.Facture_ID"><i class="bx bx-list-ol"></i>Liste des BL</a>
@@ -328,7 +328,7 @@
         window.location.reload();
     }
 
-    function payer(factureID,libelle,total) {
+    function payer(factureID, libelle, total, paye) {
         $('#myModal').modal('show');
         $("#plandiv").append("<div class='form-row'>"
         + "<div class= 'col-md-4 mb-1' >"
@@ -337,10 +337,10 @@
         + "<div><input type='text' disabled id='numFac' value='" + libelle + "' class='form-control'/></div></div>"
         + "<div class= 'col-md-4 mb-1' >"
         + "<label for='date'>Montant total</label>"
-            + "<div><input type='number' disabled id='mttot' value='" +  total + "' class='form-control'/></div></div>"        
+            + "<div><input type='number' disabled id='mttot' value='" +  parseFloat(total) + "' class='form-control'/></div></div>"        
             + "<div class= 'col-md-4 mb-1' >"
         + "<label for='date'>Montant à payer</label>"
-            + "<div><input type='number'  id='mtPay' value='" + total + "' class='form-control'/></div></div>" 
+            + "<div><input type='number'  id='mtPay' value='" + parseFloat(parseFloat(total) - parseFloat(paye)) + "' class='form-control'/></div></div>"
             + "<div class= 'col-md-4 mb-1' >"
         + "<label for='date'>Date de paiement</label>"
             + "<div><input type='date'  id='dateFac'class='form-control'/></div></div>"

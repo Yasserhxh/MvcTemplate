@@ -297,6 +297,11 @@ namespace Service.Services
             return mapper.Map<IEnumerable<FournisseurMatiere>, IEnumerable<FournisseurMatiereModel>>(fournisseurRepository.getListMatiereLink(fournisseurId));
         }
 
+        public async Task<List<PayementFacture_Model>> getListPayementFacture(int factureID, int aboID)
+        {
+            return  mapper.Map<List<Payement_Facture>, List<PayementFacture_Model>>(await fournisseurRepository.getListPayementFacture(factureID, aboID));
+        }
+
         public IEnumerable<Section_StockageModel> getListSections(int matiereID)
         {
             return mapper.Map<IEnumerable<Section_Stockage>, IEnumerable<Section_StockageModel>>(fournisseurRepository.getListSections(matiereID));
