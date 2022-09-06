@@ -163,7 +163,9 @@
                                                                                         <button class="dropdown-item btn-outline-success" onclick='payer(@item.Facture_ID,"@item.Facture_Numero","@item.Facture_TotalTTC", "@item.listePaiement.Sum(p=>p.PayementFacture_Montant)")'><i class="bx bx-check"></i>Payer la facture</button>
                                                                                         
                                                                                 }
+                                                                                   
                                                                                 <a class="dropdown-item btn-outline-info" asp-action="getlistFactureDetails" asp-route-id="@item.Facture_ID"><i class="bx bx-list-ol"></i>Liste des BL</a>
+                                                                                <a class="dropdown-item btn-outline-info" asp-action="ListePaiementFactures" asp-route-id="@item.Facture_ID"><i class="bx bx-list-ol"></i>Liste des paiements</a>
                                                                                     </div>
                                                                                 </div>
                                                                         </td>
@@ -353,6 +355,12 @@
             + "<label for='date'>Référence d'opération</label>"
             + "<div><input type='text'  id='comment'class='form-control'/></div></div>"
             + "</div>");
+        Date.prototype.toDateInputValue = (function () {
+            var local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        });
+        document.getElementById('dateFac').value = new Date().toDateInputValue();
     }
     function Valider() {
         var factureID = $("#facId").val();
@@ -395,4 +403,6 @@
             }
         });
     }
+   
+  
 </script>

@@ -194,10 +194,10 @@ namespace Web.Controllers
 
             return View("~/Views/Fournisseur/Factures/ListeDesFactures.cshtml", model);
         }
-        public async Task<IActionResult> ListePaiementFactures(int factureID)
+        public async Task<IActionResult> ListePaiementFactures(int? id)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var query = await fournisseurService.getListPayementFacture(factureID, Id);
+            var query = await fournisseurService.getListPayementFacture((int)id, Id);
             return View("~/Views/Fournisseur/Factures/ListeDesPaiements.cshtml", query);
         }
         public IActionResult AjouterBC()

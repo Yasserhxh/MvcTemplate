@@ -1449,7 +1449,7 @@ namespace Repository.Repositories
                 .Where(f => f.FicheTechniqueBridge_ProduitVendableID == Id)
                 .Where(f => f.FicheTechniqueBridge_InUse == true)
                 .Include(p=>p.Produit_Vendable)
-                .Include(p => p.Produit_FicheTechnique).ThenInclude(p => p.Matiere_Premiere)
+                .Include(p => p.Produit_FicheTechnique).ThenInclude(p => p.Matiere_Premiere).ThenInclude(p=>p.listAllergene).ThenInclude(p=>p.Allgerene)
                 .Include(p => p.Produit_FicheTechnique).ThenInclude(u => u.Unite_Mesure)
                 .Include(p=>p.FicheTech_ProduitBase).ThenInclude(p=>p.ProduitBase)
                 .Include(p => p.Fiche_Forme).ThenInclude(p=>p.Forme_Produit)
