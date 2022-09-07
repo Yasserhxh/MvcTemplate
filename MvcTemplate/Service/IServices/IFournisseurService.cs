@@ -42,5 +42,7 @@ namespace Service.IServices
         Task<List<DistributeurModel>> getListDistributeur(int Id, int? statut, string rc);
         Task<bool> deleteDistributeur(int ID, int code);
         Task<List<PayementFacture_Model>> getListPayementFacture(int factureID, int aboID);
+        Task<ArticleBL_Model> getArticleBL(int articleID, int aboID);
+
     }
 }

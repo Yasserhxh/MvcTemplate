@@ -634,5 +634,13 @@ namespace Repository.Repositories
             }
             return false;
         }
+
+        public async Task<Article_BL> getArticleBL(int articleID, int aboID)
+        {
+            var res = await _db.article_BLs.Where(p => p.ArticleBL_ID == articleID && p.bonDeLivraison.BonDeLivraison_AbonnementID == aboID)
+                .Include(p=>p.bonDeLivraison)
+                .FirstOrDefaultAsync();
+            return res;
+        }
     }
 }

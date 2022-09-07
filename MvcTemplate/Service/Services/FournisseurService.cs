@@ -221,6 +221,12 @@ namespace Service.Services
         {
             return fournisseurRepository.getAllProds(pg);
         }
+
+        public async Task<ArticleBL_Model> getArticleBL(int articleID, int aboID)
+        {
+            return mapper.Map<Article_BL, ArticleBL_Model>( await fournisseurRepository.getArticleBL(articleID, aboID));
+        }
+
         public IEnumerable<ArticleBC_Model> GetArticlesBC(int bonCommandeID)
         {
             return mapper.Map<IEnumerable<Article_BC>, IEnumerable<ArticleBC_Model>>(fournisseurRepository.GetArticlesBC(bonCommandeID));

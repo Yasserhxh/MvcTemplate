@@ -556,7 +556,51 @@ namespace Web.Controllers
             return result;
         }
 
+        [HttpPost]
+        public async Task<List<QrClassM>> GetQrCode(int id)
+        {
+            var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var item = await fournisseurService.getArticleBL(id, AboId);
+            var listQr = new List<QrClassM>();
+            var qRCode = new QRCodeModel()
+            {
+                // QRCodeText = redirect.ToString(),
+                DESIGNATION = item.ArticleBL_Designation.ToUpper(),
+                LOT_INTERN = item.ArticleBL_LotTemp,
+                LOT_FOURNISSEUR = item.ArticleBL_LotFournisseur.ToUpper(),
+                DATE_RECEP = item.bonDeLivraison.BonDeLivraison_DateLivraison.ToString(),
+                //DATE_P = item.ArticleBL_DateProduction.Value.ToShortDateString(),
+                DLC = item.ArticleBL_DateLimiteConso.Value.ToShortDateString(),
+                TEMPERATURE = item.ArticleBL_Teemperature + " " + "°C"
+            };
 
+            var serializer = new JsonSerializer();
+            var stringWriter = new StringWriter();
+            using (var writer = new JsonTextWriter(stringWriter))
+            {
+                writer.QuoteName = false;
+                writer.Indentation = 6;
+                writer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, qRCode);
+            }
+            var json = stringWriter.ToString();
+            //string output = JsonConvert.SerializeObject(qRCode, Formatting.Indented);
+            QRCodeGenerator QrGenerator = new QRCodeGenerator();
+            //json = json.Replace("/{|}/g", " ");
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(json, QRCodeGenerator.ECCLevel.Q);
+            QRCode QrCode = new QRCode(QrCodeInfo);
+            Bitmap QrBitmap = QrCode.GetGraphic(60);
+            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+            string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+            var qRCodeM = new QrClassM()
+            {
+                qRCodeIMG = QrUri,
+                qRCodeTITLE = item.ArticleBL_Designation
+            };
+            
+
+            return listQr;
+        }
     }
 
     public static class BitmapExtension

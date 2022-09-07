@@ -97,6 +97,7 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de Production</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">DLC</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Temperature °C</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Action</th>
 
                                                                 </tr>
                                                             </thead>
@@ -112,7 +113,17 @@
                                                                         <td class="border-b dark:border-dark-5">@item.ArticleBL_DateProduction.Value.ToShortDateString()</td>
                                                                         <td class="border-b dark:border-dark-5">@item.ArticleBL_DateLimiteConso.Value.ToShortDateString()</td>
                                                                         <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.ArticleBL_Teemperature) °C</td>
+                                                                        <td>
+                                                                            <div class="dropdown">
+                                                                                <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
+                                                                                </span>
+                                                                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
+                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.ArticleBL_ID"><i class="bx bx-history "></i>Télécharger QR code</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
                                                                     </tr>
+
                                                                 }
                                                             </tbody>
                                                         </table>

@@ -333,17 +333,10 @@
                             "<div class='row'id='tableModal' >"+
                             "<div class='col-md-12'> <span>" + data[i].qRCodeTITLE + " </span></div>"+
                             "<div class=' col-md-12 text-sm-center'> <img src='" + data[i].qRCodeIMG + "' style='height: 155px;' /></div>"+
-                            "</div>" 
-                          //  "<td class='border-b dark:border-dark-5 '>" + parseFloat(data[i].qteEnStock).toFixed(3) + "</td>" +
-                          //  "<td class='border-b dark:border-dark-5 '>" + data[i].uniteStock + "</td>" +
-                            );
+                            "</div>"
+                        );
                     }
-                        /* ShowNotification("Bon de livraison  ajouté avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-                        setTimeout(
-                            function () {
-                               window.location.href = '@Url.Action("ListeBonDeCommande", "Fournisseur")';
-                            }, 2000);
-                    */} else {
+                       } else {
                         ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
                         setTimeout(
                             function () {

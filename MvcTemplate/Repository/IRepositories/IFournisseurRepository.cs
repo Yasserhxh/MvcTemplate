@@ -43,5 +43,6 @@ namespace Repository.IRepositories
         Task<List<Distributeur>> getListDistributeur(int Id, int? statut, string rc);
         Task<bool> deleteDistributeur(int ID, int code);
         Task<List<Payement_Facture>> getListPayementFacture(int factureID, int aboID);
+        Task<Article_BL> getArticleBL(int articleID, int aboID);
     }
 }
