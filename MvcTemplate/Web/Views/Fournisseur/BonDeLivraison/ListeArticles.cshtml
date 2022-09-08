@@ -118,7 +118,7 @@
                                                                                 <span class="bx bx-dots-horizontal-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu">
                                                                                 </span>
                                                                                 <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 19px, 0px);" x-out-of-boundaries="">
-                                                                                    <a class="dropdown-item btn-outline-secondary" asp-action="GetArticlesBL" asp-route-id="@item.ArticleBL_ID"><i class="bx bx-history "></i>Télécharger QR code</a>
+                                                                                    <button class="dropdown-item btn-outline-secondary" onclick="PDF(@item.ArticleBL_ID)"><i class="bx bx-history "></i>Télécharger QR code</button>
                                                                                 </div>
                                                                             </div>
                                                                         </td>
@@ -150,7 +150,31 @@
         </div>
     </div>
 </div>
+<div class="modal" id="BaseModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">QR code</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div style="display:none;" id="Basediv"> </div>
 
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary" id="envbutton2" onclick="refresh()">
+                <span style="color:aliceblue;">
+                    Imprimer
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
 <!-- END: Content-->
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
@@ -253,5 +277,59 @@
         var fournisseurID = $("#fournisseur").val();
         var date = $("#date").val();
         window.location.href = '/fournisseur/ListeBonDeCommande?fournisseurID=' + fournisseurID + "&date=" + date ;
+    }
+    function PDF(id) {
+        console.log(id);
+
+        var data = {
+            id: id
+        }
+        $.ajax({
+            url: '@Url.Action("GetQrCode", "Fournisseur")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data!=null) {
+                    //$("#loadMe").modal("hide");
+                    $('#BaseModal').modal('show');
+                        $("#mbody").append(
+                            "<div class='row'id='tableModal' >" +
+                            "<div class='col-md-12'> <span>" + data.qRCodeTITLE + " </span></div>" +
+                            "<div class=' col-md-12 text-sm-center'> <img src='" + data.qRCodeIMG + "' style='height: 155px;' /></div>" +
+                            "</div>"
+                        );
+                    
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 2000);
+                }
+            },
+            error: function () {
+                alert("non ajoute");
+            }
+        });
+
+    } 
+    let modal = document.querySelector('#BaseModal');
+    window.addEventListener('click', outsideClick);
+    function outsideClick(e) {
+        if (e.target === modal) {
+            console.log(modal)
+            modal.classList.add('fade-out')
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.classList.remove('fade-out');
+                window.location.reload();
+            }, 1500)
+
+            if (modal.classList.contains('fade-in')) {
+                modal.classList.remove('fade-in');
+            }
+        }
     }
 </script>

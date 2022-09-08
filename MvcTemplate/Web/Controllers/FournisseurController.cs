@@ -557,7 +557,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<List<QrClassM>> GetQrCode(int id)
+        public async Task<QrClassM> GetQrCode(int id)
         {
             var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             var item = await fournisseurService.getArticleBL(id, AboId);
@@ -599,7 +599,7 @@ namespace Web.Controllers
             };
             
 
-            return listQr;
+            return qRCodeM;
         }
     }
 

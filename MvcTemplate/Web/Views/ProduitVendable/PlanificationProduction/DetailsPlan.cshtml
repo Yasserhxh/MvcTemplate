@@ -75,6 +75,8 @@
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Forme</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité prévisionnelle</th>                                                                 
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Quantité produite</th>                                                                 
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de production</th>                                                                 
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Date de limite de consommation</th>                                                                 
 @*                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Coût De Revient</th>                                                                 
 *@                                                                </tr>
                                                             </thead>
@@ -89,6 +91,8 @@
                                                                         <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Forme_Produit.FormeProduit_Libelle)</td>
                                                                         <td class="text-bold-600 pr-0 ">@item.PlanificationProduction_QuantitePrevue.ToString("G29") @item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle</td>
                                                                         <td class="text-bold-600 pr-0">@item.PlanificationProduction_QuantiteProduite.ToString("G29") @item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                        <td class="text-bold-600 pr-0">@item.PlanificationProduction_DateModification.Value.ToString("dd/MM/yyyy hh:mm:ss")</td>
+                                                                        <td class="text-bold-600 pr-0">@item.PlanificationProduction_DateModification.Value.AddDays((double)item.Produit_Vendable.ProduitVendable_DelaiConsommation)</td>
 @*                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.PlanificationProduction_CoutRevient) / @item.Produit_Vendable.Unite_Mesure.UniteMesure_Libelle</td>
 *@                                                                    </tr>
 }

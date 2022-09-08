@@ -313,7 +313,7 @@
     </div>
 </div>
 <div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#c19d56">
                 <h4 class="modal-title white" id="myModalLabel33">Indiquer la quantité produite.</h4>
@@ -332,7 +332,7 @@
                                         <option value="" selected>Choisissez un produit ...</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label>Forme de produit: </label>
                                     <select class="custom-select" id="forme" data-search="true" onchange="getQte()">
                                         <option value="" selected>Choisissez une forme de produit ...</option>
@@ -342,9 +342,13 @@
                                     <label>Qté prévue: </label>
                                     <input type="number" id="qtepre" class="form-control" placeholder="Qté Prevue" disabled>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <label>Qté produite: </label>
                                     <input type="number" id="qteproduite" placeholder="Qté Produite" class="form-control">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Date de production: </label>
+                                    <input type="datetime-local" id="dateProd" class="form-control">
                                 </div>
                                 <div class="col-md-1">
                                     <label></label>
@@ -366,6 +370,7 @@
                                             <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Forme</th>
                                             <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantite Prevue</th>
                                             <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Quantite Produite</th>
+                                            <th class='border-b-2 dark:border-dark-5 whitespace-no-wrap'>Date de production</th>
                                             <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap"></th>
                                         </tr>
                                     </thead>
@@ -571,6 +576,7 @@
     function camionAdd() {
 
         if ($("#qteproduite").val() != null && $("#qteproduite").val() != '' &&
+            $("#dateProd").val() != null && $("#dateProd").val() != '' &&
             $("#produit option:selected").val() != null && $("#produit option:selected").val() != '' )
         {
             document.getElementById('divTable').style.display = "block";
@@ -586,9 +592,11 @@
         var table = document.getElementById("tbodyCamions");
         var quantite = 0;
         var prod = 0;
+        var datep = 0;
         var quantiteval = $("#qteproduite").val();
         var produit = $("#produit option:selected").val();
         var formeval = $("#forme option:selected").val();
+        var dateProd = $("#dateProd").val();
 
         if ($("#tableCamions tbody").length == 0) {
             $("#tableCamions").append("<tbody id='tbodyCamions'></tbody>");
@@ -600,6 +608,7 @@
                 if (table.rows[i].cells[0].innerHTML == formeval) {
                     prod = table.rows[i].cells[0].innerHTML;
                     quantite = table.rows[i].cells[4].innerHTML;
+                    //datep = table.rows[i].cells[6].innerHTML;
                     table.rows[i].remove();
                     // table.rows[i].cells[7].innerHTML = parseFloat(table.rows[i].cells[7].innerHTML) + parseFloat(quantiteval);
                     // table.rows[i].cells[2].innerHTML = table.rows[i].cells[7].innerHTML;
@@ -614,6 +623,8 @@
             "<td class='text-sm-left'>" + $("#forme option:selected").text() + "</td>" +
             "<td class='border-b dark:border-dark-5'  style='text-align: center;'>" + parseFloat($("#qtepre").val()) + "</td>" +
             "<td class='border-b dark:border-dark-5'style='text-align: center;'>" + quantiteval+ "</td>" +
+            "<td class='border-b dark:border-dark-5'style='text-align: center;'>" + dateProd.replace('T', ' ').replace('Z', '') + "</td>" +
+            "<td class='border-b dark:border-dark-5'style='text-align: center; display:none;'>" + dateProd + "</td>" +
             "<td class='text-right'>" +
             '<button class="btn btn-outline-danger btn-table round" onclick="CamionDelete(this)"><i class="bx bx-trash-alt"></i></button>' +
             "</tr>");
@@ -638,14 +649,17 @@
         var ListePlans = new Array();
         var table = document.getElementById("tbodyCamions");
         var quantiteProduite = 0;
+        var datep = "";
         var planificationId = 0;
         for (var i = 0; i < table.rows.length; i++)
         {
             planificationId = table.rows[i].cells[0].innerHTML;
             quantiteProduite = table.rows[i].cells[4].innerHTML;
+            datep = table.rows[i].cells[6].innerHTML;
             var plans = {
                 PlanificationProduction_Id: parseInt(planificationId),
                 PlanificationProduction_QuantiteProduite: parseFloat(quantiteProduite).toFixed(3).replace(".",","),
+                PlanificationProduction_DateModification: datep,
             };
             ListePlans.push(plans);
         }
@@ -746,5 +760,10 @@
         return local.toJSON().slice(0, 10);
     });
     document.getElementById('date').value = new Date().toDateInputValue();
+
+    var now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('dateProd').value = now.toISOString().slice(0, 16);
+    //document.getElementById('dateProd').value = new Date().toDateInputValue();
 </script>
 

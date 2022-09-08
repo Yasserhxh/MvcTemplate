@@ -915,7 +915,7 @@ namespace Repository.Repositories
                     .FirstOrDefault();
                 plan.PlanificationProduction_QuantiteProduite = p.PlanificationProduction_QuantiteProduite;
                 plan.PlanificationProduction_QuantiteRestante = plan.PlanificationProduction_QuantiteProduite;
-                plan.PlanificationProduction_DateModification = DateTime.Now;
+                plan.PlanificationProduction_DateModification = p.PlanificationProduction_DateModification;
                 var ficheTech = _db.ficheTechniqueBridges
                             .Where(f => f.FicheTechniqueBridge_ProduitVendableID == plan.PlanificationProduction_ProduitVendableId).Where(f => f.FicheTechniqueBridge_InUse == true)
                             .Include(f => f.Produit_FicheTechnique).ThenInclude(f=>f.Unite_Mesure)
