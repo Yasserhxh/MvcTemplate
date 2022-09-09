@@ -17,7 +17,6 @@ namespace Domain.Models
         public DateTime PlanificationProduction_DateCreation { get; set; }
         public DateTime? PlanificationProduction_DateModification { get; set; }
         public int PlanificationProduction_PlanificationJourneeID { get; set; }
-
         public ProduitVendableModel Produit_Vendable { get; set; }
         public Forme_ProduitModel Forme_Produit { get; set; }
         public PlanificationJourneeModel Planification_Journee { get; set; }
