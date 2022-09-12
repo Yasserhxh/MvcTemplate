@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
+using QRCoder;
 
 namespace Web.Controllers
 {
@@ -3244,11 +3245,26 @@ namespace Web.Controllers
              {
                 var aboID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 var ficheBaseListe = new List<FicheTehcniqueProduitBaseModel>();
+                var allergeneListe = new List<AllergeneModel>();
                 var produit = produitVendableService.GetFicheTech(id);
                 foreach(var item in produit.FicheTech_ProduitBase)
                 {
                     var fichebase = produitFicheTechniqueService.FindFicheTechniqueBaseBYPordBase(item.ProduitBase.ProduitBase_ID, aboID);
                     ficheBaseListe.Add(fichebase);
+                    var y = fichebase.ProduitBase_FicheTechnique.SelectMany(p => p.Matiere_Premiere.listAllergene).Select(p => p.Allgerene);
+                    foreach (var item2 in y)
+                    {
+                        bool alreadyExists = allergeneListe.Any(p => p.Allergene_Id == item2.Allergene_Id);
+                        if (!alreadyExists)
+                            allergeneListe.Add(item2);
+                    }
+                }
+                var x = produit.Produit_FicheTechnique.SelectMany(p=>p.Matiere_Premiere.listAllergene).Select(p=>p.Allgerene);
+                foreach(var item in x)
+                {
+                    bool alreadyExists = allergeneListe.Any(p => p.Allergene_Id == item.Allergene_Id);
+                    if (!alreadyExists)
+                        allergeneListe.Add(item);
                 }
                 var model = new PDF_FicheTechnique()
                 {
@@ -3266,8 +3282,51 @@ namespace Web.Controllers
             }
         }
 
-    }
-   
+        [HttpPost]
+        public QrClassM GetQrCode(int id)
+        {
+            var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var item =  produitVendableService.findFormulairePlans(id);
+            var listQr = new List<QrClassM>();
+            var qRCode = new QRCodeProduitModel()
+            {
+                // QRCodeText = redirect.ToString(),
+                DESIGNATION = item.Produit_Vendable.ProduitVendable_Designation.ToUpper(),
+                DATE_PROD = item.PlanificationProduction_DateCreation.ToString("dd/MM/yyyy hh:mm:ss"),
+                DATE_EXP = item.PlanificationProduction_DateModification.Value.ToString("dd/MM/yyyy hh:mm:ss"),
+                CONDITIONNEMENT = item.Produit_Vendable.ProduitVendable_Conditionnement.ToUpper(),
+                FORME_STOCKAGE = item.Produit_Vendable.Forme_Stockage.FormStockage_Libelle,
+            };
 
+            var serializer = new JsonSerializer();
+            var stringWriter = new StringWriter();
+            using (var writer = new JsonTextWriter(stringWriter))
+            {
+                writer.QuoteName = false;
+                writer.Indentation = 6;
+                writer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, qRCode);
+            }
+            var json = stringWriter.ToString();
+            //string output = JsonConvert.SerializeObject(qRCode, Formatting.Indented);
+            QRCodeGenerator QrGenerator = new QRCodeGenerator();
+            //json = json.Replace("/{|}/g", " ");
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(json, QRCodeGenerator.ECCLevel.Q);
+            QRCode QrCode = new QRCode(QrCodeInfo);
+            Bitmap QrBitmap = QrCode.GetGraphic(60);
+            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+            string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+            var qRCodeM = new QrClassM()
+            {
+                qRCodeIMG = QrUri,
+                qRCodeTITLE = item.Produit_Vendable.ProduitVendable_Designation
+            };
+
+
+            return qRCodeM;
+        }
+
+
+    }
 
 }

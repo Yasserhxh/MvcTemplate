@@ -187,62 +187,47 @@
                 </tbody>
             </table>
         }
-
-
-@*        <h5>Glacage noir FS</h5>
+        <h5>Conditionnement :</h5>
         <table class="titable">
             <thead>
                 <tr>
-                    <th width="15%"></th>
-                    <th width="55%">Designation</th>
-                    <th width="15%">Quantite</th>
-                    <th width="15%">Condtionnement</th>
+                    <th width="25%">Description emballage</th>
+                    <th width="25%">Poids unitaire</th>
+                    <th width="25%">Quantite par caisse</th>
+                    <th width="25%">Poids net</th>
                 </tr>
             </thead>
             <tbody>
 
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td>&nbsp; @Model.fichetechnique.Produit_Vendable.ProduitVendable_Conditionnement</td>
+                    <td>&nbsp;@Model.fichetechnique.Produit_Vendable.ProduitVendable_Specification</td>
+                    <td>1</td>
+                    <td>1</td>
                 </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+
 
 
 
 
             </tbody>
-        </table>*@
+        </table>
+        <h4>Allergènes :</h4>
+        <ul>
+            @if(Model.allergenes !=null){
+                @foreach (var item in Model.allergenes)
+                {
+
+                    <li>@item.Allergene_Libelle</li>
+                }
+            }
+
+            <li>Céréales contenant du gluten</li>
+            <li>Oeufs et produits à base d'oeufs</li>
+            <li>Soja et produits à base de soja</li>
+            <li>Lait et produits à base de lait</li>
+            <li>Fruits à coque</li>
+        </ul>
     </div>
 </body>
 </html>
