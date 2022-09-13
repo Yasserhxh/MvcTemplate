@@ -102,6 +102,8 @@
                                             {<span>Trepho / Admin</span> }
                                             else if(User.IsInRole("Gerant_des_achats") == true)
                                             {<span> Trepho / Achat</span>}
+                                            else if(User.IsInRole("Responsable_de_production") == true)
+                                            {<span> Trepho / Responsable Prod</span>}
                                             else
                                             {<span> Trepho / @Context.Session.GetString("point")</span>}
                                         </a>
@@ -705,7 +707,18 @@
                                 </ul>
                             </li>
                         }
+                @if (User.IsInRole("Responsable_de_production"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-calculator"></i><span class="menu-title">Situation de stock</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="SituationStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des matières premières en stock</span></a>
 
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

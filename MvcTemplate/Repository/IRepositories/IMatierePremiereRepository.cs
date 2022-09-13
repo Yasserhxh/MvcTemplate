@@ -25,7 +25,7 @@ namespace Repository.IRepositories
         IEnumerable<MatireFamille_Parent> getListMatiereFamilleParent(int Id);
         IEnumerable<ProduitFicheTechnique> getListFicheTechnique(int Id);
         IEnumerable<MatierePremiereStockage> getListMatieresStockes(int Id, int MatierePremiereStokage_Id);
-        IEnumerable<MatierePremiereStockage> getListMatieresStockesAll(int Id, int lieuId, int? zone, int? section);
+        IEnumerable<MatierePremiereStockage> getListMatieresStockesAll(int Id, int? lieuId, int? zone, int? section);
         IEnumerable<Unite_Mesure> getListUniteMesure(int Id, int aboId);
         IEnumerable<Unite_MesureMatiere> getListUniteUtilisation(int matiereId);
         IEnumerable<Perte_Matiere> getListPertes(int aboId, int? atelierID, string date, int? matiereId);

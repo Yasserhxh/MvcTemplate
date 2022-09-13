@@ -132,7 +132,7 @@ namespace Web.Controllers
             var lieuId = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["ZoneStockage_LieuStockageId"] = new SelectList(zoneStockageService.getListZones(lieuId), "ZoneStockage_Id", "ZoneStockage_Designation");
-            var query = matierePremiereService.getListMatiereStockerAll(Id, (int)lieuId, zone, section);
+            var query = matierePremiereService.getListMatiereStockerAll(Id, lieuId, zone, section);
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
@@ -142,6 +142,23 @@ namespace Web.Controllers
             var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
             this.ViewBag.Pager = pager;
             return View(model);
+        }
+        [Authorize(Roles = "Responsable_de_production")]
+        public IActionResult SituationStock(int? lieuId, int pg = 1)
+        {
+            //var lieuId = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
+            var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            ViewData["lieu"] = new SelectList(zoneStockageService.getListLieuStockage(Id, 1), "LieuStockag_Id", "LieuStockag_Nom");
+            var query = matierePremiereService.getListMatiereStockerAll(Id, lieuId, null, null);
+            const int pageSize = 15;
+            if (pg < 1)
+                pg = 1;
+            int recsCount = query.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            this.ViewBag.Pager = pager;
+            return View("~/Views/ProduitVendable/RespoProduction/SituationStock.cshtml", model);
         }
         public IActionResult ConsulterUnite(int Id)
         {

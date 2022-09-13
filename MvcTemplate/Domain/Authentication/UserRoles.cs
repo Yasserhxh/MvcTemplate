@@ -9,5 +9,6 @@
         public const string Chef_Patissier = "Chef_Patissier";
         public const string RespoVente = "Responsable_Vente";
         public const string PositionVente = "Position_Vente";
+        public const string Responsable_de_production = "Responsable_de_production";
     }
 }
