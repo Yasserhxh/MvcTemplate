@@ -343,7 +343,7 @@ namespace Repository.Repositories
         public FicheTechniqueProduitBase FindFicheTechniqueBaseBYPordBase(int Id, int AboId)
         {
             return _db.ficheTechniqueProduitBases.Where(p => p.FicheTechniqueProduitBase_ProduitBaseID == Id && p.FicheTechniqueProduitBase_AbonnementID == AboId && p.FicheTechniqueProduitBase_InUse == true)
-                .Include(p=>p.ProduitBase_FicheTechnique).ThenInclude(p=>p.Matiere_Premiere)
+                .Include(p=>p.ProduitBase_FicheTechnique).ThenInclude(p=>p.Matiere_Premiere).ThenInclude(p=>p.listAllergene).ThenInclude(p=>p.Allgerene)
                 .Include(p=>p.ProduitBase_FicheTechnique).ThenInclude(p=>p.Unite_Mesure)
                 .FirstOrDefault();
         }

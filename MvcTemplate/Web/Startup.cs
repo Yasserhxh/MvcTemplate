@@ -53,7 +53,7 @@ namespace Web
                 options.LoginPath = new PathString("/Authentification/Login");
                 options.AccessDeniedPath = new PathString("/Authentification/NotAuthorized");
             });
-           // services.AddSession(options => { options.IdleTimeout = TimeSpan.MaxValue; });
+            services.AddSession(options => { options.IdleTimeout = TimeSpan.MaxValue; });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc().AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

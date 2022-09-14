@@ -8,5 +8,6 @@ namespace Domain.Models
     {
         public FicheTechniqueBridgeModel fichetechnique { get; set; }
         public List<FicheTehcniqueProduitBaseModel> fichetechniqueBase { get; set; }
+        public List<AllergeneModel> allergenes { get; set; }
     }
 }

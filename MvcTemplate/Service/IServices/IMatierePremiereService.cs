@@ -28,7 +28,7 @@ namespace Service.IServices
         IEnumerable<MatiereFamille_ParentModel> getListMatiereFamilleParent(int Id);
         IEnumerable<ProduitFicheTechniqueModel> getListFicheTech(int Id);
         IEnumerable<MatierePremiereStockageModel> getListMatiereStocker(int Id, int MatierePremiereStokage_Id);
-        IEnumerable<MatierePremiereStockageModel> getListMatiereStockerAll(int Id, int lieuId, int? zone, int? section);
+        IEnumerable<MatierePremiereStockageModel> getListMatiereStockerAll(int Id, int? lieuId, int? zone, int? section);
         IEnumerable<Unite_MesureModel> getListUniteMesure(int Id, int aboId);
         IEnumerable<Unite_MesureMatiereModel> getListUniteUtilisation(int matiereId);
 

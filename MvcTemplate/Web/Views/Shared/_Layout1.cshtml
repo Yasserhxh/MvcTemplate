@@ -102,6 +102,8 @@
                                             {<span>Trepho / Admin</span> }
                                             else if(User.IsInRole("Gerant_des_achats") == true)
                                             {<span> Trepho / Achat</span>}
+                                            else if(User.IsInRole("Responsable_de_production") == true)
+                                            {<span> Trepho / Responsable Prod</span>}
                                             else
                                             {<span> Trepho / @Context.Session.GetString("point")</span>}
                                         </a>
@@ -705,7 +707,82 @@
                                 </ul>
                             </li>
                         }
+                @if (User.IsInRole("Responsable_de_production"))
+                        {
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bx-calculator"></i><span class="menu-title">Situation de stock</span></a>
+                                <ul class="menu-content">
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="SituationStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des matières premières en stock</span></a>
 
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                            <li class=" nav-item">
+                                <a href="#"><i class="bx bxs-package"></i><span class="menu-title">Gestion des produits</span></a>
+                                <ul class="menu-content">
+
+                                    <li>
+                                        <a asp-controller="MatierePremiere" asp-action="ListeMatierePremiere"><i class="bx bx-right-arrow-alt"></i><span class="menu-item"></span>Gestion des matières premières</a>
+                                    </li>
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels"></span>Gestion des produits</a>
+                                        <ul class="menu-content">
+
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitBase"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits de base</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitVendable"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits maison</span></a>
+                                            </li>
+                                            @*<li>
+                    <a asp-controller="MatierePremiere" asp-action="ListeDeclarations"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des matières premières (Points de production)</span></a>
+                </li>
+                <li>
+                    <a asp-controller="MatierePremiere" asp-action="ListeDeclarationsStock"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des matières premières (Points de stockage)</span></a>
+                </li>*@
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitConsomable"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item"></span>Produits prêts à consommer</a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Produits packagés</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+
+                                    @*<li class=" nav-item">
+            <a href="#"><i class="bx bx-right-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des produits prêts à consommer</span></a>
+            <ul class="menu-content">
+                <li>
+                    <a asp-controller="ProduitVendable" asp-action="ListeProduitConsomable"><i class="bx bx-right-arrow-alt"></i><span class="menu-item"></span>Liste des produits prêts à consommer</a>
+                </li>
+                <li>
+                    <a asp-controller="ProduitVendable" asp-action="ListeDeclarationsPret"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des déclarations des pertes des produits prêts à consommer</span></a>
+                </li>
+            </ul>
+        </li>*@
+                                    @* <li>
+            <a asp-controller="ProduitVendable" asp-action="ListeProduitsPackage"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Gestion des produits packagés</span></a>
+        </li>*@
+                                    <li class=" nav-item">
+                                        <a href="#"><i class="bx bx-down-arrow-alt"></i><span class="menu-title" data-i18n="Menu Levels">Gestion des fiches techniques</span></a>
+                                        <ul class="menu-content">
+                                            <li>
+                                                <a class="sub-a" asp-controller="FicheTechnique" asp-action="ListeFichesTechniques"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fiches techniques (Produits maison)</span></a>
+                                            </li>
+                                            <li>
+                                                <a class="sub-a" asp-controller="FicheTechnique" asp-action="ListeFichesTechniquesBase"><i class="bx mar-lr bx-caret-right"></i><span class="menu-item">Fiches techniques (Produits de base)</span></a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="ProduitVendable" asp-action="ListeDesPlans"><i class="bx bx-right-arrow-alt"></i><span class="menu-item">Liste des planifications</span></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

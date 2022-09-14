@@ -1,0 +1,215 @@
+﻿@model IEnumerable<Domain.Models.MatierePremiereStockageModel>
+@using Web.Helpers;
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    ViewData["Title"] = "Matiere Stockées";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a asp-action="ListeMatierePremiere">Liste des matières premières</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="form-row">
+                    <div class="col-md-4 offset-md-3 mb-1">
+                        <label for="zone">Zone de stockage</label>
+                        <div>
+                            <div>
+                                <select class="custom-select" data-search="true" id="lieu" asp-items="@ViewBag.lieu">
+                                    <option value="" selected disabled>Choisir un point de stockage...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class=" text-md-right">
+                        <button class="btn btn-sm btn-success glow mt-md-2 mb-1" onclick="displayDashboard()">Filtrer</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table-responsive">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière Première</th>
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Section de stockage</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Zone de Stockage</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Stock Minimum</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Stock Maximum</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-right">Quantité en Stock</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model)
+                                                                {
+                                                                    if (item.MatierePremiereStokage_QuantiteActuelle <= item.MatierePremiereStokage_StockMinimum)
+                                                                    {
+                                                                        <tr>
+                                                                            @{
+                                                                                var qtemin = decimal.Parse(item.MatierePremiereStokage_StockMinimum.ToString()).ToString("G29");
+                                                                            }
+                                                                            @{
+                                                                                var qtemax = decimal.Parse(item.MatierePremiereStokage_StockMaximum.ToString()).ToString("G29");
+                                                                            }
+                                                                            @{
+                                                                                var qteS = decimal.Parse(item.MatierePremiereStokage_QuantiteActuelle.ToString()).ToString("G29");
+                                                                            }
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Matiere_Premiere.MatierePremiere_Libelle)</td>
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Section_Stockage.Section_Designation)</td>
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Section_Stockage.Zone_Stockage.ZoneStockage_Designation)</td>
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-right">@qtemin @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-right">@qtemax @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                            <td class="text-danger text-bold-600 pr-0 text-sm-right">@qteS @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            @{
+                                                                                var qtemin = decimal.Parse(item.MatierePremiereStokage_StockMinimum.ToString()).ToString("G29");
+                                                                            }
+                                                                            @{
+                                                                                var qtemax = decimal.Parse(item.MatierePremiereStokage_StockMaximum.ToString()).ToString("G29");
+                                                                            }
+                                                                            @{
+                                                                                var qteS = decimal.Parse(item.MatierePremiereStokage_QuantiteActuelle.ToString()).ToString("G29");
+                                                                            }
+                                                                            <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.Matiere_Premiere.MatierePremiere_Libelle)</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Section_Stockage.Section_Designation)</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.Section_Stockage.Zone_Stockage.ZoneStockage_Designation)</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-right">@qtemin @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-right">@qtemax @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-right">@qteS @item.Matiere_Premiere.Unite_Mesure.UniteMesure_Libelle</td>
+                                                                        </tr>
+                                                                    }
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+            <div class="container">
+                @if (pager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-end">
+                        @if (pager.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="SituationStock" asp-route-pg="1" asp-route-lieuId="@Context.Request.Query["lieuId"]"><i class="bx bx-chevrons-left"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="SituationStock" asp-route-pg="@(pager.CurrentPage - 1)" asp-route-lieuId="@Context.Request.Query["lieuId"]"><i class="bx bx-chevron-left"></i></a>
+                            </li>
+                        }
+                        @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == pager.CurrentPage?"active":"")">
+                                <a class="page-link" asp-action="SituationStock" asp-route-pg="@pge" asp-route-lieuId="@Context.Request.Query["lieuId"]">@pge</a>
+                            </li>
+                        }
+                        @if (pager.CurrentPage < pager.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-action="SituationStock" asp-route-pg="@(pager.CurrentPage + 1)" asp-route-lieuId="@Context.Request.Query["lieuId"]"><i class="bx bx-chevron-right"></i></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" asp-action="SituationStock" asp-route-pg="@(pager.TotalPages)" asp-route-lieuId="@Context.Request.Query["lieuId"]"><i class="bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+                    </ul>
+
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function displayDashboard() {
+        var lieuId = $("#lieu").val();
+        window.location.href = '/MatierePremiere/SituationStock?lieuId=' + lieuId;
+    }
+</script>

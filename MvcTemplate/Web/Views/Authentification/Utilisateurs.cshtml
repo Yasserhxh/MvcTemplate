@@ -128,6 +128,10 @@
                                                                     {
                                                                         <td class="border-b dark:border-dark-5 text-sm-left">Responsable des achats</td>
                                                                     }
+                                                                    @if (item.Role == "Responsable_de_production")
+                                                                    {
+                                                                        <td class="border-b dark:border-dark-5 text-sm-left">Responsable de production</td>
+                                                                    }
 
                                                                     <td class="border-b dark:border-dark-5 text-sm-left">@Html.DisplayFor(modelItem => item.Affectation)</td>
                                                                     <td class="border-b dark:border-dark-5">@(item.Statut == 0 || item.Statut == null ? "Désactivé" : "Activé")</td>

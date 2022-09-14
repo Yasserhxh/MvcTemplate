@@ -32,7 +32,7 @@
                                     <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    <a href="#">Liste des fournisseurs</a>
+                                    <a href="#">Liste des distributeurs</a>
                                 </li>
                             </ol>
                         </div>
@@ -44,7 +44,7 @@
             <!--Dashboard Ecommerce stqrts-->
             <section id="dashboard-ecommerce">
                 <div class="form-row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 offset-1">
                         <label for="role">Raison sociale</label>
                         <div>
                             <input type="text" class="form-control" name="name" id="name" onkeyup="checkdisable()"/>
@@ -107,6 +107,7 @@
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
                                                                 <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Photo</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Raison Sociale</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">ICE</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">IF</th>
@@ -121,6 +122,12 @@
                                                                 @foreach (var item in Model)
                                                                 {
                                                                     <tr class="odd">
+                                                                        <td>
+                                                                            <img src="~/@item.Distributeur_Photo"
+                                                                                 class="rounded-circle"
+                                                                                 height="40" width="40"
+                                                                                 asp-append-version="true" />
+                                                                        </td>
                                                                         <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Distributeur_RaisonSocial)</td>
                                                                         <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Distributeur_ICE)</td>
                                                                         <td class="text-bold-600 pr-0 sorting_1">@Html.DisplayFor(modelItem => item.Distributeur_IF)</td>

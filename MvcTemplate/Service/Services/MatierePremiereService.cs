@@ -118,7 +118,7 @@ namespace Service.Services
         {
             return mapper.Map<IEnumerable<MatierePremiereStockage>, IEnumerable<MatierePremiereStockageModel>>(matierePremiereRepository.getListMatieresStockes(Id, MatierePremiereStokage_Id));
         }
-        public IEnumerable<MatierePremiereStockageModel> getListMatiereStockerAll(int Id, int lieuId, int? zone, int? section)
+        public IEnumerable<MatierePremiereStockageModel> getListMatiereStockerAll(int Id, int? lieuId, int? zone, int? section)
         {
             return mapper.Map<IEnumerable<MatierePremiereStockage>, IEnumerable<MatierePremiereStockageModel>>(matierePremiereRepository.getListMatieresStockesAll(Id, lieuId, zone, section));
         }

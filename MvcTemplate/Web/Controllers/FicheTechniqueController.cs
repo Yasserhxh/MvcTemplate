@@ -13,7 +13,7 @@ using Web.Helpers;
 
 namespace Web.Controllers
 {
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Client, Responsable_de_production")]
 
     public class FicheTechniqueController : Controller
     {

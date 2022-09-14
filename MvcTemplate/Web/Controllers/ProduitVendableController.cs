@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
+using QRCoder;
 
 namespace Web.Controllers
 {
@@ -69,7 +70,7 @@ namespace Web.Controllers
         }
 
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult Ajouter()
         {
             var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -181,7 +182,7 @@ namespace Web.Controllers
             SelectList sousfamilleList = new SelectList(familleProduitService.getListSousFamilles(familleParent, aboid), "SousFamille_ID", "SousFamille_Libelle");
             return sousfamilleList;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ListeProduitVendable(int? categ, int? sousCateg,string name, int pg=1)
         {
@@ -201,7 +202,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult Modification(int? id)
         {
@@ -297,7 +298,7 @@ namespace Web.Controllers
             var result = await produitVendableService.deleteProduitsLink(id, code);
             return result;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ListeUniteMesure()
         {
@@ -397,7 +398,7 @@ namespace Web.Controllers
         {
             return View(produitVendableService.getListPrixFormes(Id));
         }
-        [Authorize(Roles = "Chef_Patissier,Client")]
+        [Authorize(Roles = "Chef_Patissier,Client, Responsable_de_production")]
 
         public IActionResult Planification()
         {
@@ -436,7 +437,7 @@ namespace Web.Controllers
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
-            
+
             if (User.IsInRole("Chef_Patissier"))
             {
                 //var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
@@ -459,7 +460,7 @@ namespace Web.Controllers
                 var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 ViewData["production"] = new SelectList(produitVendableService.getListAteliers(Id), "Atelier_ID", "Atelier_Nom");
-                
+
                 var query = await produitVendableService.getListPansStock(Id, adresse, etat, point, date);
                 int recsCount = query.Count();
                 var pager = new Pager(recsCount, pg, pageSize);
@@ -468,7 +469,7 @@ namespace Web.Controllers
                 this.ViewBag.Pager = pager;
                 return View("~/Views/ProduitVendable/PlanificationProduction/ListeDesPlansGerant.cshtml", model);
             }
-            else if(User.IsInRole("Client"))
+            else if (User.IsInRole("Client") || User.IsInRole("Responsable_de_production"))
             {
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 ViewData["production"] = new SelectList(produitVendableService.getListAteliers(Id), "Atelier_ID", "Atelier_Nom");
@@ -3024,7 +3025,7 @@ namespace Web.Controllers
             var redirect = await produitVendableService.DemanderPret(demande_PretModel);
             return redirect;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult AjouterProduitBase()
         {
             var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -3053,7 +3054,7 @@ namespace Web.Controllers
                 return View();
             }
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult ListeProduitBase(int? formeId, int pg=1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -3069,7 +3070,7 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/ProduitVendable/ProduitdeBase/ListeDesProduits.cshtml", model);
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ConsulterBase(int Id)
         {
@@ -3087,7 +3088,7 @@ namespace Web.Controllers
             return select;
             //return produitVendableService.findFormulaireFormeProduit(id);
         }
-        [Authorize(Roles = "Chef_Patissier,Client")]
+        [Authorize(Roles = "Chef_Patissier,Client, Responsable_de_production")]
 
         public IActionResult PlanificationBase()
         {
@@ -3244,11 +3245,26 @@ namespace Web.Controllers
              {
                 var aboID = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 var ficheBaseListe = new List<FicheTehcniqueProduitBaseModel>();
+                var allergeneListe = new List<AllergeneModel>();
                 var produit = produitVendableService.GetFicheTech(id);
                 foreach(var item in produit.FicheTech_ProduitBase)
                 {
                     var fichebase = produitFicheTechniqueService.FindFicheTechniqueBaseBYPordBase(item.ProduitBase.ProduitBase_ID, aboID);
                     ficheBaseListe.Add(fichebase);
+                    var y = fichebase.ProduitBase_FicheTechnique.SelectMany(p => p.Matiere_Premiere.listAllergene).Select(p => p.Allgerene);
+                    foreach (var item2 in y)
+                    {
+                        bool alreadyExists = allergeneListe.Any(p => p.Allergene_Id == item2.Allergene_Id);
+                        if (!alreadyExists)
+                            allergeneListe.Add(item2);
+                    }
+                }
+                var x = produit.Produit_FicheTechnique.SelectMany(p=>p.Matiere_Premiere.listAllergene).Select(p=>p.Allgerene);
+                foreach(var item in x)
+                {
+                    bool alreadyExists = allergeneListe.Any(p => p.Allergene_Id == item.Allergene_Id);
+                    if (!alreadyExists)
+                        allergeneListe.Add(item);
                 }
                 var model = new PDF_FicheTechnique()
                 {
@@ -3266,8 +3282,51 @@ namespace Web.Controllers
             }
         }
 
-    }
-   
+        [HttpPost]
+        public QrClassM GetQrCode(int id)
+        {
+            var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var item =  produitVendableService.findFormulairePlans(id);
+            var listQr = new List<QrClassM>();
+            var qRCode = new QRCodeProduitModel()
+            {
+                // QRCodeText = redirect.ToString(),
+                DESIGNATION = item.Produit_Vendable.ProduitVendable_Designation.ToUpper(),
+                DATE_PROD = item.PlanificationProduction_DateCreation.ToString("dd/MM/yyyy hh:mm:ss"),
+                DATE_EXP = item.PlanificationProduction_DateModification.Value.ToString("dd/MM/yyyy hh:mm:ss"),
+                CONDITIONNEMENT = item.Produit_Vendable.ProduitVendable_Conditionnement.ToUpper(),
+                FORME_STOCKAGE = item.Produit_Vendable.Forme_Stockage.FormStockage_Libelle,
+            };
 
+            var serializer = new JsonSerializer();
+            var stringWriter = new StringWriter();
+            using (var writer = new JsonTextWriter(stringWriter))
+            {
+                writer.QuoteName = false;
+                writer.Indentation = 6;
+                writer.Formatting = Formatting.Indented;
+                serializer.Serialize(writer, qRCode);
+            }
+            var json = stringWriter.ToString();
+            //string output = JsonConvert.SerializeObject(qRCode, Formatting.Indented);
+            QRCodeGenerator QrGenerator = new QRCodeGenerator();
+            //json = json.Replace("/{|}/g", " ");
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(json, QRCodeGenerator.ECCLevel.Q);
+            QRCode QrCode = new QRCode(QrCodeInfo);
+            Bitmap QrBitmap = QrCode.GetGraphic(60);
+            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
+            string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(BitmapArray));
+            var qRCodeM = new QrClassM()
+            {
+                qRCodeIMG = QrUri,
+                qRCodeTITLE = item.Produit_Vendable.ProduitVendable_Designation
+            };
+
+
+            return qRCodeM;
+        }
+
+
+    }
 
 }

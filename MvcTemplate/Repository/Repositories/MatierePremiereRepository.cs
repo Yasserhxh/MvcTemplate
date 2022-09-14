@@ -309,9 +309,11 @@ namespace Repository.Repositories
                 .AsEnumerable();
             return m;
         }  
-        public IEnumerable<MatierePremiereStockage> getListMatieresStockesAll(int Id, int lieuId,int? zone,int? section)
+        public IEnumerable<MatierePremiereStockage> getListMatieresStockesAll(int Id, int? lieuId,int? zone,int? section)
         {
             IEnumerable<MatierePremiereStockage> m;
+            if (lieuId == null)
+                return null;
             if (zone != null)
             {
                 if (section != null)
