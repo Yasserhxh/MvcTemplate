@@ -4684,5 +4684,20 @@ namespace Repository.Repositories
             else
                 return false;
         }
+
+        public Task<int> CreateDemandeApprov(DemandeApprov demandeApprov)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<DemandeApprov>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<DemandeApprov_Details>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
