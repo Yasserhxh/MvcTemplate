@@ -1,16 +1,21 @@
 ﻿using Domain.Authentication;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NHibernate.Cfg;
 using Repository.IRepositories;
 using Service.IServices;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Files = System.IO.File;
 
 namespace Web.Controllers
 {
@@ -20,23 +25,69 @@ namespace Web.Controllers
         private readonly IProduitVendableService produitVendableService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthentificationRepository authentificationRepository;
+        private readonly IHostingEnvironment _environment;
 
-        public PointVenteController(IPointVenteService pointVenteService, IProduitVendableService produitVendableService, UserManager<ApplicationUser> userManager, IAuthentificationRepository authentificationRepository)
+        public PointVenteController(IPointVenteService pointVenteService, IProduitVendableService produitVendableService, UserManager<ApplicationUser> userManager, IAuthentificationRepository authentificationRepository, IHostingEnvironment environment)
         {
             this.pointVenteService = pointVenteService;
             this.authentificationRepository = authentificationRepository;
             this.produitVendableService = produitVendableService;
             _userManager = userManager;
+            _environment = environment;
         }
 
         [Authorize(Roles = "Client")]
 
         [HttpPost]
-        public async Task<bool> Ajouter(Point_VenteModel pointVenteModel)
+        public async Task<bool> Ajouter(Point_VenteModel pdv)
         {
             // GET CURRENT USER_ID and query it's abo_ID 
-            pointVenteModel.PointVente_AbonnementId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
-            var redirect = await pointVenteService.CreatePointVente(pointVenteModel);
+            var newFileName = string.Empty;
+            if (HttpContext.Request.Form.Files != null)
+            {
+                var fileName = string.Empty;
+                string PathDB = string.Empty;
+
+                var files = HttpContext.Request.Form.Files;
+
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        //Getting FileName
+                        fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        //Assigning Unique Filename (Guid)
+                        var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                        //Getting file Extension
+                        var FileExtension = Path.GetExtension(fileName);
+
+                        // concating  FileName + FileExtension
+                        newFileName = myUniqueFileName + FileExtension;
+
+                        // Combines two strings into a path.
+                        fileName = Path.Combine(_environment.WebRootPath, "images") + $@"\{newFileName}";
+
+                        // if you want to store path of folder in database
+                        PathDB = "images/" + newFileName;
+
+                        using (FileStream fs = System.IO.File.Create(fileName))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush();
+                        }
+                        pdv.PointVente_Logo = PathDB;
+
+                    }
+                }
+
+
+            }
+            // GET CURRENT USER_ID and query it's abo_ID 
+            pdv.PointVente_AbonnementId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var redirect = await pointVenteService.CreatePointVente(pdv);
+
+
             return redirect;
         }
         [Authorize(Roles = "Client")]

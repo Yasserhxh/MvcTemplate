@@ -101,6 +101,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>Point de Vente</th>
+                                                                    <th>Logo</th>
                                                                     <th>Type de service </th>
                                                                     <th>Ville </th>
                                                                     <th>Adresse</th>
@@ -115,6 +116,7 @@
                                                                 {
                                                                 <tr>
                                                                     <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.PointVente_Nom)</td>
+                                                                    <td><img width="100px" height="100px" src="~/@item.PointVente_Logo" /></td>
                                                                     @if (item.PointVente_TypeService == 0){
                                                                         <td class="border-b dark:border-dark-5">Service à emporter</td>}
                                                                     else {
@@ -173,7 +175,7 @@
                     <i class="bx bx-x"></i>
                 </button>
             </div>
-            <form class="form">
+            <form class="form" enctype="multipart/form-data">
                 <div class="modal-body" id="mbody">
                     <div class="row">
                         <div class="col-sm-12">
@@ -266,14 +268,14 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="row">
+                    <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="image">Image </label>
-                                <input type="file" class="form-control"  />
+                                <label for="img">logo</label>
+                                <input type="file" id="img" class="form-control"  />
                             </div>
                         </div>
-                    </div>*@
+                    </div>
                     <div class="row">
                         <div class="col-md-12 text-sm-right">
                             <button class="btn btn-primary" id="envbutton" onclick="camionAdd()">
@@ -367,6 +369,7 @@
             $("#gsm").val() != null && $("#gsm").val() != '' &&
             $("#ville").val() != null && $("#ville").val() != '' &&
             $("#code").val() != null && $("#code").val() != '' &&
+            $("#img").val() != null && $("#img").val() != ''&&
             $("#inputGroupSelected02").val() != null && $("#inputGroupSelected02").val() != '') { ajouterPdV(); }
 
     }
@@ -470,7 +473,7 @@
 
     function ajouterPdV() {
         document.getElementById("envbutton").disabled = true;
-        var pointVenteModel = {
+/*        var pointVenteModel = {
 
             PointVente_Nom: $('#nom').val(),
             PointVente_Adresse: $('#adresse').val(),
@@ -481,9 +484,23 @@
             PointVente_TypeService: $("#service").val(),
             PointVente_UtilisateurId: $('#inputGroupSelected02 option:selected').val(),
             PointVente_AtelierID: $('#inputGroupSelected001 option:selected').val(),
-            PointVente_StockID: $('#inputGroupSelected002 option:selected').val()
-        };
-        console.log(pointVenteModel);
+            PointVente_StockID: $('#inputGroupSelected002 option:selected').val(),
+            PointVente_Logo: $("#img").val()
+            
+        };*/
+        var formData = new FormData();
+        var file = document.getElementById("img").files[0];
+        formData.append("PointVente_Logo", file);
+        formData.append("PointVente_Nom", $('#nom').val());
+        formData.append("PointVente_Adresse", $('#adresse').val());
+        formData.append("PointVente_NomResponsable", $('#respoNom').val());
+        formData.append("PointVente_Telephone", $("#gsm").val());
+        formData.append("PointVente_VilleID", $('#ville option:selected').val());
+        formData.append("PointVente_CodePostal", $("#code").val());
+        formData.append("PointVente_TypeService", $("#service").val());
+        formData.append("PointVente_UtilisateurId", $('#inputGroupSelected02 option:selected').val());
+        formData.append("PointVente_AtelierID", $('#inputGroupSelected001 option:selected').val());
+        formData.append("PointVente_StockID", $('#inputGroupSelected002 option:selected').val());
 
         $.ajax({
 
@@ -491,7 +508,9 @@
              type: "POST",
              cache: false,
              async: true,
-            data: pointVenteModel,
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formData,
                  success: function (data) {
                 if (data == true)
                 {
