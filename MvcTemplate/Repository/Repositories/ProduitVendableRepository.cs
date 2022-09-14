@@ -4685,14 +4685,26 @@ namespace Repository.Repositories
                 return false;
         }
 
-        public Task<int> CreateDemandeApprov(DemandeApprov demandeApprov)
+        public async Task<int?> CreateDemandeApprov(DemandeApprov demandeApprov)
         {
-            throw new NotImplementedException();
+            await _db.demandeApprovs.AddAsync(demandeApprov);
+            var confirm = await unitOfWork.Complete();
+            if (confirm > 0)
+                return demandeApprov.DemandeApprov_ID;
+            else
+                return null;
         }
 
-        public Task<List<DemandeApprov>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv)
+        public async Task<List<DemandeApprov>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv)
         {
-            throw new NotImplementedException();
+            var query = _db.demandeApprovs.Where(p => p.DemandeApprov_AbonnementID == aboId && p.DemandeApprov_DateLivraisonPrevue.Date == DateTime.Now.Date);
+            if (pointVenteID != null)
+                query = query.Where(p => p.details.Any(x => x.DemandeApprovDetails_PointVenteID == pointVenteID));
+            if (string.IsNullOrEmpty(etat) == true)
+                query = query.Where(p => p.DemandeApprov_EtatDemande == etat);
+            if (string.IsNullOrEmpty(dateLiv) == true)
+                query = query.Where(p => Convert.ToDateTime(p.DemandeApprov_DateLivraisonPrevue).ToString("yyyy-MM-dd") == etat);
+            return await query.ToListAsync();
         }
 
         public Task<List<DemandeApprov_Details>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg)
