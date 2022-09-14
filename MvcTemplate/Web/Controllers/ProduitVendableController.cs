@@ -70,7 +70,7 @@ namespace Web.Controllers
         }
 
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult Ajouter()
         {
             var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -182,7 +182,7 @@ namespace Web.Controllers
             SelectList sousfamilleList = new SelectList(familleProduitService.getListSousFamilles(familleParent, aboid), "SousFamille_ID", "SousFamille_Libelle");
             return sousfamilleList;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ListeProduitVendable(int? categ, int? sousCateg,string name, int pg=1)
         {
@@ -202,7 +202,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult Modification(int? id)
         {
@@ -298,7 +298,7 @@ namespace Web.Controllers
             var result = await produitVendableService.deleteProduitsLink(id, code);
             return result;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ListeUniteMesure()
         {
@@ -398,7 +398,7 @@ namespace Web.Controllers
         {
             return View(produitVendableService.getListPrixFormes(Id));
         }
-        [Authorize(Roles = "Chef_Patissier,Client")]
+        [Authorize(Roles = "Chef_Patissier,Client, Responsable_de_production")]
 
         public IActionResult Planification()
         {
@@ -437,7 +437,7 @@ namespace Web.Controllers
             const int pageSize = 15;
             if (pg < 1)
                 pg = 1;
-            
+
             if (User.IsInRole("Chef_Patissier"))
             {
                 //var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
@@ -460,7 +460,7 @@ namespace Web.Controllers
                 var adresse = Convert.ToInt32(HttpContext.Session.GetString("mysession"));
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 ViewData["production"] = new SelectList(produitVendableService.getListAteliers(Id), "Atelier_ID", "Atelier_Nom");
-                
+
                 var query = await produitVendableService.getListPansStock(Id, adresse, etat, point, date);
                 int recsCount = query.Count();
                 var pager = new Pager(recsCount, pg, pageSize);
@@ -469,7 +469,7 @@ namespace Web.Controllers
                 this.ViewBag.Pager = pager;
                 return View("~/Views/ProduitVendable/PlanificationProduction/ListeDesPlansGerant.cshtml", model);
             }
-            else if(User.IsInRole("Client"))
+            else if (User.IsInRole("Client") || User.IsInRole("Responsable_de_production"))
             {
                 var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
                 ViewData["production"] = new SelectList(produitVendableService.getListAteliers(Id), "Atelier_ID", "Atelier_Nom");
@@ -3025,7 +3025,7 @@ namespace Web.Controllers
             var redirect = await produitVendableService.DemanderPret(demande_PretModel);
             return redirect;
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult AjouterProduitBase()
         {
             var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -3054,7 +3054,7 @@ namespace Web.Controllers
                 return View();
             }
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
         public IActionResult ListeProduitBase(int? formeId, int pg=1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -3070,7 +3070,7 @@ namespace Web.Controllers
             this.ViewBag.Pager = pager;
             return View("~/Views/ProduitVendable/ProduitdeBase/ListeDesProduits.cshtml", model);
         }
-        [Authorize(Roles = "Client")]
+        [Authorize(Roles = "Client, Responsable_de_production")]
 
         public IActionResult ConsulterBase(int Id)
         {
@@ -3088,7 +3088,7 @@ namespace Web.Controllers
             return select;
             //return produitVendableService.findFormulaireFormeProduit(id);
         }
-        [Authorize(Roles = "Chef_Patissier,Client")]
+        [Authorize(Roles = "Chef_Patissier,Client, Responsable_de_production")]
 
         public IActionResult PlanificationBase()
         {

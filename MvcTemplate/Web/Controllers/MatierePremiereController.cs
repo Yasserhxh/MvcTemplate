@@ -37,7 +37,7 @@ namespace Web.Controllers
             this.pointVenteService = pointVenteService;
             _userManager = userManager;
         }
-        [Authorize(Roles = "Client, Gerant_des_achats")]
+        [Authorize(Roles = "Client, Gerant_des_achats, Responsable_de_production")]
 
         public IActionResult AjouterMatierePremiere()
         {
@@ -86,7 +86,7 @@ namespace Web.Controllers
             return redirect;
         }
 
-        [Authorize(Roles = "Client,Gerant_de_stock, Gerant_des_achats")]
+        [Authorize(Roles = "Client,Gerant_de_stock, Gerant_des_achats, Responsable_de_production")]
         public IActionResult ListeMatierePremiere(int? allergene,int? forme, string name, int pg=1)
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
@@ -107,7 +107,7 @@ namespace Web.Controllers
             {
                 return View("~/Views/MatierePremiere/ListeMatierePremiereGerant.cshtml", model);
             }
-            if (User.IsInRole("Client") || User.IsInRole("Gerant_des_achats"))
+            if (User.IsInRole("Client") || User.IsInRole("Gerant_des_achats") || User.IsInRole("Responsable_de_production") )
             {
                 ViewData["Unite"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
                 return View(model);
