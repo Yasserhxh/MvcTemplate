@@ -100,6 +100,8 @@ namespace Repository.Mapping
             CreateMap<MatiereTransfert_Model, Matiere_Transfert>();
             CreateMap<PayementFacture_Model, Payement_Facture>();
             CreateMap<DistributeurModel, Distributeur>();
+            CreateMap<Unite_CategorieModel, Unite_Categorie>();
+            CreateMap<Unite_Categorie, Unite_CategorieModel>();
 
         }
     }

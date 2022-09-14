@@ -247,6 +247,10 @@ namespace Repository.Repositories
         public IEnumerable<Unite_Mesure> getListUniteMesure()
         {
             return _db.unite_Mesures.AsEnumerable();
+        } 
+        public IEnumerable<Unite_Categorie> getListUniteCategorie()
+        {
+            return _db.unite_Categories.AsEnumerable();
         }
 
         public IEnumerable<Zone_Stockage> getListZoneStockage(int Id)

@@ -43,6 +43,7 @@ namespace Web.Controllers
         {
             var abo = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["MatierePremiere_UniteMesureId_FT"] = new SelectList(zoneStockageService.getListUniteMesure(), "UniteMesure_Id", "UniteMesure_Libelle");
+            ViewData["categorie"] = new SelectList(zoneStockageService.getListUniteCategorie(), "UniteCategorie_Id", "UniteCategorie_Libelle");
             ViewData["MatierePremiere_FormeStockageId"] = new SelectList(matierePremiereService.getListFormeStockage(abo), "FormStockage_Id", "FormStockage_Libelle");
             ViewData["MatierePremiere_AllergeneId"] = new SelectList(matierePremiereService.getListAllergene(abo), "Allergene_Id", "Allergene_Libelle");
             ViewData["tva"] = new SelectList(matierePremiereService.getListCoutTVA(), "TauxTVA_Id", "TauxTVA_pourcentageString");
@@ -68,6 +69,13 @@ namespace Web.Controllers
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             SelectList sousfamilleList = new SelectList(matierePremiereService.getListMatiereFamille(Id).Where(s => s.MatiereFamille_ParentID == familleParent), "MatiereFamille_ID", "MatiereFamille_Libelle");
             return sousfamilleList;
+        }
+        [HttpPost]
+        public SelectList categorieuniteList(int categorieunite)
+        {
+           
+            SelectList uniteAchat = new SelectList(zoneStockageService.getListUniteMesure().Where(s => s.Unite_CategorieID == categorieunite), "UniteMesure_Id", "UniteMesure_Libelle");
+            return uniteAchat;
         }
 
         [Authorize(Roles = "Client, Gerant_des_achats")]

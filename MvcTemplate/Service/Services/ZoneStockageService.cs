@@ -193,6 +193,10 @@ namespace Service.Services
         {
             return mapper.Map<IEnumerable<Unite_Mesure>, IEnumerable<Unite_MesureModel>>(this.zoneStockageRepository.getListUniteMesure());
         }
+        public IEnumerable<Unite_CategorieModel> getListUniteCategorie()
+        {
+            return mapper.Map<IEnumerable<Unite_Categorie>, IEnumerable<Unite_CategorieModel>>(this.zoneStockageRepository.getListUniteCategorie());
+        }
 
         public IEnumerable<Zone_StockageModel> getListZoneStockage(int Id)
         {

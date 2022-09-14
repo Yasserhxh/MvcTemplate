@@ -13,6 +13,7 @@ namespace Repository.Data
         public DbSet<FamilleProduit> familleProduits { get; set; }
         public DbSet<SousFamille> sousFamilles { get; set; }
         public DbSet<Unite_Mesure> unite_Mesures { get; set; }
+        public DbSet<Unite_Categorie> unite_Categories { get; set; }
         public DbSet<Type_Contenu> type_Contenus { get; set; }
         public DbSet<Forme_Stockage> forme_Stockages { get; set; }
         public DbSet<Point_Vente> point_Ventes { get; set; }
