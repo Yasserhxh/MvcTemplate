@@ -63,31 +63,31 @@
                                                 <div class="col-12">
                                                     <h6 class="py-50"></h6>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Libellé (FR)</label>
                                                         <input type="text" id="libelle" asp-for="MatierePremiere_Libelle" class="form-control" placeholder="Entrez le nom de la matière" onchange="changeLib()" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Libellé (AR)</label>
                                                         <input type="text" id="libelleAR" asp-for="MatierePremiere_LibelleAR" class="form-control" onchange="testAR()" placeholder="Entrez le nom de la matière (AR)" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Libellé (EN)</label>
                                                         <input type="text" id="libelleEN" asp-for="MatierePremiere_LibelleEN" class="form-control" placeholder="Entrez le nom de la matière (EN)" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Code Article</label>
                                                         <input type="text" id="codeAr" asp-for="MatierePremiere_CodeArticle" class="form-control" placeholder="Entrez le code de la matière" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Catégorie de matière première</label>
                                                         <select class="custom-select" id="parentID" data-search="true" asp-items="@ViewBag.FamilleParent" onchange="familleList()" required>
@@ -97,7 +97,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label>Sous-catégorie de matière première</label>
                                                         <select class="custom-select" id="childID" data-search="true" asp-for="MatierePremiere_FamilleID" required>
@@ -107,16 +107,25 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="AchatUniteMesure">Catégorie d'unité d'achat</label>
+                                                        <select class="custom-select" id="categorieuniteAchat" data-search="true"  asp-items="@ViewBag.categorie" onchange="categorieUniteList()" required>
+                                                            <option value="" selected>Sélectionnez l'unite de mesure ...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="AchatUniteMesure">Unité d'achat</label>
-                                                        <select class="custom-select" id="uniteAchat" data-search="true" asp-for="MatierePremiere_AchatUniteMesureId" asp-items="@ViewBag.MatierePremiere_UniteMesureId_FT" required>
+                                                        <select class="custom-select" id="uniteAchat" data-search="true" asp-for="MatierePremiere_AchatUniteMesureId" required>
                                                             <option value="" selected>Sélectionnez l'unite de mesure ...</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-sm-3">
+                                                
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="FormeStockage">Forme de stockage</label>
                                                         <select class="custom-select" id="forme" data-search="true" asp-for="MatierePremiere_FormeStockageId" asp-items="@ViewBag.MatierePremiere_FormeStockageId">
@@ -811,6 +820,43 @@
                     }
                     $.each(data, function (i, item) {
                         $("#childID").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                    });
+                },
+                error: function () {
+                }
+            });
+        }
+    }
+    function categorieUniteList()
+    {
+        var data = { categorieunite: parseInt($("#categorieuniteAchat").val()) };
+        if ($("#categorieuniteAchat").val() != null) {
+            $.ajax({
+                url: '@Url.Action("categorieuniteList", "MatierePremiere")',
+                type: "POST",
+                cache: false,
+                async: true,
+                data: data,
+                success: function (data) {
+                    if ($("#uniteAchat option").length > 1 || $("#uniteUti option").length > 1) {
+                        $.each($("#uniteAchat option"), function (i, item) {
+                            item.remove();
+                        });
+                        $.each($("#uniteUti option"), function (i, item) {
+                            item.remove();
+                        });
+                        $("#uniteAchat").append("<option value='' selected disabled>Sélectionnez une unité d'achat</option>");
+                        $("#uniteUti").append("<option value='' selected disabled>Sélectionnez une unité d'utilisation</option>");
+                    }
+                    $.each(data, function (i, item) {
+                        $("#uniteAchat").append($('<option>', {
+                            value: item.value,
+                                text: item.text
+                        }));
+                        $("#uniteUti").append($('<option>', {
                             value: item.value,
                                 text: item.text
                         }));

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Service.IServices
         Task<bool?> AjouterUtilisateur(int idStock, string responsableId);
         IEnumerable<Type_ContenuModel> getListTypeContenu();
         IEnumerable<Unite_MesureModel> getListUniteMesure();
+        IEnumerable<Unite_CategorieModel> getListUniteCategorie();
         IEnumerable<Lieu_StockageModel> getListLieuStockage(int Id,int? statut);
         IEnumerable<Lieu_StockageModel> getListLieuStockageActive(int Id, int lieuId);
         IEnumerable<Stock_UserModel> getListStockUser(string UserId);

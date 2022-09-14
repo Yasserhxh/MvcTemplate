@@ -33,5 +33,6 @@ namespace Repository.IRepositories
         string getUserLogo(int aboId);
         UserModel findFormulaireUser(string userId);
         Task<bool> updateFormulaireUser(string userId, UserModel newUser);
+        
     }
 }

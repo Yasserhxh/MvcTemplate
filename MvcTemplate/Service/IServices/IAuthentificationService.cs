@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Authentication;
+using Domain.Enums;
 using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,5 +24,6 @@ namespace Service.IServices
         Task<bool> DesactiverAsync(string id);
         UserModel findFormulaireUser(string userId);
         Task<bool> updateFormulaireUser(string userId, UserModel newUser);
+        
     }
 }

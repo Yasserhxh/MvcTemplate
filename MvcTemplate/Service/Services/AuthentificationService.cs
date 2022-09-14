@@ -6,6 +6,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Repository.IRepositories;
 using Service.IServices;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -126,5 +127,7 @@ namespace Service.Services
         {
             return this.authentificationRepository.updateFormulaireUser(userId, newUser);
         }
+
+        
     }
 }

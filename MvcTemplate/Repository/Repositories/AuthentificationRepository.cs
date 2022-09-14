@@ -49,10 +49,15 @@ namespace Repository.Repositories
             var user = await _userManager.FindByNameAsync(loginModel.UserName);
             if (user != null)
             {
+                var p = _db.paiement_Abonnements.Where(v => v.PaiementAbonnement_AbonnementId == user.Abonnement_ID).LastOrDefault();
                 var result = await _signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, lockoutOnFailure: true);
                 if (result.Succeeded)
+                {
+                    if (p.PaiementAbonnement_DateFinPeriode == DateTime.Now)
+                        user.Abonnement_ISACTIVE = 0;
                     return user;
-               
+
+                }  
                 else
                     return null;
             }
@@ -601,5 +606,7 @@ namespace Repository.Repositories
             }
             return false;
         }
+
+        
     }
 }

@@ -36,7 +36,7 @@ namespace Repository.IRepositories
         IEnumerable<Section_Stockage> getListSection(int zoneId);
         IEnumerable<Ville> getlistVille();
         IEnumerable<Zone_Stockage> getListZones(int lieuId);
-
+        IEnumerable<Unite_Categorie> getListUniteCategorie();
 
 
 
