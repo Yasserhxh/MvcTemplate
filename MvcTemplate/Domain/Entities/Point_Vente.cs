@@ -40,9 +40,11 @@ namespace Domain.Entities
         [ForeignKey("Lieu_Stockage")]
         public int? PointVente_StockID { get; set; }
         [Column(TypeName = "int")]
+
         public int PointVente_CodePostal { get; set; }
         [Column(TypeName = "int")]
         public int PointVente_TypeService { get; set; }
+        public string PointVente_Logo { get; set; }
         public Ville Ville { get; set; }
         public ICollection<PointVente_Famille> Famille_Link { get; set; }
         public ICollection<PositionVente> PositionsVente { get; set; }

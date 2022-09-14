@@ -21,6 +21,7 @@ namespace Domain.Models
         public int PointVente_AbonnementId { get; set; }
         public DateTime PointVente_DateCreation { get; set; }
         public int PointVente_VilleID { get; set; }
+        public string PointVente_Logo { get; set; }
         public int? PointVente_AtelierID { get; set; }
         public int? PointVente_StockID { get; set; }
         public int PointVente_CodePostal { get; set; }
