@@ -130,6 +130,8 @@ namespace Repository.Data
         public DbSet<Produit_Composants> produit_Composants { get; set; }
         public DbSet<Distributeur> distributeurs { get; set; }
         public DbSet<Matiere_Composants> matiere_Composants { get; set; }
+        public DbSet<DemandeApprov> demandeApprovs { get; set; }
+        public DbSet<DemandeApprov_Details> demandeApprov_Details { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
