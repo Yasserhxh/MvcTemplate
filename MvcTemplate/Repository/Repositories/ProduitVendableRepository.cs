@@ -1172,7 +1172,9 @@ namespace Repository.Repositories
 
         public PlanificationdeProduction findFormulairePlans(int formulaireProduitId)
         {
-            return _db.planificationdeProductions.Where(e => e.PlanificationProduction_Id == formulaireProduitId).Include(e => e.Produit_Vendable).ThenInclude(p=>p.Forme_Stockage).FirstOrDefault();
+            return _db.planificationdeProductions.Where(e => e.PlanificationProduction_Id == formulaireProduitId)
+                .Include(p=>p.Planification_Journee)
+                .Include(e => e.Produit_Vendable).ThenInclude(p=>p.Forme_Stockage).FirstOrDefault();
         }
 
         public async Task<int?> Planifier(PlanificationJournee plan)
