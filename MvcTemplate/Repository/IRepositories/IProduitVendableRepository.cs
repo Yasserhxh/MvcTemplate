@@ -183,7 +183,7 @@ namespace Repository.IRepositories
         Task<int?> PlanificationBaseAuto(int planID);
         IEnumerable<MatierePremiere> fillMatiereDemande(int planJourneeID);
         Task<MatStockFlagModel> CloturerDemande(int demandeID);
-        Task<int> CreateDemandeApprov(DemandeApprov demandeApprov);
+        Task<int?> CreateDemandeApprov(DemandeApprov demandeApprov);
         Task<List<DemandeApprov>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv);
         Task<List<DemandeApprov_Details>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg);
     }

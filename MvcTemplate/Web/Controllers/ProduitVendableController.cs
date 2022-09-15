@@ -3292,7 +3292,7 @@ namespace Web.Controllers
             {
                 // QRCodeText = redirect.ToString(),
                 DESIGNATION = item.Produit_Vendable.ProduitVendable_Designation.ToUpper(),
-                DATE_PROD = item.PlanificationProduction_DateCreation.ToString("dd/MM/yyyy hh:mm:ss"),
+                DATE_PROD = item.Planification_Journee.PlanificationJournee_Date.ToString("dd/MM/yyyy hh:mm:ss"),
                 DATE_EXP = item.PlanificationProduction_DateModification.Value.ToString("dd/MM/yyyy hh:mm:ss"),
                 CONDITIONNEMENT = item.Produit_Vendable.ProduitVendable_Conditionnement.ToUpper(),
                 FORME_STOCKAGE = item.Produit_Vendable.Forme_Stockage.FormStockage_Libelle,
