@@ -1,0 +1,352 @@
+﻿@model List<Domain.Models.DemandeApprov_Model>
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{ }
+<div class="app-content content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-12 mb-2 mt-1">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb p-0 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active">
+                                    <a href="#">Demandes d'approvisionnement</a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Dashboard Ecommerce Starts -->
+            <section id="dashboard-ecommerce">
+                <div class="row">
+                    <!-- Greetings Content Starts -->
+                    <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                        <div class="card">
+                            <div class="card-header">
+                                @if (Model.Count() > 0)
+                                {
+                                    <h4 class="card-title">Demandes d'approvisionnement</h4>
+                                }
+                                else
+                                {
+                                    <h4 class="card-title">Aucune demande</h4>
+                                }
+                                <a class="heading-elements-toggle">
+                                    <i class="bx bx-dots-vertical font-medium-3"></i>
+                                </a>
+                                <div class="heading-elements">
+                                    <ul class="list-inline mb-0">
+                                        <li>
+                                            <a data-action="collapse">
+                                                <i class="bx bx-chevron-down"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="expand">
+                                                <i class="bx bx-fullscreen"></i>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-action="reload">
+                                                <i class="bx bx-revision"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- table success start -->
+                                            <section id="table-success">
+                                                <div class="card">
+                                                    <!-- datatable start -->
+                                                    <div class="table table-striped dataex-html5-selectors dataTable">
+                                                        <table id="table-Cartographie-Deposees" class="table mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière Première</th>
+                                                                    @if (User.IsInRole("Chef_Patissier"))
+                                                                    {
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité</th>
+                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité en magasin</th>
+                                                                    }
+
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité demandée</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité livrée</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="usertbody">
+                                                                @foreach (var item in Model.SelectMany(p => p.details).GroupBy(p => p.Sous_Famille, (key, items) => new { categorie = key.SousFamille_Libelle, produit = items.Select(u => u.DemandeApprovDetails_ProduitName), Quantite = items.Select(u => u.DemandeApprovDetails_Quantite), pdv = items.Select(u => u.Point_Vente.PointVente_Nom), total = items.Sum(u => u.DemandeApprovDetails_Quantite) }))
+                                                                {
+
+                                                                    <tr>
+                                                                        <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.categorie)</td>
+                                                                        @{
+                                                                            var qte = decimal.Parse(item.Quantite.ToString()).ToString("G29");
+                                                                        }
+                                                                       
+                                                                            <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.produit)</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-left"> @item.Quantite</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- datatable ends -->
+                                                </div>
+                                            </section>
+                                            <!-- table success ends -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Dashboard Ecommerce ends -->
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="myModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel33">Extrait du bon de sortie</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Livrer les matières premières à livrer</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12" id="plan">
+                                                <div class="card mb-1" id="plandiv">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" id="envbutton" onclick="Livrer()">
+                        <i class="bx bx-send"></i>
+                        Valider
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog" id="matStocks">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#c19d56">
+                <h4 class="modal-title white" id="myModalLabel">Impossible de livrer les matières</h4>
+                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body" id="mbody">
+                    <div class="row">
+                        <!-- Greetings Content Starts -->
+                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Liste des matières premières  en stock à réceptionner</h4>
+                                </div>
+                                <div class="card-content collapse show">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 mt-2" id="plan1">
+                                                <div class="table-responsive">
+                                                    <table id="plandiv1" class="table mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Matère première</th>
+                                                                <th>Quantité à livrer</th>
+                                                                <th>Unité de mesure </th>
+                                                                <th>Quantité en stock</th>
+                                                                <th>Unité de mesure</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<script>
+    function deleteProduitVendable(id) {
+        var data = { id: id };
+        $.ajax({
+            url: '@Url.Action("DeletePlanification", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: data,
+            success: function (data) {
+                if (data == true) {
+                    ShowNotification("Produit désactivé avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeDesPlans", "ProduitVendable")';
+                            if ($("#usertbody tr").length == 0) {
+                                document.getElementById('usertable').style.display = "none";
+                            }
+                        }, 3000);
+
+                } else {
+                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.href = '@Url.Action("ListeDesPlans", "ProduitVendable")';
+                        }, 3000);
+                }
+            },
+            error: function () {
+                alert("non supprime");
+            }
+        });
+    }
+
+    var ListBons = new Array();
+    function Valider(planificationId, bonSortie) {
+        console.log(planificationId);
+        $.ajax({
+            url: '@Url.Action("getBonDeSortie", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: { 'Id': bonSortie },
+            success: function (data) {
+                $('#myModal').modal('show');
+                $("#plandiv").append("<div class='form-row'>"
+                    + "<div><input type='text' disabled style='display:none;' id='palinf' value='" + planificationId + "' class='form-control'/></div></div>");
+
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].bonDeSortie_QuantiteDemandee > 0.0001) {
+                        $("#plandiv").append("<div class='form-row'>"
+                            + "<div class= 'col-md-3 mb-1' >"
+                            + "<label for='date'>Matière première</label>"
+                            + "<div><input type='text' disabled id='matprem" + i + "' value='" + data[i].matiere_Premiere.matierePremiere_Libelle + "' class='form-control'/></div></div>"
+                            + "<div class= 'col-md-3 mb-1' >"
+                            + "<label for='date'>Quantité demandée</label>"
+                            + "<div><input type='number' disabled id='qteDem" + i + "' value='" + data[i].bonDeSortie_QuantiteDemandee + "' class='form-control'/></div></div>"
+                            + "<div class= 'col-md-3 mb-1' >"
+                            + "<label for='date'>Quantité à livrer</label>"
+                            + "<div><input type='number' id='" + data[i].bonDetails_ID + "' value='" + parseFloat(data[i].bonDeSortie_QuantiteDemandee).toFixed(3) + "'   class='form-control'/></div></div>"
+                            + "<div class= 'col-md-3 mb-1' >"
+                            + "<label for='date'>Unité de mesure</label>"
+                            + "<div><input type='text' disabled id='unite" + i + "' value='" + data[i].unite_Mesure.uniteMesure_Libelle + "' class='form-control'/></div></div>");
+                        console.log(document.getElementById(data[i].bonDetails_ID).value);
+
+                        var bon = {
+                            ID: data[i].bonDetails_ID,
+                            value: parseFloat(document.getElementById(data[i].bonDetails_ID).value).toFixed(3),
+                        };
+                        ListBons.push(bon);
+                    }
+                    else {
+                        var bon = {
+                            ID: data[i].bonDetails_ID,
+                            value: ""
+                        };
+                        ListBons.push(bon);
+                    }
+
+                }
+
+            },
+            error: function () {
+                ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+        });
+
+    } function Livrer() {
+        document.getElementById('envbutton').disabled = true;
+        for (var i = 0; i < ListBons.length; i++) {
+            ListBons[i].value = parseFloat($("#" + ListBons[i].ID).val()).toFixed(3).replace(".", ",");
+        }
+        console.log(ListBons);
+        $.ajax({
+            url: '@Url.Action("AccepterPlanification", "ProduitVendable")',
+            type: "POST",
+            cache: false,
+            async: true,
+            data: { 'planificationId': parseInt($("#palinf").val()), 'ListBons': ListBons },
+            success: function (data) {
+                if (data.flag == true) {
+                    ShowNotification("Matières premières livrées avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                    setTimeout(
+                        function () {
+                            window.location.reload();
+                        }, 3000);
+                } else {
+
+                    $('#matStocks').modal('show');
+                    $('#myModal').modal('toggle');
+
+                    for (var i = 0; i < data.matieres.length; i++) {
+
+                        $("#plandiv1").append(
+                            "<tr>" +
+                            "<td class='border-b dark:border-dark-5 '>" + data.matieres[i].matiereLibelle + "</td>" +
+                            "<td class='border-b dark:border-dark-5 text-sm-center'>" + data.matieres[i].qteLivrer + "</td>" +
+                            "<td class='border-b dark:border-dark-5 text-sm-center '>" + data.matieres[i].uniteLivrer + "</td>" +
+                            "<td class='border-b dark:border-dark-5 text-sm-center'>" + data.matieres[i].qteEnStock + "</td>" +
+                            "<td class='border-b dark:border-dark-5'>" + data.matieres[i].uniteStock + "</td></tr>");
+                    }
+                }
+            },
+            error: function () {
+                ShowNotification("Error!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+            }
+        });
+    }
+
+</script>
+

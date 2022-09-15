@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -173,5 +174,8 @@ namespace Service.IServices
         Task<int?> PlanificationBaseAuto(int planID);
         IEnumerable<MatierePremiereModel> fillMatiereDemande(int planJourneeID);
         Task<MatStockFlagModel> CloturerDemande(int demandeID);
+        Task<bool> CreateDemandeApprov(DemandeApprov_Model demandeApprov);
+        Task<List<DemandeApprov_Model>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv);
+        Task<List<DemandeApprov_DetailsModel>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg);
     }
 }

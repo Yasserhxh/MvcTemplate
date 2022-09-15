@@ -4706,7 +4706,7 @@ namespace Repository.Repositories
                 query = query.Where(p => p.DemandeApprov_EtatDemande == etat);
             if (string.IsNullOrEmpty(dateLiv) == true)
                 query = query.Where(p => Convert.ToDateTime(p.DemandeApprov_DateLivraisonPrevue).ToString("yyyy-MM-dd") == etat);
-            return await query.ToListAsync();
+            return await query.Include(p=>p.details).ThenInclude(p=>p.Sous_Famille).ToListAsync();
         }
 
         public Task<List<DemandeApprov_Details>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg)

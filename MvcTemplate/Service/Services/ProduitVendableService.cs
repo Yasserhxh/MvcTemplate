@@ -7,6 +7,8 @@ using Repository.UnitOfWork;
 using Service.IServices;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Service.Services
@@ -1462,6 +1464,44 @@ namespace Service.Services
         {
             return await produitVendableRepository.CloturerDemande(demandeID);
             
+        }
+
+        public async Task<bool> CreateDemandeApprov(DemandeApprov_Model demandeApprovModel)
+        {
+            using (IDbContextTransaction transaction = unitOfWork.BeginTransaction())
+            {
+                try
+                {
+                    DemandeApprov demadeApprov = mapper.Map<DemandeApprov_Model, DemandeApprov>(demandeApprovModel);
+
+                    var confirm = await produitVendableRepository.CreateDemandeApprov(demadeApprov);
+                    if (confirm > 0)
+                    {
+                        return false;
+                    }
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
+
+        public async Task<List<DemandeApprov_Model>> GetListDemandeApprovs(int aboId, int? pointVenteID, string etat, string dateLiv)
+        {
+            var res = await produitVendableRepository.GetListDemandeApprovs(aboId, pointVenteID, etat, dateLiv);
+            return mapper.Map<List<DemandeApprov>, List<DemandeApprov_Model>> (res);
+          /*  var details = res.SelectMany(p => p.details);
+            var detailsG = details.GroupBy(p => p.Sous_Famille, (key, items) => new { categorie = key.SousFamille_Libelle, produit = items.Select(u=>u.DemandeApprovDetails_ProduitName), Quantite = items.Select(u => u.DemandeApprovDetails_Quantite), pdv = items.Select(u => u.Point_Vente.PointVente_Nom), total = items.Sum(u=>u.DemandeApprovDetails_Quantite) }).ToList();
+        */
+        }
+
+        public async Task<List<DemandeApprov_DetailsModel>> GetListDemandeApprovsDetails(int aboId, int? poinVenteID, int? demandeID, string etat, int? produitCateg)
+        {
+            return mapper.Map<List<DemandeApprov_Details>, List<DemandeApprov_DetailsModel>>(await produitVendableRepository.GetListDemandeApprovsDetails(aboId, poinVenteID, demandeID, etat, produitCateg));
         }
     }
 }

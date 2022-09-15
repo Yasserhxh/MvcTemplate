@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using Web.Helpers;
 using Web.Tools;
 using QRCoder;
+using PdfSharp;
 
 namespace Web.Controllers
 {
@@ -3324,6 +3325,19 @@ namespace Web.Controllers
 
 
             return qRCodeM;
+        }
+
+        public async Task<IActionResult> ListDesDemandesAprovosionnements( int? pdv, string etatDemande, string dateLivraison, int pg = 1)
+        {
+            const int pageSize = 15;
+            var AboId = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var res = await produitVendableService.GetListDemandeApprovs(AboId, pdv, etatDemande, dateLivraison);
+            int recsCount = res.Count();
+            var pager = new Pager(recsCount, pg, pageSize);
+            int recSkip = (pg - 1) * pageSize;
+            var model = res.Skip(recSkip).Take(pager.PageSize).ToList();
+            ViewBag.Pager = pager;
+            return View("~/Views/ProduitVendable/Approvisionnement/ListeDemandesApprov.cshtml", model);
         }
 
 

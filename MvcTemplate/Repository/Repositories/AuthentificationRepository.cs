@@ -110,7 +110,7 @@ namespace Repository.Repositories
                         return new Response { Success = false, Message = Messages.Error };
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     transaction.Rollback();
                     return new Response { Success = false, Message = Messages.Error };
