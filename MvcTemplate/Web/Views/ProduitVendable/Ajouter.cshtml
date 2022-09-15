@@ -442,7 +442,7 @@
                     <i class="bx bx-x"></i>
                 </button>
             </div>
-            <form class="form">
+            <form class="form" enctype="multipart/form-data">
 @*                <div class="modal-body" style="height:auto;" id="mbody">
                     <div class="row">
                             <div class="form-row">
@@ -496,6 +496,13 @@
                                                             </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="imgsousfamille">Logo</label>
+                                                    <input type="file" id="imgsousfamille" class="form-control" />
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -585,20 +592,27 @@
     }
     function ajouterSousFamille() {
         document.getElementById('envbutton2').disabled = true;
-        var sousFamilleModel = {
+        /*var sousFamilleModel = {
 
             SousFamille_Libelle: $('#sousFamille').val(),
             SousFamille_ParentID: parseInt($("#familleParent2").val()),
 
-        };
-                 $.ajax({
+        };*/
+        var formData = new FormData();
+        var file = document.getElementById("imgsousfamille").files[0];
+        formData.append("SousFamille_Image", file);
+        formData.append("SousFamille_Libelle", $('#sousFamille').val());
+        formData.append("SousFamille_ParentID", parseInt($("#familleParent2").val()); 
+        $.ajax({
 
              url: '@Url.Action("AjouterSousFamille", "FamilleProduits")',
              type: "POST",
              cache: false,
              async: true,
-                     data: sousFamilleModel,
-                 success: function (data) {
+             contentType: false, // Not to set any content header
+             processData: false, // Not to process data
+             data: formData,
+             success: function (data) {
                 if (data == true)
                 {
                     ShowNotification("Sous-famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
@@ -617,7 +631,7 @@
                                    window.location.reload();
                             }, 1000);
                     }
-                     },
+                },
              error: function () {alert("non ajoute");}
 
          });
