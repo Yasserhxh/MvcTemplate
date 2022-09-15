@@ -100,8 +100,8 @@
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Point de Vente</th>
                                                                     <th>Logo</th>
+                                                                    <th>Point de Vente</th>
                                                                     <th>Type de service </th>
                                                                     <th>Ville </th>
                                                                     <th>Adresse</th>
@@ -115,8 +115,8 @@
                                                                 @foreach (var item in Model)
                                                                 {
                                                                 <tr>
+                                                                    <td><img class="rounded-circle" height="40" width="40" asp-append-version="true" src="~/@item.PointVente_Logo" /></td>
                                                                     <td class="border-b dark:border-dark-5">@Html.DisplayFor(modelItem => item.PointVente_Nom)</td>
-                                                                    <td><img width="100px" height="100px" src="~/@item.PointVente_Logo" /></td>
                                                                     @if (item.PointVente_TypeService == 0){
                                                                         <td class="border-b dark:border-dark-5">Service à emporter</td>}
                                                                     else {
