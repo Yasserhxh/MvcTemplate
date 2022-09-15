@@ -1,508 +1,509 @@
-﻿@{
-    ViewData["Title"] = "Produits Vendable ";
-    Layout = "~/Views/Shared/_Layout1.cshtml";
-}
+﻿    @{
+        ViewData["Title"] = "Produits Vendable ";
+        Layout = "~/Views/Shared/_Layout1.cshtml";
+    }
 
-@model Domain.Models.ProduitVendableModel
+    @model Domain.Models.ProduitVendableModel
 
-@{
-    ViewData["Title"] = "Ajouter un Produit";
-}
+    @{
+        ViewData["Title"] = "Ajouter un Produit";
+    }
 
-<div class="app-content content">
-    <div class="content-overlay"></div>
-    <div class="content-wrapper">
-        <div class="content-header row">
-            <div class="content-header-left col-12 mb-2 mt-1">
-                <div class="row breadcrumbs-top">
-                    <div class="col-12">
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb p-0 mb-0">
-                                <li class="breadcrumb-item">
-                                    <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
-                                </li>
-                                <li class="breadcrumb-item active">
-                                    <a asp-action="ListeProduitVendable">Liste des produits maison</a>
-                                </li>
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-12 mb-2 mt-1">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb p-0 mb-0">
+                                    <li class="breadcrumb-item">
+                                        <a asp-controller="Home" asp-action="Index"><i class="bx bx-home-alt"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item">
+                                        <a href="javascript:history.go(-1)"><i class="bx bxs-left-arrow-circle"></i></a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        <a asp-action="ListeProduitVendable">Liste des produits maison</a>
+                                    </li>
 
-                            </ol>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <section id="basic-form-layouts">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title-wrap bar-success">
-                        <h4 class="card-title" id="basic-layout-form">  Ajouter produit maison</h4>
+            <section id="basic-form-layouts">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-wrap bar-success">
+                            <h4 class="card-title" id="basic-layout-form">  Ajouter produit maison</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <div class="px-3">
-                        <fieldset>
-                            <legend> Détails du produit maison</legend>
-                            <form class="form" action="Ajouter" method="post" onsubmit="theButton.disabled = true; return true;" enctype="multipart/form-data">
-                                <div class="form-body">
-                                    <h4 class="form-section">
-                                        <i class="icon-user"></i>
-                                    </h4>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Designation">Désignation (FR)</label>
-                                                <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" onchange="changeLib()" required />
+                    <div class="card-body">
+                        <div class="px-3">
+                            <fieldset>
+                                <legend> Détails du produit maison</legend>
+                                <form class="form" action="Ajouter" method="post" onsubmit="theButton.disabled = true; return true;" enctype="multipart/form-data">
+                                    <div class="form-body">
+                                        <h4 class="form-section">
+                                            <i class="icon-user"></i>
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Designation">Désignation (FR)</label>
+                                                    <input type="text" asp-for="ProduitVendable_Designation" id="desi" class="form-control" onchange="changeLib()" required />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Designation">Désignation (AR)</label>
-                                                <input type="text" asp-for="ProduitVendable_DesignationAR" id="txtArabic2" onchange="testAR()" class="form-control" required />
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Designation">Désignation (AR)</label>
+                                                    <input type="text" asp-for="ProduitVendable_DesignationAR" id="txtArabic2" onchange="testAR()" class="form-control" required />
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Designation">Désignation (EN)</label>
+                                                    <input type="text" asp-for="ProduitVendable_DesignationEN" id="desiEn" class="form-control"  required />
+                                                </div>
                                             </div>
-                                        </div> 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Designation">Désignation (EN)</label>
-                                                <input type="text" asp-for="ProduitVendable_DesignationEN" id="desiEn" class="form-control"  required />
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Description">Description</label>
+                                                    <input type="text" asp-for="ProduitVendable_Description" class="form-control" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Description">Description</label>
-                                                <input type="text" asp-for="ProduitVendable_Description" class="form-control" />
-                                            </div>
-                                        </div>
                                     
 
 
-                                    </div>
-
-                                    @* <div class="row">
-
-
-            </div> *@
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <div class="form-group">
-                                                    <label for="FamilleProduit">Code de produit</label>
-                                                    <input type="text" asp-for="ProduitVendable_CodeProduit" class="form-control" />
-                                                </div>
-                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="FamilleProduit">Famille de produit</label>
-                                                <div>
-                                                    <select class="custom-select" id="inputGroupSelected" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="familleList()" required>
-                                                        <option value="" selected>Sélectionnez une famille de produit ...</option>
-                                                    </select>
-                                                    <a href="#" data-target="#familleModal" data-toggle="modal"><small>Ajouter une famille de produit</small></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="SousFamille">Sous-famille</label>
-                                                <div>
-                                                    <select class="custom-select" asp-for="ProduitVendable_FamilleProduitId" id="sousfamille1" data-search="true" required>
-                                                        <option value="" selected>Sélectionnez une sous-famille...</option>
-                                                    </select>
-                                                    <a href="#" data-target="#sousfamilleModal" data-toggle="modal"><small>Ajouter une sous famille</small></a>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="FormedeStockage"> Forme de conservation</label>
-                                                <div>
-                                                    <select class="custom-select" id="inputGroupSelected01" data-search="true" asp-for="ProduitVendable_FormStockageId" asp-items="@ViewBag.ProduitVendable_FormStockageId">
-                                                        <option value="" selected>Sélectionnez une forme de conservation ...</option>
-                                                    </select>
-                                                    <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une forme de conservation</small></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="tempConserv">Température de conservation</label>
-                                                <input type="text" asp-for="ProduitVendable_TempConservation" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="AvecPlanification">Type de production</label>
-                                                <div>
-                                                    <select class="custom-select" id="typeProd" data-search="true" asp-for="ProduitVendable_PlanificationFlag" required>
-                                                        <option value="" disabled>Sélectionnez un type de production...</option>
-                                                        <option value="1">Avec planification</option>
-                                                        <option value="0">Sans planification</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Unite_FT">Unité de vente</label>
-                                                <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitVendable_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
-                                                    <option value="" selected disabled>Sélectionnez une unite de mesure ...</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Delai">Délai de consommation (par jour)</label>
-                                                <div>
-                                                    <input type="number" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        @* <div class="row">
 
 
-
-                                    @*<div class="row">
-
-            </div>*@
-                                    <div class="row">
-                                        
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="condi">Conditionnement</label>
-                                                <select class="custom-select" id="condi" data-search="true" asp-for="ProduitVendable_Conditionnement" onchange="disa()" required>
-                                                    <option value="" selected disabled>Sélectionnez un conditionnement...</option>
-                                                    <option value="Plateau">Plateau</option>
-                                                    <option value="Assiette">Assiette</option>
-                                                    <option value="Boite">Boîte</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="spec">Spécification</label>
-                                                <div>
-                                                    <input id="spec" type="text"  asp-for="ProduitVendable_Specification" class="form-control" disabled required />
-
-                                                </div>
-                                            </div>
-                                        </div>  
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="StockMin">Stock minimun</label>
-                                                <div>
-                                                    <input id="stockmin" type="number" min="0" step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label for="Stock Max">Stock maximum</label>
-                                                <input id="stockmax" type="number" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                       
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="CodeBarre">Code à barre</label>
-                                                <input type="text" maxlength="30" asp-for="ProduitVendable_CodeBarre" class="form-control" required />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Photo de produit</label>
-                                                <div class="custom-file">
-                                                    <input type="file" name="files" class="custom-file-input" id="fileinput" required>
-                                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <fieldset style="border: 2px solid #fdda4161; display:none;" id="table">
-                                    <legend style="background: #4c216b;">Liste des éléments</legend>
-                                    <div class="row">
-                                        <div class="col-12 mt-2">
-                                            <div class="table-responsive">
-                                                <table id="tableCamions" class="table table-bordered table-striped mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th style="background: #4c216b;">Produit Maison</th>
-                                                            <th style="background: #4c216b;">Composant (FR)</th>
-                                                            <th style="background: #4c216b;">Composant (AR)</th>
-                                                            <th style="background: #4c216b;">Valeur</th>
-                                                        </tr>
-                                                    </thead> 
-                                                    <tbody>
-                                                        <tr>
-                                                           
-                                                            <td>
-                                                                <input type="text" maxlength="30" id="produitM" disabled class="form-control" required />
-                                                            </td>
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantName" value="Energie" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" value="Energie" disabled class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantNameAR" value="القيمة الطاقية" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" value="القيمة الطاقية" disabled class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
-                                                            </td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" maxlength="30" id="produitM1"  disabled class="form-control" required />
-                                                            </td>
-                                                           
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" value="Graisses" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantNameAR" disabled value="Graisses" class="form-control" required />
-                                                               
-                                                            </td>
-                                                             <td style="display:none;">
-                                                                <input type="text" maxlength="30"   value="الدهون" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="الدهون" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_Valeur" class="form-control" required />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" maxlength="30" id="produitM2"  disabled class="form-control" required />
-                                                            </td>
-                                                         
-                                                           
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30"  disabled value="Glucide" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantNameAR" value="كربوهيدرات" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" disabled value="كربوهيدرات" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" maxlength="30" id="produitM3" disabled class="form-control" required />
-                                                            </td>
-                                                          
-                                                            
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
-                                                               
-                                                            </td> 
-                                                            <td>
-                                                                <input type="text" maxlength="30"  disabled value="Protéines" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantNameAR" value="البروتينات" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" disabled value="البروتينات" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
-                                                            </td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" maxlength="30" id="produitM4" disabled class="form-control" required />
-                                                            </td>
-                                                           
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" disabled value="Sel" class="form-control" required />
-                                                               
-                                                            </td>
-                                                            <td style="display:none;">
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantNameAR" value="ملح" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" disabled value="ملح" class="form-control" required />
-
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
-                                                            </td>
-                                                        </tr> 
-                                                        
-                                                       
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div class="form-actions text-right">
-                                    <button type="submit" name="theButton" class="btn btn-success">
-                                        <i class="icon-note"></i> Enregistrer
-                                    </button>
-                                    <a class="btn btn-danger" asp-action="ListeProduitVendable">
-                                        Annuler
-                                    </a>
-                                </div>
-                            </form>
-                        </fieldset>
-
-                    </div>
-                </div>
-            </div>
-
-        </section>
-    </div>
-</div>
-
-
-<div class="modal fade show" id="familleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#6c3c36">
-                <h4 class="modal-title white" id="myModalLabel33">Ajouter une famille de produit</h4>
-                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
-                    <i class="bx bx-x"></i>
-                </button>
-            </div>
-            <form class="form">
-                <div class="modal-body" id="mbody">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-row">
-                                <div class="form-group col-sm-12">
-                                        <label for="AllergeneLabel">Nom de famille</label>
-                                        <input type="text" id="familleParent1" class="form-control" required />
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-primary" id="envbutton1" onclick="ajouterFamille()">
-                        <span style="color:aliceblue;">
-                            Enregistrer
-                        </span>
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade show" id="sousfamilleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color:#6c3c36">
-                <h4 class="modal-title white" id="myModalLabel33">Ajouter une sous-famille de produit</h4>
-                <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
-                    <i class="bx bx-x"></i>
-                </button>
-            </div>
-            <form class="form" enctype="multipart/form-data">
-@*                <div class="modal-body" style="height:auto;" id="mbody">
-                    <div class="row">
-                            <div class="form-row">
-                                <div>
-                                <div class="form-group col-md-12">
-                                        <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
-                                        <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
-                                            <option value="" selected>Sélectionnez une famille de produit ...</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="form-row">
-                                <div>
-                                <div class="form-group col-md-12">
-                                        <label for="AllergeneLabel">Nom du sous famille</label>
-                                        <input type="text" id="sousFamille" class="form-control" required />
-                                    </div>
-                                </div>
-
-                            </div>
-                    </div>
-                </div>
-
-*@
-                <div class="modal-body" id="mbody">
-                    <div class="row">
-                        <!-- Greetings Content Starts -->
-                        <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title"> Détails de sous-famille</h4>
-                                </div>
-                                <div class="card-content collapse show">
-                                    <div class="card-body">
-
+                </div> *@
                                         <div class="row">
-                                            <div class="col-sm-12" id="plan">
-                                                <div class="card mb-1" id="plandiv">
-                                                    <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
-                                                                <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
-                                                                    <option value="" selected>Sélectionnez une famille de produit ...</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="AllergeneLabel">Nom du sous famille</label>
-                                                                <input type="text" id="sousFamille" class="form-control" required />
-                                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <div class="form-group">
+                                                        <label for="FamilleProduit">Code de produit</label>
+                                                        <input type="text" asp-for="ProduitVendable_CodeProduit" class="form-control" />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="imgsousfamille">Logo</label>
-                                                    <input type="file" id="imgsousfamille" class="form-control" />
+                                                    <label for="FamilleProduit">Famille de produit</label>
+                                                    <div>
+                                                        <select class="custom-select" id="inputGroupSelected" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId" onchange="familleList()" required>
+                                                            <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#familleModal" data-toggle="modal"><small>Ajouter une famille de produit</small></a>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="SousFamille">Sous-famille</label>
+                                                    <div>
+                                                        <select class="custom-select" asp-for="ProduitVendable_FamilleProduitId" id="sousfamille1" data-search="true" required>
+                                                            <option value="" selected>Sélectionnez une sous-famille...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#sousfamilleModal" data-toggle="modal"><small>Ajouter une sous famille</small></a>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="FormedeStockage"> Forme de conservation</label>
+                                                    <div>
+                                                        <select class="custom-select" id="inputGroupSelected01" data-search="true" asp-for="ProduitVendable_FormStockageId" asp-items="@ViewBag.ProduitVendable_FormStockageId">
+                                                            <option value="" selected>Sélectionnez une forme de conservation ...</option>
+                                                        </select>
+                                                        <a href="#" data-target="#myModal" data-toggle="modal"><small>Ajouter une forme de conservation</small></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="tempConserv">Température de conservation</label>
+                                                    <input type="text" asp-for="ProduitVendable_TempConservation" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="AvecPlanification">Type de production</label>
+                                                    <div>
+                                                        <select class="custom-select" id="typeProd" data-search="true" asp-for="ProduitVendable_PlanificationFlag" required>
+                                                            <option value="" disabled>Sélectionnez un type de production...</option>
+                                                            <option value="1">Avec planification</option>
+                                                            <option value="0">Sans planification</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Unite_FT">Unité de vente</label>
+                                                    <select class="custom-select" id="inputGroupSelected02" data-search="true" asp-for="ProduitVendable_UniteMesureId" asp-items="@ViewBag.ProduitVendable_UniteMesureId" required>
+                                                        <option value="" selected disabled>Sélectionnez une unite de mesure ...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Delai">Délai de consommation (par jour)</label>
+                                                    <div>
+                                                        <input type="number" min="0" asp-for="ProduitVendable_DelaiConsommation" class="form-control" required />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        @*<div class="row">
+
+                </div>*@
+                                        <div class="row">
+                                        
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="condi">Conditionnement</label>
+                                                    <select class="custom-select" id="condi" data-search="true" asp-for="ProduitVendable_Conditionnement" onchange="disa()" required>
+                                                        <option value="" selected disabled>Sélectionnez un conditionnement...</option>
+                                                        <option value="Plateau">Plateau</option>
+                                                        <option value="Assiette">Assiette</option>
+                                                        <option value="Boite">Boîte</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="spec">Spécification</label>
+                                                    <div>
+                                                        <input id="spec" type="text"  asp-for="ProduitVendable_Specification" class="form-control" disabled required />
+
+                                                    </div>
+                                                </div>
+                                            </div>  
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="StockMin">Stock minimun</label>
+                                                    <div>
+                                                        <input id="stockmin" type="number" min="0" step=".01" asp-for="ProduitVendable_StockMinimum" class="form-control" required />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Stock Max">Stock maximum</label>
+                                                    <input id="stockmax" type="number" step=".01" asp-for="ProduitVendable_StockMaximum" class="form-control" onchange="qte()" required />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                       
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="CodeBarre">Code à barre</label>
+                                                    <input type="text" maxlength="30" asp-for="ProduitVendable_CodeBarre" class="form-control" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Photo de produit</label>
+                                                    <div class="custom-file">
+                                                        <input type="file" name="files" class="custom-file-input" id="fileinput" required>
+                                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <fieldset style="border: 2px solid #fdda4161; display:none;" id="table">
+                                        <legend style="background: #4c216b;">Liste des éléments</legend>
+                                        <div class="row">
+                                            <div class="col-12 mt-2">
+                                                <div class="table-responsive">
+                                                    <table id="tableCamions" class="table table-bordered table-striped mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="background: #4c216b;">Produit Maison</th>
+                                                                <th style="background: #4c216b;">Composant (FR)</th>
+                                                                <th style="background: #4c216b;">Composant (AR)</th>
+                                                                <th style="background: #4c216b;">Valeur</th>
+                                                            </tr>
+                                                        </thead> 
+                                                        <tbody>
+                                                            <tr>
+                                                           
+                                                                <td>
+                                                                    <input type="text" maxlength="30" id="produitM" disabled class="form-control" required />
+                                                                </td>
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantName" value="Energie" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" value="Energie" disabled class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_ComposantNameAR" value="القيمة الطاقية" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" value="القيمة الطاقية" disabled class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[0].ProduitComposant_Valeur" class="form-control" required />
+                                                                </td>
+                                                            </tr> 
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" id="produitM1"  disabled class="form-control" required />
+                                                                </td>
+                                                           
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" value="Graisses" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantNameAR" disabled value="Graisses" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                 <td style="display:none;">
+                                                                    <input type="text" maxlength="30"   value="الدهون" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_ComposantName" disabled value="الدهون" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[1].ProduitComposant_Valeur" class="form-control" required />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" id="produitM2"  disabled class="form-control" required />
+                                                                </td>
+                                                         
+                                                           
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantName"  value="Glucide" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30"  disabled value="Glucide" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_ComposantNameAR" value="كربوهيدرات" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" disabled value="كربوهيدرات" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[2].ProduitComposant_Valeur" class="form-control" required />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" id="produitM3" disabled class="form-control" required />
+                                                                </td>
+                                                          
+                                                            
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantName"  value="Protéines" class="form-control" required />
+                                                               
+                                                                </td> 
+                                                                <td>
+                                                                    <input type="text" maxlength="30"  disabled value="Protéines" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_ComposantNameAR" value="البروتينات" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" disabled value="البروتينات" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[3].ProduitComposant_Valeur" class="form-control" required />
+                                                                </td>
+                                                            </tr> 
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" id="produitM4" disabled class="form-control" required />
+                                                                </td>
+                                                           
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantName"  value="Sel" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" disabled value="Sel" class="form-control" required />
+                                                               
+                                                                </td>
+                                                                <td style="display:none;">
+                                                                    <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_ComposantNameAR" value="ملح" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" disabled value="ملح" class="form-control" required />
+
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" maxlength="30" asp-for="Composants[4].ProduitComposant_Valeur" class="form-control" required />
+                                                                </td>
+                                                            </tr> 
+                                                        
+                                                       
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions text-right">
+                                        <button type="submit" name="theButton" class="btn btn-success">
+                                            <i class="icon-note"></i> Enregistrer
+                                        </button>
+                                        <a class="btn btn-danger" asp-action="ListeProduitVendable">
+                                            Annuler
+                                        </a>
+                                    </div>
+                                </form>
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+
+    <div class="modal fade show" id="familleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#6c3c36">
+                    <h4 class="modal-title white" id="myModalLabel33">Ajouter une famille de produit</h4>
+                    <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form class="form">
+                    <div class="modal-body" id="mbody">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-row">
+                                    <div class="form-group col-sm-12">
+                                            <label for="AllergeneLabel">Nom de famille</label>
+                                            <input type="text" id="familleParent1" class="form-control" required />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" id="envbutton1" onclick="ajouterFamille()">
+                            <span style="color:aliceblue;">
+                                Enregistrer
+                            </span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade show" id="sousfamilleModal" tabindex="-1" aria-labelledby="myModalLabel33" style="padding-right: 17px;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#6c3c36">
+                    <h4 class="modal-title white" id="myModalLabel33">Ajouter une sous-famille de produit</h4>
+                    <button class="close" data-toggle="modal" aria-label="Close" onclick="refresh()">
+                        <i class="bx bx-x"></i>
+                    </button>
+                </div>
+                <form class="form" enctype="multipart/form-data">
+    @*                <div class="modal-body" style="height:auto;" id="mbody">
+                        <div class="row">
+                                <div class="form-row">
+                                    <div>
+                                    <div class="form-group col-md-12">
+                                            <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
+                                            <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
+                                                <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div>
+                                    <div class="form-group col-md-12">
+                                            <label for="AllergeneLabel">Nom du sous famille</label>
+                                            <input type="text" id="sousFamille" class="form-control" required />
+                                        </div>
+                                    </div>
+
+                                </div>
+                        </div>
+                    </div>
+
+    *@
+                    <div class="modal-body" id="mbody">
+                        <div class="row">
+                            <!-- Greetings Content Starts -->
+                            <div class="col-xl-12 col-md-12 col-12 dashboard-greetings">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title"> Détails de sous-famille</h4>
+                                    </div>
+                                    <div class="card-content collapse show">
+                                        <div class="card-body">
+
+                                            <div class="row">
+                                                <div class="col-sm-12" id="plan">
+                                                    <div class="card mb-1" id="plandiv">
+                                                        <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="AllergeneLabel" style="text-align:center">Famille parent</label>
+                                                                    <select class="custom-select" id="familleParent2" data-search="true" asp-items="@ViewBag.ProduitVendable_FamilleProduitId">
+                                                                        <option value="" selected>Sélectionnez une famille de produit ...</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="AllergeneLabel">Nom du sous famille</label>
+                                                                    <input type="text" id="sousFamille" class="form-control" required />
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="imgsousfamille">Logo</label>
+                                                        <input type="file" id="imgsousfamille" class="form-control" />
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -510,215 +511,214 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-primary" id="envbutton2" onclick="ajouterSousFamille()">
-                        <span style="color:aliceblue;">
-                        Enregistrer
-                        </span>
-                    </a>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <a class="btn btn-primary" id="envbutton2" onclick="ajouterSousFamille()">
+                            <span style="color:aliceblue;">
+                            Enregistrer
+                            </span>
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 
 
-<script src="~/js/sweetalert.min.js"></script>
-<script src="~/js/sweetalert2.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/sweetalert.min.js"></script>
+    <script src="~/js/sweetalert2.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 
 
-<script>
+    <script>
 
-    @if (TempData["Creation"] != null)
-    {
-        <text>CreationNotifications();</text>
-    }
+        @if (TempData["Creation"] != null)
+        {
+            <text>CreationNotifications();</text>
+        }
 
-    @if (TempData["CreationError"] != null)
-    {
-        <text>ModificationNotifications();</text>
-    }
-    function CreationNotifications()
-    {
-        ShowNotification("Produit enregistré avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-    }
+        @if (TempData["CreationError"] != null)
+        {
+            <text>ModificationNotifications();</text>
+        }
+        function CreationNotifications()
+        {
+            ShowNotification("Produit enregistré avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+        }
 
-    function ModificationNotifications()
-    {
-        ShowNotification("Une error s'est produite.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-    }
-    function ajouterFamille() {
-        document.getElementById('envbutton1').disabled = true;
+        function ModificationNotifications()
+        {
+            ShowNotification("Une error s'est produite.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+        }
+        function ajouterFamille() {
+            document.getElementById('envbutton1').disabled = true;
 
-        var familleModel = {
+            var familleModel = {
 
-            FamilleProduit_Libelle: $('#familleParent1').val(),
+                FamilleProduit_Libelle: $('#familleParent1').val(),
 
-        };
-         $.ajax({
+            };
+             $.ajax({
 
-             url: '@Url.Action("Ajouter", "FamilleProduits")',
-             type: "POST",
-             cache: false,
-             async: true,
-             data: familleModel,
-                 success: function (data) {
-                if (data == true)
-                {
-                    ShowNotification("Famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-                    setTimeout(
-                        function ()
-                        {
-                            window.location.reload();
-                        }, 1000);
-                } else
-                {
-                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
-                    setTimeout
-                        (
+                 url: '@Url.Action("Ajouter", "FamilleProduits")',
+                 type: "POST",
+                 cache: false,
+                 async: true,
+                 data: familleModel,
+                     success: function (data) {
+                    if (data == true)
+                    {
+                        ShowNotification("Famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
                             function ()
                             {
-                                   window.location.reload();
+                                window.location.reload();
                             }, 1000);
-                    }
-                     },
-             error: function () {alert("non ajoute");}
+                    } else
+                    {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout
+                            (
+                                function ()
+                                {
+                                       window.location.reload();
+                                }, 1000);
+                        }
+                         },
+                 error: function () {alert("non ajoute");}
 
-         });
-    }
-    function ajouterSousFamille() {
-        document.getElementById('envbutton2').disabled = true;
-        /*var sousFamilleModel = {
+             });
+        }
+        function ajouterSousFamille() {
+            document.getElementById('envbutton2').disabled = true;
+            /*var sousFamilleModel = {
 
-            SousFamille_Libelle: $('#sousFamille').val(),
-            SousFamille_ParentID: parseInt($("#familleParent2").val()),
+                SousFamille_Libelle: $('#sousFamille').val(),
+                SousFamille_ParentID: parseInt($("#familleParent2").val()),
 
-        };*/
-        var formData = new FormData();
-        var file = document.getElementById("imgsousfamille").files[0];
-        formData.append("SousFamille_Image", file);
-        formData.append("SousFamille_Libelle", $('#sousFamille').val());
-        formData.append("SousFamille_ParentID", parseInt($("#familleParent2").val()); 
-        $.ajax({
-
-             url: '@Url.Action("AjouterSousFamille", "FamilleProduits")',
-             type: "POST",
-             cache: false,
-             async: true,
-             contentType: false, // Not to set any content header
-             processData: false, // Not to process data
-             data: formData,
-             success: function (data) {
-                if (data == true)
-                {
-                    ShowNotification("Sous-famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
-                    setTimeout(
-                        function ()
-                        {
-                            window.location.reload();
-                        }, 1000);
-                } else
-                {
-                    ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
-                    setTimeout
-                        (
-                            function ()
-                            {
-                                   window.location.reload();
-                            }, 1000);
-                    }
-                },
-             error: function () {alert("non ajoute");}
-
-         });
-    }
-    function refresh() {
-        setTimeout(
-            function () {
-                window.location.reload();
-            }, 500);
-    }
-    function familleList()
-    {
-        var data = { familleParent: parseInt($("#inputGroupSelected").val()) };
-        if ($("#inputGroupSelected").val() != null) {
+            };*/
+            var formData = new FormData();
+            var file = document.getElementById("imgsousfamille").files[0];
+            formData.append("SousFamille_Image", file);
+            formData.append("SousFamille_Libelle", $('#sousFamille').val());
+            formData.append("SousFamille_ParentID", parseInt($("#familleParent2").val())); 
             $.ajax({
-                url: '@Url.Action("familleList", "ProduitVendable")',
-                type: "POST",
-                cache: false,
-                async: true,
-                data: data,
-                success: function (data) {
-                    if ($("#sousfamille1 option").length > 1) {
-                        $.each($("#sousfamille1 option"), function (i, item) {
-                            item.remove();
+
+                 url: '@Url.Action("AjouterSousFamille", "FamilleProduits")',
+                 type: "POST",
+                 cache: false,
+                 async: true,
+                 contentType: false, // Not to set any content header
+                 processData: false, // Not to process data
+                 data: formData,
+                 success: function (data) {
+                    if (data == true)
+                    {
+                        ShowNotification("Sous-famille ajoutée avec succés.", NotifToaster.SucessType, NotifToaster.Top_Full_Width);
+                        setTimeout(
+                            function ()
+                            {
+                                window.location.reload();
+                            }, 1000);
+                    } else
+                    {
+                        ShowNotification("Une erreur s'est produite!", NotifToaster.ErrorType, NotifToaster.Top_Full_Width);
+                        setTimeout
+                            (
+                                function ()
+                                {
+                                       window.location.reload();
+                                }, 1000);
+                        }
+                    },
+                 error: function () {alert("non ajoute");}
+
+             });
+        }
+        function refresh() {
+            setTimeout(
+                function () {
+                    window.location.reload();
+                }, 500);
+        }
+        function familleList()
+        {
+            var data = { familleParent: parseInt($("#inputGroupSelected").val()) };
+            if ($("#inputGroupSelected").val() != null) {
+                $.ajax({
+                    url: '@Url.Action("familleList", "ProduitVendable")',
+                    type: "POST",
+                    cache: false,
+                    async: true,
+                    data: data,
+                    success: function (data) {
+                        if ($("#sousfamille1 option").length > 1) {
+                            $.each($("#sousfamille1 option"), function (i, item) {
+                                item.remove();
+                            });
+                            $("#sousfamille1").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                        }
+                        $.each(data, function (i, item) {
+                            $("#sousfamille1").append($('<option>', {
+                                value: item.value,
+                                    text: item.text
+                            }));
                         });
-                        $("#sousfamille1").append("<option value='' selected disabled>Sélectionnez une sous famille</option>");
+                    },
+                    error: function () {
                     }
-                    $.each(data, function (i, item) {
-                        $("#sousfamille1").append($('<option>', {
-                            value: item.value,
-                                text: item.text
-                        }));
-                    });
-                },
-                error: function () {
-                }
-            });
+                });
+            }
         }
-    }
 
-    function qte() {
+        function qte() {
       
-        var qtemin = parseFloat($("#stockmin").val());
-        var qtemax = parseFloat($("#stockmax").val());
-        if (qtemin >= qtemax) {
-            swal({
-                title: "Attention",
-                text: "la quantite max de stockage doit etre supérieur à la quantité min de stockage",
-                type: "warning",
-                showCancelButton: false,
-                cancelButtonText: "Annuler",
-                closeOnConfirm: false,
-                closeOnCancel: true
-            });
+            var qtemin = parseFloat($("#stockmin").val());
+            var qtemax = parseFloat($("#stockmax").val());
+            if (qtemin >= qtemax) {
+                swal({
+                    title: "Attention",
+                    text: "la quantite max de stockage doit etre supérieur à la quantité min de stockage",
+                    type: "warning",
+                    showCancelButton: false,
+                    cancelButtonText: "Annuler",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                });
+            }
         }
-    }
 
-    function disa() {
+        function disa() {
 
-        if ($("#condi option:selected").val() !=""){
-            document.getElementById('spec').disabled = false;
+            if ($("#condi option:selected").val() !=""){
+                document.getElementById('spec').disabled = false;
+            }
         }
-    }
-    function changeLib() {
+        function changeLib() {
 
-        var desi = $("#desi").val();
-        $("#produitM").val(desi);
-        $("#produitM1").val(desi);
-        $("#produitM2").val(desi);
-        $("#produitM3").val(desi);
-        $("#produitM4").val(desi);
-       // $("#matiereP1").val(lib);
-        document.getElementById('table').style.display = "block";
+            var desi = $("#desi").val();
+            $("#produitM").val(desi);
+            $("#produitM1").val(desi);
+            $("#produitM2").val(desi);
+            $("#produitM3").val(desi);
+            $("#produitM4").val(desi);
+           // $("#matiereP1").val(lib);
+            document.getElementById('table').style.display = "block";
 
-    }
-    var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
-    var isArabic2 = /^[\u0621-\u064A\u0660-\u0669 ]+$/;
-     function testAR(){
-        var filterFn = isArabic2.test.bind(isArabic2);
-        var newValue = $("#txtArabic2").val().split().filter(filterFn);
-        console.log(newValue)
+        }
+        var isArabic = /^([\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufbc1]|[\ufbd3-\ufd3f]|[\ufd50-\ufd8f]|[\ufd92-\ufdc7]|[\ufe70-\ufefc]|[\ufdf0-\ufdfd])*$/g;
+        var isArabic2 = /^[\u0621-\u064A\u0660-\u0669 ]+$/;
+         function testAR(){
+            var filterFn = isArabic2.test.bind(isArabic2);
+            var newValue = $("#txtArabic2").val().split().filter(filterFn);
+            console.log(newValue)
 
 
-        if ($("#txtArabic2").val() != newValue)
-            $("#txtArabic2").val(newValue);
-     }
+            if ($("#txtArabic2").val() != newValue)
+                $("#txtArabic2").val(newValue);
+         }
    
 
-</script>
+    </script>
 
