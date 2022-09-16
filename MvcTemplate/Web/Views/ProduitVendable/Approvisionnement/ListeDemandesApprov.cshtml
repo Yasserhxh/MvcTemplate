@@ -78,15 +78,14 @@
                                                         <table id="table-Cartographie-Deposees" class="table mb-0">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Matière Première</th>
-                                                                    @if (User.IsInRole("Chef_Patissier"))
-                                                                    {
-                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité</th>
-                                                                        <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité en magasin</th>
-                                                                    }
-
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Point de vente</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Catégorie de produit</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap">Produit</th>
                                                                     <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité demandée</th>
-                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Quantité livrée</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Total des quantités</th>
+                                                                    <th class="border-b-2 dark:border-dark-5 whitespace-no-wrap text-sm-left">Action  </th>
+
+
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="usertbody">
@@ -95,11 +94,8 @@
 
                                                                     <tr>
                                                                         <td class="text-bold-600 pr-0">@Html.DisplayFor(modelItem => item.categorie)</td>
-                                                                        @{
-                                                                            var qte = decimal.Parse(item.Quantite.ToString()).ToString("G29");
-                                                                        }
-                                                                       
                                                                             <td class="text-bold-600 pr-0 text-sm-left">@Html.DisplayFor(modelItem => item.produit)</td>
+                                                                            <td class="text-bold-600 pr-0 text-sm-left"> @item.Quantite</td>
                                                                             <td class="text-bold-600 pr-0 text-sm-left"> @item.Quantite</td>
                                                                     </tr>
                                                                 }
