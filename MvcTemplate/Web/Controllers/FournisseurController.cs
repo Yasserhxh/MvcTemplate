@@ -413,9 +413,10 @@ namespace Web.Controllers
                 throw;
             }
         }
-        public IActionResult getAllProds(int pg = 2)
+        public IActionResult getAllProds(int? Sous, string nom, int pg = 1)
         {
-            var query = fournisseurService.getAllProds(pg);
+            var aboid = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
+            var query = fournisseurService.getAllProds(Sous, nom, aboid, pg);
             var pager = new Pager(query.count, pg, 10);
             ViewBag.Pager = pager;
             return View(query.objList);

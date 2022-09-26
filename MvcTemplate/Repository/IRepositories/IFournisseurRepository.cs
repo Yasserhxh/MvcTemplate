@@ -29,7 +29,7 @@ namespace Repository.IRepositories
         IEnumerable<Facture> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date);
         BonDeCommande FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
-        paginationModel<ProduitVendable> getAllProds(int pg);
+        paginationModel<ProduitVendable> getAllProds(int? Sous, string nom, int aboid, int pg = 1);
         IEnumerable<Stock_Achat> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern);
         Task<int?> CreateOrdreTransfer(Transfert_Matiere transfert);
         IEnumerable<Transfert_Matiere> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date);

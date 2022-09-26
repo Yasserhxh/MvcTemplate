@@ -29,7 +29,7 @@ namespace Service.IServices
         IEnumerable<FactureModel> GetFactures(int aboID, int? bondeCommande, string numeroFac, int? date);
         BonDeCommande_Model FindFormulaireBonDeCommande(int aboID, int? bonCommandeID);
         BonDeLivraison_Model FindFormulaireBonDeLivraison(int aboID, int? bondeLivraison);
-        paginationModel<ProduitVendable> getAllProds(int pg);
+        paginationModel<ProduitVendableModel> getAllProds(int? Sous, string nom, int aboid, int pg);
         IEnumerable<StockAchat_Model> GetMatireStockAchat(int aboID, int? matiereID, string lotIntern);
         Task<bool> CreateOrdreTransfer(TransfertMatiere_Model transfertModel);
         IEnumerable<TransfertMatiere_Model> GetListeOrdreTransfert(int aboId, string statut, int? stockID, string date);

@@ -217,9 +217,10 @@ namespace Service.Services
             return mapper.Map<Fournisseur, FournisseurModel>(fournisseurRepository.findFormulaireFournisseur(formulaireFourisseurId));
         }
 
-        public paginationModel<ProduitVendable> getAllProds(int pg)
+        public paginationModel<ProduitVendableModel> getAllProds(int? Sous, string nom, int aboid, int pg)
         {
-            return fournisseurRepository.getAllProds(pg);
+            return mapper.Map<paginationModel<ProduitVendable>, paginationModel<ProduitVendableModel>>(fournisseurRepository.getAllProds(Sous, nom, aboid, pg));
+
         }
 
         public async Task<ArticleBL_Model> getArticleBL(int articleID, int aboID)

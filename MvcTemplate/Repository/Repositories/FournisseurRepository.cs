@@ -239,19 +239,37 @@ namespace Repository.Repositories
             int recSkip = (pg - 1) * pageSize;*/
             return query.Include(p=>p.MatierePremiere).Include(p=>p.Unite_Mesure).AsEnumerable();
         }
-        public paginationModel<ProduitVendable> getAllProds(int pg = 2)
+        public paginationModel<ProduitVendable> getAllProds(int? Sous, string nom, int aboid, int pg = 1)
         {
-            int pageSize = 10;
+            int pageSize = 15;
             if (pg < 1)
                 pg = 1;
             int startRow = (pg -1) * pageSize;
-            var query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new
+            var query = new List<ProduitVendable>();
+            if (String.IsNullOrEmpty(nom))
+                nom = "";
+            if ( Sous != null)
             {
-                startRowIndex = startRow,
-                maximumRows = pageSize,
-                aboID = 1,
-                sousCateg = ""
-            }, commandType: CommandType.StoredProcedure).ToList();
+                query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new
+                {
+                    startRowIndex = startRow,
+                    maximumRows = pageSize,
+                    aboID = aboid,
+                    sousCateg = (int)Sous,
+                    name = nom
+                }, commandType: CommandType.StoredProcedure).ToList();
+            }
+            else
+            {
+                query = _db.Database.GetDbConnection().Query<ProduitVendable>("produitCount", new
+                {
+                    startRowIndex = startRow,
+                    maximumRows = pageSize,
+                    aboID = aboid,
+                    sousCateg = Sous,
+                    name = nom
+                }, commandType: CommandType.StoredProcedure).ToList();
+            }
             var pagination = new paginationModel<ProduitVendable>
             {
                 objList = query,

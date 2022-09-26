@@ -50,11 +50,12 @@ namespace Web.Controllers
         private static readonly string key = "b1529618774e40c09cf10149dcaca84c";
         private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com";
         private static readonly string location = "westeurope";
+        private readonly IFournisseurService fournisseurService;
 
         public ProduitVendableController(IProduitVendableService produitVendableService, IAuthentificationRepository authentificationRepository, UserManager<ApplicationUser> userManager,
             IZoneStockageService zoneStockageService, IProduitFicheTechniqueService produitFicheTechniqueService, IMatierePremiereService matierePremiereService,
             IGestionMouvementService gestionMouvementService, IHostingEnvironment IHostingEnvironment, IPointVenteService pointVenteService, IFamilleProduitService familleProduitService,
-            IVenteProduitsService venteProduitsService, IUnitOfWork unitOfWork = null)
+            IVenteProduitsService venteProduitsService, IUnitOfWork unitOfWork = null, IFournisseurService fournisseurService = null)
         {
             this.gestionMouvementService = gestionMouvementService;
             this.authentificationRepository = authentificationRepository;
@@ -68,6 +69,7 @@ namespace Web.Controllers
             this.familleProduitService = familleProduitService;
             this.venteProduitsService = venteProduitsService;
             _unitOfWork = unitOfWork;
+            this.fournisseurService = fournisseurService;
         }
 
 
@@ -189,8 +191,9 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["ProduitVendable_FamilleProduitId"] = new SelectList(produitVendableService.getListFamilleProduit(Id), "FamilleProduit_Id", "FamilleProduit_Libelle");
-            var query = produitVendableService.getListProduitVendable(Id, categ, sousCateg, name);
-            if (!String.IsNullOrEmpty(name))
+            //var query = produitVendableService.getListProduitVendable(Id, categ, sousCateg, name);
+            var query2 = fournisseurService.getAllProds(sousCateg, name, Id, pg);
+            /*if (!String.IsNullOrEmpty(name))
                 query = query.Where(p => p.ProduitVendable_Designation.Contains(name, StringComparison.OrdinalIgnoreCase));
             const int pageSize = 15;
             if (pg < 1)
@@ -198,9 +201,11 @@ namespace Web.Controllers
             int recsCount = query.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();*/
+            var pager = new Pager(query2.count, pg, 15);
+            ViewBag.Pager = pager;
             this.ViewBag.Pager = pager;
-            return View(model);
+            return View(query2.objList);
         }
 
         [Authorize(Roles = "Client, Responsable_de_production")]
