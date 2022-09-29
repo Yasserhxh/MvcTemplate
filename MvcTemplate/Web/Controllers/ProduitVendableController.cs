@@ -191,9 +191,9 @@ namespace Web.Controllers
         {
             var Id = Convert.ToInt32(HttpContext.User.FindFirst("AboId").Value);
             ViewData["ProduitVendable_FamilleProduitId"] = new SelectList(produitVendableService.getListFamilleProduit(Id), "FamilleProduit_Id", "FamilleProduit_Libelle");
-            //var query = produitVendableService.getListProduitVendable(Id, categ, sousCateg, name);
-            var query2 = fournisseurService.getAllProds(sousCateg, name, Id, pg);
-            /*if (!String.IsNullOrEmpty(name))
+            var query = produitVendableService.getListProduitVendable(Id, categ, sousCateg, name);
+            //var query2 = fournisseurService.getAllProds(sousCateg, name, Id, pg);
+            if (!String.IsNullOrEmpty(name))
                 query = query.Where(p => p.ProduitVendable_Designation.Contains(name, StringComparison.OrdinalIgnoreCase));
             const int pageSize = 15;
             if (pg < 1)
@@ -201,11 +201,11 @@ namespace Web.Controllers
             int recsCount = query.Count();
             var pager = new Pager(recsCount, pg, pageSize);
             int recSkip = (pg - 1) * pageSize;
-            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();*/
-            var pager = new Pager(query2.count, pg, 15);
+            var model = query.Skip(recSkip).Take(pager.PageSize).ToList();
+           // var pager = new Pager(query.Count(), pg, 15);
             ViewBag.Pager = pager;
             this.ViewBag.Pager = pager;
-            return View(query2.objList);
+            return View(model);
         }
 
         [Authorize(Roles = "Client, Responsable_de_production")]
