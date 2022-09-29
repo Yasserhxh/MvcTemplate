@@ -22,11 +22,12 @@ namespace Web.Tools
             // Get the base URL
             string baseUrl = "https://trephoapp.azurewebsites.net";
 
-            string PDFURL = "http://alexandrepdfgen.cloudapp.net/";
+            string PDFURL = "http://anothertest.westeurope.cloudapp.azure.com";
             HtmlToPdfConverter htmlToPdfConverter = new HtmlToPdfConverter(true, PDFURL);
 
             //HtmlToPdfConverter htmlToPdfConverter = new HtmlToPdfConverter();
-            htmlToPdfConverter.LicenseKey = "GpSHlYSAlYaBlYSBm4WVhoSbhIebjIyMjJWF";
+            htmlToPdfConverter.LicenseKey = "b+Hx4PHg8vH29eDx9u7w4PPx7vHy7vn5+fng8A==";
+            htmlToPdfConverter.ServicePassword = "";
             //htmlToPdfConverter.RenderedHtmlElementSelector = "#ToGenerate";
             //htmlToPdfConverter.HtmlViewerZoom = 130;
 
