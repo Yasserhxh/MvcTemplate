@@ -50,18 +50,23 @@ namespace Repository.Repositories
             if (user != null)
             {
                 var p = _db.paiement_Abonnements.Where(v => v.PaiementAbonnement_AbonnementId == user.Abonnement_ID).LastOrDefault();
-                var result = await _signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, lockoutOnFailure: true);
-                if (result.Succeeded)
+                if(p!=null)
                 {
-                    if (p.PaiementAbonnement_DateFinPeriode == DateTime.Now)
-                        user.Abonnement_ISACTIVE = 0;
-                    return user;
 
-                }  
-                else
-                    return null;
+                    var result = await _signInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, lockoutOnFailure: true);
+                    if (result.Succeeded)
+                    {
+                        if (p.PaiementAbonnement_DateFinPeriode == DateTime.Now)
+                            user.Abonnement_ISACTIVE = 0;
+                        return user;
+
+                    }
+                    else
+                        return null;
+                }
+                return user;
+
             }
-            //return user;
             return null;
         }
         public async Task<Response> Register(RegisterModel registerModel)

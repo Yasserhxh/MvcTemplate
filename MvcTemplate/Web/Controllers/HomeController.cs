@@ -257,20 +257,20 @@ namespace Web.Controllers
         public IActionResult Parametrage()
         {
             ViewData["data"] = null;
-            var id = HttpContext.User.FindFirst("userId").Value;
+            var id = HttpContext.User.FindFirst("userId");
             if (User.IsInRole("Responsable_Vente"))
             {
-                ViewData["data"] = new SelectList(pointVenteService.getListPdvUser(id), "Point_Vente.PointVente_Id", "Point_Vente.PointVente_Nom");
+                ViewData["data"] = new SelectList(pointVenteService.getListPdvUser(id.Value), "Point_Vente.PointVente_Id", "Point_Vente.PointVente_Nom");
                 return View();
             }
             if (User.IsInRole("Gerant_de_stock"))
             {
-                ViewData["data"] = new SelectList(zoneStockageService.getListStockUser(id), "Lieu_Stockage.LieuStockag_Id", "Lieu_Stockage.LieuStockag_Nom");
+                ViewData["data"] = new SelectList(zoneStockageService.getListStockUser(id.Value), "Lieu_Stockage.LieuStockag_Id", "Lieu_Stockage.LieuStockag_Nom");
                 return View();
             }
             if (User.IsInRole("Chef_Patissier"))
             {
-                ViewData["data"] = new SelectList(abonnement_ClientService.getListAtelierUser(id), "Atelier.Atelier_ID", "Atelier.Atelier_Nom");
+                ViewData["data"] = new SelectList(abonnement_ClientService.getListAtelierUser(id.Value), "Atelier.Atelier_ID", "Atelier.Atelier_Nom");
                 return View();
             }
             else
